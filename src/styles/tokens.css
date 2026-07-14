@@ -1,0 +1,38 @@
+@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/noto-sans-kr";
+@import "@fontsource-variable/jetbrains-mono";
+
+:root {
+  color-scheme: dark;
+  --bg: #090d0b;
+  --bg-raised: #0f1511;
+  --surface: #141b16;
+  --surface-strong: #1a231c;
+  --text: #f1f2e9;
+  --text-soft: #bec5bc;
+  --muted: #818b83;
+  --line: rgba(241, 242, 233, 0.12);
+  --line-strong: rgba(241, 242, 233, 0.24);
+  --signal: #c8ff63;
+  --signal-deep: #8fca36;
+  --cyan: #68dfcb;
+  --font-display: "Manrope Variable", "Noto Sans KR Variable", sans-serif;
+  --font-body: "Noto Sans KR Variable", "Manrope Variable", sans-serif;
+  --font-mono: "JetBrains Mono Variable", Consolas, monospace;
+  --type-hero-name: clamp(3.1rem, 6vw, 4.75rem);
+  --type-hero-statement: clamp(2.2rem, 4.8vw, 4rem);
+  --type-page: clamp(2.4rem, 4.2vw, 3.4rem);
+  --type-case: clamp(2.8rem, 5vw, 3.9rem);
+  --type-section: clamp(1.9rem, 3.4vw, 2.75rem);
+  --type-project: clamp(1.45rem, 2.2vw, 2rem);
+  --type-lead: clamp(1.02rem, 1.35vw, 1.18rem);
+  --page-max: 1180px;
+  --reading-max: 720px;
+  --nav-height: 72px;
+  --section-space: clamp(88px, 10vw, 132px);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+}

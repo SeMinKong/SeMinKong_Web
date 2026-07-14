@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SeMinKong의 경력, 프로젝트, 기술을 정리한 온라인 이력서입니다." />
+    <meta name="theme-color" content="#090d0b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>document.documentElement.classList.add('js');</script>
+    <title>Resume — SeMinKong</title>
+  </head>
+  <body class="resume-page">
+    <a class="skip-link" href="#resume-main">이력서 본문으로 바로가기</a>
+    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
+
+    <header class="site-nav" data-site-nav>
+      <a class="wordmark" href="../" aria-label="SeMinKong 포트폴리오로 돌아가기">
+        <span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span>
+      </a>
+      <nav class="site-nav__links" aria-label="주요 페이지"><a href="../work/">Work</a><a href="../#about">About</a><a href="mailto:semin1224@gmail.com">Email</a></nav>
+      <a class="resume-back" href="../"><span aria-hidden="true">←</span> Home</a>
+    </header>
+
+    <main class="resume" id="resume-main">
+      <header class="resume-hero" data-resume-intro>
+        <div>
+          <p class="resume-kicker">Resume / 이력서</p>
+          <h1 lang="en">Se Min Kong</h1>
+          <p class="resume-role" lang="en">AI &amp; Robotics Software Developer</p>
+        </div>
+        <div class="resume-contact" aria-label="연락처">
+          <a href="mailto:semin1224@gmail.com">semin1224@gmail.com</a>
+          <a href="https://github.com/SeMinKong" rel="noreferrer">github.com/SeMinKong</a>
+          <span lang="en">Seoul, Republic of Korea</span>
+        </div>
+      </header>
+
+      <section class="resume-summary resume-block" aria-labelledby="summary-title" data-resume-reveal>
+        <p class="resume-label">Profile</p>
+        <div>
+          <h2 id="summary-title">컴퓨터 비전부터 로봇 제어와 운영 화면까지 연결해 구현합니다.</h2>
+          <p>Software Engineering을 전공했고, Computer Vision, ROS 2, backend, hardware를 하나의 시스템으로 통합하는 프로젝트를 진행해 왔습니다.</p>
+        </div>
+      </section>
+
+      <section class="resume-block" aria-labelledby="experience-title" data-resume-reveal>
+        <h2 class="resume-label" id="experience-title" lang="en">Experience</h2>
+        <div class="resume-list">
+          <article>
+            <div class="resume-item__head"><div><h3 lang="en">Samsung SW·AI Academy For Youth</h3><p lang="en">SSAFY · Trainee, Robotics Track</p></div><time lang="en">Jan 2026 — Present</time></div>
+            <p>로보틱스, Computer Vision, ROS 2와 하드웨어·소프트웨어 통합 프로젝트를 중심으로 한 집중 SW·AI 과정을 이수하고 있습니다.</p>
+          </article>
+          <article>
+            <div class="resume-item__head"><div><h3 lang="en">Republic of Korea Army</h3><p lang="en">Tactical Communications Equipment Operator / Maintainer</p></div><time lang="en">May 2021 — Nov 2022</time></div>
+            <p>전술 통신 장비 운용·정비 임무를 수행하고 Sergeant로 병역 의무를 마쳤습니다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="resume-block" aria-labelledby="projects-title" data-resume-reveal>
+        <h2 class="resume-label" id="projects-title" lang="en">Selected Projects</h2>
+        <div class="resume-list resume-projects">
+          <article>
+            <div class="resume-item__head"><div><h3 lang="en"><a href="../work/aqis/">AQIS for Smart Factory</a></h3><p lang="en">Team Lead · Full-Stack &amp; Robot Integration</p></div><time lang="en">May — Jun 2026</time></div>
+            <p>RealSense와 YOLOv5 검사 결과를 컨베이어, Dobot, RealOps dashboard로 연결했습니다. FastAPI, ROS 2 bridge와 device adapter 구현을 주도했습니다.</p>
+            <ul><li>ROS 2</li><li>FastAPI</li><li>React</li><li>RealSense</li><li>Dobot</li><li>YOLOv5</li></ul>
+          </article>
+
+          <article>
+            <div class="resume-item__head"><div><h3 lang="en"><a href="../work/brain-tumor-mri/">Brain Tumor MRI Classification &amp; Segmentation</a></h3><p lang="en">Personal Project</p></div><time lang="en">Feb — Apr 2026</time></div>
+            <p>YOLO11 classification·segmentation과 mask-to-polygon 전처리를 구현했습니다. 내부 평가 기준 Top-1 99.4%, Mask mAP50 92.7%이며 재현 절차는 문서화 중입니다.</p>
+            <ul><li>Python</li><li>PyTorch</li><li>YOLO11</li><li>OpenCV</li><li>NumPy</li></ul>
+          </article>
+
+          <article>
+            <div class="resume-item__head"><div><h3 lang="en"><a href="../work/alkkagi/">Alkkagi.io</a></h3><p lang="en">Personal Project</p></div><time lang="en">Mar — Apr 2026</time></div>
+            <p>React와 Socket.io로 실시간 multiplayer game을 만들고, 충돌·마찰·위치 보정을 서버 권위 60 FPS TypeScript 물리 엔진으로 구현했습니다.</p>
+            <ul><li>React 19</li><li>TypeScript</li><li>Node.js</li><li>Express</li><li>Socket.io</li></ul>
+          </article>
+
+          <article>
+            <div class="resume-item__head"><div><h3 lang="en"><a href="../work/briefit/">Briefit</a></h3><p lang="en">AI-Based News Curation · Team AI Engineer</p></div><time lang="en">May — Sep 2025</time></div>
+            <p>비동기 뉴스 수집, 유사 기사 grouping, KoBART 요약 파이프라인과 전처리·tokenization을 담당했습니다.</p>
+            <ul><li>Python</li><li>aiohttp</li><li>BeautifulSoup</li><li>Transformers</li><li>KoBART</li></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="resume-block resume-block--split" aria-labelledby="skills-title" data-resume-reveal>
+        <h2 class="resume-label" id="skills-title" lang="en">Technical Skills</h2>
+        <div class="skill-groups">
+          <div lang="en"><h3>Languages &amp; Core</h3><p>Python · C++ · TypeScript</p></div>
+          <div lang="en"><h3>AI &amp; Vision</h3><p>PyTorch · Ultralytics YOLO · OpenCV · Transformers · CUDA</p></div>
+          <div lang="en"><h3>Robotics &amp; Systems</h3><p>ROS 2 · Intel RealSense · Dobot Magician · RoboDK · NVIDIA Isaac Sim / Isaac Lab</p></div>
+          <div lang="en"><h3>Backend &amp; Tools</h3><p>FastAPI · WebSocket · React · Node.js · Socket.io · Git · Docker · Linux</p></div>
+        </div>
+      </section>
+
+      <section class="resume-block" aria-labelledby="education-title" data-resume-reveal>
+        <h2 class="resume-label" id="education-title" lang="en">Education</h2>
+        <div class="resume-list">
+          <article>
+            <div class="resume-item__head"><div><h3 lang="en">Soongsil University</h3><p lang="en">College of IT · School of Software</p></div><time lang="en">Mar 2020 — Feb 2026</time></div>
+            <p lang="en">Bachelor of Engineering in Software · Major in Artificial Intelligence &amp; Big Data · Convergence Major in Big Data</p>
+          </article>
+          <article>
+            <div class="resume-item__head"><div><h3 lang="en">Dulwich College Suzhou</h3><p lang="en">Primary &amp; Middle School · Suzhou, China</p></div><time lang="en">2008 — 2012</time></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="resume-block" aria-labelledby="awards-title" data-resume-reveal>
+        <h2 class="resume-label" id="awards-title" lang="en">Awards &amp; Credentials</h2>
+        <div class="resume-list resume-awards">
+          <article lang="en"><div class="resume-item__head"><div><h3>IT Project Pro League</h3><p>Encouragement Award · Soongsil University Spartan SW Education Center</p></div><time>Nov 2025</time></div></article>
+          <article lang="en"><div class="resume-item__head"><div><h3>Software Competition</h3><p>Gold Prize · Soongsil University SW</p></div></div></article>
+          <article lang="en"><div class="resume-item__head"><div><h3>Capstone Design Competition</h3><p>Encouragement Award · Soongsil University SW</p></div></div></article>
+          <article lang="en"><div class="resume-item__head"><div><h3>OPIc English</h3><p>IH · Intermediate High</p></div><time>Valid through Oct 2027</time></div></article>
+        </div>
+      </section>
+
+      <section class="resume-cta" data-resume-reveal aria-labelledby="resume-contact-title">
+        <p>Contact</p>
+        <h2 id="resume-contact-title">연락은 이메일로 부탁드립니다.</h2>
+        <div><a href="mailto:semin1224@gmail.com">Email <span aria-hidden="true">↗</span></a><a href="https://github.com/SeMinKong" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
+      </section>
+    </main>
+
+    <footer class="resume-footer" lang="en"><span>© 2026 SeMinKong</span><a href="../">Back to portfolio ↑</a></footer>
+    <script type="module" src="/src/resume.js"></script>
+  </body>
+</html>

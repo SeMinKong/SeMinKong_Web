@@ -1,54 +1,70 @@
 # QA checklist
 
-## Build
+Verification record: 2026-07-14 — identity-first Hero and Dexterous Hand update
 
-- [ ] `npm.cmd run build` 성공
-- [ ] 의존성 또는 번들 오류 없음
-- [ ] `dist/`를 직접 수정하지 않음
+Environment: Windows, npm, Vite production build and preview
 
-## Desktop — 1280px
+Manual QA overrides: `?motion=full`, `?motion=lite`, `?motion=reduced`
 
-- [ ] Hero 제목과 궤도 필드가 겹치지 않음
-- [ ] Motion, Field, Depth 버튼 상태가 실제 동작과 일치
-- [ ] 프로젝트 드래그와 관성 동작
-- [ ] 카드 2.5D가 부드럽게 복귀
-- [ ] 키네틱 티커가 끊기지 않음
+## Build and source
 
-## Tablet — 768px
+- [x] `npm.cmd run build` succeeds with Home, Work, five case studies, and Resume
+- [x] `npm.cmd ls --depth=0` resolves the npm dependency tree
+- [x] Active JavaScript modules pass `node --check`
+- [x] `git diff --check` reports no whitespace errors
+- [x] Anime.js remains the primary intro, reveal, Hero, and page-transition library
+- [x] Manrope Variable, Noto Sans KR Variable, and JetBrains Mono Variable are self-hosted through npm
+- [x] Real project images and videos are bundled from `src/assets/projects/`
+- [x] All compiled asset references resolve to files in `dist/`
+- [x] No wheel, touchmove, scroll-snap, body scroll lock, or gesture interception is present
 
-- [ ] 내비게이션과 Hero가 겹치지 않음
-- [ ] 프로젝트 카드가 탐색 가능
-- [ ] 텍스트 줄바꿈과 여백이 자연스러움
-- [ ] 가로 페이지 overflow 없음
+## Routes and content
 
-## Mobile — 390px
+- [x] Production preview returns HTTP 200 for all eight routes
+- [x] All 75 internal source links resolve to an existing route
+- [x] `/` presents the name and positioning first, then About, actual AQIS evidence, three selected projects, Focus, and Contact
+- [x] `/work/` presents all five projects as an editorial list with role, year, outcome, technology, and real media
+- [x] Every project has a separate case-study route and repository or live-product evidence
+- [x] AQIS and Briefit distinguish the user's role from the full team product
+- [x] MRI metrics are described as internal evaluation, not clinical validation
+- [x] `/resume/` is a readable page rather than a forced download
+- [x] Template microcopy such as `Scroll to inspect` and generic final `Links` sections was removed
 
-- [ ] 가로 페이지 overflow 없음
-- [ ] 터치 세로 스크롤이 방해받지 않음
-- [ ] 프로젝트 가로 스크롤 가능
-- [ ] CTA와 토글의 터치 영역이 충분함
-- [ ] 데스크톱 전용 장식이 콘텐츠를 가리지 않음
+## Semantics and keyboard source checks
 
-## Accessibility
+- [x] Every route has exactly one H1 and one main element
+- [x] The skip link is the first focusable control on every route
+- [x] No duplicate IDs or positive `tabindex` values were found
+- [x] Work uses one keyboard tab stop per project; duplicate media and arrow links remain pointer-clickable but leave the tab order
+- [x] Home selected work also uses one keyboard tab stop per project; media links remain pointer-clickable but leave the tab order
+- [x] Controlled case-study videos are not managed as autoplay videos
+- [x] Project media has project-specific alternative text or an accessible parent label
+- [x] Focus-visible styling is defined globally
+- [x] No phone number or birth date is present in public markup
 
-- [ ] Skip link 동작
-- [ ] 키보드로 링크와 버튼에 접근 가능
-- [ ] 포커스 표시가 보임
-- [ ] `aria-pressed`와 버튼 라벨 일치
-- [ ] reduced-motion에서 콘텐츠가 숨지 않음
-- [ ] Motion 수동 override 동작
+## Motion, depth, and lifecycle source checks
 
-## Browser runtime
+- [x] Full desktop uses native scroll with media-only visual inertia and time-based pointer spring
+- [x] Lite/coarse-pointer layouts retain native scroll and static depth
+- [x] Reduced mode removes Hero sticky choreography, inertia, depth, autoplay, and page-exit delay
+- [x] Continuous media/depth work pauses or settles when hidden or offscreen
+- [x] Dexterous Hand uses one coordinated cube/joint/tendon manipulation timeline independent from Hero scroll
+- [x] Dexterous Hand pauses offscreen/hidden/pagehide and resumes when visible/pageshow; reduced motion preserves the first static grip
+- [x] Fine-pointer tracking uses one rAF spring, and touch keeps native vertical scrolling without wheel/touchmove interception
+- [x] Short-height desktop, tablet, and mobile layouts receive dedicated hand, cube, and spacing reductions
+- [x] Case-study videos with controls are excluded from pointer tilt and automatic playback
+- [x] Same-origin page exit uses one 300ms Anime.js curtain; hash, mail, external, download, target, and modifier-click links are excluded
+- [x] Page progress continues to its actual target after large keyboard or scrollbar jumps
 
-- [ ] 콘솔 error 0건
-- [ ] 예상하지 못한 warning 검토
-- [ ] 숨겨진 탭에서 연속 모션 정지
-- [ ] 다시 보이는 탭에서 사용자 상태를 유지하며 재개
-- [ ] 빠른 포인터 이동에도 애니메이션이 누적되지 않음
+## Real-browser visual verification
 
-## Final report
+The browser-control plugin could not attach (`Cannot redefine property: process`), so the same installed Chrome was controlled through the bundled Playwright runtime. Screenshots were visually inspected at exact CSS viewports.
 
-- [ ] 변경 파일 목록
-- [ ] 실행한 검증 명령
-- [ ] 확인한 화면 크기
-- [ ] 남은 위험과 미검증 항목
+- [x] 1280x900: refined hand silhouette, full Motion, interactive Depth, reduced mode, console, and horizontal overflow
+- [x] 768x900: static-depth fallback, separated finger silhouette, navigation spacing, console, and horizontal overflow
+- [x] 390x844: responsive Hero, simplified hand detail, CTA hit areas, console, and horizontal overflow
+- [x] Keyboard: the Home tab sequence exposes the skip link first and all sampled links show focus outlines; all eight routes were traversed at 390px with native media controls retained
+- [x] Reduced motion: OS emulation and `?motion=reduced` keep the cube and finger pose static and set Depth to flat
+- [x] Motion/Depth defaults: cube transforms change in full mode; 1280px reports interactive Depth while 768px and 390px report static Depth
+- [x] Production build and preview: all eight routes return one H1, one main element, no page errors, and no horizontal overflow
+- [ ] Lifecycle: source guards were checked, but background/restore timing was not manually observed in a visible browser window

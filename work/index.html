@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SeMinKong의 로보틱스, Computer Vision, real-time software, AI 프로젝트입니다." />
+    <meta name="theme-color" content="#090d0b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>document.documentElement.classList.add('js');</script>
+    <title>Work — SeMinKong</title>
+  </head>
+  <body class="work-index-page">
+    <a class="skip-link" href="#work-list">프로젝트 목록으로 바로가기</a>
+    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
+
+    <header class="site-nav" data-site-nav>
+      <a class="wordmark" href="../" aria-label="SeMinKong 홈"><span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span></a>
+      <nav class="site-nav__links" aria-label="주요 페이지">
+        <a href="./" aria-current="page">Work</a><a href="../#about">About</a><a href="mailto:semin1224@gmail.com">Email</a>
+      </nav>
+      <a class="nav-resume" href="../resume/">Resume <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main class="work-index">
+      <header class="work-index__hero page-width">
+        <p class="eyebrow" data-intro>Work / 05 projects</p>
+        <h1 data-intro lang="en">Projects</h1>
+        <p data-intro>로봇, 비전, 실시간 웹, AI 파이프라인을 실제 실행 화면과 함께 정리했습니다.</p>
+      </header>
+
+      <section class="work-list page-width" id="work-list" aria-label="프로젝트">
+        <article class="work-row" data-reveal="row">
+          <span class="work-row__index">01</span>
+          <a class="work-row__media work-row__media--aqis" href="./aqis/" data-depth-card tabindex="-1" aria-hidden="true">
+            <img src="/src/assets/projects/aqis/real-ops.png" alt="AQIS RealOps 운영 대시보드" data-depth-layer="6" data-inertia="14" />
+          </a>
+          <div class="work-row__copy">
+            <p>Team Lead · Full-Stack &amp; Robot Integration · 2026</p>
+            <h2><a href="./aqis/" lang="en">AQIS</a></h2>
+            <span>RealSense 검사 결과를 컨베이어, Dobot, 실시간 운영 화면까지 연결했습니다.</span>
+            <ul aria-label="주요 기술"><li>ROS 2</li><li>FastAPI</li><li>RealSense</li></ul>
+          </div>
+          <a class="work-row__arrow" href="./aqis/" tabindex="-1" aria-hidden="true">↗</a>
+        </article>
+
+        <article class="work-row" data-reveal="row">
+          <span class="work-row__index">02</span>
+          <a class="work-row__media" href="./brain-tumor-mri/" data-depth-card tabindex="-1" aria-hidden="true">
+            <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="Brain Tumor MRI 분류 결과" data-depth-layer="6" data-inertia="12" />
+          </a>
+          <div class="work-row__copy">
+            <p>Personal Project · Computer Vision · 2026</p>
+            <h2><a href="./brain-tumor-mri/" lang="en">Brain Tumor MRI</a></h2>
+            <span>YOLO11으로 4개 MRI 분류와 종양 영역 분할을 하나의 추론 흐름으로 구현했습니다.</span>
+            <ul aria-label="주요 기술"><li>PyTorch</li><li>YOLO11</li><li>OpenCV</li></ul>
+          </div>
+          <a class="work-row__arrow" href="./brain-tumor-mri/" tabindex="-1" aria-hidden="true">↗</a>
+        </article>
+
+        <article class="work-row" data-reveal="row">
+          <span class="work-row__index">03</span>
+          <a class="work-row__media" href="./alkkagi/" data-depth-card tabindex="-1" aria-hidden="true">
+            <video src="/src/assets/projects/alkkagi/demo.mp4" muted loop playsinline preload="metadata" data-auto-video data-depth-layer="6" data-inertia="12" aria-hidden="true"></video>
+          </a>
+          <div class="work-row__copy">
+            <p>Personal Project · Real-time Web · 2026</p>
+            <h2><a href="./alkkagi/" lang="en">Alkkagi.io</a></h2>
+            <span>직접 만든 물리 모듈과 Socket.io를 결합한 서버 권위 실시간 멀티플레이 게임입니다.</span>
+            <ul aria-label="주요 기술"><li>TypeScript</li><li>Node.js</li><li>Socket.io</li></ul>
+          </div>
+          <a class="work-row__arrow" href="./alkkagi/" tabindex="-1" aria-hidden="true">↗</a>
+        </article>
+
+        <article class="work-row" data-reveal="row">
+          <span class="work-row__index">04</span>
+          <a class="work-row__media work-row__media--briefit" href="./briefit/" data-depth-card tabindex="-1" aria-hidden="true">
+            <img src="/src/assets/projects/briefit/cover.webp" alt="Briefit 공식 팀 제품 화면" data-depth-layer="6" data-inertia="12" />
+          </a>
+          <div class="work-row__copy">
+            <p>Team AI Engineer · NLP · 2025</p>
+            <h2><a href="./briefit/" lang="en">Briefit</a></h2>
+            <span>뉴스 수집, 유사 기사 grouping, KoBART 요약으로 이어지는 AI 파이프라인을 담당했습니다.</span>
+            <ul aria-label="주요 기술"><li>Python</li><li>Transformers</li><li>KoBART</li></ul>
+          </div>
+          <a class="work-row__arrow" href="./briefit/" tabindex="-1" aria-hidden="true">↗</a>
+        </article>
+
+        <article class="work-row" data-reveal="row">
+          <span class="work-row__index">05</span>
+          <a class="work-row__media work-row__media--prompt" href="./project-prompt-generator/" data-depth-card tabindex="-1" aria-hidden="true">
+            <img src="/src/assets/projects/prompt-generator/flow.png" alt="Project Prompt Generator LangGraph 흐름도" data-depth-layer="6" data-inertia="10" />
+          </a>
+          <div class="work-row__copy">
+            <p>Personal Project · AI Agent · 2026</p>
+            <h2><a href="./project-prompt-generator/" lang="en">Project Prompt Generator</a></h2>
+            <span>여섯 설계 영역의 대화를 병렬로 진행하고 하나의 구현 문서로 합치는 LangGraph 서비스입니다.</span>
+            <ul aria-label="주요 기술"><li>LangGraph</li><li>FastAPI</li><li>WebSocket</li></ul>
+          </div>
+          <a class="work-row__arrow" href="./project-prompt-generator/" tabindex="-1" aria-hidden="true">↗</a>
+        </article>
+      </section>
+
+      <section class="directory-contact page-width" data-reveal="text">
+        <p>함께 만들 일이 있다면</p>
+        <a href="mailto:semin1224@gmail.com">semin1224@gmail.com <span aria-hidden="true">↗</span></a>
+      </section>
+    </main>
+
+    <footer class="page-width site-footer"><span>© 2026 SeMinKong</span><a href="../">Home ↑</a></footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
