@@ -1,6 +1,10 @@
 import { animate, createTimeline } from 'animejs';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+const HOVER_LIMIT_X = 18;
+const HOVER_LIMIT_Y = 14;
+const DRAG_LIMIT_X = 32;
+const DRAG_LIMIT_Y = 24;
 
 const springStep = (value, velocity, target, dt, stiffness = 120, damping = 19) => {
   const acceleration = ((target - value) * stiffness) - (velocity * damping);
@@ -95,6 +99,7 @@ export const initDexterousHand = (environment) => {
   let geometry = null;
   let geometryFrame = 0;
   let geometryUpdatedAt = 0;
+  let dragState = null;
 
   const cubeState = {
     x: 0,
@@ -145,8 +150,8 @@ export const initDexterousHand = (environment) => {
     const dt = Math.min(0.05, Math.max(0.001, (time - (lastTime || time)) / 1000));
     lastTime = time;
 
-    [cubeState.x, cubeState.vx] = springStep(cubeState.x, cubeState.vx, cubeState.targetX, dt, 112, 19);
-    [cubeState.y, cubeState.vy] = springStep(cubeState.y, cubeState.vy, cubeState.targetY, dt, 112, 19);
+    [cubeState.x, cubeState.vx] = springStep(cubeState.x, cubeState.vx, cubeState.targetX, dt, 168, 24);
+    [cubeState.y, cubeState.vy] = springStep(cubeState.y, cubeState.vy, cubeState.targetY, dt, 168, 24);
 
     let moving =
       Math.abs(cubeState.targetX - cubeState.x) > 0.01 ||
@@ -155,7 +160,7 @@ export const initDexterousHand = (environment) => {
       Math.abs(cubeState.vy) > 0.02;
 
     fingerStates.forEach((finger) => {
-      [finger.value, finger.velocity] = springStep(finger.value, finger.velocity, finger.target, dt, 132, 21);
+      [finger.value, finger.velocity] = springStep(finger.value, finger.velocity, finger.target, dt, 158, 23);
       if (Math.abs(finger.target - finger.value) > 0.01 || Math.abs(finger.velocity) > 0.02) moving = true;
     });
 
@@ -167,6 +172,11 @@ export const initDexterousHand = (environment) => {
     if (frame || !visible || document.hidden || environment.motion === 'reduced') return;
     lastTime = 0;
     frame = requestAnimationFrame(tick);
+  };
+
+  const cancelCubeDrag = () => {
+    dragState = null;
+    root.classList.remove('is-dragging', 'is-cube-hovering');
   };
 
   const applyPose = (pose) => {
@@ -192,6 +202,7 @@ export const initDexterousHand = (environment) => {
   };
 
   const clearTransient = () => {
+    cancelCubeDrag();
     cubeFeedback?.revert?.();
     cubeFeedback = null;
     if (feedbackTimer) window.clearTimeout(feedbackTimer);
@@ -295,19 +306,21 @@ export const initDexterousHand = (environment) => {
     geometryFrame = 0;
     const sceneRect = scene.getBoundingClientRect();
     const cubeRect = cubeImpulse.getBoundingClientRect();
+    const cubeSize = Math.max(cubeRect.width, cubeRect.height);
     geometry = {
       scene: sceneRect,
       cube: {
         x: cubeRect.left + (cubeRect.width / 2),
         y: cubeRect.top + (cubeRect.height / 2),
-        radius: Math.max(52, Math.max(cubeRect.width, cubeRect.height) * 1.55)
+        hitRadius: Math.max(48, cubeSize * 0.78),
+        influenceRadius: Math.max(170, Math.min(sceneRect.width, sceneRect.height) * 0.52)
       },
       fingers: fingerStates.map((finger) => {
         const rect = finger.tip.getBoundingClientRect();
         return {
           x: rect.left + (rect.width / 2),
           y: rect.top + (rect.height / 2),
-          radius: Math.max(28, Math.max(rect.width, rect.height) * 1.65)
+          radius: clamp(Math.max(rect.width, rect.height) * 1.8, 44, 88)
         };
       })
     };
@@ -325,36 +338,101 @@ export const initDexterousHand = (environment) => {
     const dx = event.clientX - geometry.cube.x;
     const dy = event.clientY - geometry.cube.y;
     const distance = Math.hypot(dx, dy);
-    return { dx, dy, distance, force: clamp(1 - (distance / geometry.cube.radius), 0, 1) };
+    const radius = geometry.cube.influenceRadius;
+    const influence = clamp(1 - (distance / radius), 0, 1);
+    const edgeFade = clamp(((radius * 1.15) - distance) / (radius * 0.15), 0, 1);
+    return { dx, dy, distance, radius, influence, edgeFade };
   };
 
-  const onPointerMove = (event) => {
-    if (environment.depth !== 'interactive' || environment.motion === 'reduced' || event.pointerType === 'touch') return;
-    const pointer = getPointerGeometry(event);
-    if (!pointer) return;
-
-    if (pointer.force > 0) {
-      cubeState.targetX = clamp((-pointer.dx / geometry.cube.radius) * 8 * pointer.force, -8, 8);
-      cubeState.targetY = clamp((-pointer.dy / geometry.cube.radius) * 6 * pointer.force, -6, 6);
-      setManipulationSpeed(0.78);
-    } else {
-      cubeState.targetX = 0;
-      cubeState.targetY = 0;
-      setManipulationSpeed(1);
-    }
-
+  const updateFingerTargets = (event, pointer) => {
     fingerStates.forEach((finger, index) => {
       const hit = geometry.fingers[index];
       const proximity = hit
         ? clamp(1 - (Math.hypot(event.clientX - hit.x, event.clientY - hit.y) / hit.radius), 0, 1)
         : 0;
-      finger.target = finger.direction * ((pointer.force * 3.5) - (proximity * 6.5)) * finger.weight;
+      finger.target = finger.direction * ((pointer.influence * 3) - (proximity * 9.5)) * finger.weight;
     });
+  };
+
+  const playCubePress = (direction) => {
+    cubeFeedback?.revert?.();
+    cubeFeedback = animate(cubeImpulse, {
+      x: [0, direction * 10, -direction * 3, 0],
+      y: [0, -9, 2, 0],
+      rotateX: ['0deg', `${direction * 13}deg`, '0deg'],
+      rotateZ: ['0deg', `${direction * 18}deg`, `${-direction * 5}deg`, '0deg'],
+      duration: 520,
+      ease: 'out(3)'
+    });
+  };
+
+  const onPointerMove = (event) => {
+    if (environment.depth !== 'interactive' || environment.motion === 'reduced' || event.pointerType === 'touch') return;
+    if (dragState) return;
+    const pointer = getPointerGeometry(event);
+    if (!pointer) return;
+
+    root.classList.toggle('is-cube-hovering', pointer.distance <= geometry.cube.hitRadius * 1.15);
+    cubeState.targetX = clamp(pointer.dx / pointer.radius, -1, 1) * HOVER_LIMIT_X * pointer.edgeFade;
+    cubeState.targetY = clamp(pointer.dy / pointer.radius, -1, 1) * HOVER_LIMIT_Y * pointer.edgeFade;
+    setManipulationSpeed(1 - (pointer.influence * 0.08));
+    updateFingerTargets(event, pointer);
     schedule();
   };
 
   const onPointerLeave = () => {
+    if (dragState) return;
+    root.classList.remove('is-cube-hovering');
     resetInteraction();
+    schedule();
+  };
+
+  const startCubeDrag = (event) => {
+    cubeState.targetX = cubeState.x;
+    cubeState.targetY = cubeState.y;
+    cubeState.vx = 0;
+    cubeState.vy = 0;
+    dragState = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: cubeState.x,
+      originY: cubeState.y
+    };
+    root.classList.add('is-dragging');
+    manipulation?.pause?.();
+  };
+
+  const onDragMove = (event) => {
+    if (!dragState || event.pointerId !== dragState.pointerId) return;
+    if ((event.buttons & 1) === 0) {
+      finishCubeDrag(event);
+      return;
+    }
+    if (!visible || document.hidden || environment.motion === 'reduced') return;
+
+    cubeState.targetX = clamp(
+      dragState.originX + ((event.clientX - dragState.startX) * 0.82),
+      -DRAG_LIMIT_X,
+      DRAG_LIMIT_X
+    );
+    cubeState.targetY = clamp(
+      dragState.originY + ((event.clientY - dragState.startY) * 0.7),
+      -DRAG_LIMIT_Y,
+      DRAG_LIMIT_Y
+    );
+
+    const pointer = getPointerGeometry(event);
+    if (pointer) updateFingerTargets(event, pointer);
+    schedule();
+  };
+
+  const finishCubeDrag = (event) => {
+    if (!dragState || (event?.pointerId != null && event.pointerId !== dragState.pointerId)) return;
+    cancelCubeDrag();
+    resetInteraction();
+    requestGeometryUpdate();
+    resumeMotion();
     schedule();
   };
 
@@ -370,27 +448,22 @@ export const initDexterousHand = (environment) => {
       if (!nearestFinger || score < nearestFinger.score) nearestFinger = { index, distance, score };
     });
 
-    const cubeScore = pointer.distance / geometry.cube.radius;
+    const cubeScore = pointer.distance / geometry.cube.hitRadius;
     let handled = false;
 
-    if (cubeScore <= 1 && (!nearestFinger || cubeScore <= nearestFinger.score)) {
+    if (cubeScore <= 1.15 && (!nearestFinger || cubeScore <= nearestFinger.score * 1.08)) {
       const direction = pointer.dx >= 0 ? -1 : 1;
-      cubeFeedback?.revert?.();
-      cubeFeedback = animate(cubeImpulse, {
-        x: [0, direction * 7, -direction * 2, 0],
-        y: [0, -6, 1, 0],
-        rotateX: ['0deg', `${direction * 9}deg`, '0deg'],
-        rotateZ: ['0deg', `${direction * 14}deg`, `${-direction * 4}deg`, '0deg'],
-        duration: 560,
-        ease: 'out(3)'
-      });
-      setManipulationSpeed(0.62);
+      if (feedbackTimer) window.clearTimeout(feedbackTimer);
+      feedbackTimer = 0;
+      playCubePress(direction);
+      startCubeDrag(event);
+      schedule();
+      return;
+    } else if (nearestFinger && nearestFinger.score <= 1.5) {
+      const finger = fingerStates[nearestFinger.index];
+      finger.target = -finger.direction * 12 * finger.weight;
+      finger.velocity += -finger.direction * 22 * finger.weight;
       handled = true;
-    } else if (nearestFinger && nearestFinger.score <= 1.35) {
-        const finger = fingerStates[nearestFinger.index];
-        finger.target = -finger.direction * 9 * finger.weight;
-        finger.velocity += -finger.direction * 18 * finger.weight;
-        handled = true;
     }
 
     if (!handled) return;
@@ -399,7 +472,7 @@ export const initDexterousHand = (environment) => {
     feedbackTimer = window.setTimeout(() => {
       resetInteraction();
       schedule();
-    }, 620);
+    }, 560);
     schedule();
   };
 
@@ -419,6 +492,10 @@ export const initDexterousHand = (environment) => {
   scene.addEventListener('pointerleave', onPointerLeave, { passive: true });
   scene.addEventListener('pointercancel', onPointerLeave, { passive: true });
   scene.addEventListener('pointerdown', onPointerDown, { passive: true });
+  window.addEventListener('pointermove', onDragMove, { passive: true });
+  window.addEventListener('pointerup', finishCubeDrag, { passive: true });
+  window.addEventListener('pointercancel', finishCubeDrag, { passive: true });
+  window.addEventListener('blur', finishCubeDrag, { passive: true });
   window.addEventListener('resize', requestGeometryUpdate, { passive: true });
 
   if ('IntersectionObserver' in window) {

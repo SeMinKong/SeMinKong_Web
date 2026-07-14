@@ -294,3 +294,41 @@ Hero가 release된 뒤에는 추상 시스템 모션을 반복하지 않는다. 
 - Joint-cycle offsets stay deliberately small; motion should suggest tendon-driven correction rather than folding the fingers into a bolt chain.
 - The thumb remains the primary opposing contact below the cube, while the index supplies the clearest upper contact. The other three digits support the hand silhouette and should not collide visually with the cube.
 - Surface-channel opacity may follow the existing structural tension bus, but it must remain subordinate to the solid palm shell.
+
+## 2026-07-14 — Freer palm manipulation override
+
+This interaction range replaces the earlier cube pointer limit of X `±8px` and Y `±6px`.
+
+- Fine-pointer hover follows the pointer across a broad hand-scene radius instead of multiplying distance by a second falloff. Local cube offset is limited to X `±18px` and Y `±14px`, with a faster critically damped return.
+- Pressing the cube starts a mouse-only direct drag. Drag offset is limited to X `±32px` and Y `±24px` in rig coordinates so the cube stays over the palm after responsive scaling.
+- The master Anime.js manipulation timeline pauses while dragging and resumes from its preserved progress on release. The interactive offset then springs back to the autonomous palm path.
+- Cube press feedback uses a stronger translation and rotation impulse without scale. Finger proximity and press flex are widened so individual chains respond before the pointer reaches the exact fingertip center.
+- Dragging uses window-level passive pointer listeners without pointer capture or `preventDefault`. Touch and coarse-pointer environments keep native `pan-y` scrolling and do not enable hover, press, or drag interaction.
+- Reduced motion, offscreen, hidden, `pagehide`, `pointercancel`, and window blur all cancel transient interaction and preserve the existing static or paused lifecycle behavior.
+
+## 2026-07-14 — Desktop smooth-scroll transport override
+
+이 항목은 위의 `스크롤 자체를 가로채는 라이브러리는 추가하지 않는다` 결정을 대체한다. Anime.js가 계속 Hero, reveal, dexterous-hand, page transition의 primary motion library다.
+
+### Page scroll
+
+- `motion=full`과 `depth=interactive`인 961px 이상 fine-pointer 환경에만 Lenis를 생성한다.
+- `autoRaf: true`, `lerp: 0.115`, `wheelMultiplier: 0.9`, `smoothWheel: true`, `stopInertiaOnNavigate: true`를 사용한다.
+- `syncTouch: false`로 두어 touch와 coarse-pointer 환경에서 vertical scrolling을 흉내 내거나 가로채지 않는다.
+- 768px, 390px, `prefers-reduced-motion`, local `?motion=lite|reduced`에서는 Lenis를 생성하지 않는다.
+- hidden 상태에서는 stop하고 visible 상태에서 resume한다. `pagehide`에서는 instance를 destroy한다.
+- scroll transport와 중복되는 media-only 후행 이동은 gain `0.34`, 전체 clamp `±12px`로 낮춘다.
+
+### Page transition
+
+- same-origin full-mode link는 `rgba(8, 12, 10, 0.94)` graphite curtain을 opacity `0 → 1`, scale `1.012 → 1`로 210ms 동안 표시한다.
+- signal lime full-screen curtain은 사용하지 않는다.
+- lite/reduced, hash, mail, tel, download, target, external, modifier click은 지연시키지 않는다.
+
+## 2026-07-14 — Hand 2.5D depth motion refinement
+
+- The existing hand scene remains the only `data-depth-root`; its desktop strength is `1.45` and its hand-specific perspective is `880px`.
+- The previously transform-free `.dexterous-hand__tilt` wrapper is the only new parallax layer, using `data-depth-layer="4"`. Anime.js-owned rig, cube, impulse, and digit transforms remain untouched.
+- Desktop pointer movement adds a small whole-hand parallax offset on top of the fixed 3/4 pose. No new pointer listener, rAF loop, or Anime.js instance is added.
+- Static depth uses relaxed `1080px` perspective at tablet widths and `1200px` on mobile. Reduced motion keeps the layered CSS geometry but zeros root tilt and parallax.
+- Existing offscreen, hidden, page lifecycle, coarse-pointer, and native `pan-y` behavior continues to own activation and cleanup.

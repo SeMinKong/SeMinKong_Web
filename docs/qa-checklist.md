@@ -16,11 +16,11 @@ Manual QA overrides: `?motion=full`, `?motion=lite`, `?motion=reduced`
 - [x] Manrope Variable, Noto Sans KR Variable, and JetBrains Mono Variable are self-hosted through npm
 - [x] Real project images and videos are bundled from `src/assets/projects/`
 - [x] All compiled asset references resolve to files in `dist/`
-- [x] No wheel, touchmove, scroll-snap, body scroll lock, or gesture interception is present
+- [x] Desktop/full alone uses Lenis wheel smoothing; touchmove, scroll-snap, body scroll lock, syncTouch, and gesture interception are absent
 
 ## Routes and content
 
-- [x] Production preview returns HTTP 200 for all eight routes
+- [x] Production preview returns HTTP 200 for all nine HTML routes
 - [x] All 75 internal source links resolve to an existing route
 - [x] `/` presents the name and positioning first, then About, actual AQIS evidence, three selected projects, Focus, and Contact
 - [x] `/work/` presents all five projects as an editorial list with role, year, outcome, technology, and real media
@@ -44,7 +44,7 @@ Manual QA overrides: `?motion=full`, `?motion=lite`, `?motion=reduced`
 
 ## Motion, depth, and lifecycle source checks
 
-- [x] Full desktop uses native scroll with media-only visual inertia and time-based pointer spring
+- [x] Full desktop uses Lenis wheel transport with restrained media inertia and a time-based pointer spring; keyboard and touch remain native
 - [x] Lite/coarse-pointer layouts retain native scroll and static depth
 - [x] Reduced mode removes Hero sticky choreography, inertia, depth, autoplay, and page-exit delay
 - [x] Continuous media/depth work pauses or settles when hidden or offscreen
@@ -53,7 +53,7 @@ Manual QA overrides: `?motion=full`, `?motion=lite`, `?motion=reduced`
 - [x] Fine-pointer tracking uses one rAF spring, and touch keeps native vertical scrolling without wheel/touchmove interception
 - [x] Short-height desktop, tablet, and mobile layouts receive dedicated hand, cube, and spacing reductions
 - [x] Case-study videos with controls are excluded from pointer tilt and automatic playback
-- [x] Same-origin page exit uses one 300ms Anime.js curtain; hash, mail, external, download, target, and modifier-click links are excluded
+- [x] Same-origin page exit uses one 210ms graphite Anime.js curtain; hash, mail, external, download, target, and modifier-click links are excluded
 - [x] Page progress continues to its actual target after large keyboard or scrollbar jumps
 
 ## Real-browser visual verification
@@ -63,8 +63,58 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] 1280x900: refined hand silhouette, full Motion, interactive Depth, reduced mode, console, and horizontal overflow
 - [x] 768x900: static-depth fallback, separated finger silhouette, navigation spacing, console, and horizontal overflow
 - [x] 390x844: responsive Hero, simplified hand detail, CTA hit areas, console, and horizontal overflow
-- [x] Keyboard: the Home tab sequence exposes the skip link first and all sampled links show focus outlines; all eight routes were traversed at 390px with native media controls retained
+- [x] Keyboard: skip links remain first in source order, sampled header links show focus outlines, and the new About/Resume skip targets accept programmatic focus
 - [x] Reduced motion: OS emulation and `?motion=reduced` keep the cube and finger pose static and set Depth to flat
 - [x] Motion/Depth defaults: cube transforms change in full mode; 1280px reports interactive Depth while 768px and 390px report static Depth
-- [x] Production build and preview: all eight routes return one H1, one main element, no page errors, and no horizontal overflow
+- [x] Production build and preview: all nine HTML routes return one H1 and one main element; representative Home, About, Resume, and case layouts have no page errors or horizontal overflow
 - [ ] Lifecycle: source guards were checked, but background/restore timing was not manually observed in a visible browser window
+
+## 2026-07-14 — `develop` hand-only Hero verification
+
+- [x] `develop` was created from the clean deployed `main`; no commit, push, merge, or deployment was performed.
+- [x] `npm.cmd run build`, `npm.cmd run verify:dist`, `npm.cmd ls --depth=0`, all active `node --check` calls, and `git diff --check` pass.
+- [x] Production preview returns HTTP 200 for Home, Work, five case studies, and Resume.
+- [x] The active Hero markup contains no `.robot-forearm`; the compact wrist, palm, and five digit silhouettes remain.
+- [x] 1280×900 production preview: the enlarged hand is balanced in the right column, the cube overlaps the palm bounds, default Motion is `full`, Depth is `interactive`, and there is no horizontal overflow.
+- [x] 768×900 production preview: the enlarged static-depth fallback stays below the Hero copy without clipping; default Motion is `lite`, Depth is `static`, and there is no horizontal overflow.
+- [x] 390×844 production preview: the hand-only silhouette, palm cube, CTA row, and native page flow remain readable with no horizontal overflow.
+- [x] Fine-pointer hover produced an observed X offset above `8px` at a sampled point, compared with the previous mathematical maximum near `2px`; cube drag executed and released without a stuck dragging state or console error.
+- [x] `?motion=reduced` reports Motion `reduced` and Depth `flat`; cube transforms stayed identical across an 800ms sample and pointer movement left both interactive offsets at zero.
+- [x] Moving directly to `#selected-work` placed the hand well outside the observer margin and its cube transform stayed identical across an 850ms sample, confirming offscreen pause.
+- [x] The skip link remains first in the accessibility snapshot; sampled skip and brand links receive a visible 2px solid keyboard focus outline.
+- [x] Browser console error log is empty after responsive, pointer, drag, reduced-motion, and offscreen checks.
+- [ ] Background-tab hide/restore timing remains unverified in a visible browser window; source guards are unchanged.
+
+## 2026-07-14 — About, inertial scroll, transition, original Resume verification
+
+- [x] `npm.cmd run build` and `npm.cmd run verify:dist` pass; 13 deployment entries include About and the PDF, DOCX, and resume page PNG.
+- [x] Production preview returns HTTP 200 for Home, About, Work, five case studies, Resume, PDF, DOCX, and PNG; file MIME types are correct.
+- [x] 1280×900: Home statement is one line, Lenis is active only in full/interactive mode, and one 720px wheel input continued from Y 87 → 367 → 577 → 644 over 660ms.
+- [x] 768×900: statement is one 655px line, Motion is lite, Depth is static, Lenis is absent, both Work and About remain visible, and horizontal overflow is zero.
+- [x] 390×844: statement wraps to two readable lines, Home, About, Contact, and Resume have no horizontal overflow, and all header links fit.
+- [x] About has one H1, four profile facts, three work-method items, current tools, Work/Resume/Contact paths, and responsive 1280px/390px layouts.
+- [x] Contact is a real information panel with email, GitHub, Resume, and location; the old “이메일로 부탁드립니다” copy and top-nav Email item are absent.
+- [x] Resume keeps all HTML sections and adds a loaded 1241×1754 page preview plus working PDF download, PDF new-tab, and DOCX download links.
+- [x] The source PDF is a one-page A4 tagged Word export; the 150dpi render was visually checked for clipping and overlap.
+- [x] Full-mode internal navigation shows a graphite `rgba(8, 12, 10, 0.94)` curtain at 210ms; no signal-green full-screen flash remains.
+- [x] `?motion=reduced` reports Motion reduced, Depth flat, no Lenis class/data attribute, relative Hero layout, visible intro content, and no page curtain.
+- [x] Browser console logs are empty after Home, About, Resume, transition, responsive, inertia, and reduced-motion checks.
+- [x] Focus-visible sampling reports a solid outline on a header Work link; source order still places skip links first and no positive tabindex was added.
+- [ ] Original Resume privacy: the requested source includes a phone number and birth date. Confirm that both may be public before deploying.
+- [ ] Background-tab hide/restore timing was not manually observed; stop/start source guards were reviewed.
+
+## 2026-07-14 — Hand 2.5D depth verification
+
+- [x] `npm.cmd run build` succeeds and `git diff --check` reports no whitespace errors after the hand depth pass.
+- [x] 1280×900: palm and link thickness, per-digit depth bands, projected cube shadow, and desktop pointer parallax are visible; Motion is `full`, Depth is `interactive`, and horizontal overflow is absent.
+- [x] 768×900: the relaxed `1080px` perspective keeps the static hand volume readable below the Hero copy; Motion is `lite`, Depth is `static`, and horizontal overflow is absent.
+- [x] 390×844: the `1200px` perspective and reduced side-wall/shadow contrast keep the hand legible without clipping or horizontal overflow.
+- [x] The thumb remains at z-index `11` / depth `72px`, above the cube at z-index `8` / depth `29px`; the cube remains elevated at `top: 35%`.
+- [x] `?motion=reduced` reports Motion `reduced` and Depth `flat`; root tilt and the added parallax layer resolve to zero while the static CSS volume remains.
+- [x] The decorative hand remains `aria-hidden` with no focusable descendants, and browser logs contain no warnings or errors beyond Vite connection debug messages.
+
+## 2026-07-14 — Tapered palm release verification
+
+- [x] 1280×900: the palm narrows toward the wrist, the center recess separates the bright shell, and the thinner side wall remains visibly 2.5D.
+- [x] 768×900 and 390×844: the simplified palm keeps its tapered silhouette without clipping or horizontal overflow.
+- [x] Cube height, thumb-over-cube layering, finger roots, wrist coupling, Motion/Depth defaults, and native mobile scrolling remain unchanged.

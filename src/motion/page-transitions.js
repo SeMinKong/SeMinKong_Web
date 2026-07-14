@@ -8,7 +8,9 @@ export const initPageTransitions = (environment) => {
 
   const reset = () => {
     navigating = false;
-    curtain.style.transform = 'translate3d(0, 102%, 0)';
+    curtain.style.opacity = '0';
+    curtain.style.visibility = 'hidden';
+    curtain.style.transform = 'scale(1.012)';
   };
 
   const shouldHandle = (event, link, url) => {
@@ -33,6 +35,7 @@ export const initPageTransitions = (environment) => {
 
     event.preventDefault();
     navigating = true;
+    curtain.style.visibility = 'visible';
     let completed = false;
     const navigate = () => {
       if (completed) return;
@@ -41,13 +44,14 @@ export const initPageTransitions = (environment) => {
     };
 
     animate(curtain, {
-      y: ['102%', '0%'],
-      duration: 300,
-      ease: 'inOut(3)',
+      opacity: [0, 1],
+      scale: [1.012, 1],
+      duration: 210,
+      ease: 'out(3)',
       onComplete: navigate
     });
 
-    window.setTimeout(navigate, 340);
+    window.setTimeout(navigate, 250);
   });
 
   window.addEventListener('pageshow', reset);

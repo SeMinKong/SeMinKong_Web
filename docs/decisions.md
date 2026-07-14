@@ -127,3 +127,51 @@
 - Decision: use a tapered solid palm, five separated digit silhouettes, one bearing per joint boundary, restrained metacarpal channels, and a single aluminum/graphite lighting system.
 - Reason: adding small parts made the previous object read as an insect-like linkage and a pile of bolts rather than a dexterous robotic hand.
 - Impact: palm dimensions and joint hardware are reduced, digit roots are fanned along the palm edge, the rig is enlarged and tilted for a 3/4 product-render composition, and secondary details disappear on constrained layouts. Anime.js remains the motion engine and no Three.js dependency is added.
+
+## 2026-07-14 — Hero 로봇 손의 아래팔 제거와 직접 조작 확대
+
+- Decision: Hero의 긴 forearm shell은 제거하고 다섯 손가락, 손바닥, 짧은 wrist coupler만 남긴다. 남은 손을 확대·재중심화하고 큐브를 손바닥 전면 위로 옮긴다. fine pointer에서는 넓은 hover 반응과 제한된 직접 drag를 제공한다.
+- Reason: 아래팔이 시각적 비중을 과도하게 차지했고, 큐브가 손바닥보다 뒤에 떨어져 보였다. 기존 거리 수식은 명목 범위보다 실제 이동량이 훨씬 작아 상호작용이 억압적으로 느껴졌다.
+- Impact: desktop hover는 X `±18px`, Y `±14px`, drag는 X `±32px`, Y `±24px` 범위에서 동작한다. 큐브의 수직 기준점은 rig 상단 `35%`로 두어 손바닥 위에 명확한 공중 간격을 유지한다. Anime.js master timeline, reduced motion, touch/coarse-pointer fallback, native vertical scroll, visibility lifecycle은 유지한다.
+
+## 2026-07-14 — 별도 About와 Contact 정보 패널
+
+- Decision: 상단 내비게이션은 `Work · About · Resume`로 단순화하고 Email 항목을 제거한다. Home의 짧은 소개는 `/about/`로 연결하며, 상세 소개는 별도 About 페이지에서 제공한다. 연락처는 Home의 `#contact` 정보 패널 한 곳에 이메일, GitHub, Resume, 위치를 모은다.
+- Reason: 소개와 연락 경로를 각각 독립적인 목적지로 만들고, 반복되는 “이메일로 연락” 문구 없이 사용자가 필요한 정보를 직접 선택하게 하기 위해서다.
+- Impact: 모든 route의 About 링크는 `/about/`를 가리키고, case study와 Work의 기존 Email 링크는 Contact 패널 링크로 바뀐다. backend 없는 장식용 form은 만들지 않는다.
+
+## 2026-07-14 — 데스크톱 wheel 관성 transport
+
+- Decision: 이전의 `Lenis 같은 scroll hijacking 계층을 추가하지 않는다` 결정을 대체한다. fine pointer와 961px 이상인 full 환경에 한해 Lenis를 wheel 관성 transport로 사용하고, Anime.js를 Hero·reveal·object·page transition의 주 모션 엔진으로 유지한다.
+- Reason: 참고 사이트에서 확인한 약 0.6초의 실제 문서 scroll 감쇠를 미디어 후행 효과만으로는 재현할 수 없었다.
+- Impact: `lerp 0.115`, `wheelMultiplier 0.9`, `syncTouch false`를 사용한다. 768px 이하, touch/coarse pointer, reduced motion, keyboard scroll은 native 동작을 유지하며 hidden 상태에서는 Lenis를 정지한다. 기존 미디어 관성 강도는 중복감을 줄이기 위해 절반 이하로 낮춘다.
+
+## 2026-07-14 — 저채도 page transition
+
+- Decision: signal green 전체 화면 curtain을 제거하고, 210ms 동안 나타나는 반투명 graphite curtain 하나만 사용한다.
+- Reason: 밝은 초록색 flash가 페이지 이동보다 강조되어 부담스럽고 콘텐츠 간 연결을 끊었다.
+- Impact: full desktop의 same-origin 이동에만 적용하며 hash, mail, download, 새 탭, modifier click과 reduced/lite 환경은 기본 탐색을 사용한다.
+
+## 2026-07-14 — 웹 Resume와 원본 Resume 병행
+
+- Decision: 기존 HTML Resume를 유지하고, 제공받은 DOCX를 변환한 1-page PDF, DOCX 원본, 렌더된 page image를 `/resume/`에서 함께 제공한다.
+- Reason: 빠르게 훑는 웹 이력서와 원문 확인·다운로드 요구를 동시에 만족시키기 위해서다.
+- Impact: 기존 `전화번호와 생년월일이 공개 빌드에 포함되지 않는다` 기준은 원본 문서에 한해 사용자 요청으로 예외 처리한다. 원본에는 전화번호와 생년월일이 포함되어 있으므로 실제 배포 전에 공개 범위를 다시 확인해야 한다.
+
+## 2026-07-14 — Hero 엄지의 전면 접촉 레이어
+
+- Decision: 로봇 손의 엄지는 큐브와 겹치는 모든 자세에서 큐브 앞면보다 위에 렌더링한다.
+- Reason: 엄지가 큐브 내부로 관통해 보이면 손바닥 위에서 물체를 조작한다는 접촉 관계가 깨진다.
+- Impact: 엄지의 위치와 관절 동작은 유지하고, 엄지의 3D 깊이만 `72px`로 올려 큐브 회전·hover·drag 중에도 전면 레이어를 유지한다.
+
+## 2026-07-14 — Hero 로봇 손 2.5D 깊이 강화
+
+- Decision: 손 전용 `880px` perspective와 절제된 3/4 자세를 사용하고, 손바닥·손가락 링크의 side wall, 손가락별 yaw/depth band, 큐브의 투영 그림자를 CSS 3D로 추가한다.
+- Reason: 기존 실루엣과 관절 구조는 명확했지만 금속 면이 한 평면에 겹쳐 보여 실제 부피와 큐브의 공중 높이가 약하게 읽혔다.
+- Impact: 기존 depth root의 강도만 `1.45`로 높이고 비어 있던 tilt wrapper를 parallax layer로 재사용한다. 새 런타임이나 listener는 추가하지 않으며 Anime.js 소유권, touch/native scroll, reduced motion, lifecycle을 유지한다. 엄지는 `72px`, 큐브는 `29px` 깊이를 유지해 전면 접촉 관계를 보존한다.
+
+## 2026-07-14 — Hero 손바닥의 테이퍼 섀시화
+
+- Decision: 손바닥을 손가락 쪽에서 펼쳐지고 손목 쪽에서 좁아지는 polygon으로 다시 만들고, 모서리 곡률·측면 오프셋·중복 그림자를 줄인다. 데스크톱에서는 중앙 graphite recess와 rail 대비로 밝은 앞판을 분할한다.
+- Reason: 동일한 둥근 실루엣의 앞·뒤·측면 판이 겹치면서 손바닥이 하나의 두꺼운 쿠션이나 뭉툭한 덩어리처럼 보였다.
+- Impact: 손가락, 손목, Anime.js transform은 바꾸지 않는다. 큐브 `z-index: 8 / 29px`, 엄지 `z-index: 11 / 72px`, 큐브 높이 `35%`를 유지해 기존 접촉과 조작 관계를 보존한다.

@@ -16,6 +16,7 @@ export default defineConfig({
         alkkagi: resolve(rootDirectory, 'work/alkkagi/index.html'),
         briefit: resolve(rootDirectory, 'work/briefit/index.html'),
         projectPromptGenerator: resolve(rootDirectory, 'work/project-prompt-generator/index.html'),
+        about: resolve(rootDirectory, 'about/index.html'),
         resume: resolve(rootDirectory, 'resume/index.html')
       }
     }

@@ -21,8 +21,7 @@
       </a>
       <nav class="site-nav__links" aria-label="주요 페이지">
         <a href="./work/">Work</a>
-        <a href="#about">About</a>
-        <a href="mailto:semin1224@gmail.com">Email</a>
+        <a href="./about/">About</a>
       </nav>
       <a class="nav-resume" href="./resume/">Resume <span aria-hidden="true">→</span></a>
     </header>
@@ -36,20 +35,19 @@
               <h1 id="hero-title">
                 <span class="hero-identity__name" data-intro lang="en">SeMinKong</span>
                 <span class="hero-identity__statement" data-intro>
-                  <span data-hero-line>모델을 만드는 데서 멈추지 않고,</span>
-                  <span data-hero-line><em>실제 장치가 움직이는 순간까지 구현합니다.</em></span>
+                  <span data-hero-line>모델을 만드는 데서 멈추지 않고, <em>실제 장치가 움직이는 순간까지 구현합니다.</em></span>
                 </span>
               </h1>
               <p class="hero-identity__lead" data-intro>Computer Vision과 ROS 2를 공부하며, software와 hardware가 만나는 Robotics와 Physical AI로 관심을 넓히고 있습니다.</p>
               <div class="hero-story__actions" data-intro>
-                <a class="button button--primary" href="#about">About me <span aria-hidden="true">↓</span></a>
+                <a class="button button--primary" href="./about/">About me <span aria-hidden="true">→</span></a>
                 <a class="button button--quiet" href="./resume/">Resume <span aria-hidden="true">→</span></a>
               </div>
             </div>
 
             <div class="dexterous-hand" data-dexterous-hand aria-hidden="true">
-              <div class="dexterous-hand__scene" data-hand-scene data-depth-root data-depth-strength="1.2">
-                <div class="dexterous-hand__tilt" data-hand-tilt>
+              <div class="dexterous-hand__scene" data-hand-scene data-depth-root data-depth-strength="1.45">
+                <div class="dexterous-hand__tilt" data-hand-tilt data-depth-layer="4">
                   <div class="dexterous-hand__idle" data-hand-idle>
                     <div class="dexterous-hand__response" data-hand-response>
                       <div class="robot-hand-rig">
@@ -72,14 +70,6 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-
-                        <div class="robot-forearm">
-                          <span class="robot-forearm__shell"><i></i></span>
-                          <span class="robot-forearm__flange"><i></i></span>
-                          <span class="robot-forearm__cap"><i></i></span>
-                          <span class="robot-forearm__panel"></span>
-                          <span class="robot-forearm__port"></span>
                         </div>
 
                         <div class="robot-wrist">
@@ -206,7 +196,7 @@
               <div><dt>Now</dt><dd>SSAFY Robotics Track</dd></div>
               <div><dt>Focus</dt><dd>Computer Vision · ROS 2 · Physical AI</dd></div>
             </dl>
-            <a class="text-link" href="./resume/">경력과 기술 보기 <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="./about/">소개 페이지 보기 <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </section>
@@ -269,11 +259,19 @@
         </div>
       </section>
 
-      <section class="home-contact" aria-labelledby="contact-title">
-        <div class="page-width home-contact__inner" data-reveal="text">
-          <p class="eyebrow">Contact</p>
-          <h2 id="contact-title">프로젝트와 채용 관련 연락은 이메일로 부탁드립니다.</h2>
-          <a href="mailto:semin1224@gmail.com">semin1224@gmail.com <span aria-hidden="true">↗</span></a>
+      <section class="home-contact" id="contact" aria-labelledby="contact-title">
+        <div class="page-width home-contact__panel" data-reveal="text">
+          <div class="home-contact__intro">
+            <p class="eyebrow">Contact</p>
+            <h2 id="contact-title">함께 움직일 다음 장면을 이야기해 주세요.</h2>
+            <p>Robotics, Computer Vision, 실제 제품과 서비스를 만드는 기회에 열려 있습니다.</p>
+          </div>
+          <address class="home-contact__details" aria-label="연락 정보">
+            <a href="mailto:semin1224@gmail.com"><span>Email</span><strong>semin1224@gmail.com <i aria-hidden="true">↗</i></strong></a>
+            <a href="https://github.com/SeMinKong" rel="noreferrer"><span>GitHub</span><strong>github.com/SeMinKong <i aria-hidden="true">↗</i></strong></a>
+            <a href="./resume/"><span>Resume</span><strong>경력과 기술 보기 <i aria-hidden="true">→</i></strong></a>
+            <div><span>Based in</span><strong>Seoul, Republic of Korea</strong></div>
+          </address>
         </div>
         <footer class="page-width site-footer"><span>© 2026 SeMinKong</span><a href="https://github.com/SeMinKong" rel="noreferrer">GitHub ↗</a></footer>
       </section>

@@ -12,6 +12,10 @@ html {
   background: var(--bg);
 }
 
+html[data-smooth-scroll="active"] {
+  scroll-behavior: auto;
+}
+
 body {
   min-width: 320px;
   margin: 0;
@@ -134,8 +138,12 @@ ol {
   z-index: 900;
   inset: 0;
   pointer-events: none;
-  background: var(--signal);
-  transform: translate3d(0, 102%, 0);
+  visibility: hidden;
+  background: rgba(8, 12, 10, 0.94);
+  opacity: 0;
+  transform: scale(1.012);
+  transform-origin: center;
+  backdrop-filter: blur(5px);
 }
 
 .site-nav,
@@ -385,8 +393,8 @@ ol {
     padding-inline: 24px;
   }
 
-  .site-nav__links a:not(:first-child) {
-    display: none;
+  .site-nav__links {
+    gap: 18px;
   }
 }
 
@@ -412,7 +420,8 @@ ol {
   }
 
   .site-nav__links {
-    font-size: 0.68rem;
+    gap: 11px;
+    font-size: 0.64rem;
   }
 
   .nav-resume,
