@@ -1,6 +1,6 @@
 # SeMinKong Portfolio
 
-AI, Robotics, Computer Vision, and software projects presented as a multi-page Vite portfolio.
+AI, Robotics, Computer Vision, and software projects presented through Home, About, Work, case-study, and Resume pages in Vite.
 
 ## Local development
 

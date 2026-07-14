@@ -10,7 +10,11 @@ const expectedFiles = [
   'work/alkkagi/index.html',
   'work/briefit/index.html',
   'work/project-prompt-generator/index.html',
-  'resume/index.html'
+  'about/index.html',
+  'resume/index.html',
+  'resume/SeMinKong-Resume.pdf',
+  'resume/SeMinKong-Resume.docx',
+  'resume/SeMinKong-Resume-page-1.png'
 ];
 
 const distDirectory = resolve('dist');

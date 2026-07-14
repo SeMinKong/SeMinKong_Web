@@ -11,10 +11,12 @@ import { initPageTransitions } from './motion/page-transitions.js';
 import { initDexterousHand } from './motion/dexterous-hand.js';
 import { initIntro, initReveals } from './motion/reveal.js';
 import { initScrollKinetics } from './motion/scroll-kinetics.js';
+import { initSmoothScroll } from './motion/smooth-scroll.js';
 import { initNavigation } from './ui/navigation.js';
 
 const environment = initEnvironment();
 
+initSmoothScroll(environment);
 initNavigation(environment);
 initPageTransitions(environment);
 initDexterousHand(environment);

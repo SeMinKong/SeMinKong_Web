@@ -1,6 +1,6 @@
 import './styles/tokens.css';
 import './styles/base.css';
-import './styles/resume.css';
+import './styles/about.css';
 import './styles/motion.css';
 
 import { initEnvironment } from './motion/environment.js';
@@ -14,5 +14,5 @@ const environment = initEnvironment();
 initSmoothScroll(environment);
 initNavigation(environment);
 initPageTransitions(environment);
-initIntro(environment, '[data-resume-intro]');
-initReveals(environment, '[data-resume-reveal]', { distance: 22, threshold: 0.08 });
+initIntro(environment, '[data-about-intro]');
+initReveals(environment, '[data-about-reveal]', { distance: 28, threshold: 0.08 });

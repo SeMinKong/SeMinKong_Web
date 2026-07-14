@@ -13,7 +13,7 @@ Status: Approved for implementation — 2026-07-14
 - Resume source: Google Drive의 `Se Min Kong.docx`, 확인일 2026-07-14
 - Public contact: `semin1224@gmail.com`, `github.com/SeMinKong`
 - Resume: 다운로드보다 사이트 내부 `/resume/` 페이지에서 읽는 방식을 우선한다.
-- Privacy: 전화번호와 생년월일은 공개 사이트에 노출하지 않는다.
+- Privacy: 일반 사이트 markup에는 전화번호와 생년월일을 노출하지 않는다. 사용자가 제공한 원본 Resume는 예외지만 실제 배포 전 공개 여부를 다시 확인한다.
 
 ## Objective
 
@@ -120,7 +120,7 @@ GPA, 초·중학교, 군 복무 상세는 메인 페이지에서 강조하지 �
 1. `/` — Home
    - 이름, 역할, 한 문장, Name-first scroll Hero
    - 대표 작업 3개는 실제 화면을 사용한 preview로만 보여준다.
-   - 짧은 소개와 이메일 연락 경로만 남긴다.
+   - 짧은 소개 teaser와 이메일·GitHub·Resume를 모은 Contact 정보 패널을 둔다.
 2. `/work/` — Work index
    - 공개 근거가 있는 프로젝트 전체를 이미지 중심으로 비교한다.
    - 역할과 한 문장 외의 구현 설명은 상세 페이지로 이동한다.
@@ -129,9 +129,10 @@ GPA, 초·중학교, 군 복무 상세는 메인 페이지에서 강조하지 �
 5. `/work/alkkagi/` — 실제 플레이 영상, server-authoritative 60 FPS 구현, 저장소
 6. `/work/briefit/` — 공식 팀 제품 이미지와 AI 담당 범위를 분리해 표시하고 팀 저장소에 연결
 7. `/work/project-prompt-generator/` — 실제 LangGraph 흐름도, 구현 구조, 라이브 데모와 저장소
-8. `/resume/` — 경력, 교육, 기술, 수상과 각 프로젝트 상세 페이지 링크
+8. `/about/` — 프로필 사실, 개발 관점, 작업 방식, 현재 학습 범위와 기술
+9. `/resume/` — 경력, 교육, 기술, 수상, 프로젝트 링크와 원본 Resume 미리보기·다운로드
 
-별도 About·Contact 페이지는 만들지 않는다. 현재 콘텐츠 분량에서는 Home의 짧은 소개와 `mailto:`가 더 직접적이다.
+About은 별도 페이지로 제공하고 Contact는 Home의 정보 패널로 유지한다. backend 없는 별도 Contact form/page는 만들지 않는다.
 
 ## Resume experience
 
@@ -221,7 +222,7 @@ GPA, 초·중학교, 군 복무 상세는 메인 페이지에서 강조하지 �
 - 레퍼런스 및 기존 Orbital 데모와 시각적으로 명확히 구분된다.
 - 장식 모션마다 정보 전달 또는 피드백 목적이 있다.
 - 모바일과 키보드 환경에서도 주요 콘텐츠와 연락 CTA를 사용할 수 있다.
-- 전화번호와 생년월일이 공개 빌드에 포함되지 않는다.
+- 일반 HTML markup에는 전화번호와 생년월일이 없다. 요청받은 원본 Resume asset은 예외이며 배포 전에 공개 여부를 확인한다.
 - `Resume / 이력서 보기` 링크가 `/resume/`로 이동하고 390px에서도 별도 다운로드 없이 읽을 수 있다.
 
 ## 2026-07-14 — 레퍼런스 재검토 후 편집 디자인 정리
@@ -276,6 +277,21 @@ GPA, 초·중학교, 군 복무 상세는 메인 페이지에서 강조하지 �
 - 스크롤 전에도 이름과 CTA가 읽히며, 스크롤하는 동안 문장과 Core가 완성된 뒤 About으로 자연스럽게 이어진다.
 - 2.5D 객체는 프로젝트 증거를 대신하지 않으며, 실제 작업물은 바로 다음 정보 구간의 `Selected Work`에서 확인할 수 있다.
 
+## 2026-07-14 — About, Contact, Resume 정보 구조 override
+
+- 전체 route는 `Home · Work · About · Resume · five case studies`로 구성한다.
+- Home 상단 내비게이션은 Work, About, Resume만 노출하고 Email은 Contact 패널 내부 정보로 이동한다.
+- Home의 About / Now는 짧은 teaser로 유지하고 `/about/`에서 프로필 사실, 개발 관점, 작업 방식, 현재 학습 범위와 기술을 상세히 설명한다.
+- About은 참고 사이트의 구체적인 레이아웃·문구·자산을 복제하지 않고, 큰 제목과 짧은 프로필 facts, 읽기 쉬운 narrative라는 편집 원칙만 사용한다.
+- Contact는 form 제출 기능을 가장하지 않는다. 이메일, GitHub, Resume, Seoul 위치를 하나의 정보 패널로 제공한다.
+- Resume는 현재 HTML 내용을 계속 먼저 읽을 수 있고, 바로 이어지는 `Original Resume`에서 PDF 다운로드, 새 탭 보기, DOCX 다운로드, page image 미리보기를 제공한다.
+- 원본 Resume에는 전화번호와 생년월일이 포함된다. 이는 사용자가 제공한 원본을 공개하라는 명시적 요청에 따른 예외이며, 배포 전 privacy 확인 항목으로 남긴다.
+
+### Hero statement sizing override
+
+- `모델을 만드는 데서 멈추지 않고, 실제 장치가 움직이는 순간까지 구현합니다.`는 1280px과 768px에서 한 줄로 보이도록 display 크기를 줄인다.
+- 390px에서는 본문 가독성과 가로 overflow 방지를 우선해 자연스러운 두 줄을 허용한다.
+
 ## 2026-07-14 — Dexterous robotic hand Hero visual override
 
 이 항목은 위의 `Perception Core` 시각 객체에 관한 결정을 대체한다. Hero의 identity-first 정보 구조와 실제 프로젝트를 `Selected Work`에서 보여 주는 원칙은 유지한다.
@@ -308,3 +324,34 @@ This refinement replaces the earlier detail-first mechanical treatment with a si
 - Desktop presents the object as a 3/4 product render. Tablet and mobile keep the same silhouette while hiding secondary palm channels and surface detail.
 
 Visual acceptance: at 1280px every digit and fingertip must be separately readable; at 768px and 390px the object must remain recognizable without covering the name, statement, or CTA.
+
+## 2026-07-14 — Hand-only Hero composition override
+
+This direction replaces the forearm requirement in the previous hand silhouette decisions.
+
+- Remove the lower forearm shell from the Hero object. Keep only the five digits, tapered palm, and a compact wrist coupler so the object reads as a robotic hand rather than a full arm.
+- Recenter and enlarge the remaining hand to use the space released by the forearm at desktop, tablet, and mobile sizes.
+- Place the cube over the palm surface instead of behind the hand. The palm stays behind the cube while the thumb and index contact regions remain in front to preserve grasp occlusion.
+- Keep the cube within the palm footprint during both the autonomous manipulation loop and pointer interaction.
+- Fine-pointer environments may expose a grab cursor and direct cube drag, but no instruction HUD or focusable decorative control is added.
+
+Visual acceptance: the hand-only silhouette is balanced in the right side of the Hero at 1280px, remains clearly readable at 768px and 390px, and the cube consistently appears supported by the palm rather than detached behind it.
+
+## 2026-07-14 — Hand 2.5D depth refinement
+
+- Desktop presents the hand from a restrained 3/4 angle with a shorter hand-specific perspective than the rest of the page.
+- The palm and finger links use visible back slabs, side walls, directional highlights, and contact shadows so the object reads as a layered mechanical volume rather than a flat illustration.
+- Each digit occupies a slightly different depth band and yaw angle while the thumb keeps the highest contact layer above the cube.
+- The floating cube carries a soft projected shadow toward the palm to make its height legible without adding another object or a full 3D renderer.
+- Tablet and mobile relax the perspective and reduce side-wall/shadow contrast while preserving the same hand-only silhouette.
+
+Visual acceptance: depth is clearly visible at 1280px, remains clean at 768px and 390px, and never changes the cube's elevated position or the thumb-over-cube occlusion.
+
+## 2026-07-14 — Tapered palm chassis refinement
+
+- The palm flares toward the four finger roots and narrows toward the wrist instead of ending as a wide rounded block.
+- Front, back, and side shells share a sharper tapered outline, with corner radii and side-wall offsets reduced so the volume reads as machined structure rather than padding.
+- A graphite center recess and stronger metacarpal rails divide the bright front plate into smaller mechanical zones on desktop.
+- Tablet and mobile may hide the center recess, but must retain the tapered silhouette and thinner side wall.
+
+Visual acceptance: the palm remains large enough to support the cube, but its wrist-side mass is visibly narrower at 1280px, 768px, and 390px. Finger roots, thumb saddle, wrist, and cube remain separate at a glance.

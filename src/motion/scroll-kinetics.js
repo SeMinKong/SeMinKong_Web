@@ -62,7 +62,7 @@ export const initScrollKinetics = (environment) => {
     const delta = nextScroll - lastScroll;
     lastScroll = nextScroll;
     if (!enabled() || !active.size) return;
-    target = clamp(target - delta * 0.72, -22, 22);
+    target = clamp(target - delta * 0.34, -12, 12);
     schedule();
   };
 
