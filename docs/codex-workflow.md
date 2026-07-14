@@ -54,7 +54,7 @@ Goal에는 세 요소가 필요하다.
 이 저장소를 독창적인 Anime.js 포트폴리오로 완성해줘.
 실제 Three.js는 추가하지 않고 npm만 사용한다.
 390px, 768px, 1280px에서 가로 넘침이 없어야 한다.
-Motion/Depth 토글과 reduced-motion을 지원하고 npm.cmd run build가 통과해야 한다.
+Motion/Depth는 지원 환경에서 자동 적용하고 reduced-motion과 capability fallback을 지원하며 `npm.cmd run build`가 통과해야 한다.
 브라우저 콘솔 오류가 없어야 완료다.
 ```
 

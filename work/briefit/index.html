@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="뉴스 수집, 유사 기사 grouping, KoBART 요약을 담당한 Briefit 팀 프로젝트." />
+    <meta name="theme-color" content="#090d0b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>document.documentElement.classList.add('js');</script>
+    <title>Briefit — SeMinKong</title>
+  </head>
+  <body class="case-page case-page--briefit">
+    <a class="skip-link" href="#case-content">프로젝트 본문으로 바로가기</a>
+    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
+    <header class="site-nav" data-site-nav>
+      <a class="wordmark" href="../../" aria-label="SeMinKong 홈"><span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span></a>
+      <nav class="site-nav__links" aria-label="주요 페이지"><a href="../">Work</a><a href="../../#about">About</a><a href="mailto:semin1224@gmail.com">Email</a></nav>
+      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="case-content">
+      <article class="case-study">
+        <header class="case-hero page-width">
+          <p class="case-hero__meta" data-intro>04 / 05 · NLP · Team Project · 2025</p>
+          <h1 data-intro lang="en">Briefit</h1>
+          <p class="case-hero__lead" data-intro>여러 뉴스 소스를 수집하고, 비슷한 기사를 묶어 하나의 요약으로 전달하는 AI 파이프라인을 맡았습니다.</p>
+          <dl class="case-facts" data-intro>
+            <div><dt>Role</dt><dd>Team AI Engineer</dd></div>
+            <div><dt>Period</dt><dd>May — Sep 2025</dd></div>
+            <div><dt>Scope</dt><dd>Collection · Grouping<br />Summarization</dd></div>
+            <div><dt>Stack</dt><dd>Python · aiohttp<br />Transformers · KoBART</dd></div>
+          </dl>
+        </header>
+
+        <figure class="case-media case-media--image page-width" data-reveal="media" data-depth-card>
+          <img src="/src/assets/projects/briefit/cover.webp" alt="Briefit 뉴스 목록과 기사 요약 화면으로 구성된 공식 팀 제품 이미지" data-depth-layer="6" />
+          <figcaption>Official team product image</figcaption>
+        </figure>
+
+        <div class="case-body page-width">
+          <section class="case-section" data-reveal>
+            <h2>Service &amp; credit</h2>
+            <div class="case-section__copy">
+              <p>Briefit은 여러 매체의 기사를 한곳에 모으고, 같은 이슈를 다루는 기사를 묶어 읽을 수 있게 만든 뉴스 큐레이션 서비스입니다.</p>
+              <p>위 화면은 팀의 전체 제품이며, 저는 프론트엔드 디자인이 아니라 AI 데이터 파이프라인을 담당했습니다.</p>
+            </div>
+          </section>
+
+          <section class="case-section case-section--violet" data-reveal>
+            <h2>AI pipeline</h2>
+            <div class="case-section__copy">
+              <ul class="case-list">
+                <li>aiohttp와 BeautifulSoup을 이용한 비동기 다중 뉴스 수집</li>
+                <li>기사 본문 전처리와 tokenization 흐름 정리</li>
+                <li>기사 간 유사도를 기준으로 같은 이슈 grouping</li>
+                <li>KoBART API와 local model을 이용한 중립 요약 실험</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="case-section" data-reveal>
+            <h2>Result</h2>
+            <div class="case-section__copy source-links">
+              <p>수집·전처리·grouping·요약 단계를 하나의 비동기 파이프라인으로 연결해 팀 제품이 기사 묶음별 요약을 제공할 수 있도록 구현했습니다.</p>
+              <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI" rel="noreferrer">AI 저장소 <span aria-hidden="true">↗</span></a>
+              <a class="source-link" href="https://github.com/capstone-btd/.github/blob/main/profile/README.md" rel="noreferrer">팀 소개 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <nav class="case-next page-width" aria-label="다른 프로젝트">
+        <a href="../alkkagi/"><span>Previous</span><strong>← Alkkagi.io</strong></a>
+        <a href="../project-prompt-generator/"><span>Next</span><strong>Project Prompt Generator →</strong></a>
+      </nav>
+    </main>
+    <footer class="page-width site-footer site-footer--light"><span>© 2026 SeMinKong</span><a href="../">All work ↑</a></footer>
+    <script type="module" src="/src/project.js"></script>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="RealSense 검사부터 Dobot 제어와 실시간 운영 화면까지 연결한 AQIS 스마트 팩토리 프로젝트." />
+    <meta name="theme-color" content="#090d0b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>document.documentElement.classList.add('js');</script>
+    <title>AQIS — SeMinKong</title>
+  </head>
+  <body class="case-page case-page--aqis">
+    <a class="skip-link" href="#case-content">프로젝트 본문으로 바로가기</a>
+    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
+
+    <header class="site-nav" data-site-nav>
+      <a class="wordmark" href="../../" aria-label="SeMinKong 홈"><span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span></a>
+      <nav class="site-nav__links" aria-label="주요 페이지"><a href="../">Work</a><a href="../../#about">About</a><a href="mailto:semin1224@gmail.com">Email</a></nav>
+      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="case-content">
+      <article class="case-study">
+        <header class="case-hero page-width">
+          <p class="case-hero__meta" data-intro>01 / 05 · Smart Factory · Team Project · 2026</p>
+          <h1 data-intro lang="en">AQIS</h1>
+          <p class="case-hero__lead" data-intro>검사 모델의 판단이 로봇 동작과 운영 화면까지 이어지도록 전체 시스템을 연결했습니다.</p>
+          <dl class="case-facts" data-intro>
+            <div><dt>Role</dt><dd>Team Lead<br />Full-Stack &amp; Robot Integration</dd></div>
+            <div><dt>Team</dt><dd>2 people</dd></div>
+            <div><dt>Period</dt><dd>May — Jun 2026</dd></div>
+            <div><dt>Stack</dt><dd>ROS 2 · FastAPI · React<br />RealSense · YOLOv5 · Dobot</dd></div>
+          </dl>
+        </header>
+
+        <figure class="case-media case-media--video page-width" data-reveal="media" data-depth-card>
+          <video src="/src/assets/projects/aqis/process-demo.mp4" muted loop playsinline controls preload="metadata" data-depth-layer="6" aria-label="AQIS 실제 생산 검사와 Dobot 분류 구동 영상"></video>
+          <figcaption>Actual inspection and Dobot sorting process</figcaption>
+        </figure>
+
+        <div class="case-body page-width">
+          <section class="case-section" data-reveal>
+            <h2>Context</h2>
+            <div class="case-section__copy">
+              <p>AQIS는 생산 라인의 제품을 카메라로 검사하고, 불량 판정이 나오면 컨베이어와 로봇을 제어하는 스마트 팩토리 시스템입니다.</p>
+              <p>검사 결과와 장비 상태는 웹 대시보드에서 실시간으로 확인할 수 있습니다.</p>
+            </div>
+          </section>
+
+          <section class="case-section" data-reveal>
+            <h2>My role</h2>
+            <div class="case-section__copy">
+              <ul class="case-list">
+                <li>RealSense와 YOLOv5 검사 결과를 시스템 이벤트로 연결</li>
+                <li>ROS 2 bridge와 장비별 adapter 구현</li>
+                <li>FastAPI REST·WebSocket 서비스와 React 운영 화면 개발</li>
+                <li>컨베이어 정지와 Dobot vacuum pick-and-place 흐름 통합</li>
+              </ul>
+            </div>
+          </section>
+
+          <figure class="case-video case-video--image" data-reveal>
+            <img src="/src/assets/projects/aqis/real-ops.png" alt="검사 결과, Dobot 상태, 카메라 화면을 함께 보여주는 실제 AQIS RealOps 대시보드" />
+            <figcaption>RealOps dashboard</figcaption>
+          </figure>
+
+          <section class="case-section case-section--dark" data-reveal>
+            <h2>System flow</h2>
+            <div class="case-section__copy case-flow">
+              <div><strong>제품 검사</strong><p>RealSense의 RGB·Depth 입력을 받아 YOLOv5가 제품 상태를 판정합니다.</p></div>
+              <div><strong>장비 제어</strong><p>불량 이벤트가 발생하면 컨베이어를 멈추고 Dobot 작업을 실행합니다.</p></div>
+              <div><strong>운영 화면</strong><p>검사 결과와 장비 상태를 WebSocket으로 전달해 대시보드에 반영합니다.</p></div>
+            </div>
+          </section>
+
+          <section class="case-section" data-reveal>
+            <h2>Outcome</h2>
+            <div class="case-section__copy">
+              <p>RealSense 입력에서 불량을 감지하면 컨베이어를 멈추고 Dobot pick-and-place를 실행하며, 결과와 장비 상태를 대시보드에 표시하는 흐름을 완성했습니다.</p>
+              <a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory" rel="noreferrer">팀 GitHub 저장소 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <nav class="case-next page-width" aria-label="다른 프로젝트">
+        <a href="../"><span>All work</span><strong>프로젝트 목록</strong></a>
+        <a href="../brain-tumor-mri/"><span>Next</span><strong>Brain Tumor MRI →</strong></a>
+      </nav>
+    </main>
+
+    <footer class="page-width site-footer site-footer--light"><span>© 2026 SeMinKong</span><a href="mailto:semin1224@gmail.com">Email ↗</a></footer>
+    <script type="module" src="/src/project.js"></script>
+  </body>
+</html>

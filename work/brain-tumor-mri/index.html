@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="YOLO11을 활용한 뇌 MRI 종양 분류 및 영역 분할 프로젝트." />
+    <meta name="theme-color" content="#090d0b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>document.documentElement.classList.add('js');</script>
+    <title>Brain Tumor MRI — SeMinKong</title>
+  </head>
+  <body class="case-page case-page--mri">
+    <a class="skip-link" href="#case-content">프로젝트 본문으로 바로가기</a>
+    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
+    <header class="site-nav" data-site-nav>
+      <a class="wordmark" href="../../" aria-label="SeMinKong 홈"><span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span></a>
+      <nav class="site-nav__links" aria-label="주요 페이지"><a href="../">Work</a><a href="../../#about">About</a><a href="mailto:semin1224@gmail.com">Email</a></nav>
+      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="case-content">
+      <article class="case-study">
+        <header class="case-hero page-width">
+          <p class="case-hero__meta" data-intro>02 / 05 · Computer Vision · Personal Project · 2026</p>
+          <h1 data-intro lang="en">Brain Tumor<br />MRI</h1>
+          <p class="case-hero__lead" data-intro>한 장의 MRI에서 종양 종류를 분류하고 영역을 함께 표시하는 추론 파이프라인을 만들었습니다.</p>
+          <dl class="case-facts" data-intro>
+            <div><dt>Role</dt><dd>Model training<br />Data pipeline · Web demo</dd></div>
+            <div><dt>Period</dt><dd>Feb — Apr 2026</dd></div>
+            <div><dt>Tasks</dt><dd>Classification<br />Instance segmentation</dd></div>
+            <div><dt>Stack</dt><dd>Python · PyTorch<br />YOLO11 · OpenCV</dd></div>
+          </dl>
+        </header>
+
+        <figure class="case-media case-media--image page-width" data-reveal="media" data-depth-card>
+          <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="실제 웹 데모에서 출력한 10개 뇌 MRI 분류 결과" data-depth-layer="6" />
+          <figcaption>Classification demo · 10 samples</figcaption>
+        </figure>
+
+        <div class="case-body page-width">
+          <section class="case-section" data-reveal>
+            <h2>Model &amp; data</h2>
+            <div class="case-section__copy">
+              <p>YOLO11 분류 모델로 glioma, meningioma, pituitary, healthy 네 클래스를 판별하고, 분할 모델로 종양 경계를 찾았습니다.</p>
+              <p>그레이스케일 마스크를 형태학적 연산으로 정리한 뒤 YOLO polygon label로 변환하는 전처리 과정도 자동화했습니다.</p>
+            </div>
+          </section>
+
+          <section class="case-metrics" aria-label="프로젝트 내부 평가 결과" data-reveal>
+            <div><strong>99.4%</strong><span>Top-1 classification</span></div>
+            <div><strong>92.7%</strong><span>Mask mAP50</span></div>
+          </section>
+
+          <section class="case-section" data-reveal>
+            <h2>Web demo</h2>
+            <div class="case-section__copy">
+              <p>분류 결과와 분할 마스크를 한 화면에서 확인할 수 있도록 웹 UI를 추가했습니다.</p>
+            </div>
+          </section>
+
+          <figure class="case-video" data-reveal>
+            <video src="/src/assets/projects/brain-mri/demo.mp4" controls playsinline preload="metadata" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
+            <figcaption>Classification + segmentation web demo</figcaption>
+          </figure>
+
+          <section class="case-section" data-reveal>
+            <h2>Validation</h2>
+            <div class="case-section__copy">
+              <p>수치는 프로젝트 내부 평가 결과입니다. 데이터 분할과 재현 절차는 문서화 중이며, 외부 검증이나 임상 성능을 의미하지 않습니다.</p>
+              <a class="source-link" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO" rel="noreferrer">GitHub 저장소 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <nav class="case-next page-width" aria-label="다른 프로젝트">
+        <a href="../aqis/"><span>Previous</span><strong>← AQIS</strong></a>
+        <a href="../alkkagi/"><span>Next</span><strong>Alkkagi.io →</strong></a>
+      </nav>
+    </main>
+    <footer class="page-width site-footer site-footer--light"><span>© 2026 SeMinKong</span><a href="../">All work ↑</a></footer>
+    <script type="module" src="/src/project.js"></script>
+  </body>
+</html>

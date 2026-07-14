@@ -1,14 +1,22 @@
 {
-  "name": "orbital-signal-studio",
+  "name": "seminkong-portfolio",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "vite --configLoader runner",
+    "build": "vite build --configLoader runner",
+    "preview": "vite preview --configLoader runner",
+    "verify:dist": "node scripts/verify-dist.mjs",
+    "verify": "npm run build && npm run verify:dist"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/manrope": "^5.2.8",
+    "@fontsource-variable/noto-sans-kr": "^5.2.10",
     "animejs": "^4.0.0"
   },
   "devDependencies": {

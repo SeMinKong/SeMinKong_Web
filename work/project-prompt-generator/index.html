@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="LangGraph와 WebSocket으로 프로젝트 설계 대화를 병렬 처리하는 Project Prompt Generator." />
+    <meta name="theme-color" content="#090d0b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>document.documentElement.classList.add('js');</script>
+    <title>Project Prompt Generator — SeMinKong</title>
+  </head>
+  <body class="case-page case-page--prompt">
+    <a class="skip-link" href="#case-content">프로젝트 본문으로 바로가기</a>
+    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
+    <header class="site-nav" data-site-nav>
+      <a class="wordmark" href="../../" aria-label="SeMinKong 홈"><span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span></a>
+      <nav class="site-nav__links" aria-label="주요 페이지"><a href="../">Work</a><a href="../../#about">About</a><a href="mailto:semin1224@gmail.com">Email</a></nav>
+      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="case-content">
+      <article class="case-study">
+        <header class="case-hero page-width">
+          <p class="case-hero__meta" data-intro>05 / 05 · AI Agent · Personal Project · 2026</p>
+          <h1 data-intro lang="en">Project Prompt<br />Generator</h1>
+          <p class="case-hero__lead" data-intro>하나의 아이디어를 여러 설계 영역으로 나누고, 대화를 거쳐 구현 문서로 정리하는 서비스를 만들었습니다.</p>
+          <dl class="case-facts" data-intro>
+            <div><dt>Role</dt><dd>Agent workflow<br />Backend · Web UI</dd></div>
+            <div><dt>Period</dt><dd>2026</dd></div>
+            <div><dt>Runtime</dt><dd>LangGraph<br />WebSocket</dd></div>
+            <div><dt>Stack</dt><dd>Python · FastAPI<br />Solar Pro · JavaScript</dd></div>
+          </dl>
+        </header>
+
+        <figure class="case-media case-media--prompt page-width" data-reveal="media" data-depth-card>
+          <img src="/src/assets/projects/prompt-generator/flow.png" alt="프로젝트 입력을 여섯 설계 영역으로 나눈 뒤 최종 문서로 모으는 LangGraph 흐름도" data-depth-layer="6" />
+          <figcaption>LangGraph workflow used in the project</figcaption>
+        </figure>
+
+        <div class="case-body page-width">
+          <section class="case-section" data-reveal>
+            <h2>Workflow</h2>
+            <div class="case-section__copy">
+              <p>사용자가 프로젝트 아이디어를 입력하면 UI/UX, API, 데이터베이스, 시스템 구조, 테스트, 배포 영역을 각각 독립된 대화로 시작합니다.</p>
+              <p>각 영역은 별도 상태와 대화 이력을 유지하고, 답변이 충분해지면 최종 구현 문서에 합쳐집니다.</p>
+            </div>
+          </section>
+
+          <section class="case-section case-section--violet" data-reveal>
+            <h2>State design</h2>
+            <div class="case-section__copy">
+              <ul class="case-list">
+                <li>LangGraph로 설계 영역별 상태와 진행 단계를 분리</li>
+                <li>최대 세 번의 질문으로 필요한 요구사항을 구체화</li>
+                <li>FastAPI WebSocket으로 질문과 완료 상태를 즉시 전달</li>
+                <li>완성된 영역별 설계를 한 문서로 병합</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="case-section" data-reveal>
+            <h2>Result</h2>
+            <div class="case-section__copy source-links">
+              <p>여섯 설계 대화가 각자 상태를 유지하면서 진행되고, 완료된 결과를 하나의 구현 문서로 합치는 흐름을 웹에서 끝까지 사용할 수 있게 배포했습니다.</p>
+              <a class="source-link" href="https://projectpromptgeneratorlanggraph-production.up.railway.app/" rel="noreferrer">Live demo <span aria-hidden="true">↗</span></a>
+              <a class="source-link" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph" rel="noreferrer">GitHub 저장소 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <nav class="case-next page-width" aria-label="다른 프로젝트">
+        <a href="../briefit/"><span>Previous</span><strong>← Briefit</strong></a>
+        <a href="../"><span>All work</span><strong>프로젝트 목록 →</strong></a>
+      </nav>
+    </main>
+    <footer class="page-width site-footer site-footer--light"><span>© 2026 SeMinKong</span><a href="mailto:semin1224@gmail.com">Email ↗</a></footer>
+    <script type="module" src="/src/project.js"></script>
+  </body>
+</html>

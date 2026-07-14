@@ -30,7 +30,8 @@
 - Use reference sites for principles, not for direct copying of branding, copy, layout, or assets.
 - Preserve Anime.js as the primary motion library.
 - Prefer lightweight 2.5D effects over adding a full Three.js stack unless the user changes this decision.
-- Preserve both the manual Motion toggle and `prefers-reduced-motion` behavior.
+- Apply motion and depth automatically when supported; do not expose manual Motion or Depth on/off buttons.
+- Preserve `prefers-reduced-motion` and automatically simplify depth for touch, coarse-pointer, and constrained layouts.
 - Pause continuous motion when the page is hidden or the animated region is offscreen.
 - Keep touch interactions native and avoid trapping vertical page scrolling.
 
@@ -38,5 +39,5 @@
 
 - Run `npm.cmd run build` after source changes.
 - Check 390px, 768px, and 1280px layouts in a real browser.
-- Check console errors, horizontal overflow, keyboard focus, Motion on/off, Depth on/off, and reduced motion.
+- Check console errors, horizontal overflow, keyboard focus, default Motion/Depth behavior, capability fallbacks, and reduced motion.
 - Report what was verified and anything that remains unverified.
