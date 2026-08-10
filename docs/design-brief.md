@@ -67,7 +67,7 @@ Hero 첫 상태에서는 5초 안에 이름·역할·행동이 보여야 하고,
 - Stack: ROS 2, MediaPipe Hands, OpenCV, Jetson, Raspberry Pi 5, DYNAMIXEL XL330, React, Django, AWS EC2
 - Story: 21개 손 landmark를 엄지 3축과 네 손가락 4축의 7축 명령으로 변환해 텐던 로봇 핸드를 실시간 구동하고, 안전 제어·관제·실험 데이터 기록까지 연결한 시스템
 - Portfolio value: perception → guarded command → physical action → observability와 data까지 연결한 가장 최근의 end-to-end robotics 사례
-- Public evidence: 저장소는 현재 private이므로 사이트 자체에 검증 가능한 구조 설명과 독립적인 system visual을 제공하고, GitHub 링크에는 접근 제한 가능성을 밝힌다.
+- Public evidence: 공개 GitHub 저장소의 최종 시연 영상, 통합 텐던 핸드 사진, Jetson·MediaPipe 시험 사진을 사용한다. 독립적인 system visual은 제어 경로를 보조 설명한다.
 
 ### 2. AQIS for Smart Factory — robot integration case
 
@@ -128,7 +128,7 @@ GPA, 초·중학교, 군 복무 상세는 메인 페이지에서 강조하지 �
 1. `/` — Home
    - 이름, 역할, 한 문장, Name-first scroll Hero
    - THING을 최우선 대표 작업으로 두고 AQIS, Brain Tumor MRI를 이어 보여준다.
-   - 공개 가능한 실제 화면 또는 저장소 근거를 바탕으로 직접 만든 system visual을 preview로 사용한다.
+   - 공개 저장소의 실제 최종 시연 영상을 preview로 사용하고, system visual은 구조 설명에 보조적으로 사용한다.
    - 짧은 소개 teaser와 이메일·GitHub·Resume를 모은 Contact 정보 패널을 둔다.
 2. `/work/` — Work index
    - 공개 근거가 있는 프로젝트 전체를 이미지 중심으로 비교한다.

@@ -131,3 +131,13 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] `?motion=reduced` keeps Motion reduced, Depth flat, the Hero object static, project actions visible, navigation fixed, and horizontal overflow at zero.
 - [x] THING copy and the custom system visual are based on repository documentation; private Git LFS media is not hotlinked and the GitHub access limitation is stated on the case page.
 - [ ] The in-app browser's automatic security review blocked the final follow-up after the last CTA cascade/depth-input patch. Those two patches passed build, `node --check`, cascade source review, and `git diff --check`, but final Work-row color and live pointer tilt were not re-observed in the browser.
+
+## 2026-08-10 THING public-media verification
+
+- [x] `npm.cmd run verify` succeeds after adding the public THING final-demo video and two repository photos; 14 deployment entries are verified.
+- [x] Home and Work load the 1080x1920 final demonstration video as a muted lifecycle-managed preview, with the integrated-hand photo as its poster.
+- [x] The THING case page preserves the full portrait demonstration (`9:16`) with native playback controls and does not autoplay it.
+- [x] At 1280x900, 768x900, and 390x844 the case video and both project-specific evidence photos load at their natural dimensions without horizontal overflow or console warnings/errors.
+- [x] At 768x900 the evidence photos use two balanced columns; at 390x844 they collapse to a single readable column.
+- [x] At 390x844, Home and Work load the real preview video without overflow; Work retains the persistent signal-green `프로젝트 살펴보기 →` call to action.
+- [x] `?motion=reduced` pauses the Home project-preview video while retaining the accessible project link and static poster.

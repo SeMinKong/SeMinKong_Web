@@ -4,6 +4,14 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Added
+
+- Added public THING final-demo video plus integrated-hand and Jetson MediaPipe evidence to the portfolio.
+
+### Changed
+
+- Replaced THING's primary synthetic preview with actual project media while retaining the system-flow visual as supporting documentation.
+
 ## [1.2.0] - 2026-08-10
 
 ### Added

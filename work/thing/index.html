@@ -35,9 +35,9 @@
           </dl>
         </header>
 
-        <figure class="case-media case-media--thing page-width" data-reveal="media" data-depth-card>
-          <img src="/src/assets/projects/thing/system-flow.svg" alt="21개 손 랜드마크가 MediaPipe, ROS 2, 안전 제어를 거쳐 7축 텐던 로봇 핸드 동작으로 이어지는 THING 시스템 흐름" data-depth-layer="6" />
-          <figcaption>THING system path — perception, command guard, and tendon actuation</figcaption>
+        <figure class="case-media case-media--thing case-media--thing-demo case-media--video page-width" data-reveal="media">
+          <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/integrated-robot-hand.jpg" controls playsinline preload="metadata"></video>
+          <figcaption>Final demonstration — the tendon-driven hand follows live motion commands. Sound and playback controls are available.</figcaption>
         </figure>
 
         <div class="case-body page-width">
@@ -49,6 +49,23 @@
             </div>
           </section>
 
+          <section class="case-section" data-reveal>
+            <h2>Built prototype</h2>
+            <div class="case-section__copy">
+              <p>공개 저장소의 제작 기록과 시험 사진을 통해 실제 텐던 라우팅, 손가락 구조, Jetson 기반 landmark 인식 환경을 확인할 수 있습니다.</p>
+              <div class="thing-evidence-grid">
+                <figure class="thing-evidence-media thing-evidence-media--robot">
+                  <img src="/src/assets/projects/thing/integrated-robot-hand.jpg" alt="오렌지색 텐던이 연결된 THING 로봇 핸드 통합 시제품" loading="lazy" />
+                  <figcaption>Integrated tendon hand prototype</figcaption>
+                </figure>
+                <figure class="thing-evidence-media thing-evidence-media--vision">
+                  <img src="/src/assets/projects/thing/jetson-mediapipe-hands-test.jpg" alt="Jetson 화면에서 MediaPipe가 손의 landmark를 추적하는 시험 환경" loading="lazy" />
+                  <figcaption>Jetson + MediaPipe landmark test</figcaption>
+                </figure>
+              </div>
+            </div>
+          </section>
+
           <section class="case-section case-section--dark" data-reveal>
             <h2>System path</h2>
             <div class="case-section__copy case-flow">
@@ -57,6 +74,10 @@
               <div><strong>Safe actuation</strong><p>Raspberry Pi 5의 명령 중재와 Command Guard, GPIO E-Stop을 거쳐 DYNAMIXEL XL330 7개를 구동합니다.</p></div>
               <div><strong>Observability</strong><p>React 관제 화면은 WebSocket·MJPEG 상태를 보여주고, rosbag2 기록은 JSON·CSV와 SHA-256 검증을 거쳐 데이터 포털로 이어집니다.</p></div>
             </div>
+            <figure class="thing-system-diagram">
+              <img src="/src/assets/projects/thing/system-flow.svg" alt="21개 손 랜드마크가 MediaPipe, ROS 2, 안전 제어를 거쳐 7축 텐던 로봇 핸드 동작으로 이어지는 THING 시스템 흐름" loading="lazy" />
+              <figcaption>Perception, guarded command, and tendon actuation</figcaption>
+            </figure>
           </section>
 
           <section class="case-section" data-reveal>
@@ -75,8 +96,8 @@
             <h2>Evidence</h2>
             <div class="case-section__copy">
               <p>프로젝트 문서에는 실제 손동작 모방, 캔과 유연 물체 파지, 장치별 통신과 데이터 기록 흐름이 정리되어 있습니다. 이 페이지의 설명은 저장소 문서를 기준으로 하며 개인별 역할은 공개 근거가 없어 별도로 주장하지 않습니다.</p>
-              <a class="source-link" href="https://github.com/SeMinKong/THING" rel="noreferrer">GitHub 저장소 · 접근 권한 필요 <span aria-hidden="true">↗</span></a>
-              <p class="source-note">현재 저장소는 비공개로 표시되어 일반 방문자는 GitHub 원문을 열 수 없을 수 있습니다.</p>
+              <a class="source-link" href="https://github.com/SeMinKong/THING" rel="noreferrer">GitHub 저장소 보기 <span aria-hidden="true">↗</span></a>
+              <p class="source-note">공개 저장소의 실제 시연 영상과 제작·시험 기록을 이 페이지의 근거로 사용했습니다.</p>
             </div>
           </section>
         </div>

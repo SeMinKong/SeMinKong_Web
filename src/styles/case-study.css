@@ -144,6 +144,74 @@
   object-fit: cover;
 }
 
+.case-media--thing-demo video {
+  width: min(100%, 450px);
+  max-height: min(78vh, 840px);
+  aspect-ratio: 9 / 16;
+  object-fit: contain;
+}
+
+.case-media--thing-demo {
+  display: grid;
+  justify-items: center;
+}
+
+.case-media--thing-demo figcaption {
+  width: 100%;
+}
+
+.thing-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.thing-evidence-media {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: #07100d;
+}
+
+.thing-evidence-media img {
+  width: 100%;
+  display: block;
+  background: #050806;
+  object-fit: cover;
+}
+
+.thing-evidence-media--robot img {
+  aspect-ratio: 3 / 4;
+}
+
+.thing-evidence-media--vision img {
+  aspect-ratio: 4 / 3;
+}
+
+.thing-evidence-media figcaption,
+.thing-system-diagram figcaption {
+  padding: 10px 12px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  line-height: 1.45;
+}
+
+.thing-system-diagram {
+  overflow: hidden;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: #07100d;
+}
+
+.thing-system-diagram img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
+
 .case-page--mri .case-media--image,
 .case-page--prompt .case-media--prompt {
   background: #dfe8ec;
@@ -443,6 +511,10 @@
     grid-template-columns: 1fr;
     gap: 24px;
     padding-block: 50px;
+  }
+
+  .thing-evidence-grid {
+    grid-template-columns: 1fr;
   }
 
   .case-section--dark::before,

@@ -187,3 +187,9 @@
 - Decision: Hero의 행동을 `THING 프로젝트 보기`와 `전체 프로젝트`로 바꾸고, Home project card와 Work row 전체를 하나의 primary link로 만든다. 고정 내비게이션은 아래 방향 스크롤에서도 숨기지 않는다.
 - Reason: 기존 Hero는 About·Resume를 중복 강조했고, 카드에서는 작은 제목과 화살표만 링크로 읽혀 touch와 빠른 훑기에서 다음 행동이 잘 보이지 않았다.
 - Impact: 프로젝트 링크는 한 카드당 keyboard tab stop 하나를 유지하면서 시각적 hit area를 카드 전체로 넓힌다. `프로젝트 살펴보기 →` 라벨을 항상 노출하고, 내비게이션 링크의 대비와 최소 높이를 높인다. Anime.js reveal, page transition, depth, reduced-motion과 native touch scroll 기준은 유지한다.
+
+## 2026-08-10 — 공개 THING 실제 미디어 우선
+
+- Decision: 공개 전환된 THING 저장소의 최종 시연 영상은 Home featured card, Work row, THING case hero에 사용하고, 통합 텐던 핸드 사진과 Jetson·MediaPipe 시험 사진은 case evidence로 추가한다.
+- Reason: 직접 만든 system visual보다 실제 시제품과 동작 증거가 프로젝트의 신뢰도와 완성 범위를 더 빠르게 전달한다.
+- Impact: system visual은 제어 구조를 설명하는 보조 자료로 유지한다. 영상은 muted, playsinline, viewport·visibility·reduced-motion에 따라 자동 재생을 멈추는 기존 lifecycle을 사용한다.
