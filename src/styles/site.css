@@ -1545,18 +1545,27 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .featured-work {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
-  gap: 30px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(42px, 5vw, 64px) 30px;
 }
 
 .project-card {
+  position: relative;
   min-width: 0;
   display: flex;
   flex-direction: column;
+  border-radius: var(--radius-md);
+  cursor: pointer;
 }
 
 .project-card--feature {
-  grid-row: span 2;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+  gap: 30px;
+  align-items: end;
+  padding-bottom: clamp(32px, 4vw, 48px);
+  border-bottom: 1px solid var(--line);
 }
 
 .project-card__media {
@@ -1571,9 +1580,13 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .project-card--feature .project-card__media {
-  flex: 1;
-  min-height: 430px;
-  aspect-ratio: auto;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+}
+
+.project-card--feature .project-card__copy {
+  padding-top: 0;
+  padding-bottom: 4px;
 }
 
 .project-card__media::after,
@@ -1600,6 +1613,20 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   object-position: center center;
 }
 
+.project-card__media--thing img,
+.work-row__media--thing img {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.project-card__media--thing {
+  background: #07100d;
+}
+
+.project-card--feature .project-card__media--thing img {
+  object-fit: contain;
+}
+
 .project-card__copy {
   display: grid;
   gap: 6px;
@@ -1623,6 +1650,21 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   transition: color 260ms ease;
 }
 
+.project-card__copy h3 a::after,
+.work-row__copy h2 a::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: var(--radius-md);
+}
+
+.project-card:focus-within,
+.work-row:focus-within {
+  outline: 2px solid var(--signal);
+  outline-offset: 5px;
+}
+
 .project-card:hover h3 a,
 .project-card:focus-within h3 a,
 .work-row:hover h2 a,
@@ -1636,6 +1678,34 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   font-family: var(--font-body);
   font-size: 0.94rem;
   line-height: 1.65;
+}
+
+.project-card__cta,
+.work-row__cta {
+  width: max-content;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  color: var(--signal);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-style: normal;
+  font-weight: 650;
+}
+
+.project-card__cta i,
+.work-row__cta i {
+  font-style: normal;
+  transition: transform 420ms var(--ease-out);
+}
+
+.project-card:hover .project-card__cta i,
+.project-card:focus-within .project-card__cta i,
+.work-row:hover .work-row__cta i,
+.work-row:focus-within .work-row__cta i {
+  transform: translateX(5px);
 }
 
 .focus-section {
@@ -1839,6 +1909,11 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   align-items: center;
   padding-block: clamp(30px, 4vw, 48px);
   border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.work-row--featured {
+  background: linear-gradient(90deg, rgba(200, 255, 99, 0.055), transparent 72%);
 }
 
 .work-row__index {
@@ -1881,7 +1956,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   line-height: 1.12;
 }
 
-.work-row__copy > span {
+.work-row__copy > span:not(.work-row__cta) {
   max-width: 610px;
   color: var(--text-soft);
   font-size: 0.96rem;
@@ -2164,6 +2239,14 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
   .project-card--feature {
     grid-column: auto;
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .project-card--feature .project-card__copy {
+    padding-top: 18px;
   }
 
   .project-card__media,
@@ -2229,8 +2312,13 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     padding-top: calc(var(--nav-height) + 32px);
   }
 
+  .hero-story__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .hero-story__actions .button {
-    flex: 1;
+    width: 100%;
   }
 
   .home-contact__panel {

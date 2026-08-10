@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="손동작 21개 랜드마크를 안전한 7축 명령으로 변환해 텐던 로봇 핸드를 구동하는 THING 프로젝트." />
+    <meta name="theme-color" content="#090d0b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>document.documentElement.classList.add('js');</script>
+    <title>THING — SeMinKong</title>
+  </head>
+  <body class="case-page case-page--thing">
+    <a class="skip-link" href="#case-content">프로젝트 본문으로 바로가기</a>
+    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
+
+    <header class="site-nav" data-site-nav>
+      <a class="wordmark" href="../../" aria-label="SeMinKong 홈"><span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span></a>
+      <nav class="site-nav__links" aria-label="주요 페이지"><a href="../">Projects</a><a href="../../about/">About</a></nav>
+      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="case-content">
+      <article class="case-study">
+        <header class="case-hero page-width">
+          <p class="case-hero__meta" data-intro>01 / 06 · Human-Mimetic Hand · Team Project · 2026</p>
+          <h1 data-intro lang="en">THING</h1>
+          <p class="case-hero__lead" data-intro>사람의 손동작을 인식해 안전한 로봇 명령으로 바꾸고, 실제 텐던 핸드의 움직임과 실험 기록까지 연결한 ROS 2 시스템입니다.</p>
+          <dl class="case-facts" data-intro>
+            <div><dt>Type</dt><dd>Team Project<br />Robotics &amp; Edge AI</dd></div>
+            <div><dt>Control</dt><dd>21 landmarks<br />7-axis HandCommand</dd></div>
+            <div><dt>System</dt><dd>Jetson · Raspberry Pi 5<br />AWS EC2</dd></div>
+            <div><dt>Stack</dt><dd>ROS 2 · MediaPipe · React<br />DYNAMIXEL · Django</dd></div>
+          </dl>
+        </header>
+
+        <figure class="case-media case-media--thing page-width" data-reveal="media" data-depth-card>
+          <img src="/src/assets/projects/thing/system-flow.svg" alt="21개 손 랜드마크가 MediaPipe, ROS 2, 안전 제어를 거쳐 7축 텐던 로봇 핸드 동작으로 이어지는 THING 시스템 흐름" data-depth-layer="6" />
+          <figcaption>THING system path — perception, command guard, and tendon actuation</figcaption>
+        </figure>
+
+        <div class="case-body page-width">
+          <section class="case-section" data-reveal>
+            <h2>Context</h2>
+            <div class="case-section__copy">
+              <p>THING은 카메라로 읽은 사람의 손 자세를 텐던 구동 로봇 핸드가 실시간으로 따라 하도록 만든 Human-Mimetic robotics 프로젝트입니다.</p>
+              <p>단순 모터 제어를 넘어 비전 입력, 분산 장치 통신, 안전 제어, 관제 화면, 실험 데이터 보존을 하나의 운영 흐름으로 구성했습니다.</p>
+            </div>
+          </section>
+
+          <section class="case-section case-section--dark" data-reveal>
+            <h2>System path</h2>
+            <div class="case-section__copy case-flow">
+              <div><strong>Perception</strong><p>Jetson에서 MediaPipe Hands가 21개 landmark를 검출하고 손 자세를 추정합니다.</p></div>
+              <div><strong>Retargeting</strong><p>엄지 3축과 네 손가락 굽힘 4축을 하나의 7축 HandCommand로 변환합니다.</p></div>
+              <div><strong>Safe actuation</strong><p>Raspberry Pi 5의 명령 중재와 Command Guard, GPIO E-Stop을 거쳐 DYNAMIXEL XL330 7개를 구동합니다.</p></div>
+              <div><strong>Observability</strong><p>React 관제 화면은 WebSocket·MJPEG 상태를 보여주고, rosbag2 기록은 JSON·CSV와 SHA-256 검증을 거쳐 데이터 포털로 이어집니다.</p></div>
+            </div>
+          </section>
+
+          <section class="case-section" data-reveal>
+            <h2>System design</h2>
+            <div class="case-section__copy">
+              <ul class="case-list">
+                <li>Jetson, Raspberry Pi 5, browser, AWS EC2 사이의 책임을 분리한 ROS 2 기반 구조</li>
+                <li>명령 제한, 비상 정지, 네트워크 복구 뒤 자동 재동작을 막는 안전 경계</li>
+                <li>실시간 상태와 카메라 피드를 함께 확인하는 React 관제 인터페이스</li>
+                <li>CAD·STL·URDF와 3D 프린팅 기구를 포함한 텐던 구동 하드웨어 구성</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="case-section" data-reveal>
+            <h2>Evidence</h2>
+            <div class="case-section__copy">
+              <p>프로젝트 문서에는 실제 손동작 모방, 캔과 유연 물체 파지, 장치별 통신과 데이터 기록 흐름이 정리되어 있습니다. 이 페이지의 설명은 저장소 문서를 기준으로 하며 개인별 역할은 공개 근거가 없어 별도로 주장하지 않습니다.</p>
+              <a class="source-link" href="https://github.com/SeMinKong/THING" rel="noreferrer">GitHub 저장소 · 접근 권한 필요 <span aria-hidden="true">↗</span></a>
+              <p class="source-note">현재 저장소는 비공개로 표시되어 일반 방문자는 GitHub 원문을 열 수 없을 수 있습니다.</p>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <nav class="case-next page-width" aria-label="다른 프로젝트">
+        <a href="../"><span>All projects</span><strong>프로젝트 목록</strong></a>
+        <a href="../aqis/"><span>Next project</span><strong>AQIS →</strong></a>
+      </nav>
+    </main>
+
+    <footer class="page-width site-footer site-footer--light"><span>© 2026 SeMinKong</span><a href="../../#contact">Contact ↗</a></footer>
+    <script type="module" src="/src/project.js"></script>
+  </body>
+</html>

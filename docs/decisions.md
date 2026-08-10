@@ -175,3 +175,15 @@
 - Decision: 손바닥을 손가락 쪽에서 펼쳐지고 손목 쪽에서 좁아지는 polygon으로 다시 만들고, 모서리 곡률·측면 오프셋·중복 그림자를 줄인다. 데스크톱에서는 중앙 graphite recess와 rail 대비로 밝은 앞판을 분할한다.
 - Reason: 동일한 둥근 실루엣의 앞·뒤·측면 판이 겹치면서 손바닥이 하나의 두꺼운 쿠션이나 뭉툭한 덩어리처럼 보였다.
 - Impact: 손가락, 손목, Anime.js transform은 바꾸지 않는다. 큐브 `z-index: 8 / 29px`, 엄지 `z-index: 11 / 72px`, 큐브 높이 `35%`를 유지해 기존 접촉과 조작 관계를 보존한다.
+
+## 2026-08-10 — THING을 최우선 대표 프로젝트로 승격
+
+- Decision: `THING`을 Home의 가장 큰 featured project와 Work index의 `01 / 06`으로 배치하고, 별도 `/work/thing/` case study를 제공한다. AQIS와 기존 프로젝트는 한 단계씩 뒤로 이동한다.
+- Reason: THING은 손동작 인식, ROS 2 명령 중재, 안전 제어, 7축 텐던 구동, 관제, 실험 데이터 기록까지 현재 포지셔닝을 가장 넓게 증명하는 최신 robotics 사례다.
+- Impact: Home, Work, About, HTML Resume와 프로젝트 previous/next 순서를 THING 중심으로 맞춘다. 저장소가 현재 private이고 개인별 역할 근거가 없으므로 접근 제한을 명시하고 구체적인 개인 직책은 주장하지 않는다. 실제 비공개 asset을 hotlink하지 않고 저장소 문서에 근거한 독립적인 system visual을 사용한다.
+
+## 2026-08-10 — 상시 보이는 탐색 경로와 전체 카드 링크
+
+- Decision: Hero의 행동을 `THING 프로젝트 보기`와 `전체 프로젝트`로 바꾸고, Home project card와 Work row 전체를 하나의 primary link로 만든다. 고정 내비게이션은 아래 방향 스크롤에서도 숨기지 않는다.
+- Reason: 기존 Hero는 About·Resume를 중복 강조했고, 카드에서는 작은 제목과 화살표만 링크로 읽혀 touch와 빠른 훑기에서 다음 행동이 잘 보이지 않았다.
+- Impact: 프로젝트 링크는 한 카드당 keyboard tab stop 하나를 유지하면서 시각적 hit area를 카드 전체로 넓힌다. `프로젝트 살펴보기 →` 라벨을 항상 노출하고, 내비게이션 링크의 대비와 최소 높이를 높인다. Anime.js reveal, page transition, depth, reduced-motion과 native touch scroll 기준은 유지한다.

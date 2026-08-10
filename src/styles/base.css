@@ -160,7 +160,7 @@ ol {
   gap: 28px;
   padding-inline: max(32px, calc((100vw - var(--page-max)) / 2));
   border-bottom: 1px solid transparent;
-  transition: transform 480ms var(--ease-soft), background-color 360ms ease, border-color 360ms ease;
+  transition: background-color 360ms ease, border-color 360ms ease;
 }
 
 .site-nav.is-scrolled,
@@ -168,10 +168,6 @@ ol {
   border-bottom-color: var(--line);
   background: rgba(9, 13, 11, 0.86);
   backdrop-filter: blur(18px);
-}
-
-.site-nav.is-hidden {
-  transform: translate3d(0, calc(-100% - 4px), 0);
 }
 
 .wordmark {
@@ -209,14 +205,18 @@ ol {
   align-items: center;
   gap: clamp(22px, 3vw, 42px);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
+  font-weight: 620;
   letter-spacing: -0.01em;
 }
 
 .site-nav__links a {
   position: relative;
-  padding-block: 12px;
-  color: var(--muted);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 2px;
+  color: var(--text-soft);
   transition: color 260ms ease;
 }
 
@@ -314,6 +314,12 @@ ol {
   color: var(--text);
 }
 
+.button--small {
+  min-height: 44px;
+  gap: 20px;
+  padding-inline: 14px;
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -341,7 +347,8 @@ ol {
   gap: 10px;
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 0.76rem;
+  font-size: 0.8rem;
+  font-weight: 620;
   transition: color 260ms ease;
 }
 
@@ -421,12 +428,12 @@ ol {
 
   .site-nav__links {
     gap: 11px;
-    font-size: 0.64rem;
+    font-size: 0.7rem;
   }
 
   .nav-resume,
   .resume-back {
-    min-height: 40px;
+    min-height: 44px;
     padding-inline: 11px;
     font-size: 0.65rem;
   }

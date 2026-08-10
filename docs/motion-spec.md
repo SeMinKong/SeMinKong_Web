@@ -332,3 +332,10 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 - Desktop pointer movement adds a small whole-hand parallax offset on top of the fixed 3/4 pose. No new pointer listener, rAF loop, or Anime.js instance is added.
 - Static depth uses relaxed `1080px` perspective at tablet widths and `1200px` on mobile. Reduced motion keeps the layered CSS geometry but zeros root tilt and parallax.
 - Existing offscreen, hidden, page lifecycle, coarse-pointer, and native `pan-y` behavior continues to own activation and cleanup.
+
+## 2026-08-10 — Persistent exploration navigation override
+
+- 이 항목은 아래 방향 스크롤에서 `.site-nav`를 화면 위로 숨기던 동작을 대체한다. 모든 route의 고정 내비게이션은 항상 viewport 안에 남고, 18px 이상 스크롤했을 때 배경과 hairline만 전환한다.
+- Home project card와 Work row는 하나의 stretched primary link를 사용한다. hover·focus에서는 제목 색과 CTA 화살표만 짧게 이동하며 카드 자체를 과하게 scale하거나 tilt하지 않는다.
+- 카드마다 keyboard tab stop은 하나만 유지하고, focus-visible은 카드 전체 outline과 기존 링크 outline으로 확인할 수 있어야 한다.
+- 이 변경은 Hero, reveal, depth, Lenis, page curtain timeline을 바꾸지 않는다. touch의 native vertical scroll과 `prefers-reduced-motion` 동작도 그대로 유지한다.

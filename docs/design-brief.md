@@ -61,7 +61,15 @@ Hero 첫 상태에서는 5초 안에 이름·역할·행동이 보여야 하고,
 
 ## Evidence from resume
 
-### 1. AQIS for Smart Factory — flagship
+### 1. THING Human-Mimetic Robot Hand — flagship
+
+- Role: Team project. 공개 저장소 문서에 개인별 역할 분담이 없어 세부 직책은 표기하지 않는다.
+- Stack: ROS 2, MediaPipe Hands, OpenCV, Jetson, Raspberry Pi 5, DYNAMIXEL XL330, React, Django, AWS EC2
+- Story: 21개 손 landmark를 엄지 3축과 네 손가락 4축의 7축 명령으로 변환해 텐던 로봇 핸드를 실시간 구동하고, 안전 제어·관제·실험 데이터 기록까지 연결한 시스템
+- Portfolio value: perception → guarded command → physical action → observability와 data까지 연결한 가장 최근의 end-to-end robotics 사례
+- Public evidence: 저장소는 현재 private이므로 사이트 자체에 검증 가능한 구조 설명과 독립적인 system visual을 제공하고, GitHub 링크에는 접근 제한 가능성을 밝힌다.
+
+### 2. AQIS for Smart Factory — robot integration case
 
 - Role: Team Lead, Full-Stack & Robot Integration, 2인 팀
 - Stack: ROS 2, FastAPI, WebSocket, React, RealSense, Dobot, YOLOv5
@@ -69,7 +77,7 @@ Hero 첫 상태에서는 5초 안에 이름·역할·행동이 보여야 하고,
 - Contribution: RealOps dashboard, REST/WebSocket 서비스, ROS 2 bridge, device adapters, LLM command integration
 - Portfolio value: AI 인식부터 물리적 행동과 운영 UI까지 연결한 가장 강한 대표 사례
 
-### 2. Brain Tumor MRI Classification & Segmentation
+### 3. Brain Tumor MRI Classification & Segmentation
 
 - Role: Personal project
 - Stack: Python, PyTorch, YOLO11, OpenCV, NumPy
@@ -77,14 +85,14 @@ Hero 첫 상태에서는 5초 안에 이름·역할·행동이 보여야 하고,
 - Portfolio value: Computer Vision 모델링, 데이터 변환, 정량 결과를 보여주는 사례
 - Verification needed: dataset, split, evaluation method, leakage control, reproducible result context
 
-### 3. Alkkagi.io
+### 4. Alkkagi.io
 
 - Role: Personal project
 - Stack: React 19, TypeScript, Node.js, Express, Socket.io
 - Contribution: server-authoritative 60 FPS physics, collision, friction, momentum, correction, dynamic mass/radius
 - Portfolio value: Robotics 밖에서도 실시간 시스템과 full-stack 구현이 가능함을 보여주는 사례
 
-### 4. Briefit
+### 5. Briefit
 
 - Role: Team AI Engineer
 - Stack: Python, aiohttp, BeautifulSoup, Transformers, KoBART
@@ -111,7 +119,7 @@ GPA, 초·중학교, 군 복무 상세는 메인 페이지에서 강조하지 �
 
 `Perception → Decision → Physical Action → Interface`
 
-이 흐름은 AQIS의 실제 구조를 기반으로 하고, 다른 프로젝트에서는 각 단계가 어떻게 달라지는지 보여준다.
+이 흐름은 THING의 손동작 인식·안전 제어·텐던 구동·관제 구조를 대표 사례로 하고, AQIS와 다른 프로젝트에서 각 단계가 어떻게 달라지는지 보여준다.
 
 ## Confirmed content structure
 
@@ -119,18 +127,20 @@ GPA, 초·중학교, 군 복무 상세는 메인 페이지에서 강조하지 �
 
 1. `/` — Home
    - 이름, 역할, 한 문장, Name-first scroll Hero
-   - 대표 작업 3개는 실제 화면을 사용한 preview로만 보여준다.
+   - THING을 최우선 대표 작업으로 두고 AQIS, Brain Tumor MRI를 이어 보여준다.
+   - 공개 가능한 실제 화면 또는 저장소 근거를 바탕으로 직접 만든 system visual을 preview로 사용한다.
    - 짧은 소개 teaser와 이메일·GitHub·Resume를 모은 Contact 정보 패널을 둔다.
 2. `/work/` — Work index
    - 공개 근거가 있는 프로젝트 전체를 이미지 중심으로 비교한다.
    - 역할과 한 문장 외의 구현 설명은 상세 페이지로 이동한다.
-3. `/work/aqis/` — 실제 로봇 구동 영상, RealOps 화면, 역할, 구현 범위, 결과, 팀 저장소
-4. `/work/brain-tumor-mri/` — 실제 분류 화면과 통합 데모 영상, 내부 평가 수치와 검증 범위, 저장소
-5. `/work/alkkagi/` — 실제 플레이 영상, server-authoritative 60 FPS 구현, 저장소
-6. `/work/briefit/` — 공식 팀 제품 이미지와 AI 담당 범위를 분리해 표시하고 팀 저장소에 연결
-7. `/work/project-prompt-generator/` — 실제 LangGraph 흐름도, 구현 구조, 라이브 데모와 저장소
-8. `/about/` — 프로필 사실, 개발 관점, 작업 방식, 현재 학습 범위와 기술
-9. `/resume/` — 경력, 교육, 기술, 수상, 프로젝트 링크와 원본 Resume 미리보기·다운로드
+3. `/work/thing/` — 21 landmark → 7축 command → 안전 제어 → 텐던 구동 → 기록으로 이어지는 구조와 저장소 접근 범위
+4. `/work/aqis/` — 실제 로봇 구동 영상, RealOps 화면, 역할, 구현 범위, 결과, 팀 저장소
+5. `/work/brain-tumor-mri/` — 실제 분류 화면과 통합 데모 영상, 내부 평가 수치와 검증 범위, 저장소
+6. `/work/alkkagi/` — 실제 플레이 영상, server-authoritative 60 FPS 구현, 저장소
+7. `/work/briefit/` — 공식 팀 제품 이미지와 AI 담당 범위를 분리해 표시하고 팀 저장소에 연결
+8. `/work/project-prompt-generator/` — 실제 LangGraph 흐름도, 구현 구조, 라이브 데모와 저장소
+9. `/about/` — 프로필 사실, 개발 관점, 작업 방식, 현재 학습 범위와 기술
+10. `/resume/` — 경력, 교육, 기술, 수상, 프로젝트 링크와 원본 Resume 미리보기·다운로드
 
 About은 별도 페이지로 제공하고 Contact는 Home의 정보 패널로 유지한다. backend 없는 별도 Contact form/page는 만들지 않는다.
 
@@ -214,8 +224,10 @@ About은 별도 페이지로 제공하고 Contact는 Home의 정보 패널로 �
 ## Acceptance criteria
 
 - 첫 화면에서 5초 안에 이름, 선호 직무, AI·Robotics 중심 역량을 이해할 수 있다.
-- 기본 스크롤이 가로채지지 않은 채 hero 문장이 순차적으로 누적되고, 완성 후 AQIS로 자연스럽게 이동한다.
-- AQIS를 통해 `인식 → 소프트웨어 → 물리적 행동 → 인터페이스` 역량을 확인할 수 있다.
+- 첫 화면의 명시적인 CTA에서 THING 상세 또는 전체 프로젝트 목록으로 바로 이동할 수 있다.
+- 고정 내비게이션은 스크롤 방향과 관계없이 계속 보이고, Home 카드와 Work row 전체가 하나의 명확한 프로젝트 링크로 동작한다.
+- THING을 통해 `인식 → 안전한 명령 → 물리적 행동 → 관제·데이터` 역량을 확인할 수 있다.
+- AQIS를 통해 Computer Vision, backend, 로봇 통합 역량을 추가로 확인할 수 있다.
 - 나머지 프로젝트가 Computer Vision, NLP, real-time full-stack 역량의 폭을 증명한다.
 - 네 프로젝트 chapter는 배경, 색, 조형 언어가 구분되지만 하나의 포트폴리오로 읽힌다.
 - 한국어와 영어가 장식적으로 섞이지 않고 각각 명확한 역할을 가진다.

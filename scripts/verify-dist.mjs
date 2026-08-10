@@ -5,6 +5,7 @@ const expectedFiles = [
   'index.html',
   'favicon.svg',
   'work/index.html',
+  'work/thing/index.html',
   'work/aqis/index.html',
   'work/brain-tumor-mri/index.html',
   'work/alkkagi/index.html',
