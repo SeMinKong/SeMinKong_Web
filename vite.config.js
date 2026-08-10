@@ -11,6 +11,7 @@ export default defineConfig({
       input: {
         portfolio: resolve(rootDirectory, 'index.html'),
         work: resolve(rootDirectory, 'work/index.html'),
+        thing: resolve(rootDirectory, 'work/thing/index.html'),
         aqis: resolve(rootDirectory, 'work/aqis/index.html'),
         brainTumorMri: resolve(rootDirectory, 'work/brain-tumor-mri/index.html'),
         alkkagi: resolve(rootDirectory, 'work/alkkagi/index.html'),

@@ -20,7 +20,7 @@
         <span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span>
       </a>
       <nav class="site-nav__links" aria-label="주요 페이지">
-        <a href="./work/">Work</a>
+        <a href="./work/">Projects</a>
         <a href="./about/">About</a>
       </nav>
       <a class="nav-resume" href="./resume/">Resume <span aria-hidden="true">→</span></a>
@@ -38,10 +38,10 @@
                   <span data-hero-line>모델을 만드는 데서 멈추지 않고, <em>실제 장치가 움직이는 순간까지 구현합니다.</em></span>
                 </span>
               </h1>
-              <p class="hero-identity__lead" data-intro>Computer Vision과 ROS 2를 공부하며, software와 hardware가 만나는 Robotics와 Physical AI로 관심을 넓히고 있습니다.</p>
+              <p class="hero-identity__lead" data-intro>ROS 2 기반 THING에서 손동작 인식, 안전 제어, 텐던 로봇 핸드, 실험 데이터 기록을 하나의 시스템으로 연결했습니다.</p>
               <div class="hero-story__actions" data-intro>
-                <a class="button button--primary" href="./about/">About me <span aria-hidden="true">→</span></a>
-                <a class="button button--quiet" href="./resume/">Resume <span aria-hidden="true">→</span></a>
+                <a class="button button--primary" href="./work/thing/">THING 프로젝트 보기 <span aria-hidden="true">→</span></a>
+                <a class="button button--quiet" href="./work/">전체 프로젝트 <span aria-hidden="true">→</span></a>
               </div>
             </div>
 
@@ -191,7 +191,7 @@
           </div>
           <div class="home-about__copy" data-reveal="text">
             <p>숭실대학교에서 소프트웨어를 전공했고, 현재 SSAFY Robotics Track에서 Computer Vision, ROS 2, robot control을 공부하고 있습니다.</p>
-            <p>모델의 결과가 서버와 화면, 장치 동작까지 이어지는 전체 시스템에 관심이 있습니다. Robotics를 가장 선호하지만, 실제 제품과 서비스를 만드는 개발 직무에도 열려 있습니다.</p>
+            <p>THING의 Human-Mimetic hand와 AQIS의 스마트 팩토리를 만들며, 모델의 결과가 안전한 장치 동작과 관제 화면까지 이어지는 전체 시스템을 구현해 왔습니다.</p>
             <dl class="home-profile" aria-label="현재 관심 분야">
               <div><dt>Now</dt><dd>SSAFY Robotics Track</dd></div>
               <div><dt>Focus</dt><dd>Computer Vision · ROS 2 · Physical AI</dd></div>
@@ -205,40 +205,43 @@
         <div class="page-width">
           <header class="section-heading" data-reveal="text">
             <div><p class="eyebrow">Selected work</p><h2 id="selected-work-title">주요 프로젝트</h2></div>
-            <a class="text-link" href="./work/">전체 프로젝트 <span aria-hidden="true">→</span></a>
+            <a class="button button--quiet button--small" href="./work/">전체 프로젝트 둘러보기 <span aria-hidden="true">→</span></a>
           </header>
 
           <div class="featured-work">
             <article class="project-card project-card--feature" data-reveal="media">
-              <a class="project-card__media project-card__media--aqis" href="./work/aqis/" data-depth-card tabindex="-1" aria-hidden="true">
-                <img src="/src/assets/projects/aqis/real-ops.png" alt="AQIS RealOps 대시보드" data-depth-layer="6" data-inertia="14" />
-              </a>
+              <div class="project-card__media project-card__media--thing" data-depth-card aria-hidden="true">
+                <img src="/src/assets/projects/thing/system-flow.svg" alt="" data-depth-layer="6" data-inertia="14" />
+              </div>
               <div class="project-card__copy">
-                <p>01 · Team Lead · 2026</p>
+                <p>Featured · 01 · Team Project · Robotics &amp; Edge AI · 2026</p>
+                <h3><a href="./work/thing/" lang="en">THING</a></h3>
+                <p class="project-card__summary">손동작 21개 landmark를 안전한 7축 명령으로 변환해 텐던 로봇 핸드와 실험 기록까지 연결했습니다.</p>
+                <span class="project-card__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
+              </div>
+            </article>
+
+            <article class="project-card" data-reveal="media">
+              <div class="project-card__media project-card__media--aqis" data-depth-card aria-hidden="true">
+                <img src="/src/assets/projects/aqis/real-ops.png" alt="" data-depth-layer="6" data-inertia="12" />
+              </div>
+              <div class="project-card__copy">
+                <p>02 · Team Lead · 2026</p>
                 <h3><a href="./work/aqis/" lang="en">AQIS</a></h3>
                 <p class="project-card__summary">검사 결과를 컨베이어, Dobot, 실시간 운영 화면까지 연결한 스마트 팩토리 시스템.</p>
+                <span class="project-card__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
               </div>
             </article>
 
             <article class="project-card" data-reveal="media">
-              <a class="project-card__media" href="./work/brain-tumor-mri/" data-depth-card tabindex="-1" aria-hidden="true">
-                <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="Brain Tumor MRI 분류 결과 화면" data-depth-layer="6" data-inertia="12" />
-              </a>
+              <div class="project-card__media" data-depth-card aria-hidden="true">
+                <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="" data-depth-layer="6" data-inertia="12" />
+              </div>
               <div class="project-card__copy">
-                <p>02 · Personal · 2026</p>
+                <p>03 · Personal · Computer Vision · 2026</p>
                 <h3><a href="./work/brain-tumor-mri/" lang="en">Brain Tumor MRI</a></h3>
                 <p class="project-card__summary">MRI 영상을 4개 클래스로 분류하고 종양 영역을 분할하는 추론 흐름을 구현했습니다.</p>
-              </div>
-            </article>
-
-            <article class="project-card" data-reveal="media">
-              <a class="project-card__media" href="./work/alkkagi/" data-depth-card tabindex="-1" aria-hidden="true">
-                <video src="/src/assets/projects/alkkagi/demo.mp4" muted loop playsinline preload="metadata" data-auto-video data-depth-layer="6" data-inertia="12" aria-hidden="true"></video>
-              </a>
-              <div class="project-card__copy">
-                <p>03 · Personal · 2026</p>
-                <h3><a href="./work/alkkagi/" lang="en">Alkkagi.io</a></h3>
-                <p class="project-card__summary">서버에서 60 FPS로 물리 상태를 계산하는 실시간 멀티플레이 게임.</p>
+                <span class="project-card__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
               </div>
             </article>
           </div>
@@ -252,9 +255,9 @@
             <h2 id="focus-title">제가 연결하는 범위</h2>
           </header>
           <div class="focus-list">
-            <div data-reveal="row"><span>01</span><h3 lang="en">Perception</h3><p>YOLO · PyTorch · OpenCV 기반 분류, 분할, 실시간 검사</p></div>
-            <div data-reveal="row"><span>02</span><h3 lang="en">Software</h3><p>ROS 2 · FastAPI · WebSocket으로 상태와 장비를 연결하는 backend</p></div>
-            <div data-reveal="row"><span>03</span><h3 lang="en">Physical Action</h3><p>RealSense · Dobot · device adapter를 이용한 실제 장비 제어</p></div>
+            <div data-reveal="row"><span>01</span><h3 lang="en">Perception</h3><p>MediaPipe · YOLO · OpenCV 기반 손동작 인식, 분류, 실시간 검사</p></div>
+            <div data-reveal="row"><span>02</span><h3 lang="en">Software &amp; Safety</h3><p>ROS 2 · FastAPI · WebSocket으로 명령, 안전 경계, 상태를 연결하는 software</p></div>
+            <div data-reveal="row"><span>03</span><h3 lang="en">Physical Action</h3><p>DYNAMIXEL 텐던 핸드 · Dobot · device adapter를 이용한 실제 장비 제어</p></div>
           </div>
         </div>
       </section>

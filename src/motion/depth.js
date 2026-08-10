@@ -11,6 +11,7 @@ export const initDepthEffects = (environment) => {
 
   const entries = elements.map((element) => ({
     element,
+    pointerTarget: element.closest('.project-card, .work-row') || element,
     layers: Array.from(element.querySelectorAll('[data-depth-layer]')),
     strength: Math.min(2.2, Math.max(0.5, Number(element.dataset.depthStrength) || 1)),
     active: true,
@@ -109,6 +110,19 @@ export const initDepthEffects = (environment) => {
       if (environment.depth !== 'interactive' || !entry.active) return;
       const bounds = entry.element.getBoundingClientRect();
       if (!bounds.width || !bounds.height) return;
+
+      const isOverMedia =
+        event.clientX >= bounds.left &&
+        event.clientX <= bounds.right &&
+        event.clientY >= bounds.top &&
+        event.clientY <= bounds.bottom;
+
+      if (!isOverMedia) {
+        reset(entry);
+        schedule();
+        return;
+      }
+
       entry.targetX = ((event.clientX - bounds.left) / bounds.width - 0.5) * 2;
       entry.targetY = ((event.clientY - bounds.top) / bounds.height - 0.5) * 2;
       entry.targetScale = 1.006;
@@ -120,9 +134,9 @@ export const initDepthEffects = (environment) => {
       schedule();
     };
 
-    entry.element.addEventListener('pointermove', onPointerMove, { passive: true });
-    entry.element.addEventListener('pointerleave', onPointerLeave, { passive: true });
-    entry.element.addEventListener('pointercancel', onPointerLeave, { passive: true });
+    entry.pointerTarget.addEventListener('pointermove', onPointerMove, { passive: true });
+    entry.pointerTarget.addEventListener('pointerleave', onPointerLeave, { passive: true });
+    entry.pointerTarget.addEventListener('pointercancel', onPointerLeave, { passive: true });
     render(entry);
   });
 

@@ -9,6 +9,10 @@
   --project-accent: #72d8ff;
 }
 
+.case-page--thing {
+  --project-accent: #8ce9dc;
+}
+
 .case-page--alkkagi {
   --project-accent: #8492ff;
 }
@@ -128,6 +132,16 @@
 
 .case-media--video video {
   aspect-ratio: 16 / 9;
+}
+
+.case-media--thing {
+  background: #07100d;
+}
+
+.case-media--thing img {
+  max-height: none;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 .case-page--mri .case-media--image,
@@ -307,6 +321,13 @@
   min-height: 42px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--line);
+}
+
+.source-note {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.65;
 }
 
 .case-next {
