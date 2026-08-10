@@ -7,10 +7,12 @@ All notable changes to this project are recorded here. The project follows Seman
 ### Added
 
 - Added public THING final-demo video plus integrated-hand and Jetson MediaPipe evidence to the portfolio.
+- Added a Home portfolio-overview panel with the actual THING demo and concise project-scope facts.
 
 ### Changed
 
 - Replaced THING's primary synthetic preview with actual project media while retaining the system-flow visual as supporting documentation.
+- Put Selected Work directly after the Home Hero and moved the About teaser after project evidence.
 
 ## [1.2.0] - 2026-08-10
 

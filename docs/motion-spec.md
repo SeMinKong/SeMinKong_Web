@@ -1,5 +1,9 @@
 # Motion specification
 
+## 2026-08-10 — Home overview motion refinement
+
+The real THING preview is the Hero's only moving visual proof. It follows the established muted, playsinline, visibility-aware, and reduced-motion lifecycle. The former decorative hand is not displayed on Home; tablet and mobile show the Hero as an immediate static document flow so the identity, project preview, and actions are discoverable without a long scroll sequence.
+
 Status: Approved for implementation — 2026-07-14
 
 ## Confirmed preference

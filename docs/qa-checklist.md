@@ -1,5 +1,16 @@
 # QA checklist
 
+## 2026-08-10 — Home portfolio overview verification
+
+- [x] At 1280x720 and 1280x600, both the Hero identity and the real THING overview panel remain fully inside the sticky viewport without clipping.
+
+- [x] `npm.cmd run verify` builds 84 modules and validates all 14 deployment entries.
+- [x] Home source has one H1; its visible section order is Hero → Selected Work → Focus → About → Contact.
+- [x] At 1280x900, the Hero loads the real THING preview beside the identity and project actions with no horizontal overflow.
+- [x] At 768x900, the overview panel remains a 705x315px readable split layout and Selected Work follows in the same viewport range.
+- [x] At 390x844, the preview panel becomes a single-column 343px-wide layout, all text remains accessible, and horizontal overflow is absent.
+- [x] `?motion=reduced` pauses the Hero preview; browser console warnings and errors are empty after responsive checks.
+
 Verification record: 2026-07-14 — identity-first Hero and Dexterous Hand update
 
 Environment: Windows, npm, Vite production build and preview

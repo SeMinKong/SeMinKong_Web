@@ -5,6 +5,220 @@
   min-height: 960px;
 }
 
+/* Home overview: make the portfolio's proof and scope readable before scrolling. */
+.home-page .hero-story {
+  height: 120svh;
+  min-height: 800px;
+}
+
+.home-page .hero-story__frame {
+  grid-template-columns: minmax(0, 0.86fr) minmax(460px, 1.14fr);
+  gap: clamp(36px, 5vw, 72px);
+  padding-bottom: 68px;
+}
+
+.home-page .dexterous-hand {
+  display: none;
+}
+
+.hero-project-brief {
+  min-width: 0;
+  min-height: min(56svh, 500px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(220px, 0.92fr);
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: #0b120e;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.18);
+}
+
+.hero-project-brief__media {
+  min-width: 0;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  background: #050907;
+}
+
+.hero-project-brief__media video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-project-brief__content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  padding: clamp(24px, 3.2vw, 42px);
+  background:
+    linear-gradient(145deg, rgba(200, 255, 99, 0.09), transparent 42%),
+    #101712;
+}
+
+.hero-project-brief__content .eyebrow {
+  color: var(--signal);
+}
+
+.hero-project-brief__content h2 {
+  margin-top: -13px;
+  font-size: clamp(2.8rem, 5vw, 5.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+}
+
+.hero-project-brief__content > p:not(.eyebrow) {
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.68;
+}
+
+.hero-project-brief__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.hero-project-brief__facts dt {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.3vw, 2.1rem);
+  font-weight: 650;
+  letter-spacing: -0.06em;
+}
+
+.hero-project-brief__facts dd {
+  margin-top: 4px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 901px) and (max-height: 820px) {
+  .home-page .hero-story {
+    height: 108svh;
+    min-height: 0;
+  }
+
+  .home-page .hero-story__frame {
+    gap: clamp(28px, 4vw, 52px);
+    padding-top: calc(var(--nav-height) + 20px);
+    padding-bottom: 32px;
+  }
+
+  .hero-identity__role {
+    margin-bottom: 14px;
+  }
+
+  .hero-identity h1 {
+    gap: 14px;
+  }
+
+  .hero-identity__lead {
+    margin-top: 16px;
+    font-size: clamp(0.9rem, 1.25vw, 1rem);
+    line-height: 1.58;
+  }
+
+  .hero-story__actions {
+    margin-top: 18px;
+  }
+
+  .hero-project-brief {
+    min-height: min(54svh, 420px);
+  }
+
+  .hero-project-brief__content {
+    gap: 18px;
+    padding: clamp(20px, 2.5vw, 30px);
+  }
+
+  .hero-project-brief__content h2 {
+    font-size: clamp(2.7rem, 4.4vw, 4.5rem);
+  }
+
+  .hero-project-brief__facts {
+    padding-top: 13px;
+  }
+}
+
+@media (max-width: 960px) {
+  .home-page .hero-story {
+    height: 126svh;
+    min-height: 860px;
+  }
+
+  .home-page .hero-story__frame {
+    grid-template-columns: minmax(0, 0.84fr) minmax(320px, 1.16fr);
+    gap: 30px;
+  }
+
+  .hero-project-brief {
+    min-height: 430px;
+    grid-template-columns: minmax(0, 1fr) minmax(190px, 0.9fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .home-page .hero-story {
+    height: auto;
+    min-height: 0;
+  }
+
+  .home-page .hero-story__sticky {
+    position: relative;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .home-page .hero-story__frame {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding-top: calc(var(--nav-height) + 54px);
+    padding-bottom: 56px;
+  }
+
+  .hero-project-brief {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1.1fr) minmax(220px, 0.9fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .home-page .hero-story__frame {
+    gap: 26px;
+    padding-top: calc(var(--nav-height) + 38px);
+    padding-bottom: 42px;
+  }
+
+  .hero-project-brief {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-project-brief__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .hero-project-brief__content {
+    gap: 22px;
+    padding: 24px 22px;
+  }
+
+  .hero-project-brief__content h2 {
+    margin-top: -8px;
+    font-size: clamp(3.2rem, 18vw, 4.4rem);
+  }
+}
+
 .hero-story__sticky {
   position: sticky;
   top: 0;

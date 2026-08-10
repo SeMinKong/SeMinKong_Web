@@ -1,5 +1,13 @@
 # Decision log
 
+## 2026-08-10 — Home portfolio overview
+
+- Layout: On desktop windows 820px high or shorter, compact the Hero copy, gaps, and real-media panel so both columns remain fully inside the initial viewport.
+
+- Decision: Replace the Home Hero's decorative hand-first composition with a real THING demo panel, a visible project-scope summary, and an immediate Selected Work section.
+- Reason: Visitors should be able to identify the developer, representative proof, technical range, and the next browsing path without interpreting a long visual sequence.
+- Impact: The existing Hero copy, two project actions, media lifecycle, and reduced-motion behavior remain; the decorative hand is hidden on Home and the About teaser follows project evidence.
+
 중요한 선택은 날짜, 결정, 이유, 영향으로 기록한다.
 
 ## 2026-07-13 — npm 사용
