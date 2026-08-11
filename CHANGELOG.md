@@ -7,6 +7,7 @@ All notable changes to this project are recorded here. The project follows Seman
 ### Changed
 
 - Simplified the Home Hero actions to a project archive link and an About link while keeping THING featured immediately below.
+- Increased Home Hero action typography and replaced the simultaneous intro with a reversible scroll sequence that reveals the role, two statement lines, and actions in order.
 
 ## [1.3.0] - 2026-08-11
 

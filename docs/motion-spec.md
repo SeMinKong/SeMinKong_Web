@@ -358,3 +358,13 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 - 한 시연이 재생되면 다른 THING 시연을 즉시 pause한다. 문서가 hidden 상태가 되거나 `pagehide`가 발생하면 모든 수동 시연을 pause한다.
 - Hero와 gallery 영상은 `preload="none"`과 로컬 WebP poster를 사용해 화면에 보이기 전 원본 영상 다운로드를 시작하지 않는다.
 - gallery 전체에 reveal을 한 번만 적용하고 각 video·card에는 transform 소유권을 추가하지 않는다. touch와 native controls 동작은 그대로 유지한다.
+
+## 2026-08-11 — Sequential Home Hero copy reveal
+
+- Anime.js owns one reversible scroll-seek timeline for the role, two statement lines, CTA group, and progress line. The name and dexterous-hand transforms remain outside this timeline.
+- Normalized timing is role `5–22%`, first statement `18–45%`, second statement `45–72%`, and actions `78–98%`, followed by a final hold.
+- Full motion uses damping `8`; lite motion uses damping `12`. Scroll input stays passive and target geometry is read at most once per requested animation frame.
+- CTA pointer interaction is disabled before its reveal threshold. A Tab key or CTA focus immediately settles the timeline at 100% so a keyboard user never lands on an invisible control.
+- A head-time pending class masks only the staged copy before the module initializes; initialization clears it after the first timeline seek, and a two-second watchdog restores the full copy if enhancement fails.
+- Reduced motion removes the staged timeline and sticky travel, clears inline stage styles, and shows the role, statement, actions, and static hand from the start.
+- The short mobile layout compresses copy spacing and places the hand at `70svh`, retaining at least a visible gap after the final CTA at 390×568.

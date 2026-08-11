@@ -228,3 +228,13 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] Home Hero shows exactly `프로젝트` and `About` as its two actions.
 - [x] The actions resolve to `/work/` and `/about/`, remain fully visible at 390px, 768px, and 1280px, and create no horizontal overflow.
 - [x] `npm.cmd run verify`, browser console, and keyboard focus checks pass after the CTA change.
+
+## 2026-08-11 Sequential Home Hero verification
+
+- [x] At scroll position 0, 1280×800, 768×1024, and 390×844 show the name while the role, two statement lines, and actions start at opacity 0; the signature hand remains visible.
+- [x] Desktop scroll sampling shows the role first, then line 1 while line 2 remains hidden, then line 2, and finally the actions; reverse progress uses the same timeline.
+- [x] Hero buttons render at 15.36px / 14.592px / 14.4px across 1280 / 768 / 390, use weight 650, retain 48px height, and create no horizontal overflow.
+- [x] Keyboard focus immediately settles all staged copy before showing the project-link focus ring; hidden actions do not accept pointer input.
+- [x] Reduced motion keeps one `SeMinKong` h1, exposes all copy and actions, removes the enhanced track state, and stacks the static hand with zero overflow.
+- [x] At 390×568 the final CTA and hand retain a 31px gap; 1280×600 keeps the complete copy, actions, and hand inside the viewport.
+- [x] Browser console logs are empty for normal, lite, short-height, and reduced-motion previews.

@@ -8,7 +8,10 @@
     <meta name="theme-color" content="#090d0b" />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <script>document.documentElement.classList.add('js');</script>
+    <script>
+      document.documentElement.classList.add('js', 'hero-pending');
+      window.setTimeout(() => document.documentElement.classList.remove('hero-pending'), 2000);
+    </script>
     <title>SeMinKong — AI &amp; Robotics Software Developer</title>
   </head>
   <body class="home-page">
@@ -32,18 +35,18 @@
         <div class="hero-story__sticky" data-hero-sticky>
           <div class="hero-story__frame page-width">
             <div class="hero-identity" data-hero-copy>
-              <p class="hero-identity__role" data-intro lang="en">AI &amp; Robotics Software Developer · Seoul</p>
               <h1 id="hero-title">
                 <span class="hero-identity__name" data-intro lang="en">SeMinKong</span>
-                <span class="hero-identity__statement" data-intro>
-                  <span data-hero-line>모델에서 멈추지 않고,</span>
-                  <span data-hero-line><em>움직이는 시스템까지 만듭니다.</em></span>
-                </span>
               </h1>
-              <div class="hero-story__actions" data-intro>
+              <p class="hero-identity__role" data-hero-role lang="en">AI &amp; Robotics Software Developer · Seoul</p>
+              <p class="hero-identity__statement" id="hero-summary">
+                <span data-hero-line>모델에서 멈추지 않고,</span>
+                <span data-hero-line><em>움직이는 시스템까지 만듭니다.</em></span>
+              </p>
+              <nav class="hero-story__actions" aria-label="주요 페이지 바로가기" data-hero-actions>
                 <a class="button button--primary" href="./work/" aria-label="프로젝트 목록 보기">프로젝트 <span aria-hidden="true">→</span></a>
                 <a class="button button--text" href="./about/" aria-label="About 소개 페이지 보기">About <span aria-hidden="true">→</span></a>
-              </div>
+              </nav>
             </div>
 
             <div class="dexterous-hand" data-dexterous-hand aria-hidden="true">

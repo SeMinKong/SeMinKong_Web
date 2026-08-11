@@ -82,6 +82,15 @@ html[data-motion="reduced"] [data-hero-copy] {
   clip-path: none !important;
 }
 
+html[data-motion="reduced"] [data-hero-role],
+html[data-motion="reduced"] [data-hero-line],
+html[data-motion="reduced"] [data-hero-actions] {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+  pointer-events: auto !important;
+}
+
 html[data-motion="reduced"] [data-dexterous-hand] {
   opacity: 1 !important;
   filter: none !important;

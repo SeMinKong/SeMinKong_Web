@@ -390,3 +390,10 @@ Visual acceptance: depth is clearly visible at 1280px, remains clean at 768px an
 - Tablet and mobile may hide the center recess, but must retain the tapered silhouette and thinner side wall.
 
 Visual acceptance: the palm remains large enough to support the cube, but its wrist-side mass is visibly narrower at 1280px, 768px, and 390px. Finger roots, thumb saddle, wrist, and cube remain separate at a glance.
+
+## 2026-08-11 — Staged Home Hero hierarchy
+
+- The Home Hero begins with the `SeMinKong` name as its only visible copy while retaining the signature hand as the visual anchor.
+- Scrolling reveals the role, the two value-statement lines, and the Projects/About actions in that order; each stage accumulates rather than replacing the previous one.
+- Hero action labels use a stronger 650 weight and a responsive 14–15px size, while the primary/secondary contrast remains unchanged.
+- The complete semantic copy always remains in the document. Keyboard use, reduced motion, and failed enhancement expose the full final state immediately.

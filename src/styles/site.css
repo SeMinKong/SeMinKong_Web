@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-top: 24px;
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 0.8rem;
@@ -66,9 +66,7 @@
 }
 
 .hero-identity h1 {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(28px, 3.4vw, 42px);
+  display: block;
 }
 
 .hero-identity__name {
@@ -80,6 +78,7 @@
 .hero-identity__statement {
   display: grid;
   gap: 14px;
+  margin-top: clamp(22px, 2.5vw, 32px);
   color: var(--text-soft);
   font-size: clamp(1.8rem, 2.6vw, 2.35rem);
   line-height: 1.04;
@@ -106,6 +105,37 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 38px;
+}
+
+.home-page .hero-story__actions .button {
+  font-size: clamp(0.9rem, 0.84rem + 0.15vw, 0.96rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.home-page .hero-story__actions .button--text {
+  color: var(--text);
+}
+
+html.hero-pending:not([data-motion="reduced"]) [data-hero-role],
+html.hero-pending:not([data-motion="reduced"]) [data-hero-line],
+html.hero-pending:not([data-motion="reduced"]) [data-hero-actions] {
+  opacity: 0;
+}
+
+html.hero-pending:not([data-motion="reduced"]) [data-hero-actions] {
+  pointer-events: none;
+}
+
+[data-hero-story][data-hero-enhanced]:not([data-hero-actions-ready]) [data-hero-actions] {
+  pointer-events: none;
+}
+
+[data-hero-actions]:focus-within {
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
 }
 
 .dexterous-hand {
@@ -3375,8 +3405,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 /* Restore the signature hand as the Home Hero's primary visual. */
 .home-page .hero-story {
-  height: 118svh;
-  min-height: 800px;
+  height: 158svh;
+  min-height: 900px;
 }
 
 .home-page .hero-story__frame {
@@ -3402,8 +3432,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 960px) {
   .home-page .hero-story {
-    height: 112svh;
-    min-height: 820px;
+    height: 150svh;
+    min-height: 920px;
   }
 
   .home-page .hero-story__frame {
@@ -3414,8 +3444,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 900px) {
   .home-page .hero-story {
-    height: 108svh;
-    min-height: 900px;
+    height: 145svh;
+    min-height: 920px;
   }
 
   .home-page .hero-story__sticky {
@@ -3445,8 +3475,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 720px) {
   .home-page .hero-story {
-    height: 106svh;
-    min-height: 820px;
+    height: 142svh;
+    min-height: 920px;
   }
 
   .home-page .hero-story__frame {
@@ -3470,8 +3500,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 720px) and (max-height: 760px) {
   .home-page .hero-story {
-    height: 110svh;
-    min-height: 820px;
+    height: 148svh;
+    min-height: 920px;
   }
 
   .home-page .hero-story__sticky {
@@ -3486,10 +3516,24 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     padding-bottom: 34px;
   }
 
+  .home-page .hero-identity__role {
+    margin-top: 18px;
+  }
+
+  .home-page .hero-identity__statement {
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .home-page .hero-story__actions {
+    margin-top: 10px;
+  }
+
   .home-page .dexterous-hand {
     --hand-size: min(31svh, 170px);
     --rig-scale: 0.41;
     width: min(100%, 220px);
+    inset-block-start: 70svh;
   }
 
   .home-page .robot-hand-rig {
