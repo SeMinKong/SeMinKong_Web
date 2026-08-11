@@ -123,6 +123,12 @@ html[data-motion="reduced"] .page-curtain {
     padding-top: calc(var(--nav-height) + 54px);
     padding-bottom: 76px;
   }
+
+  html[data-motion="reduced"] .home-page .dexterous-hand {
+    position: relative;
+    inset: auto;
+    margin: 20px auto 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

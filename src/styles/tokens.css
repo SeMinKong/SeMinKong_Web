@@ -10,7 +10,7 @@
   --surface-strong: #1a231c;
   --text: #f1f2e9;
   --text-soft: #bec5bc;
-  --muted: #818b83;
+  --muted: #929b94;
   --line: rgba(241, 242, 233, 0.12);
   --line-strong: rgba(241, 242, 233, 0.24);
   --signal: #c8ff63;
@@ -19,7 +19,7 @@
   --font-display: "Manrope Variable", "Noto Sans KR Variable", sans-serif;
   --font-body: "Noto Sans KR Variable", "Manrope Variable", sans-serif;
   --font-mono: "JetBrains Mono Variable", Consolas, monospace;
-  --type-hero-name: clamp(3.1rem, 6vw, 4.75rem);
+  --type-hero-name: clamp(3.35rem, 7vw, 5.8rem);
   --type-hero-statement: clamp(2.2rem, 4.8vw, 4rem);
   --type-page: clamp(2.4rem, 4.2vw, 3.4rem);
   --type-case: clamp(2.8rem, 5vw, 3.9rem);
@@ -28,8 +28,8 @@
   --type-lead: clamp(1.02rem, 1.35vw, 1.18rem);
   --page-max: 1180px;
   --reading-max: 720px;
-  --nav-height: 72px;
-  --section-space: clamp(88px, 10vw, 132px);
+  --nav-height: 64px;
+  --section-space: clamp(96px, 11vw, 148px);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --radius-sm: 8px;

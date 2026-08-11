@@ -18,7 +18,8 @@ export default defineConfig({
         briefit: resolve(rootDirectory, 'work/briefit/index.html'),
         projectPromptGenerator: resolve(rootDirectory, 'work/project-prompt-generator/index.html'),
         about: resolve(rootDirectory, 'about/index.html'),
-        resume: resolve(rootDirectory, 'resume/index.html')
+        resume: resolve(rootDirectory, 'resume/index.html'),
+        copyright: resolve(rootDirectory, 'copyright/index.html')
       }
     }
   }

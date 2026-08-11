@@ -1,8 +1,8 @@
 /* Home */
 .hero-story {
   position: relative;
-  height: 160svh;
-  min-height: 960px;
+  height: 118svh;
+  min-height: 800px;
 }
 
 .hero-story__sticky {
@@ -33,7 +33,7 @@
   z-index: 1;
   min-height: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr);
   align-items: center;
   gap: clamp(44px, 6vw, 88px);
   padding-top: calc(var(--nav-height) + 48px);
@@ -41,35 +41,53 @@
 }
 
 .hero-identity {
-  max-width: 610px;
+  max-width: 640px;
 }
 
 .hero-identity__role {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 24px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   line-height: 1.5;
+}
+
+.hero-identity__role::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 18px rgba(200, 255, 99, 0.5);
 }
 
 .hero-identity h1 {
   display: flex;
   flex-direction: column;
-  gap: clamp(22px, 3vw, 34px);
+  gap: clamp(28px, 3.4vw, 42px);
 }
 
 .hero-identity__name {
   font-size: var(--type-hero-name);
-  line-height: 0.92;
-  letter-spacing: -0.06em;
+  line-height: 0.86;
+  letter-spacing: -0.07em;
 }
 
 .hero-identity__statement {
-  display: block;
+  display: grid;
+  gap: 14px;
   color: var(--text-soft);
-  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
-  line-height: 1.25;
-  letter-spacing: -0.04em;
+  font-size: clamp(1.8rem, 2.6vw, 2.35rem);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+}
+
+.hero-identity__statement > span {
+  display: block;
 }
 
 .hero-identity__statement em {
@@ -79,27 +97,15 @@
 
 @media (min-width: 901px) {
   .hero-identity__statement {
-    width: max-content;
-    max-width: none;
-    font-size: clamp(0.86rem, 1.12vw, 1.04rem);
-    line-height: 1.35;
-    white-space: nowrap;
+    max-width: 620px;
   }
-}
-
-.hero-identity__lead {
-  max-width: 560px;
-  margin-top: 28px;
-  color: var(--text-soft);
-  font-size: var(--type-lead);
-  line-height: 1.72;
 }
 
 .hero-story__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 34px;
+  margin-top: 38px;
 }
 
 .dexterous-hand {
@@ -1539,14 +1545,23 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .home-about h2,
 .home-contact h2 {
   margin-top: 15px;
-  font-size: var(--type-section);
-  line-height: 1.08;
+  font-size: clamp(2.2rem, 4.2vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  word-break: keep-all;
+}
+
+.section-heading h2 {
+  max-width: 760px;
+  font-size: clamp(2.8rem, 6.4vw, 5.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.06em;
 }
 
 .featured-work {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(42px, 5vw, 64px) 30px;
+  gap: clamp(56px, 7vw, 88px) 34px;
 }
 
 .project-card {
@@ -1561,10 +1576,10 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .project-card--feature {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
-  gap: 30px;
-  align-items: end;
-  padding-bottom: clamp(32px, 4vw, 48px);
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: clamp(56px, 9vw, 124px);
+  align-items: center;
+  padding-bottom: clamp(48px, 6vw, 72px);
   border-bottom: 1px solid var(--line);
 }
 
@@ -1613,18 +1628,67 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   object-position: center center;
 }
 
-.project-card__media--thing img,
-.work-row__media--thing img {
-  object-fit: cover;
-  object-position: center center;
+.project-card__media--window,
+.work-row__media--window {
+  background: #0d1310;
 }
 
-.project-card__media--thing {
+.project-card__media--window::before,
+.work-row__media--window::before {
+  content: attr(data-frame-label) "  /  VERIFIED OUTPUT";
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  padding-inline: 13px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(9, 13, 11, 0.94);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+}
+
+.project-card__media--window > img,
+.project-card__media--window > video,
+.work-row__media--window > img,
+.work-row__media--window > video {
+  position: absolute;
+  top: 34px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: calc(100% - 34px);
+}
+
+.project-card__media--thing,
+.work-row__media--thing {
   background: #07100d;
 }
 
-.project-card--feature .project-card__media--thing img {
+.project-card--feature .project-card__media--thing {
+  width: min(100%, 360px);
+  justify-self: center;
+  aspect-ratio: 9 / 16;
+}
+
+.work-row .work-row__media--thing {
+  width: min(100%, 340px);
+  justify-self: center;
+  aspect-ratio: 9 / 16;
+}
+
+.project-card__media--thing img,
+.project-card__media--thing video,
+.work-row__media--thing img,
+.work-row__media--thing video {
   object-fit: contain;
+  object-position: center;
+  scale: 1;
 }
 
 .project-card__copy {
@@ -1676,8 +1740,56 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   max-width: 560px;
   color: var(--text-soft);
   font-family: var(--font-body);
-  font-size: 0.94rem;
-  line-height: 1.65;
+  font-size: 1rem;
+  line-height: 1.72;
+}
+
+.project-card--feature .project-card__copy > .project-card__summary {
+  max-width: 650px;
+  color: var(--text);
+  font-size: clamp(1.04rem, 1.6vw, 1.24rem);
+  line-height: 1.64;
+}
+
+.project-card--feature .project-card__copy h3 {
+  margin-block: 4px 8px;
+  font-size: clamp(3.8rem, 8vw, 7rem);
+  line-height: 0.86;
+  letter-spacing: -0.075em;
+}
+
+.project-card__proofs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 20px 0 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.project-card__proofs li {
+  min-height: 94px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0 12px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.project-card__proofs strong {
+  color: var(--signal);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+}
+
+.project-card__proofs span {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  line-height: 1.4;
 }
 
 .project-card__cta,
@@ -1714,8 +1826,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .focus-layout {
   display: grid;
-  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
-  gap: clamp(56px, 9vw, 132px);
+  grid-template-columns: minmax(240px, 0.62fr) minmax(0, 1.38fr);
+  gap: clamp(64px, 10vw, 140px);
 }
 
 .focus-list {
@@ -1724,10 +1836,10 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .focus-list > div {
   display: grid;
-  grid-template-columns: 38px minmax(150px, 0.7fr) minmax(0, 1.3fr);
-  gap: 24px;
+  grid-template-columns: 40px minmax(210px, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(20px, 3vw, 40px);
   align-items: baseline;
-  padding: 25px 0;
+  padding: 30px 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -1738,19 +1850,21 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .focus-list h3 {
-  font-size: 1.1rem;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.14rem, 1.8vw, 1.4rem);
+  line-height: 1.22;
+  letter-spacing: -0.035em;
 }
 
 .focus-list p {
   color: var(--text-soft);
-  font-size: 0.94rem;
+  font-size: 0.96rem;
+  line-height: 1.7;
 }
 
 .home-about__layout {
   display: grid;
-  grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
-  gap: clamp(56px, 9vw, 132px);
+  grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(64px, 10vw, 140px);
   align-items: start;
 }
 
@@ -1759,8 +1873,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   display: grid;
   gap: 18px;
   color: var(--text-soft);
-  font-size: 1rem;
-  line-height: 1.76;
+  font-size: clamp(1.02rem, 1.45vw, 1.16rem);
+  line-height: 1.78;
 }
 
 .home-about__copy .text-link {
@@ -1797,19 +1911,27 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .home-contact {
   padding-bottom: 0;
-  background:
-    radial-gradient(circle at 80% 40%, rgba(200, 255, 99, 0.08), transparent 30%),
-    var(--bg);
+  border-top: 0;
+  background: var(--signal);
+  color: var(--bg);
 }
 
 .home-contact__panel {
   display: grid;
   grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
   gap: clamp(56px, 9vw, 132px);
-  padding: clamp(34px, 5vw, 64px);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-lg);
-  background: rgba(15, 21, 17, 0.78);
+  padding: 0 0 clamp(72px, 9vw, 112px);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.home-contact .eyebrow {
+  color: rgba(9, 13, 11, 0.62);
+}
+
+.home-contact .eyebrow::before {
+  background: rgba(9, 13, 11, 0.35);
 }
 
 .home-contact__intro h2 {
@@ -1819,14 +1941,14 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .home-contact__intro > p:last-child {
   max-width: 500px;
   margin-top: 22px;
-  color: var(--text-soft);
+  color: rgba(9, 13, 11, 0.72);
   line-height: 1.72;
 }
 
 .home-contact__details {
   display: grid;
   align-self: start;
-  border-top: 1px solid var(--line-strong);
+  border-top: 1px solid rgba(9, 13, 11, 0.28);
   font-style: normal;
 }
 
@@ -1837,18 +1959,18 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   grid-template-columns: 82px minmax(0, 1fr);
   gap: 20px;
   padding-block: 17px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(9, 13, 11, 0.22);
 }
 
 .home-contact__details span {
-  color: var(--muted);
+  color: rgba(9, 13, 11, 0.58);
   font-family: var(--font-mono);
   font-size: 0.67rem;
 }
 
 .home-contact__details strong {
   min-width: 0;
-  color: var(--text);
+  color: var(--bg);
   font-family: var(--font-display);
   font-size: clamp(0.84rem, 1.25vw, 1rem);
   font-weight: 560;
@@ -1858,13 +1980,23 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .home-contact__details i {
-  color: var(--signal);
+  color: var(--bg);
   font-style: normal;
 }
 
 .home-contact__details a:hover strong,
 .home-contact__details a:focus-visible strong {
-  color: var(--signal);
+  color: rgba(9, 13, 11, 0.64);
+}
+
+.home-contact .site-footer {
+  border-top-color: rgba(9, 13, 11, 0.25);
+  color: rgba(9, 13, 11, 0.64);
+}
+
+.home-contact .site-footer a:hover,
+.home-contact .site-footer a:focus-visible {
+  color: var(--bg);
 }
 
 /* Work index */
@@ -1874,11 +2006,11 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .work-index__hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.55fr);
-  gap: 48px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: clamp(48px, 8vw, 110px);
   align-items: end;
-  padding-top: clamp(92px, 12vw, 148px);
-  padding-bottom: clamp(72px, 9vw, 112px);
+  padding-top: clamp(72px, 8vw, 96px);
+  padding-bottom: clamp(64px, 7vw, 88px);
 }
 
 .work-index__hero .eyebrow {
@@ -1886,15 +2018,28 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .work-index__hero h1 {
-  font-size: var(--type-page);
-  line-height: 0.98;
+  font-size: clamp(4.8rem, 10vw, 8.6rem);
+  line-height: 0.78;
+  letter-spacing: -0.075em;
+}
+
+.work-index__title {
+  display: grid;
+  gap: 28px;
+}
+
+.work-index__title > span {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
 }
 
 .work-index__hero > p:last-child {
   max-width: 490px;
   color: var(--text-soft);
-  font-size: var(--type-lead);
-  line-height: 1.7;
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  line-height: 1.78;
 }
 
 .work-list {
@@ -1904,16 +2049,24 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .work-row {
   position: relative;
   display: grid;
-  grid-template-columns: 36px minmax(260px, 390px) minmax(0, 1fr) 36px;
-  gap: clamp(24px, 4vw, 54px);
+  grid-template-columns: 32px minmax(250px, 340px) minmax(0, 1fr) 24px;
+  gap: clamp(22px, 3vw, 42px);
   align-items: center;
-  padding-block: clamp(30px, 4vw, 48px);
+  padding-block: clamp(38px, 5vw, 60px);
   border-bottom: 1px solid var(--line);
   cursor: pointer;
+  transition: background-color 360ms ease;
+}
+
+.work-row:hover,
+.work-row:focus-within {
+  background: rgba(241, 242, 233, 0.025);
 }
 
 .work-row--featured {
-  background: linear-gradient(90deg, rgba(200, 255, 99, 0.055), transparent 72%);
+  grid-template-columns: 32px minmax(300px, 340px) minmax(0, 1fr) 24px;
+  padding-block: clamp(56px, 7vw, 84px);
+  background: linear-gradient(90deg, rgba(200, 255, 99, 0.075), transparent 78%);
 }
 
 .work-row__index {
@@ -1952,8 +2105,16 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .work-row__copy h2 {
-  font-size: var(--type-project);
-  line-height: 1.12;
+  font-size: clamp(2rem, 3.4vw, 3.15rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.work-row--featured .work-row__copy h2 {
+  margin-block: 3px 6px;
+  font-size: clamp(4rem, 7vw, 6.8rem);
+  line-height: 0.84;
+  letter-spacing: -0.075em;
 }
 
 .work-row__copy > span:not(.work-row__cta) {
@@ -1961,6 +2122,42 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   color: var(--text-soft);
   font-size: 0.96rem;
   line-height: 1.65;
+}
+
+.work-row--featured .work-row__copy > span:not(.work-row__cta) {
+  max-width: 650px;
+  color: var(--text);
+  font-size: clamp(1rem, 1.45vw, 1.15rem);
+  line-height: 1.7;
+}
+
+.work-row__proofs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0 2px;
+}
+
+.work-row__proofs > div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.work-row__proofs dt {
+  color: var(--signal);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 660;
+  letter-spacing: -0.04em;
+}
+
+.work-row__proofs dd {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
 }
 
 .work-row__copy ul {
@@ -2020,8 +2217,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 960px) {
   .hero-story {
-    height: 135svh;
-    min-height: 920px;
+    height: 112svh;
+    min-height: 820px;
   }
 
   .hero-story__frame {
@@ -2043,6 +2240,11 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     aspect-ratio: 16 / 9;
   }
 
+  .project-card--feature .project-card__media--thing {
+    width: min(100%, 320px);
+    aspect-ratio: 9 / 16;
+  }
+
   .focus-layout,
   .home-about__layout {
     grid-template-columns: 1fr;
@@ -2062,8 +2264,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 900px) {
   .hero-story {
-    height: 135svh;
-    min-height: 980px;
+    height: 108svh;
+    min-height: 900px;
   }
 
   .hero-story__frame {
@@ -2078,7 +2280,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .hero-identity__statement {
-    font-size: clamp(1.15rem, 3.05vw, 1.4rem);
+    font-size: clamp(1.75rem, 4.4vw, 2.2rem);
   }
 
   .dexterous-hand {
@@ -2109,11 +2311,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .hero-identity__statement {
-    font-size: clamp(0.82rem, 1.05vw, 0.96rem);
-  }
-
-  .hero-identity__lead {
-    margin-top: 18px;
+    font-size: clamp(1.45rem, 2vw, 1.8rem);
   }
 
   .hero-story__actions {
@@ -2121,8 +2319,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .dexterous-hand {
-    --hand-size: min(54svh, 400px);
-    --rig-scale: 0.74;
+    --hand-size: min(58svh, 440px);
+    --rig-scale: 0.79;
   }
 }
 
@@ -2146,11 +2344,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .hero-identity__statement {
-    font-size: 1.35rem;
-  }
-
-  .hero-identity__lead {
-    margin-top: 12px;
+    font-size: 1.7rem;
   }
 
   .hero-story__actions {
@@ -2170,8 +2364,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 720px) {
   .hero-story {
-    height: 122svh;
-    min-height: 100svh;
+    height: 106svh;
+    min-height: 820px;
   }
 
   .hero-story__sticky {
@@ -2188,7 +2382,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
   .hero-identity__role {
     margin-bottom: 16px;
-    font-size: 0.66rem;
+    font-size: 0.7rem;
   }
 
   .hero-identity h1 {
@@ -2200,15 +2394,9 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .hero-identity__statement {
-    font-size: clamp(1.15rem, 5.1vw, 1.45rem);
-    line-height: 1.08;
+    font-size: clamp(1.55rem, 7vw, 1.85rem);
+    line-height: 1.04;
     letter-spacing: -0.045em;
-  }
-
-  .hero-identity__lead {
-    margin-top: 18px;
-    font-size: 0.96rem;
-    line-height: 1.64;
   }
 
   .hero-story__actions {
@@ -2254,6 +2442,19 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     aspect-ratio: 16 / 10;
   }
 
+  .section-heading h2 {
+    font-size: clamp(2.35rem, 10.5vw, 3.2rem);
+  }
+
+  .project-card--feature .project-card__media--thing {
+    width: min(100%, 280px);
+    aspect-ratio: 9 / 16;
+  }
+
+  .project-card__proofs {
+    margin-top: 16px;
+  }
+
   .focus-list > div {
     grid-template-columns: 28px 1fr;
     gap: 8px 16px;
@@ -2269,23 +2470,47 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     padding-top: 76px;
   }
 
+  .work-index__hero h1 {
+    font-size: clamp(3.7rem, 17vw, 5.2rem);
+  }
+
   .work-index__hero .eyebrow {
     grid-column: auto;
   }
 
   .work-row {
-    grid-template-columns: 26px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
     padding-block: 30px;
   }
 
+  .work-row--featured {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 42px;
+  }
+
+  .work-row .work-row__media--thing {
+    width: min(100%, 280px);
+  }
+
+  .work-row--featured .work-row__copy h2 {
+    font-size: clamp(3.4rem, 16vw, 5rem);
+  }
+
   .work-row__index {
-    grid-row: 1 / span 2;
+    position: absolute;
+    z-index: 2;
+    top: 28px;
+    left: 2px;
   }
 
   .work-row__media,
   .work-row__copy {
-    grid-column: 2;
+    grid-column: 1;
+  }
+
+  .work-row__media {
+    margin-top: 26px;
   }
 
   .work-row__arrow {
@@ -2302,7 +2527,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   .home-contact__panel {
     grid-template-columns: 1fr;
     gap: 42px;
-    padding-bottom: clamp(34px, 5vw, 64px);
+    padding-bottom: 72px;
   }
 }
 
@@ -2322,7 +2547,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .home-contact__panel {
-    padding: 26px 22px;
+    padding: 0 0 64px;
   }
 
   .home-contact__details > a,
@@ -2334,7 +2559,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 720px) and (max-height: 760px) {
   .hero-story {
-    height: 125svh;
+    height: 110svh;
     min-height: 820px;
   }
 
@@ -2356,10 +2581,6 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
   .hero-identity h1 {
     gap: 10px;
-  }
-
-  .hero-identity__lead {
-    margin-top: 12px;
   }
 
   .hero-story__actions {
@@ -3154,13 +3375,13 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 /* Restore the signature hand as the Home Hero's primary visual. */
 .home-page .hero-story {
-  height: 160svh;
-  min-height: 960px;
+  height: 118svh;
+  min-height: 800px;
 }
 
 .home-page .hero-story__frame {
-  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
-  gap: clamp(44px, 6vw, 88px);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr);
+  gap: clamp(52px, 7vw, 96px);
   padding-bottom: 94px;
 }
 
@@ -3174,15 +3395,15 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .home-page .dexterous-hand {
-    --hand-size: min(54svh, 400px);
-    --rig-scale: 0.74;
+    --hand-size: min(58svh, 440px);
+    --rig-scale: 0.79;
   }
 }
 
 @media (max-width: 960px) {
   .home-page .hero-story {
-    height: 135svh;
-    min-height: 920px;
+    height: 112svh;
+    min-height: 820px;
   }
 
   .home-page .hero-story__frame {
@@ -3193,8 +3414,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 900px) {
   .home-page .hero-story {
-    height: 135svh;
-    min-height: 980px;
+    height: 108svh;
+    min-height: 900px;
   }
 
   .home-page .hero-story__sticky {
@@ -3210,24 +3431,46 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     padding-top: calc(var(--nav-height) + 38px);
     padding-bottom: 56px;
   }
+
+  .home-page .robot-hand-rig {
+    left: calc(60% + clamp(52px, 7vw, 56px));
+  }
+}
+
+@media (min-width: 721px) and (max-width: 900px) and (max-height: 780px) {
+  .home-page .robot-hand-rig {
+    left: calc(60% + 45px);
+  }
 }
 
 @media (max-width: 720px) {
   .home-page .hero-story {
-    height: 122svh;
-    min-height: 100svh;
+    height: 106svh;
+    min-height: 820px;
   }
 
   .home-page .hero-story__frame {
+    align-content: start;
     gap: 18px;
     padding-top: calc(var(--nav-height) + 24px);
     padding-bottom: 42px;
+  }
+
+  .home-page .dexterous-hand {
+    position: absolute;
+    inset-block-start: 65svh;
+    inset-inline: 0;
+    margin-inline: auto;
+  }
+
+  .home-page .robot-hand-rig {
+    left: calc(60% + clamp(46px, 13vw, 52px));
   }
 }
 
 @media (max-width: 720px) and (max-height: 760px) {
   .home-page .hero-story {
-    height: 125svh;
+    height: 110svh;
     min-height: 820px;
   }
 
@@ -3247,5 +3490,9 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     --hand-size: min(31svh, 170px);
     --rig-scale: 0.41;
     width: min(100%, 220px);
+  }
+
+  .home-page .robot-hand-rig {
+    left: calc(60% + clamp(44px, 12vw, 48px));
   }
 }

@@ -2,7 +2,7 @@
 
 ## 2026-08-10 — Home Hero hand restoration
 
-The dexterous hand remains the Hero's signature 2.5D motion. Its existing Anime.js, pointer, lifecycle, touch, and reduced-motion safeguards remain intact. The real THING preview follows in Featured Selected Work and retains its muted, playsinline, visibility-aware, and reduced-motion lifecycle.
+The dexterous hand remains the Hero's signature 2.5D motion. Its existing Anime.js, pointer, lifecycle, touch, and reduced-motion safeguards remain intact. The real THING preview follows in Featured Selected Work at its native portrait ratio, without inner depth translation or crop, and retains its muted, playsinline, visibility-aware, and reduced-motion lifecycle.
 
 Status: Approved for implementation — 2026-07-14
 
@@ -39,7 +39,7 @@ Hero는 이름을 첫 상태로 고정하고, 사용자의 기본 세로 스크�
 
 - 외곽 hero track과 `100svh` sticky viewport를 사용하며 wheel, touch, key 입력을 가로채지 않는다.
 - Anime.js timeline 하나를 `autoplay: false`로 만들고 스크롤 progress로 seek한다.
-- desktop은 약 `180svh`, tablet은 약 `130svh`, mobile은 약 `100svh`의 추가 travel을 사용한다.
+- desktop은 약 `118svh`, tablet은 약 `108–112svh`, mobile은 약 `106svh`의 짧은 track을 사용한다. 최소 travel은 유지해 scroll-seek가 즉시 끝나지 않게 한다.
 - timeline은 track의 첫 90% 안에서 완성하고 마지막 10%는 완성된 문장을 읽는 hold로 남긴다.
 - 큰 페이지 점프나 빠른 플링은 감쇠를 생략하고 현재 scroll progress에 즉시 동기화한다.
 - CTA와 skip link는 모션 진행도와 무관하게 사용할 수 있어야 한다.
@@ -48,7 +48,7 @@ Hero는 이름을 첫 상태로 고정하고, 사용자의 기본 세로 스크�
 Hero가 release된 뒤에는 추상 시스템 모션을 반복하지 않는다. Home은 실제 프로젝트 화면 preview로 전환하고, 구현 설명은 독립 상세 페이지에서 읽는다.
 
 - 실제 화면 이미지에는 낮은 각도의 pointer depth만 적용한다.
-- 실제 데모 영상은 화면 안에 있을 때만 재생하고, 화면 밖·숨겨진 탭·reduced-motion에서는 정지한다.
+- 실제 데모 영상은 `preload="none"`으로 두고 화면 안에 있을 때만 재생하며, 화면 밖·숨겨진 탭·reduced-motion에서는 정지한다.
 - 상세 페이지 진입은 제목과 핵심 문장에 짧은 Anime.js sequence를 사용한다.
 - 본문은 1회성 clip·translate reveal만 사용하고 긴 sticky 구간을 추가하지 않는다.
 
@@ -66,7 +66,7 @@ Hero가 release된 뒤에는 추상 시스템 모션을 반복하지 않는다. 
 
 - 실제 AQIS 구동 영상과 RealOps 화면이 추상 HUD보다 먼저 보인다.
 - 영상은 visibility와 motion capability에 맞춰 재생·정지한다.
-- 시스템 흐름은 정적인 본문 구조로 설명하고 읽기 속도를 모션이 지배하지 않게 한다.
+- 시스템 흐름은 합성 preview 대신 정적인 텍스트 본문 구조로 설명하고 읽기 속도를 모션이 지배하지 않게 한다.
 
 ### Selected projects
 
@@ -343,3 +343,18 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 - Home project card와 Work row는 하나의 stretched primary link를 사용한다. hover·focus에서는 제목 색과 CTA 화살표만 짧게 이동하며 카드 자체를 과하게 scale하거나 tilt하지 않는다.
 - 카드마다 keyboard tab stop은 하나만 유지하고, focus-visible은 카드 전체 outline과 기존 링크 outline으로 확인할 수 있어야 한다.
 - 이 변경은 Hero, reveal, depth, Lenis, page curtain timeline을 바꾸지 않는다. touch의 native vertical scroll과 `prefers-reduced-motion` 동작도 그대로 유지한다.
+
+## 2026-08-11 — Editorial redesign motion ownership
+
+- Hero statement는 두 개의 data-hero-line으로 구성하고 기존 scroll-seek Anime.js timeline을 그대로 사용한다. 두 줄 사이에는 초기 line translate가 겹치지 않을 만큼의 layout gap을 확보한다.
+- 버튼과 case-next hover는 control 전체를 들어 올리지 않고 화살표만 X축 3px 이내로 이동한다.
+- project evidence rail은 media wrapper의 pseudo-element이며 data-depth-card transform을 소유하지 않는다. 실제 media child의 기존 depth/inertia만 유지하고 THING portrait video에는 depth layer를 추가하지 않는다.
+- mobile reduced mode에서는 absolute Hero hand를 document flow로 되돌려 다음 section과 겹치지 않게 한다. hand animation, pointer response, video autoplay는 계속 정지한다.
+- scrolled navigation은 24px 이후 12px blur와 hairline으로 전환하되 viewport 밖으로 숨지 않는다.
+
+## 2026-08-11 — THING manual demonstration lifecycle
+
+- `video[data-demo-video]`는 사용자 controls로만 재생하며 autoplay와 `data-depth-card`를 사용하지 않는다.
+- 한 시연이 재생되면 다른 THING 시연을 즉시 pause한다. 문서가 hidden 상태가 되거나 `pagehide`가 발생하면 모든 수동 시연을 pause한다.
+- Hero와 gallery 영상은 `preload="none"`과 로컬 WebP poster를 사용해 화면에 보이기 전 원본 영상 다운로드를 시작하지 않는다.
+- gallery 전체에 reveal을 한 번만 적용하고 각 video·card에는 transform 소유권을 추가하지 않는다. touch와 native controls 동작은 그대로 유지한다.

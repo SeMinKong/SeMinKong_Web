@@ -12,6 +12,7 @@ const expectedFiles = [
   'work/briefit/index.html',
   'work/project-prompt-generator/index.html',
   'about/index.html',
+  'copyright/index.html',
   'resume/index.html',
   'resume/SeMinKong-Resume.pdf',
   'resume/SeMinKong-Resume.docx',

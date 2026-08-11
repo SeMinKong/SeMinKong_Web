@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="SeMinKong의 로보틱스, Computer Vision, real-time software, AI 프로젝트입니다." />
+    <meta name="rights" content="© 2026 SeMinKong. All rights reserved except where a separate license applies." />
     <meta name="theme-color" content="#090d0b" />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -25,21 +26,29 @@
 
     <main class="work-index">
       <header class="work-index__hero page-width">
-        <p class="eyebrow" data-intro>Work / 06 projects</p>
-        <h1 data-intro lang="en">Projects</h1>
-        <p data-intro>Human-Mimetic robotics부터 비전, 실시간 웹, AI 파이프라인까지 실제로 연결한 시스템을 정리했습니다.</p>
+        <p class="eyebrow" data-intro>Project archive / 06</p>
+        <div class="work-index__title" data-intro>
+          <h1 lang="en">Selected <br /> Systems.</h1>
+          <span>2025—2026 · SEOUL</span>
+        </div>
+        <p data-intro>인식과 판단에서 멈추지 않고, 안전한 제어와 실제 장치 동작, 운영 화면까지 연결한 여섯 개의 시스템입니다.</p>
       </header>
 
       <section class="work-list page-width" id="work-list" aria-label="프로젝트">
         <article class="work-row work-row--featured" data-reveal="row">
           <span class="work-row__index">01</span>
           <div class="work-row__media work-row__media--thing" data-depth-card aria-hidden="true">
-            <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/integrated-robot-hand.jpg" muted loop playsinline preload="metadata" data-auto-video data-depth-layer="6" data-inertia="14"></video>
+            <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" muted loop playsinline preload="none" data-auto-video></video>
           </div>
           <div class="work-row__copy">
             <p>Featured Project · Team Project · Robotics &amp; Edge AI · 2026</p>
-            <h2><a href="./thing/" lang="en">THING</a></h2>
+            <h2><a href="./thing/" lang="en" aria-label="THING 프로젝트 살펴보기">THING</a></h2>
             <span>21개 손 landmark를 안전한 7축 명령으로 변환해 텐던 로봇 핸드, 관제, 실험 기록까지 연결했습니다.</span>
+            <dl class="work-row__proofs" aria-label="THING 핵심 구현">
+              <div><dt>21</dt><dd>landmarks</dd></div>
+              <div><dt>7</dt><dd>actuation axes</dd></div>
+              <div><dt>ROS 2</dt><dd>edge control</dd></div>
+            </dl>
             <ul aria-label="주요 기술"><li>ROS 2</li><li>MediaPipe</li><li>DYNAMIXEL</li></ul>
             <span class="work-row__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
           </div>
@@ -48,12 +57,12 @@
 
         <article class="work-row" data-reveal="row">
           <span class="work-row__index">02</span>
-          <div class="work-row__media work-row__media--aqis" data-depth-card aria-hidden="true">
-            <img src="/src/assets/projects/aqis/real-ops.png" alt="" data-depth-layer="6" data-inertia="14" />
+          <div class="work-row__media work-row__media--window work-row__media--aqis" data-frame-label="LIVE OPERATIONS / AQIS" data-depth-card aria-hidden="true">
+            <img src="/src/assets/projects/aqis/real-ops.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="14" />
           </div>
           <div class="work-row__copy">
             <p>Team Lead · Full-Stack &amp; Robot Integration · 2026</p>
-            <h2><a href="./aqis/" lang="en">AQIS</a></h2>
+            <h2><a href="./aqis/" lang="en" aria-label="AQIS 프로젝트 살펴보기">AQIS</a></h2>
             <span>RealSense 검사 결과를 컨베이어, Dobot, 실시간 운영 화면까지 연결했습니다.</span>
             <ul aria-label="주요 기술"><li>ROS 2</li><li>FastAPI</li><li>RealSense</li></ul>
             <span class="work-row__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
@@ -63,12 +72,12 @@
 
         <article class="work-row" data-reveal="row">
           <span class="work-row__index">03</span>
-          <div class="work-row__media" data-depth-card aria-hidden="true">
-            <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="" data-depth-layer="6" data-inertia="12" />
+          <div class="work-row__media work-row__media--window" data-frame-label="INFERENCE / MRI" data-depth-card aria-hidden="true">
+            <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="12" />
           </div>
           <div class="work-row__copy">
             <p>Personal Project · Computer Vision · 2026</p>
-            <h2><a href="./brain-tumor-mri/" lang="en">Brain Tumor MRI</a></h2>
+            <h2><a href="./brain-tumor-mri/" lang="en" aria-label="Brain Tumor MRI 프로젝트 살펴보기">Brain Tumor MRI</a></h2>
             <span>YOLO11으로 4개 MRI 분류와 종양 영역 분할을 하나의 추론 흐름으로 구현했습니다.</span>
             <ul aria-label="주요 기술"><li>PyTorch</li><li>YOLO11</li><li>OpenCV</li></ul>
             <span class="work-row__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
@@ -78,12 +87,12 @@
 
         <article class="work-row" data-reveal="row">
           <span class="work-row__index">04</span>
-          <div class="work-row__media" data-depth-card aria-hidden="true">
-            <video src="/src/assets/projects/alkkagi/demo.mp4" muted loop playsinline preload="metadata" data-auto-video data-depth-layer="6" data-inertia="12"></video>
+          <div class="work-row__media work-row__media--window" data-frame-label="REAL-TIME MATCH / ALKKAGI" data-depth-card aria-hidden="true">
+            <video src="/src/assets/projects/alkkagi/demo.mp4" muted loop playsinline preload="none" data-auto-video data-depth-layer="6" data-inertia="12"></video>
           </div>
           <div class="work-row__copy">
             <p>Personal Project · Real-time Web · 2026</p>
-            <h2><a href="./alkkagi/" lang="en">Alkkagi.io</a></h2>
+            <h2><a href="./alkkagi/" lang="en" aria-label="Alkkagi.io 프로젝트 살펴보기">Alkkagi.io</a></h2>
             <span>직접 만든 물리 모듈과 Socket.io를 결합한 서버 권위 실시간 멀티플레이 게임입니다.</span>
             <ul aria-label="주요 기술"><li>TypeScript</li><li>Node.js</li><li>Socket.io</li></ul>
             <span class="work-row__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
@@ -93,12 +102,12 @@
 
         <article class="work-row" data-reveal="row">
           <span class="work-row__index">05</span>
-          <div class="work-row__media work-row__media--briefit" data-depth-card aria-hidden="true">
-            <img src="/src/assets/projects/briefit/cover.webp" alt="" data-depth-layer="6" data-inertia="12" />
+          <div class="work-row__media work-row__media--window work-row__media--briefit" data-frame-label="NLP PIPELINE / BRIEFIT" data-depth-card aria-hidden="true">
+            <img src="/src/assets/projects/briefit/cover.webp" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="12" />
           </div>
           <div class="work-row__copy">
             <p>Team AI Engineer · NLP · 2025</p>
-            <h2><a href="./briefit/" lang="en">Briefit</a></h2>
+            <h2><a href="./briefit/" lang="en" aria-label="Briefit 프로젝트 살펴보기">Briefit</a></h2>
             <span>뉴스 수집, 유사 기사 grouping, KoBART 요약으로 이어지는 AI 파이프라인을 담당했습니다.</span>
             <ul aria-label="주요 기술"><li>Python</li><li>Transformers</li><li>KoBART</li></ul>
             <span class="work-row__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
@@ -108,12 +117,12 @@
 
         <article class="work-row" data-reveal="row">
           <span class="work-row__index">06</span>
-          <div class="work-row__media work-row__media--prompt" data-depth-card aria-hidden="true">
-            <img src="/src/assets/projects/prompt-generator/flow.png" alt="" data-depth-layer="6" data-inertia="10" />
+          <div class="work-row__media work-row__media--window work-row__media--prompt" data-frame-label="AGENT FLOW / PROMPT" data-depth-card aria-hidden="true">
+            <img src="/src/assets/projects/prompt-generator/flow.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="10" />
           </div>
           <div class="work-row__copy">
             <p>Personal Project · AI Agent · 2026</p>
-            <h2><a href="./project-prompt-generator/" lang="en">Project Prompt Generator</a></h2>
+            <h2><a href="./project-prompt-generator/" lang="en" aria-label="Project Prompt Generator 프로젝트 살펴보기">Project Prompt Generator</a></h2>
             <span>여섯 설계 영역의 대화를 병렬로 진행하고 하나의 구현 문서로 합치는 LangGraph 서비스입니다.</span>
             <ul aria-label="주요 기술"><li>LangGraph</li><li>FastAPI</li><li>WebSocket</li></ul>
             <span class="work-row__cta">프로젝트 살펴보기 <i aria-hidden="true">→</i></span>
@@ -123,12 +132,15 @@
       </section>
 
       <section class="directory-contact page-width" data-reveal="text">
-        <p>Contact</p>
+        <p>Next / Contact</p>
         <a href="../#contact">연락처 보기 <span aria-hidden="true">→</span></a>
       </section>
     </main>
 
-    <footer class="page-width site-footer"><span>© 2026 SeMinKong</span><a href="../">Home ↑</a></footer>
+    <footer class="page-width site-footer">
+      <span>© 2026 SeMinKong</span>
+      <nav class="site-footer__links" aria-label="하단 링크"><a href="../copyright/">Copyright</a><a href="../">Home ↑</a></nav>
+    </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

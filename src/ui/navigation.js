@@ -28,8 +28,7 @@ export const initNavigation = (environment) => {
     const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     const progressTarget = clamp(scrollTop / scrollable, 0, 1);
 
-    navigation?.classList.toggle('is-scrolled', scrollTop > 18);
-    navigation?.classList.remove('is-hidden');
+    navigation?.classList.toggle('is-scrolled', scrollTop > 24);
 
     progressCurrent = immediate ? progressTarget : progressCurrent + (progressTarget - progressCurrent) * 0.72;
     if (progress) progress.style.transform = `scaleX(${progressCurrent.toFixed(5)})`;

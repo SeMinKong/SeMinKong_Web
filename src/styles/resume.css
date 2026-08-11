@@ -49,6 +49,9 @@
 }
 
 .resume-contact a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   transition: color 220ms ease;
 }
 
@@ -86,7 +89,7 @@
 }
 
 .resume-original__actions a {
-  min-height: 40px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -210,6 +213,9 @@
 }
 
 .resume-item__head h3 a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   transition: color 220ms ease;
 }
 
@@ -323,7 +329,7 @@
 }
 
 .resume-cta a {
-  min-height: 42px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 12px;
