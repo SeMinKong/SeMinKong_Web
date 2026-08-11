@@ -186,7 +186,7 @@
 
 - Decision: `THING`을 Home의 가장 큰 featured project와 Work index의 `01 / 06`으로 배치하고, 별도 `/work/thing/` case study를 제공한다. AQIS와 기존 프로젝트는 한 단계씩 뒤로 이동한다.
 - Reason: THING은 손동작 인식, ROS 2 명령 중재, 안전 제어, 7축 텐던 구동, 관제, 실험 데이터 기록까지 현재 포지셔닝을 가장 넓게 증명하는 최신 robotics 사례다.
-- Impact: Home, Work, About, HTML Resume와 프로젝트 previous/next 순서를 THING 중심으로 맞춘다. 저장소가 현재 private이고 개인별 역할 근거가 없으므로 접근 제한을 명시하고 구체적인 개인 직책은 주장하지 않는다. 실제 비공개 asset을 hotlink하지 않고 저장소 문서에 근거한 독립적인 system visual을 사용한다.
+- Impact: Home, Work, About, HTML Resume와 프로젝트 previous/next 순서를 THING 중심으로 맞춘다. 공개 저장소에 개인별 역할 근거가 없으므로 구체적인 개인 직책은 주장하지 않는다. 공개된 실제 프로젝트 asset과 문서를 근거로 사용한다.
 
 ## 2026-08-10 — 상시 보이는 탐색 경로와 전체 카드 링크
 
@@ -198,4 +198,52 @@
 
 - Decision: 공개 전환된 THING 저장소의 최종 시연 영상은 Home featured card, Work row, THING case hero에 사용하고, 통합 텐던 핸드 사진과 Jetson·MediaPipe 시험 사진은 case evidence로 추가한다.
 - Reason: 직접 만든 system visual보다 실제 시제품과 동작 증거가 프로젝트의 신뢰도와 완성 범위를 더 빠르게 전달한다.
-- Impact: system visual은 제어 구조를 설명하는 보조 자료로 유지한다. 영상은 muted, playsinline, viewport·visibility·reduced-motion에 따라 자동 재생을 멈추는 기존 lifecycle을 사용한다.
+- Impact: 영상은 muted, playsinline, viewport·visibility·reduced-motion에 따라 자동 재생을 멈추는 기존 lifecycle을 사용한다. 아래 2026-08-11 결정이 system visual 유지 방식과 preview 비율을 대체한다.
+
+## 2026-08-11 — THING 세로 시연을 원본 비율로 편집
+
+- Decision: Home과 Work의 THING preview를 실제 영상의 `9:16` 비율로 보여주고, 영상 내부의 depth 이동과 `cover` crop을 제거한다. Home은 세로 영상과 넓은 설명·세 가지 proof를 나란히 두며, 모바일에서는 최대 280px 폭으로 가운데 배치한다. 기존 `system-flow.svg` preview는 제거하고 동일한 흐름은 텍스트 행으로 보존한다.
+- Reason: 1080×1920 시연을 16:9/16:10 프레임에 넣으면서 실제 로봇 핸드 대부분이 잘렸고, 합성 그래픽보다 실제 시제품과 동작 증거가 프로젝트를 더 빠르고 정확하게 설명한다.
+- Impact: 자동 preview는 `preload="none"`과 기존 visibility/reduced-motion lifecycle을 사용한다. Hero 손 그래픽은 유지하되 track을 desktop 118svh, tablet 108–112svh, mobile 106svh로 줄여 프로젝트가 더 빨리 보이게 한다. THING 상세 Hero에는 시연, GitHub, 시스템 흐름으로 이동하는 명시적 링크를 둔다.
+
+## 2026-08-11 — 모바일·태블릿 Hero 손의 시각 중심 보정
+
+- Decision: 한 열 Hero가 되는 900px 이하에서는 손 rig를 컨테이너 중심에서 오른쪽으로 `44–56px` 보정하고, 화면 높이가 짧을 때는 축소된 rig에 맞춰 보정량도 줄인다.
+- Reason: 외곽 컨테이너는 화면 중앙에 있었지만, 비대칭 손가락 실루엣의 실제 렌더링 픽셀 중심은 390px 화면에서 약 50px 왼쪽에 놓였다. 요소의 bounding box는 overflow된 손가락 실루엣을 온전히 반영하지 않아 캡처 픽셀 범위로 재확인했다.
+- Impact: Anime.js가 제어하는 tilt·idle·finger transform은 유지하고, 정적 rig의 `left` 기준만 한 열 구도에서 조정한다. 두 열 desktop 구도는 바뀌지 않는다.
+
+## 2026-08-11 — Home Hero 설명 문구 축약
+
+- Decision: Hero에서 THING의 시스템 범위를 반복하던 본문을 제거하고 역할, 이름, 핵심 문장, 두 프로젝트 CTA만 남긴다.
+- Reason: 동일한 내용이 바로 이어지는 Featured THING 카드와 상세 페이지에서 더 구체적으로 설명되어 첫 화면의 정보 위계만 복잡하게 만들었다.
+- Impact: 프로젝트 근거와 상세 설명은 Selected Work와 `/work/thing/`에서 유지한다. Hero scroll timeline과 손 그래픽 모션은 바꾸지 않는다.
+
+## 2026-08-11 — 모바일 Hero 손을 하단 중심 영역에 고정
+
+- Decision: 720px 이하에서는 Hero copy를 위쪽 흐름에 유지하고, 손 wrapper를 frame 기준 절대 배치해 `65svh` 지점에서 시작한다. 내부 rig의 기존 가로 시각 중심 보정은 유지한다.
+- Reason: 사용자가 표시한 목표 영역은 현재 로컬 렌더링보다 세로 약 176px 아래였으며, 단순 margin은 화면 높이에 따라 copy와 손을 함께 움직여 목표가 흔들렸다.
+- Impact: 390×844에서 밝은 손 실루엣 중심은 표시 영역과 가로 0.4px, 세로 2.7px 이내로 일치한다. 721px 이상 tablet과 desktop 흐름, Anime.js transform 소유권, reduced motion은 바뀌지 않는다.
+
+## 2026-08-11 — 증거 중심 editorial portfolio system
+
+- Decision: Home을 01 Selected Work → 02 Focus → 03 Current → 04 Contact로 읽히는 번호 체계로 재정렬하고, Hero는 큰 이름과 두 줄 선언, 하나의 filled action, signature hand에 집중한다. Work는 큰 archive title과 line-separated project evidence rows로 구성하며, 일반 프로젝트 미디어에는 자체 metadata rail을 둔다.
+- Reason: 기존 화면은 개별 요소는 완성되어 있었지만 이름, 프로젝트, 구현 범위, 다음 행동이 같은 강도로 보여 빠르게 훑을 때 핵심이 한눈에 잡히지 않았다.
+- Impact: THING은 Home과 Work에서 9:16 실제 시연과 수치 근거를 함께 보여 주고, 상세 Hero에서는 제목·행동·검증 수치와 세로 시연을 첫 구간에 병치한다. case 본문은 공개 근거 aside를 두되 확인되지 않은 개인 역할은 추가하지 않는다. Contact는 signal color의 full-width editorial ending으로 전환한다. stretched link 한 개, 44px target, fixed navigation, Anime.js, touch/native scroll, depth lifecycle은 유지한다.
+
+## 2026-08-11 — THING portrait poster와 upright evidence
+
+- Decision: 가로로 저장된 통합 핸드 사진을 세로 방향으로 바로잡은 evidence asset과 720×1280 전용 poster를 만든다. Home, Work, THING case video는 이 poster를 사용하고 controlled video는 계속 원본 1080×1920을 contain으로 표시한다.
+- Reason: 9:16 영상에 4:3 가로 사진을 그대로 poster로 사용하면 재생 전에는 큰 letterbox와 옆으로 누운 시제품이 보여, 영상 비율을 고친 뒤에도 첫 인상이 불완전했다.
+- Impact: poster와 video가 동일한 9:16 frame을 공유하며 로딩 전후 crop이나 비율 jump가 없다. Built prototype evidence는 upright 3:4 사진을 사용한다.
+
+## 2026-08-11 — THING visible-first demonstration archive
+
+- Decision: THING case Hero는 사람 손과 로봇 손이 한 화면에 보이는 실시간 모방 시연을 사용하고, Context 뒤에는 동작 범위·손가락 웨이브·캔 파지·유연 물체 파지의 네 장면을 9:16 gallery로 제공한다. 설명은 기술 구성보다 사용자의 행동과 화면에서 확인되는 결과를 먼저 쓴다.
+- Reason: 단일 최종 영상과 시스템 설명만으로는 로봇 손이 어떤 동작을 하고 서로 다른 물체를 어떻게 잡는지 한눈에 비교하기 어려웠다. 공개 저장소의 실제 시연을 순서대로 보여 주는 편이 프로젝트의 완성 범위를 더 빠르게 전달한다.
+- Impact: 공개 HEVC·HLG 원본은 720×1280 H.264·SDR·faststart로 변환해 여러 브라우저에서 재생되도록 하고, 모든 수동 시연은 `preload="none"`과 장면별 poster를 사용한다. 동시에 한 영상만 재생하며 hidden·pagehide에서는 모두 멈춘다. 영상 controls에는 depth나 autoplay motion을 적용하지 않는다.
+
+## 2026-08-11 — 저작권 범위와 별도 라이선스 우선 원칙
+
+- Decision: 모든 페이지 footer에서 `/copyright/`로 연결하고, 개인의 비영리적 교육·참고를 위한 웹 열람과 원본 링크 공유만 기본 허용한다. 관련 법령이 허용하는 경우를 제외한 복제·재게시·수정·AI 학습·상업적 이용에는 사전 서면 허락을 요구한다.
+- Reason: 짧은 저작권 표지만으로는 사용자가 허용 범위와 금지 범위를 구분하기 어렵고, 단순히 `교육용`이라고 쓰면 학교 수업·개인 학습·유료 교육을 동일하게 오해할 수 있다.
+- Impact: SeMinKong이 저작권을 보유하고 별도 라이선스가 없는 사이트 콘텐츠에만 기본 고지를 적용한다. 공개 저장소의 `LICENSE`·`NOTICE`, 팀 공동 산출물과 제3자 권리는 각 조건과 권리자가 우선한다. THING 시연에는 C103 Team 귀속과 저장소의 라이선스 안내 링크를 가까이 표시한다.

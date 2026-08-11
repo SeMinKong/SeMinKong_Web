@@ -1,5 +1,23 @@
 export const initMediaPlayback = (environment) => {
   const videos = Array.from(document.querySelectorAll('video[data-auto-video]'));
+  const demoVideos = Array.from(document.querySelectorAll('video[data-demo-video]'));
+  if (!videos.length && !demoVideos.length) return;
+
+  const pauseDemoVideos = (except = null) => {
+    demoVideos.forEach((video) => {
+      if (video !== except) video.pause();
+    });
+  };
+
+  demoVideos.forEach((video) => {
+    video.addEventListener('play', () => pauseDemoVideos(video));
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pauseDemoVideos();
+  });
+  window.addEventListener('pagehide', () => pauseDemoVideos());
+
   if (!videos.length) return;
 
   const visible = new Map(videos.map((video) => [video, false]));

@@ -2,7 +2,7 @@
 
 ## 2026-08-10 — Home Hero hand restoration
 
-The Home opening must communicate the portfolio as a browsable body of work, not only an identity statement. It preserves the animated dexterous-hand graphic as the Hero's signature visual, while the real THING demonstration appears in the immediately following Featured Selected Work card. Selected Work appears immediately after the Hero; the About teaser follows the project and capability evidence.
+The Home opening must communicate the portfolio as a browsable body of work, not only an identity statement. The Hero keeps only the role, name, one core statement, and two project actions; the repeated THING system summary is left to Selected Work and the case study. It preserves the animated dexterous-hand graphic as the Hero's signature visual; on mobile the copy stays at the top and the hand occupies the centered lower field indicated in the approved reference. The real THING demonstration appears in the immediately following Featured Selected Work card. The portrait demonstration keeps its native 9:16 composition beside concise project proof, and the shortened Hero lets Selected Work enter with less empty scroll. The About teaser follows the project and capability evidence.
 
 Status: Approved for implementation — 2026-07-14
 
@@ -71,7 +71,7 @@ Hero 첫 상태에서는 5초 안에 이름·역할·행동이 보여야 하고,
 - Stack: ROS 2, MediaPipe Hands, OpenCV, Jetson, Raspberry Pi 5, DYNAMIXEL XL330, React, Django, AWS EC2
 - Story: 21개 손 landmark를 엄지 3축과 네 손가락 4축의 7축 명령으로 변환해 텐던 로봇 핸드를 실시간 구동하고, 안전 제어·관제·실험 데이터 기록까지 연결한 시스템
 - Portfolio value: perception → guarded command → physical action → observability와 data까지 연결한 가장 최근의 end-to-end robotics 사례
-- Public evidence: 공개 GitHub 저장소의 최종 시연 영상, 통합 텐던 핸드 사진, Jetson·MediaPipe 시험 사진을 사용한다. 독립적인 system visual은 제어 경로를 보조 설명한다.
+- Public evidence: 공개 GitHub 저장소의 최종 시연 영상, 통합 텐던 핸드 사진, Jetson·MediaPipe 시험 사진을 사용한다. 제어 경로는 별도 합성 그래픽 없이 본문의 `Perception → Retargeting → Safe actuation → Observability` 텍스트로 설명한다.
 
 ### 2. AQIS for Smart Factory — robot integration case
 
@@ -132,7 +132,7 @@ GPA, 초·중학교, 군 복무 상세는 메인 페이지에서 강조하지 �
 1. `/` — Home
    - 이름, 역할, 한 문장, Name-first scroll Hero
    - THING을 최우선 대표 작업으로 두고 AQIS, Brain Tumor MRI를 이어 보여준다.
-   - 공개 저장소의 실제 최종 시연 영상을 preview로 사용하고, system visual은 구조 설명에 보조적으로 사용한다.
+   - 공개 저장소의 실제 최종 시연 영상을 원본 9:16 비율의 preview로 사용하고, 구조는 읽기 쉬운 텍스트 흐름으로 설명한다.
    - 짧은 소개 teaser와 이메일·GitHub·Resume를 모은 Contact 정보 패널을 둔다.
 2. `/work/` — Work index
    - 공개 근거가 있는 프로젝트 전체를 이미지 중심으로 비교한다.
@@ -352,6 +352,25 @@ This direction replaces the forearm requirement in the previous hand silhouette 
 - Fine-pointer environments may expose a grab cursor and direct cube drag, but no instruction HUD or focusable decorative control is added.
 
 Visual acceptance: the hand-only silhouette is balanced in the right side of the Hero at 1280px, remains clearly readable at 768px and 390px, and the cube consistently appears supported by the palm rather than detached behind it.
+
+## 2026-08-11 — Evidence-led editorial system override
+
+- Home의 첫 위계는 role status, large name, two-line value statement, primary THING action, text-level all-project action, signature hand 순서다.
+- Home의 본문은 01 Selected Work, 02 Focus, 03 Current, 04 Contact 번호 체계를 사용한다. 각 구간은 큰 제목 하나, 명확한 근거, 한 개의 다음 행동을 우선한다.
+- Selected Work의 THING은 native 9:16 시연을 자르지 않고 세 수치 proof와 병치한다. 다른 project preview는 자체 metadata rail을 가진 16:10 evidence window로 표시하되 실제 UI screenshot을 덮는 장식은 최소화한다.
+- Work index는 큰 archive title 뒤에 line-separated rows가 바로 이어져야 한다. 첫 THING row는 더 큰 portrait media와 21 / 7 / ROS 2 proof를 사용하고, 모든 row는 project detail로 향하는 하나의 stretched link만 유지한다.
+- THING case 첫 구간은 제목, short summary, three actions, four verified facts, full portrait demonstration을 동시에 이해할 수 있는 2-column evidence Hero다. 작은 화면에서는 이 순서대로 한 열로 쌓는다.
+- THING body는 narrative main column과 public evidence aside를 사용한다. aside는 공개 저장소로 연결하며 공개 근거가 없는 개인 역할이나 성과 수치를 만들지 않는다.
+- Contact는 signal lime full-width ending으로 사용해 페이지의 마지막 행동을 분명히 하되 form처럼 보이는 장식은 추가하지 않는다.
+- 이 방향은 참고 사이트의 branding, CRT effect, 구체적 composition, copy, asset을 복제하지 않고 typography scale, evidence framing, numbered hierarchy, hairline rhythm 원칙만 현재 portfolio identity로 번역한다.
+
+## 2026-08-11 — THING visible demonstration override
+
+- THING Hero의 첫 영상은 사람 손과 로봇 손을 동시에 보여 주어 입력과 결과를 설명 없이도 비교할 수 있어야 한다.
+- Context 다음에는 motion range, finger wave, rigid grasp, soft grasp 네 장면을 동일한 9:16 evidence frame으로 보여 준다. desktop과 tablet은 2열, 600px 이하는 1열이다.
+- 각 장면은 poster, 짧은 행동 중심 제목, 화면에서 확인되는 결과 설명, 재생 길이를 갖는다. 기술명과 시스템 구성은 뒤의 System path와 evidence aside에 남긴다.
+- 장면 frame은 native video controls를 존중하며 overlay는 작은 순번만 사용한다. 별도 play 장식, autoplay, depth tilt, hover crop은 추가하지 않는다.
+- 공개 원본 전체 목록으로 가는 링크를 유지해 네 장면 밖의 추가 시연도 확인할 수 있게 한다.
 
 ## 2026-07-14 — Hand 2.5D depth refinement
 

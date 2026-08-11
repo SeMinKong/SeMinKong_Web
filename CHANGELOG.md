@@ -4,14 +4,27 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-08-11
+
 ### Added
 
+- Added a site-wide Copyright link and a bilingual copyright/use-policy page that permits personal non-commercial reference while defining restricted reuse.
 - Added public THING final-demo video plus integrated-hand and Jetson MediaPipe evidence to the portfolio.
+- Added an upright THING evidence photo and a 9:16 poster matched to the portrait demonstration.
+- Added a visible-first THING demonstration gallery for motion range, finger wave, rigid can grasp, and soft-object grasp.
 
 ### Changed
 
-- Replaced THING's primary synthetic preview with actual project media while retaining the system-flow visual as supporting documentation.
-- Restored the signature dexterous-hand graphic to the Home Hero; Selected Work remains directly after it with real THING media, followed by the About teaser.
+- Added rights metadata to every route and identified the THING demonstration source media, team ownership, and repository license notice without overriding its own terms.
+- Replaced the THING case Hero evidence with the side-by-side human-to-robot mimic scene and converted all five THING demonstrations from HEVC/HDR to compact 720×1280 H.264/SDR delivery files.
+- Made manual THING demonstrations load on demand, pause one another, and stop when the page is hidden.
+- Reworked Home, Work, and the THING case study into a numbered, evidence-led editorial system with stronger typography, project frames, proof rows, and a full-width signal Contact ending.
+- Placed the THING demonstration beside its title, actions, and verified facts on desktop while preserving the full portrait frame on tablet and mobile.
+- Reframed the portrait THING demonstration at its native 9:16 ratio on Home and Work, added implementation proof, and removed the old synthetic system-flow preview.
+- Restored the signature dexterous-hand graphic to the Home Hero, shortened its scroll track, and kept Selected Work directly after it.
+- Visually centered the asymmetric Hero hand silhouette and placed it in the approved lower mobile field without changing its motion layers.
+- Removed the repeated THING system summary from the Hero to keep the opening hierarchy focused.
+- Deferred offscreen autoplay video loading, replaced multi-megabyte THING photos with 1600px WebP delivery assets, enlarged secondary link targets, and marked the unavailable Prompt Generator demo as offline.
 
 ## [1.2.0] - 2026-08-10
 
@@ -51,7 +64,8 @@ All notable changes to this project are recorded here. The project follows Seman
 - Reduced-motion, touch, keyboard, responsive, and lifecycle safeguards.
 - GitHub Flow CI, GitHub Pages deployment workflow, and automated dependency update configuration.
 
-[Unreleased]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/SeMinKong/SeMinKong_Web/releases/tag/v1.0.0

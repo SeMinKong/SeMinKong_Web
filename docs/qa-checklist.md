@@ -158,3 +158,67 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] `npm.cmd run build` succeeds after restoring the Hero hand and removing the unused Hero media panel.
 - [x] At 1280×720, the animated hand is visible in the Hero's right column, the Hero media panel is absent, and the Featured THING video remains below the Hero.
 - [x] At 768×900 and 390×844, the hand remains visible with zero horizontal overflow; the mobile Hero actions remain 48px high.
+
+## 2026-08-11 THING portrait preview and browsing verification
+
+- [x] `npm.cmd run verify` succeeds and the removed `system-flow.svg` is absent from the production bundle.
+- [x] At 1280px, 768px, and 390px, the Home and Work THING videos preserve the full 9:16 frame with `object-fit: contain` and no inner depth translation.
+- [x] The Hero hand remains visible while the shorter track brings Selected Work closer to the first viewport without breaking scroll-seek or reduced motion.
+- [x] THING case actions reach the final demonstration, public GitHub repository, and textual system path; the old synthetic preview is absent.
+- [x] Autoplay previews use `preload="none"`, pause offscreen/hidden/reduced, and do not introduce console errors or horizontal overflow.
+- [x] Project cards expose descriptive accessible names; secondary links and footer links resolve to at least 44px high.
+- [x] Project Prompt Generator reports its demo as offline instead of linking to the confirmed 404 deployment.
+
+## 2026-08-11 Mobile Hero hand centering verification
+
+- [x] `npm.cmd run verify` succeeds (84 modules, 14 deployment entries) and `git diff --check` reports no whitespace errors.
+- [x] Bright-silhouette pixel bounds center within `-1px` at 390×844, `0px` at the supplied screenshot's 577×1183 ratio, and `-3.5px` at 768×1024.
+- [x] Short layouts remain centered within `1.5px` at 390×700 and `0.5px` at 768×700; all five layouts have zero horizontal overflow.
+- [x] The production preview keeps mobile/tablet Motion `lite` and Depth `static`; `?motion=reduced` keeps Motion `reduced`, Depth `flat`, the hand visible, and zero overflow.
+- [x] At 1280×800 the desktop rig retains its original `60%` anchor, Motion `full`, Depth `interactive`, and zero horizontal overflow.
+- [x] The production preview reports no browser warnings or errors.
+
+## 2026-08-11 Home Hero copy trim verification
+
+- [x] The repeated THING system sentence and its unused `.hero-identity__lead` styles are absent from source and rendered DOM.
+- [x] At 390×844, 768×1024, and 1280×800 both project actions and the hand remain visible with zero horizontal overflow.
+- [x] Mobile keeps a deliberate 22px statement-to-action gap; tablet and desktop keep 34px.
+- [x] Default mobile/tablet/desktop Motion and Depth modes remain unchanged, and reduced motion keeps both actions and the hand visible.
+- [x] `npm.cmd run verify` succeeds with 84 modules and 14 deployment entries; browser warnings and errors are empty.
+
+## 2026-08-11 Evidence-led editorial redesign verification
+
+- [x] 1280×800 Home keeps the signature hand, two-line value statement, two visible project actions, fixed navigation, and zero horizontal overflow.
+- [x] 768×1024 and 390×844 keep the Hero copy and hand separated, centered, and fully visible with Motion lite and Depth static.
+- [x] Home Selected Work presents THING as an uncropped 9:16 feature with 21 / 7 / ROS 2 proof; the feature keeps one project link.
+- [x] Work uses the large archive title, a centered 9:16 THING row, and 16:10 evidence rails for the other projects without horizontal overflow.
+- [x] THING case shows the 1080×1920 video in a full 9:16 frame with the matched 720×1280 poster at 1280px and 390px.
+- [x] THING desktop body keeps a sticky public-evidence aside and upright prototype evidence; the small layout stacks the same information in source order.
+- [x] Contact uses the full-width signal ending and all contact links remain taller than 44px.
+- [x] Reduced motion returns the mobile hand to document flow with a 76px gap before Selected Work and keeps the preview video paused.
+- [x] `npm.cmd run verify`, route semantics, console logs, single-tab-stop focus styling, and final 390 / 768 / 1280 overflow checks pass after the final patch.
+- [x] 390×568 keeps a 20px action-to-hand gap, while the THING case remains overflow-free through the 840 / 841px one-column seam.
+
+## 2026-08-11 Mobile Hero lower-field placement verification
+
+- [x] At 390×844 the rendered bright-hand center differs from the annotated target by only `+0.4px` horizontally and `-2.7px` vertically.
+- [x] 360×640, 390×568, 390×700, 430×932, and 720×900 keep the hand inside the Hero field with no horizontal overflow at the required 390px-and-up sizes.
+- [x] 768×1024 and 1280×800 retain their existing in-flow tablet and desktop composition.
+- [x] Mobile Motion remains `lite`, Depth remains `static`, and reduced motion keeps the same lower-field placement with zero overflow.
+- [x] `npm.cmd run verify` succeeds with 84 modules and 14 deployment entries; browser warnings and errors are empty.
+
+## 2026-08-11 THING visible demonstration archive verification
+
+- [x] THING Hero shows the human hand and robot hand together in the 9:16 live-mimic poster and video without cropping.
+- [x] Four gallery scenes render as a balanced 2×2 grid at 1280px and 768px, then a centered single column at 390px with zero horizontal overflow.
+- [x] All five controlled videos are 720×1280 H.264 SDR files with local WebP posters and `preload="none"`.
+- [x] Starting a second demonstration pauses the first; hidden and `pagehide` states pause every manual demonstration.
+- [x] `npm.cmd run verify`, `git diff --check`, internal anchors, console logs, heading order, and reduced-motion checks pass after the gallery change.
+
+## 2026-08-11 Copyright and deployment verification
+
+- [x] Every public HTML route includes rights metadata and a visible footer link to the Copyright page.
+- [x] `/copyright/` distinguishes permitted personal non-commercial reference from prohibited copying, redistribution, modification, AI training, and commercial use.
+- [x] Separate repository licenses, team-project rights, third-party rights, and applicable-law exceptions are stated without claiming exclusive ownership over them.
+- [x] The Copyright page and all footer links remain readable, keyboard accessible, and overflow-free at 390px, 768px, and 1280px.
+- [ ] `npm.cmd run verify` succeeds with 15 deployment entries and the deployed Pages URL returns the new Copyright route.
