@@ -221,4 +221,4 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] `/copyright/` distinguishes permitted personal non-commercial reference from prohibited copying, redistribution, modification, AI training, and commercial use.
 - [x] Separate repository licenses, team-project rights, third-party rights, and applicable-law exceptions are stated without claiming exclusive ownership over them.
 - [x] The Copyright page and all footer links remain readable, keyboard accessible, and overflow-free at 390px, 768px, and 1280px.
-- [ ] `npm.cmd run verify` succeeds with 15 deployment entries and the deployed Pages URL returns the new Copyright route.
+- [x] `npm.cmd run verify` succeeds with 15 deployment entries and the deployed Pages URL returns the new Copyright route.
