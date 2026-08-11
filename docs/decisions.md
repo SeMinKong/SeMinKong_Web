@@ -1,12 +1,10 @@
 # Decision log
 
-## 2026-08-10 — Home portfolio overview
+## 2026-08-10 — Home Hero hand restoration
 
-- Layout: On desktop windows 820px high or shorter, compact the Hero copy, gaps, and real-media panel so both columns remain fully inside the initial viewport.
-
-- Decision: Replace the Home Hero's decorative hand-first composition with a real THING demo panel, a visible project-scope summary, and an immediate Selected Work section.
-- Reason: Visitors should be able to identify the developer, representative proof, technical range, and the next browsing path without interpreting a long visual sequence.
-- Impact: The existing Hero copy, two project actions, media lifecycle, and reduced-motion behavior remain; the decorative hand is hidden on Home and the About teaser follows project evidence.
+- Decision: Restore the dexterous-hand graphic as the Home Hero's primary visual and keep the real THING video in the first Selected Work card directly after it.
+- Reason: The hand is a distinctive part of the portfolio's identity; the Featured card still gives visitors immediate access to project evidence and details.
+- Impact: The existing Hero copy, two project actions, hand animation, pointer depth, lifecycle, touch, reduced-motion behavior, and low-height compact layout remain. The About teaser stays after project evidence.
 
 중요한 선택은 날짜, 결정, 이유, 영향으로 기록한다.
 

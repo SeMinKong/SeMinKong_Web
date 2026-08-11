@@ -152,3 +152,9 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] At 768x900 the evidence photos use two balanced columns; at 390x844 they collapse to a single readable column.
 - [x] At 390x844, Home and Work load the real preview video without overflow; Work retains the persistent signal-green `프로젝트 살펴보기 →` call to action.
 - [x] `?motion=reduced` pauses the Home project-preview video while retaining the accessible project link and static poster.
+
+## 2026-08-10 Home Hero hand restoration verification
+
+- [x] `npm.cmd run build` succeeds after restoring the Hero hand and removing the unused Hero media panel.
+- [x] At 1280×720, the animated hand is visible in the Hero's right column, the Hero media panel is absent, and the Featured THING video remains below the Hero.
+- [x] At 768×900 and 390×844, the hand remains visible with zero horizontal overflow; the mobile Hero actions remain 48px high.

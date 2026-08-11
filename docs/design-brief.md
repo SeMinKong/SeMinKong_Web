@@ -1,8 +1,8 @@
 # Design brief
 
-## 2026-08-10 — Home overview refinement
+## 2026-08-10 — Home Hero hand restoration
 
-The Home opening must communicate the portfolio as a browsable body of work, not only an identity statement. It presents the role and project actions beside an actual THING demonstration, then summarizes `21` landmarks, `7` motor axes, and `06` case studies. Selected Work appears immediately after the Hero; the About teaser follows the project and capability evidence.
+The Home opening must communicate the portfolio as a browsable body of work, not only an identity statement. It preserves the animated dexterous-hand graphic as the Hero's signature visual, while the real THING demonstration appears in the immediately following Featured Selected Work card. Selected Work appears immediately after the Hero; the About teaser follows the project and capability evidence.
 
 Status: Approved for implementation — 2026-07-14
 

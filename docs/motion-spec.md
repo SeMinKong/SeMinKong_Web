@@ -1,8 +1,8 @@
 # Motion specification
 
-## 2026-08-10 — Home overview motion refinement
+## 2026-08-10 — Home Hero hand restoration
 
-The real THING preview is the Hero's only moving visual proof. It follows the established muted, playsinline, visibility-aware, and reduced-motion lifecycle. The former decorative hand is not displayed on Home; tablet and mobile show the Hero as an immediate static document flow so the identity, project preview, and actions are discoverable without a long scroll sequence.
+The dexterous hand remains the Hero's signature 2.5D motion. Its existing Anime.js, pointer, lifecycle, touch, and reduced-motion safeguards remain intact. The real THING preview follows in Featured Selected Work and retains its muted, playsinline, visibility-aware, and reduced-motion lifecycle.
 
 Status: Approved for implementation — 2026-07-14
 
