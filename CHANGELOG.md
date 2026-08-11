@@ -4,6 +4,10 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Changed
+
+- Simplified the Home Hero actions to a project archive link and an About link while keeping THING featured immediately below.
+
 ## [1.3.0] - 2026-08-11
 
 ### Added

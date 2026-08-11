@@ -222,3 +222,9 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] Separate repository licenses, team-project rights, third-party rights, and applicable-law exceptions are stated without claiming exclusive ownership over them.
 - [x] The Copyright page and all footer links remain readable, keyboard accessible, and overflow-free at 390px, 768px, and 1280px.
 - [x] `npm.cmd run verify` succeeds with 15 deployment entries and the deployed Pages URL returns the new Copyright route.
+
+## 2026-08-11 Home Hero navigation CTA verification
+
+- [x] Home Hero shows exactly `프로젝트` and `About` as its two actions.
+- [x] The actions resolve to `/work/` and `/about/`, remain fully visible at 390px, 768px, and 1280px, and create no horizontal overflow.
+- [x] `npm.cmd run verify`, browser console, and keyboard focus checks pass after the CTA change.
