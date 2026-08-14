@@ -393,7 +393,62 @@ Visual acceptance: the palm remains large enough to support the cube, but its wr
 
 ## 2026-08-11 — Staged Home Hero hierarchy
 
-- The Home Hero begins with the `SeMinKong` name as its only visible copy while retaining the signature hand as the visual anchor.
+- The Home Hero begins with the `SeMinKong` name as its only visible copy while retaining the signature hand as the visual anchor. The two-column pair stays optically centered inside the shared page grid rather than centering each silhouette independently.
 - Scrolling reveals the role, the two value-statement lines, and the Projects/About actions in that order; each stage accumulates rather than replacing the previous one.
+- The existing hand geometry, responsive rig offsets, and manipulation loop remain unchanged. Only the free outer identity and hand wrappers move slightly upward as the hidden copy becomes visible.
 - Hero action labels use a stronger 650 weight and a responsive 14–15px size, while the primary/secondary contrast remains unchanged.
 - The complete semantic copy always remains in the document. Keyboard use, reduced motion, and failed enhancement expose the full final state immediately.
+
+## 2026-08-14 — Modern system deck override
+
+- 전역 색상은 `#090a10` midnight background, `#151824` surface, `#7c8cff` signal, `#62ded3` cyan, `#b18cff` violet을 기준으로 한다. lime은 더 이상 브랜드 signal로 사용하지 않는다.
+- Manrope는 navigation, button, title, CTA를 담당하고 JetBrains Mono는 번호, 연도, 기술값 같은 짧은 metadata에만 사용한다. 작은 metadata는 약 12px 아래로 줄이지 않는다.
+- Home의 대표 프로젝트는 실제 미디어 → 역할·연도 → 제목 → 두 줄 요약 → 두 가지 근거 → Case study 순서의 동일한 evidence card 세 장으로 구성한다.
+- 접힌 카드의 노출 edge에는 번호와 프로젝트명만 남기고, 펼침 여부와 관계없이 카드의 핵심 정보는 DOM과 keyboard 순서에 항상 존재해야 한다.
+- desktop의 stack은 signature interaction 하나로 제한한다. Focus는 세 개의 차분한 surface card, Current는 하나의 bordered panel, Contact는 cobalt-cyan의 강한 editorial ending으로 사용한다.
+- 721–960px은 정적 2열과 가운데 정렬된 마지막 카드, 720px 이하는 정적 1열이다. Work index와 case study는 카드 덱을 반복하지 않고 기존 evidence-led editorial 구조를 유지한다.
+- 실제 프로젝트 asset만 사용하며 hologram, game stat, Pokémon branding, 과도한 tilt·glow·glass 반복은 사용하지 않는다.
+
+## 2026-08-14 — Contemporary gallery visual override
+
+이 항목은 `Modern system deck`의 색·재질·표면 결정을 대체한다. 정보 구조, 단계형 Hero, 로봇 손, 프로젝트 덱의 stack/spread 동작과 정적 fallback은 유지한다.
+
+- 전체 경험은 `검은 전시장 → 웜 아이보리 아카이브 → 검은 practice room → 아이보리 field notes → 울트라마린 contact room`의 명암 리듬으로 구성한다.
+- 기본 팔레트는 museum black `#0c0c0b`, graphite `#171614`, plaster `#ece9e1`, warm hairline, ultramarine을 사용한다. 작은 텍스트 대비를 위해 ultramarine은 dark surface용 밝은 톤과 paper surface용 짙은 톤으로 나눈다.
+- glow, gradient text, glass surface, 큰 pill과 과도한 shadow를 제거한다. radius는 1–8px, 버튼과 내비게이션은 평면 fill 또는 hairline으로 제한한다.
+- Home deck은 광택 수집 카드가 아니라 무광 전시 카탈로그 folio로 보인다. 실제 프로젝트 미디어가 유일한 다색 요소이며 `Exhibit / year / role / evidence` 캡션 체계를 사용한다.
+- Focus는 세 개의 독립 카드가 아닌 하나의 연속된 3열 plinth, Current는 panel이 아닌 rule 기반 essay, Contact는 단색 ultramarine field로 구성한다.
+- Work, About, Resume, Copyright는 웜 페이퍼 카탈로그 테마를 사용하고 case study는 어두운 전시실과 full-bleed evidence frame을 사용한다.
+- Manrope display는 약 500 weight, Noto Sans KR은 긴 본문, JetBrains Mono는 작품 번호·연도·기술값에만 사용한다. 의미 있는 캡션은 12px 아래로 줄이지 않는다.
+
+## 2026-08-14 — Chromatic restraint override
+
+This section supersedes only the colour decisions in the contemporary gallery override. Layout, typography, evidence framing, and interaction remain unchanged.
+
+- Use charcoal `#11100e` and graphite `#171614` for dark rooms; use bone paper `#f1eee6` and ink `#171512` for catalogue surfaces.
+- Replace ultramarine, cyan, and violet UI accents with one vermilion family: `#e84a32` on dark surfaces, `#a73524` on light surfaces, and `#b33423` for filled/decorative depth.
+- Keep chromatic UI colour below roughly 8% of a viewport. Project media may remain naturally multicoloured, but navigation, metadata, rules, and controls use the neutral system.
+- Contact is a graphite room with a 2px vermilion rule rather than a full-colour field. Red is reserved for exhibit numbers, evidence values, focus states, and directional cues.
+- Maintain at least 4.5:1 for meaningful small text: dark vermilion 4.70:1, paper vermilion 5.70:1, and paper muted text 4.70:1.
+
+## 2026-08-14 — Visible-first catalogue detail override
+
+This section supersedes the hidden opening state in the staged Hero hierarchy while preserving its subtle scroll movement.
+
+- The Home Hero must show the role, two-line value statement, and both primary actions on first paint. Scroll motion may translate this copy slightly, but must not make essential information transparent, clipped, or temporarily non-interactive.
+- Meaningful labels, captions, proof descriptions, file actions, and catalogue metadata use a minimum rendered size of 12px and contrast appropriate to their surface.
+- About `Now / Tools` is a four-part catalogue index ordered by current focus: Robotics, Code, AI / Agents, and Systems. Each tool uses a monochrome mark plus an always-visible name; brand colour is not used as decoration.
+- ROS 2, NVIDIA Isaac Sim, Isaac Lab, C++, Python, FastAPI, PyTorch, Ollama, LangChain, Ubuntu, Git, and Docker use recognizable Simple Icons marks. Both Isaac products share the NVIDIA mark and retain distinct visible names. `llama.cpp` uses an honest `L.CPP` monogram because no matching mark is available in the selected library.
+- The catalogue path reads `ROS 2 → Simulation → Local AI / Delivery`, and Robotics retains the single vermilion focus rule.
+- The tool index is four columns on desktop/tablet and two columns at 520px and below. Variable item counts distribute across each column's available height so all four catalogue rails end on the same baseline. It remains readable when JavaScript or icon enhancement is unavailable.
+
+## 2026-08-14 — Direct copy hierarchy override
+
+This section supersedes the curatorial naming in the contemporary gallery override. The gallery's spacing, material palette, evidence framing, deck motion, and responsive fallbacks remain unchanged.
+
+- Visible display headings use short nouns or compact noun phrases instead of sentence-form slogans.
+- Remove decorative labels such as `Exhibit`, `Exhibition deck`, `Selected`, `Project archive`, `Practice`, `Field notes`, and `Evidence / Public`. Do not replace them with new catalogue jargon.
+- Home uses the direct section vocabulary `Projects`, `Focus`, `About`, and `Contact`. Project detail pages use factual headings such as `Pipeline`, `Architecture`, `Validation`, and `Result`.
+- Keep recruiter-relevant facts visible: project name, team or personal scope, domain, year, technology, metric, result, and action.
+- Compact summaries may use dot-separated factual keywords. Explanatory prose remains in body copy, captions, accessible names, and alt text where complete sentences improve comprehension.
+- Empty decorative media-label rails must collapse so removed copy does not leave a blank strip.

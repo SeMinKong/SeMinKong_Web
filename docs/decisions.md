@@ -259,3 +259,63 @@
 - Decision: Home Hero의 초기 텍스트는 `SeMinKong` 이름만 보이게 하고, 스크롤 진행에 따라 역할, 핵심 문장 첫 줄, 두 번째 줄, 프로젝트·About 버튼을 순서대로 누적 노출한다. 손 그래픽은 정체성을 유지하기 위해 처음부터 보인다.
 - Reason: 기존 Hero는 모든 문구가 동시에 나타나 첫 인상이 정적이고 정보 우선순위가 약했다. 이름을 기준점으로 고정하고 문장을 한 줄씩 읽게 하면 첫 화면의 집중도와 스크롤 서사가 모두 선명해진다.
 - Impact: Home Hero track은 화면 크기별 약 142–158svh로 확장한다. 애니메이션은 opacity·translate·clip만 사용하며 역스크롤에 반응한다. Tab 키 또는 CTA focus가 감지되면 즉시 완성 상태로 전환하고, reduced motion이나 스크립트 실패 시 전체 콘텐츠를 기본 상태로 표시한다. Hero CTA 글자는 약 14–15px, 굵기 650으로 제한해 다른 버튼 체계에는 영향을 주지 않는다.
+
+## 2026-08-11 — 초기 Hero 이름·손 중심 구도와 상향 이동
+
+- Decision: 스크롤 0에서는 공유 page grid 안에 `SeMinKong`과 기존 손 그래픽만 남겨 두 요소의 합성 시각 중심을 맞춘다. 스크롤 중에는 identity 바깥 wrapper를 최대 32px, 손 바깥 wrapper를 최대 24px 위로 이동하면서 역할·문장·버튼을 누적 표시한다.
+- Reason: 숨겨진 단계 문구가 레이아웃 공간을 유지하더라도 이름과 손의 두 열 구도는 안정적으로 중앙에 남고, 새 문구가 등장할 때 정적인 fade보다 자연스러운 공간 변화가 필요했다.
+- Impact: 손 내부 DOM, responsive rig 중심 보정, Anime.js manipulation, depth transform은 변경하지 않는다. enhanced CSS가 아직 시작하지 않은 문구를 계속 숨겨 초기 상태의 flash를 막고, keyboard·reduced motion·스크립트 실패 시에는 기존처럼 전체 정보를 즉시 표시한다.
+
+## 2026-08-14 — Midnight evidence deck visual system
+
+- Decision: 전역 팔레트를 green-black에서 midnight ink, electric cobalt, icy cyan으로 전환하고 Home의 대표 프로젝트 세 개를 `System deck`으로 구성한다. 포켓몬 브랜드나 카드 그래픽을 복제하지 않고 프로젝트 결과, 역할, 실제 미디어, 검증 가능한 근거를 카드의 정보 위계로 사용한다.
+- Reason: 기존 구성과 signature hand는 강하지만 lime 중심의 terminal 인상이 컸고, 대표 프로젝트 간 비교와 기억 지점이 약했다. 중성 표면과 한 번의 명확한 deck interaction이 기술 포트폴리오의 전문성과 개성을 함께 유지한다.
+- Impact: Home에서만 961px 이상 fine-pointer·full-motion 환경에 Anime.js stack/spread를 적용한다. tablet, mobile, coarse pointer, reduced motion은 처음부터 2열 또는 1열의 정적 카드로 읽힌다. Work archive는 기존 editorial row를 유지한다. Hero의 단계형 공개와 로봇 손은 보존하며 두 번째 Hero CTA는 직접 연락 경로인 `Contact`로 바꾼다.
+
+## 2026-08-14 — Project deck transform ownership
+
+- Decision: `.project-deck__slot`만 stack/spread transform을 소유하고, 내부 `.project-card`는 hover/focus lift, media는 정적 evidence framing을 소유한다. reveal은 deck wrapper 한 번에만 적용한다.
+- Reason: 기존 reveal, stretched link, media depth와 같은 노드에서 transform을 공유하면 inline style이 서로 덮이거나 겹친 카드의 focus 영역이 불안정해진다.
+- Impact: 펼침 거리는 stage의 실제 폭과 카드 폭으로 계산해 마지막 카드가 container 안에 머문다. keyboard focus는 즉시 펼침 상태를 만들고, resize·offscreen·hidden·pagehide에서는 진행 중 motion을 정리한다. 960px 이하에는 inline transform을 무효화하는 CSS fallback도 둔다.
+
+## 2026-08-14 — 디지털 현대미술관 시각 언어
+
+- Decision: 기존 midnight SaaS 표면을 museum black, warm plaster, graphite, tonal ultramarine 기반의 전시 카탈로그 시스템으로 교체한다. Home은 전시실의 명암 전환을 사용하고 Work·About·Resume·Copyright는 paper archive, case study는 dark gallery로 구분한다.
+- Reason: 기존 cobalt·cyan glow, 큰 radius, glass gradient는 완성도는 높지만 AI SaaS 제품 페이지에 가까웠다. 포트폴리오에서는 프로젝트 미디어와 검증 가능한 결과가 장식보다 먼저 보이고, 지원자의 취향은 타이포·여백·캡션 체계에서 드러나는 편이 더 설득력 있다.
+- Impact: 카드 덱과 Hero의 Anime.js transform ownership, stretched link, keyboard focus, touch/native scroll, reduced-motion fallback은 변경하지 않는다. 실제 미디어 로딩 정책도 유지한다. 색상은 dark/light surface별 ultramarine tone을 사용해 작은 링크와 metadata가 4.5:1 이상의 대비를 갖도록 한다.
+
+## 2026-08-14 — Neutral field with vermilion wayfinding
+
+- Decision: Replace the large ultramarine Contact field and remaining blue/cyan accents with charcoal, bone paper, and two contrast-safe vermilion tones. Vermilion acts as wayfinding, never as the dominant surface.
+- Reason: The prior blue field occupied about 15% of the opening-page colour area and competed with the project media. A mostly neutral field lets evidence remain the visual subject while preserving a distinctive museum signal.
+- Impact: Contact becomes graphite with a thin signal rule; deck metadata, focus rings, hand tendons, cube faces, and favicons share the same signal family. Theme metadata follows the new dark/paper bases. Motion, layout, touch, and reduced-motion behaviour are unchanged.
+
+## 2026-08-14 — Stable deck entry and visible-first information
+
+- Decision: A collapsed deck spreads before any rear slot can become active, and essential Hero copy is visible and clickable from the initial viewport instead of being gated by scroll progress.
+- Reason: Entering the stack through its exposed lower edge could hit the third card first, raise it above the front card, and send it across the deck after its stagger. Separately, opacity-zero Hero copy made the role, value statement, and navigation actions appear missing to a first-time reviewer.
+- Impact: Pointer activation is deferred until deck motion settles while keyboard focus remains immediate. Hero scroll motion now uses restrained translation without hiding content; reduced-motion and static responsive fallbacks are unchanged.
+
+## 2026-08-14 — About tool catalogue with progressive logo enhancement
+
+- Decision: Replace the small text-pill tool list with four monochrome catalogue groups and always-visible technology names. Use Simple Icons for ten supported technologies and `RS`/`DB` monograms for RealSense and Dobot rather than substituting unrelated brands.
+- Reason: Recognizable marks improve scanning, but a logo-only wall would reduce accessibility and make uncommon tools ambiguous. The catalogue grouping also explains how the tools relate to the candidate's work.
+- Impact: The About entry bundles only the selected icon paths, preserves text and monogram fallbacks when JavaScript fails, and keeps marks decorative to assistive technology. Technology names and marks remain the property of their respective owners and are used only for identification.
+
+## 2026-08-14 — Current stack content refresh
+
+- Decision: Replace the previous twelve-item About catalogue with the requested thirteen-item stack, ordered as Robotics, Code, AI / Agents, and Systems. Lead with ROS 2, NVIDIA Isaac Sim, and Isaac Lab, then show C++, Python, FastAPI, PyTorch, Ollama, llama.cpp, LangChain, Ubuntu, Git, and Docker.
+- Reason: The new list reflects the tools the portfolio owner wants recruiters to associate with current simulation, robotics, local-AI, and delivery work while preserving the established gallery index instead of copying a multicolour badge wall.
+- Impact: Isaac Sim and Isaac Lab share the monochrome NVIDIA identification mark, while their visible names disambiguate the products. `llama.cpp` keeps an `L.CPP` monogram because the bundled icon set has no exact project mark. The catalogue remains four columns on desktop/tablet, two columns on small screens, and readable without JavaScript. Variable item counts stretch within equal-height rails so every column finishes on one baseline instead of leaving a blank final row.
+
+## 2026-08-14 — Direct, noun-led interface copy
+
+- Decision: Remove exhibition-style framing labels and sentence-form display copy across Home, Work, About, Resume, Copyright, and all six case studies. Use short noun headings, factual metadata, and dot-separated project summaries instead.
+- Reason: Labels such as `Exhibit`, `Exhibition deck`, and `Selected` described the visual concept rather than the candidate's work. They added a synthetic curatorial voice and slowed portfolio scanning.
+- Impact: The gallery visual system and project-deck interaction remain intact, while visible hierarchy now prioritizes project names, roles, technologies, outcomes, and actions. Body explanations and accessibility text remain descriptive; media frames collapse their label rail when no factual label is present.
+
+## 2026-08-14 — Uninterrupted opening fields
+
+- Decision: Remove the full-height 64% Home guide and 58% About guide from their Hero backgrounds.
+- Reason: The 1px decorative rules read as accidental panel seams instead of useful hierarchy, cutting through the opening compositions on both dark and paper surfaces.
+- Impact: Home and About now use uninterrupted opening fields. Section rules, catalogue rails, card borders, layout, motion, and responsive positioning remain unchanged.

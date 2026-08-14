@@ -9,6 +9,7 @@ export const initHeroStory = (environment) => {
   const role = track?.querySelector('[data-hero-role]');
   const statementLines = track ? Array.from(track.querySelectorAll('[data-hero-line]')) : [];
   const actions = track?.querySelector('[data-hero-actions]');
+  const hand = track?.querySelector('[data-dexterous-hand]');
   const progress = track?.querySelector('[data-hero-progress]');
 
   if (!track || !sticky || !copy || !progress) return;
@@ -24,6 +25,7 @@ export const initHeroStory = (environment) => {
   let targetDirty = true;
 
   const stagedElements = [role, ...statementLines, actions].filter(Boolean);
+  const shiftedElements = [copy, hand].filter(Boolean);
 
   const setActionsReady = (ready) => {
     if (actionsReady === ready) return;
@@ -37,6 +39,7 @@ export const initHeroStory = (environment) => {
       element.style.removeProperty('transform');
       element.style.removeProperty('clip-path');
     });
+    shiftedElements.forEach((element) => element.style.removeProperty('transform'));
     track.removeAttribute('data-hero-enhanced');
     track.removeAttribute('data-hero-actions-ready');
     actionsReady = false;
@@ -47,10 +50,23 @@ export const initHeroStory = (environment) => {
 
     timeline = createTimeline({ autoplay: false });
 
+    timeline.add(copy, {
+      y: [0, -32],
+      duration: 3200,
+      ease: 'out(2)'
+    }, 0);
+
+    if (hand) {
+      timeline.add(hand, {
+        y: [0, -24],
+        duration: 3200,
+        ease: 'out(2)'
+      }, 0);
+    }
+
     if (role) {
       timeline.add(role, {
-        opacity: [0, 1],
-        y: [12, 0],
+        y: [6, 0],
         duration: 720,
         ease: 'out(3)'
       }, 240);
@@ -58,9 +74,7 @@ export const initHeroStory = (environment) => {
 
     statementLines.forEach((line, index) => {
       timeline.add(line, {
-        opacity: [0, 1],
-        y: [30, 0],
-        clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'],
+        y: [14, 0],
         duration: 1180,
         ease: 'out(3)'
       }, 780 + (index * 1220));
@@ -68,8 +82,7 @@ export const initHeroStory = (environment) => {
 
     if (actions) {
       timeline.add(actions, {
-        opacity: [0, 1],
-        y: [18, 0],
+        y: [8, 0],
         duration: 860,
         ease: 'out(4)'
       }, 3440);
@@ -83,14 +96,14 @@ export const initHeroStory = (environment) => {
 
     timeline.seek(0, true);
     track.setAttribute('data-hero-enhanced', '');
-    setActionsReady(false);
+    setActionsReady(true);
   };
 
   const render = (value) => {
     if (!timeline) return;
     const normalized = clamp(value, 0, 1);
     timeline.seek(timeline.duration * normalized, true);
-    setActionsReady(keyboardSettled || normalized >= 0.78);
+    setActionsReady(true);
   };
 
   const updateTarget = () => {

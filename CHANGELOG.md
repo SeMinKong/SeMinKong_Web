@@ -7,7 +7,14 @@ All notable changes to this project are recorded here. The project follows Seman
 ### Changed
 
 - Simplified the Home Hero actions to a project archive link and an About link while keeping THING featured immediately below.
-- Increased Home Hero action typography and replaced the simultaneous intro with a reversible scroll sequence that reveals the role, two statement lines, and actions in order.
+- Increased Home Hero action typography and replaced the simultaneous intro with a reversible scroll sequence that centers the initial name/hand pair, lifts both outer wrappers slightly, and reveals the role, two statement lines, and actions in order.
+- Reframed the portfolio as a contemporary digital gallery with charcoal, bone paper, graphite, and restrained vermilion wayfinding accents.
+- Converted the Home project deck into matte exhibition folios, the Work/About/Resume routes into paper catalogues, and case-study media into restrained gallery evidence frames without changing the existing interaction model.
+- Stabilized lower-edge deck entry so rear cards no longer jump above the stack during the opening stagger.
+- Replaced the About tool pills with a grouped monochrome logo catalogue, then refreshed it with the requested robotics, Isaac simulation, local-AI, and delivery stack plus an honest `llama.cpp` monogram fallback.
+- Made essential Hero information visible on first paint and strengthened small captions, proof labels, file actions, and low-contrast interface details.
+- Replaced curatorial exhibition labels and sentence-form display copy with concise, factual noun headings across Home, Work, About, Resume, Copyright, and every project case study.
+- Removed full-height decorative dividers from the Home and About Heroes so both opening compositions use uninterrupted background fields.
 
 ## [1.3.0] - 2026-08-11
 

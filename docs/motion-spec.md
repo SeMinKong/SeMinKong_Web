@@ -361,10 +361,27 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 
 ## 2026-08-11 — Sequential Home Hero copy reveal
 
-- Anime.js owns one reversible scroll-seek timeline for the role, two statement lines, CTA group, and progress line. The name and dexterous-hand transforms remain outside this timeline.
+- Anime.js owns one reversible scroll-seek timeline for the role, two statement lines, CTA group, progress line, and the free outer identity/hand wrappers. The name glyph and every dexterous-hand scene, depth, rig, cube, and finger transform remain outside this timeline.
 - Normalized timing is role `5–22%`, first statement `18–45%`, second statement `45–72%`, and actions `78–98%`, followed by a final hold.
+- During the first `73%` of the track, the identity wrapper moves from `0` to `-32px` and the hand wrapper from `0` to `-24px`. This is a layout-level lift only; it does not change the hand graphic or its manipulation loop.
 - Full motion uses damping `8`; lite motion uses damping `12`. Scroll input stays passive and target geometry is read at most once per requested animation frame.
 - CTA pointer interaction is disabled before its reveal threshold. A Tab key or CTA focus immediately settles the timeline at 100% so a keyboard user never lands on an invisible control.
-- A head-time pending class masks only the staged copy before the module initializes; initialization clears it after the first timeline seek, and a two-second watchdog restores the full copy if enhancement fails.
+- A head-time pending class masks the staged copy before the module initializes. The enhanced state continues that mask until each Anime.js segment begins, preventing delayed segments from flashing at scroll position zero; a two-second watchdog restores the full copy if enhancement fails.
 - Reduced motion removes the staged timeline and sticky travel, clears inline stage styles, and shows the role, statement, actions, and static hand from the start.
 - The short mobile layout compresses copy spacing and places the hand at `70svh`, retaining at least a visible gap after the final CTA at 390×568.
+
+## 2026-08-14 — Home project deck motion
+
+- `src/motion/project-deck.js`가 Home deck의 유일한 stack/spread controller다. `motion=full`이면서 `depth=interactive`인 961px 이상 fine-pointer 환경에서만 enhancement를 활성화한다.
+- 닫힌 상태는 카드당 X `20–26px`, Y `8px`, 회전 약 `-1.35° / 0.65° / 1.15°`를 사용한다. 열린 상태는 `stage width - card width`를 카드 수로 나눠 세 장을 container 안에 균등 배치하고 회전을 0으로 만든다.
+- 펼침은 620ms, 카드별 54ms 지연, `out(4)`를 사용한다. 접힘은 500ms, 역순 30ms 지연, `inOut(3)`를 사용하며 새 상태는 진행 중 Anime.js animation을 cancel한 뒤 현재 값에서 이어진다.
+- 실제 카드의 pointer over는 펼치고 deck pointer leave 후 110ms에 접는다. `focusin`은 animation 없이 즉시 펼치고 focused slot의 stacking order를 올리며, focus가 deck 밖으로 나가면 즉시 정적 닫힘 상태로 복귀한다.
+- `.project-deck__slot`은 deck transform, `.project-card`는 CSS hover/focus lift를 각각 소유한다. reveal은 wrapper에만 적용하며 deck media에는 pointer depth를 적용하지 않는다.
+- tablet, mobile, coarse pointer, reduced motion은 Anime.js deck transform 없이 정적 Grid를 사용한다. ResizeObserver는 현재 상태의 배치를 다시 계산하고, offscreen·hidden·pagehide는 실행 중 animation과 `will-change`를 정리한다. touch drag, pointer capture, horizontal carousel, scroll interception은 추가하지 않는다.
+
+## 2026-08-14 — Deck entry and Hero visibility stabilization
+
+- A pointer entering a collapsed deck opens the stack without first promoting the rear card that happened to receive the hit. Slot activation and elevated stacking order are allowed only after the spread animation has finished.
+- Card hover lift is suppressed while the slot animation is running, preventing a rear card from lifting, losing hover, and crossing in front of the deck during its stagger.
+- Pointer movement across an already-open, settled deck still activates the hovered slot. Keyboard focus still expands immediately and promotes the focused slot; touch, coarse-pointer, tablet, mobile, and reduced-motion fallbacks are unchanged.
+- The Home Hero role, statement, and actions are visible and interactive at scroll position zero. Anime.js retains ownership of their small Y-axis settling motion and of the outer copy/hand lift, but no longer animates essential copy opacity or clip-path.

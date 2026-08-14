@@ -1,7 +1,16 @@
 .resume-page {
-  background:
-    radial-gradient(circle at 82% 4%, rgba(104, 223, 203, 0.08), transparent 24%),
-    var(--bg);
+  --signal: var(--signal-on-light);
+  --bg: var(--paper);
+  --bg-raised: var(--paper-raised);
+  --surface: #dedad0;
+  --surface-strong: #d2cec4;
+  --text: var(--paper-ink);
+  --text-soft: var(--paper-soft);
+  --muted: var(--paper-muted);
+  --line: var(--paper-line);
+  --line-strong: var(--paper-line-strong);
+  color-scheme: light;
+  background: var(--paper);
 }
 
 .resume {
@@ -22,15 +31,16 @@
 .resume-label {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.5;
 }
 
 .resume-hero h1 {
-  margin-top: 14px;
+  margin-top: 0;
   font-size: var(--type-page);
   line-height: 0.98;
+  font-weight: 500;
 }
 
 .resume-role {
@@ -45,7 +55,7 @@
   gap: 7px;
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
 }
 
 .resume-contact a {
@@ -84,7 +94,7 @@
 .resume-original__actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 8px;
 }
 
@@ -98,29 +108,29 @@
   border-radius: var(--radius-sm);
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   white-space: nowrap;
   transition: color 220ms ease, border-color 220ms ease, background-color 220ms ease;
 }
 
 .resume-original__actions a:first-child {
-  border-color: var(--signal);
-  background: var(--signal);
+  border-color: var(--text);
+  background: var(--text);
   color: var(--bg);
 }
 
 .resume-original__actions a:hover,
 .resume-original__actions a:focus-visible {
   border-color: var(--signal);
-  background: rgba(200, 255, 99, 0.08);
+  background: color-mix(in srgb, var(--signal) 8%, transparent);
   color: var(--signal);
 }
 
 .resume-original__actions a:first-child:hover,
 .resume-original__actions a:first-child:focus-visible {
-  border-color: var(--text);
-  background: var(--text);
-  color: var(--bg);
+  border-color: var(--signal);
+  background: var(--signal);
+  color: var(--paper);
 }
 
 .resume-document {
@@ -131,16 +141,16 @@
   display: block;
   overflow: hidden;
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius-md);
+  border-radius: 1px;
   background: #fff;
-  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 14px 36px rgba(21, 20, 15, 0.12);
   transition: transform 520ms var(--ease-out), border-color 220ms ease;
 }
 
 .resume-document > a:hover,
 .resume-document > a:focus-visible {
   border-color: var(--signal);
-  transform: translateY(-4px);
+  transform: translateY(-2px);
 }
 
 .resume-document img {
@@ -152,7 +162,7 @@
   margin-top: 11px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.64rem;
+  font-size: 0.75rem;
 }
 
 .resume-block {
@@ -167,7 +177,7 @@
   max-width: 760px;
 }
 
-.resume-summary h2 {
+.resume-summary > div h2 {
   max-width: 720px;
   font-size: clamp(1.65rem, 3vw, 2.2rem);
   line-height: 1.2;
@@ -176,7 +186,7 @@
 
 .resume-summary > div > p {
   max-width: 680px;
-  margin-top: 20px;
+  margin-top: 0;
   color: var(--text-soft);
   line-height: 1.78;
 }
@@ -228,14 +238,14 @@
   margin-top: 4px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.55;
 }
 
 .resume-item__head time {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   line-height: 1.5;
   text-align: right;
   white-space: nowrap;
@@ -268,7 +278,7 @@
   border-radius: 4px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 
 .skill-groups {
@@ -305,17 +315,11 @@
 
 .resume-cta {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(32px, 6vw, 72px);
   align-items: center;
   padding-block: clamp(58px, 7vw, 82px);
   border-top: 1px solid var(--line-strong);
-}
-
-.resume-cta > p {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
 }
 
 .resume-cta h2 {
@@ -338,14 +342,14 @@
   border-radius: var(--radius-sm);
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   transition: color 220ms ease, border-color 220ms ease, background-color 220ms ease;
 }
 
 .resume-cta a:hover,
 .resume-cta a:focus-visible {
   border-color: var(--signal);
-  background: rgba(200, 255, 99, 0.07);
+  background: color-mix(in srgb, var(--signal) 8%, transparent);
   color: var(--signal);
 }
 

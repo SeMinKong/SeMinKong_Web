@@ -8,9 +8,11 @@ import { initPageTransitions } from './motion/page-transitions.js';
 import { initIntro, initReveals } from './motion/reveal.js';
 import { initSmoothScroll } from './motion/smooth-scroll.js';
 import { initNavigation } from './ui/navigation.js';
+import { initToolLogos } from './ui/tool-logos.js';
 
 const environment = initEnvironment();
 
+initToolLogos();
 initSmoothScroll(environment);
 initNavigation(environment);
 initPageTransitions(environment);
