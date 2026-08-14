@@ -112,7 +112,9 @@ export const initReveals = (environment, selector, options = {}) => {
       activeAnimations.add(animation);
 
       if (type === 'row') {
-        const rowDetails = Array.from(element.children).filter((child) => !child.matches('[data-depth-card]'));
+        const rowDetails = Array.from(element.children).filter(
+          (child) => !child.matches('[data-depth-card], .work-row__copy')
+        );
         const detailAnimation = animate(rowDetails, {
           opacity: [0, 1],
           y: [9, 0],

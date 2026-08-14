@@ -3618,6 +3618,11 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   background: var(--surface);
 }
 
+.project-card > .project-card__media,
+.work-row > .work-row__media {
+  pointer-events: none;
+}
+
 .home-page .control-cube__face--bottom {
   background: var(--bg);
 }

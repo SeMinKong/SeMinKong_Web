@@ -385,3 +385,9 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 - Card hover lift is suppressed while the slot animation is running, preventing a rear card from lifting, losing hover, and crossing in front of the deck during its stagger.
 - Pointer movement across an already-open, settled deck still activates the hovered slot. Keyboard focus still expands immediately and promotes the focused slot; touch, coarse-pointer, tablet, mobile, and reduced-motion fallbacks are unchanged.
 - The Home Hero role, statement, and actions are visible and interactive at scroll position zero. Anime.js retains ownership of their small Y-axis settling motion and of the outer copy/hand lift, but no longer animates essential copy opacity or clip-path.
+
+## 2026-08-14 — Work row link and reveal ownership
+
+- The outer `.work-row` owns the row-level reveal translation and opacity. Index and arrow children may keep their short stagger.
+- `.work-row__copy` remains transform-free so the title link's absolute stretched overlay resolves against the positioned row and covers the preview media as well as the copy.
+- Preview images and silent videos remain non-interactive evidence surfaces; pointer and touch navigation uses the same single semantic title link. Depth tracking continues to read the media bounds from the row-level pointer target.

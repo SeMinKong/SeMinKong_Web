@@ -331,3 +331,9 @@
 - Decision: Re-encode the Brain Tumor MRI screen recording as H.264 High Profile with AAC audio and fast-start metadata while preserving its 1320×1032 frame and 51.53-second duration.
 - Reason: The original 37.38 MB encode delayed case-study evidence and exceeded the practical source-upload envelope despite containing mostly compressible screen content.
 - Impact: The deployed asset is 3.64 MB and measures 0.9962 full-frame SSIM against the original. The case-study markup, controls, aspect ratio, and visible content are unchanged.
+
+## 2026-08-14 — Single-link project previews
+
+- Decision: Keep one semantic detail link per Home card and Work row, and let pointer events pass through decorative preview media to that existing stretched link.
+- Reason: A separate anchor around each image or silent preview video would duplicate navigation for assistive technology and add a second keyboard stop. The Work copy wrapper also must remain transform-free after reveal so its absolute link overlay uses the positioned row, rather than the smaller copy column, as its containing block.
+- Impact: All nine project previews respond to pointer clicks, right-click, and touch through the same route as their project title. Deck spreading, depth tracking, autoplay previews, focus outlines, and the one-tab-stop-per-project model remain unchanged.

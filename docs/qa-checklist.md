@@ -326,3 +326,11 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] The static worker forwards requests directly to the hosting asset binding, and `npm.cmd run verify:dist` verifies the worker plus all 15 user-facing deployment entries.
 - [x] The Brain Tumor MRI demonstration preserves its 1320×1032 frame, 30 fps rate, 51.53-second duration, H.264/AAC browser-compatible streams, and fast-start playback metadata.
 - [x] The optimized MRI asset is 3.64 MB rather than 37.38 MB and scores 0.9962 full-frame SSIM against the original encode.
+
+## 2026-08-14 Project preview navigation verification
+
+- [x] Home's three previews and Work's six previews map to existing detail routes through each card or row's single stretched title link.
+- [x] Decorative preview media does not intercept pointer input; image, silent-video, title, summary, and CTA clicks resolve to the same destination.
+- [x] No duplicate media anchor was added, so every project retains one keyboard tab stop, one accessible link name, and the existing card-level focus outline.
+- [x] The Work copy wrapper remains transform-free after its row reveal, keeping the stretched title-link overlay relative to the full row instead of the copy column.
+- [x] Headless Edge completed 12 center-point navigation checks: all nine Home/Work previews at 390px touch, Home at 768px, and expanded Home deck plus Work at 1280px. Every hit target resolved to the expected anchor with zero horizontal overflow or browser errors.

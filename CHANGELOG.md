@@ -17,6 +17,7 @@ All notable changes to this project are recorded here. The project follows Seman
 - Removed full-height decorative dividers from the Home and About Heroes so both opening compositions use uninterrupted background fields.
 - Added the minimal static-asset worker entry required for the validated Vite build to deploy without changing route behavior.
 - Re-encoded the 51.53-second Brain Tumor MRI demonstration for web delivery at its original 1320×1032 frame, reducing it from 37.38 MB to 3.64 MB with fast-start playback.
+- Routed pointer clicks on every Home and Work project preview through the card's existing single detail link.
 
 ## [1.3.0] - 2026-08-11
 
