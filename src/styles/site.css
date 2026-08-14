@@ -71,8 +71,9 @@
 
 .hero-identity__name {
   font-size: var(--type-hero-name);
-  line-height: 0.86;
-  letter-spacing: -0.07em;
+  font-weight: var(--weight-display);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
 }
 
 .hero-identity__statement {
@@ -80,9 +81,11 @@
   gap: 14px;
   margin-top: clamp(22px, 2.5vw, 32px);
   color: var(--text-soft);
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 2.6vw, 2.35rem);
-  line-height: 1.04;
-  letter-spacing: -0.045em;
+  font-weight: var(--weight-heading);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
 }
 
 .hero-identity__statement > span {
@@ -1563,6 +1566,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   font-size: clamp(2.2rem, 4.2vw, 3.5rem);
   line-height: 1.02;
   letter-spacing: -0.045em;
+  font-weight: var(--weight-heading);
   word-break: keep-all;
 }
 
@@ -1722,7 +1726,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .work-row__copy > p {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .project-card__copy h3 {
@@ -1867,7 +1872,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .focus-list span {
   color: var(--signal);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .focus-list h3 {
@@ -1918,7 +1924,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .home-profile dt {
   color: var(--signal);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
@@ -1927,6 +1934,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   color: var(--text);
   font-family: var(--font-display);
   font-size: 0.92rem;
+  font-weight: var(--weight-support);
   line-height: 1.5;
 }
 
@@ -1986,7 +1994,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .home-contact__details span {
   color: rgba(9, 13, 11, 0.58);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .home-contact__details strong {
@@ -1994,7 +2003,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   color: var(--bg);
   font-family: var(--font-display);
   font-size: clamp(0.84rem, 1.25vw, 1rem);
-  font-weight: 560;
+  font-weight: var(--weight-heading);
   letter-spacing: -0.025em;
   overflow-wrap: anywhere;
   transition: color 220ms ease;
@@ -2054,10 +2063,10 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .work-index__hero h1 {
-  font-weight: 500;
+  font-weight: var(--weight-display);
   font-size: clamp(4.8rem, 10vw, 8.6rem);
-  line-height: 0.78;
-  letter-spacing: -0.075em;
+  line-height: 0.86;
+  letter-spacing: -0.055em;
 }
 
 .work-index__title {
@@ -2068,7 +2077,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .work-index__title > span {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
   letter-spacing: 0.12em;
 }
 
@@ -2111,7 +2121,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   padding-top: 5px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .work-row__media {
@@ -2142,23 +2153,25 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .work-row__copy h2 {
-  font-weight: 500;
+  font-weight: var(--weight-heading);
   font-size: clamp(2rem, 3.4vw, 3.15rem);
-  line-height: 0.98;
-  letter-spacing: -0.055em;
+  line-height: 1.03;
+  letter-spacing: -0.04em;
 }
 
 .work-row--featured .work-row__copy h2 {
   margin-block: 3px 6px;
   font-size: clamp(4rem, 7vw, 6.8rem);
-  line-height: 0.84;
-  letter-spacing: -0.075em;
+  font-weight: var(--weight-display);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
 }
 
 .work-row__copy > span:not(.work-row__cta) {
   max-width: 610px;
   color: var(--text-soft);
   font-size: 0.96rem;
+  font-weight: var(--weight-body);
   line-height: 1.65;
 }
 
@@ -2195,7 +2208,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .work-row__proofs dd {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .work-row__copy ul {
@@ -2213,7 +2227,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   border-radius: 4px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .work-row__arrow {
@@ -2242,14 +2257,15 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .directory-contact p {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .directory-contact a {
   color: var(--signal);
   font-family: var(--font-display);
   font-size: clamp(1.2rem, 2.2vw, 1.9rem);
-  font-weight: 520;
+  font-weight: var(--weight-heading);
   letter-spacing: -0.03em;
 }
 
@@ -3561,13 +3577,13 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .home-page .hero-identity__name {
-  font-weight: 500;
+  font-weight: var(--weight-display);
 }
 
 .home-page .hero-identity__role {
   font-family: var(--font-display);
   font-size: 0.84rem;
-  font-weight: 500;
+  font-weight: var(--weight-meta);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -3681,7 +3697,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   border: 0;
   color: var(--paper-muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
   letter-spacing: 0.14em;
   pointer-events: none;
   box-shadow: none;
@@ -3691,7 +3708,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   max-width: 820px;
   background: none;
   color: var(--text);
-  font-weight: 500;
+  font-weight: var(--weight-display);
   -webkit-text-fill-color: currentColor;
 }
 
@@ -3770,8 +3787,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   gap: 14px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -3821,16 +3838,17 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .project-card--deck .project-card__copy > p:first-child {
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
   line-height: 1.45;
 }
 
 .project-card--deck .project-card__copy h3 {
   margin-block: 0 3px;
   font-size: clamp(1.75rem, 2.6vw, 2.35rem);
-  line-height: 0.98;
-  font-weight: 500;
-  letter-spacing: -0.05em;
+  line-height: 1.04;
+  font-weight: var(--weight-heading);
+  letter-spacing: -0.04em;
 }
 
 .project-card--deck .project-card__copy h3 a::after {
@@ -3839,8 +3857,9 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .project-card--deck .project-card__copy > .project-card__summary {
   color: var(--text-soft);
-  font-size: 0.9rem;
-  line-height: 1.62;
+  font-size: 0.94rem;
+  font-weight: var(--weight-body);
+  line-height: 1.66;
 }
 
 .project-card__facts {
@@ -3864,14 +3883,15 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   color: var(--project-accent);
   font-family: var(--font-display);
   font-size: 0.94rem;
-  font-weight: 560;
+  font-weight: var(--weight-heading);
   line-height: 1.2;
 }
 
 .project-card__facts span {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
   line-height: 1.35;
 }
 
@@ -3880,6 +3900,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   color: var(--project-accent);
   font-family: var(--font-display);
   font-size: 0.8rem;
+  font-weight: var(--weight-heading);
   letter-spacing: -0.01em;
 }
 
@@ -4020,10 +4041,12 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .focus-list h3 {
   margin-top: auto;
   font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  font-weight: var(--weight-heading);
 }
 
 .focus-list p {
-  font-size: 0.94rem;
+  font-size: 0.98rem;
+  line-height: 1.72;
 }
 
 .home-about {
@@ -4142,7 +4165,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .project-deck {
-    --deck-card-height: 510px;
+    --deck-card-height: 530px;
   }
 
   .project-deck__stage {
@@ -4161,7 +4184,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   }
 
   .project-card--deck .project-card__copy h3 {
-    font-size: clamp(2rem, 9vw, 2.55rem);
+    font-size: clamp(1.9rem, 8.4vw, 2.35rem);
   }
 
   .focus-list > div {

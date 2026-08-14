@@ -38,9 +38,9 @@
 .about-hero h1 {
   margin-top: 12px;
   font-size: clamp(4.5rem, 11vw, 8.7rem);
-  line-height: 0.86;
-  letter-spacing: -0.075em;
-  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  font-weight: var(--weight-display);
 }
 
 .about-hero__statement {
@@ -52,9 +52,9 @@
 .about-hero__statement p {
   font-family: var(--font-display);
   font-size: clamp(1.65rem, 3.15vw, 2.55rem);
-  font-weight: 570;
-  line-height: 1.2;
-  letter-spacing: -0.045em;
+  font-weight: var(--weight-ui);
+  line-height: 1.24;
+  letter-spacing: -0.025em;
 }
 
 .about-hero__statement strong {
@@ -67,7 +67,8 @@
   margin-top: 25px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .about-hero__marker {
@@ -81,7 +82,8 @@
   align-items: center;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
   text-transform: uppercase;
 }
 
@@ -127,13 +129,15 @@
 .about-facts dt {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .about-facts dd {
   color: var(--text-soft);
   font-family: var(--font-display);
   font-size: 0.86rem;
+  font-weight: var(--weight-support);
   line-height: 1.55;
 }
 
@@ -147,6 +151,7 @@
 .about-next h2 {
   margin-top: 15px;
   font-size: var(--type-section);
+  font-weight: var(--weight-heading);
   line-height: 1.12;
 }
 
@@ -154,7 +159,8 @@
   margin-top: 23px;
   color: var(--text-soft);
   font-size: clamp(1rem, 1.25vw, 1.08rem);
-  line-height: 1.82;
+  font-weight: var(--weight-body);
+  line-height: 1.76;
 }
 
 .about-method {
@@ -210,12 +216,14 @@
 .about-method__list span {
   color: var(--signal);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .about-method__list h3 {
   margin-top: auto;
   font-size: 1.16rem;
+  font-weight: var(--weight-heading);
   letter-spacing: -0.025em;
 }
 
@@ -223,7 +231,8 @@
   margin-top: 13px;
   color: var(--text-soft);
   font-size: 0.9rem;
-  line-height: 1.72;
+  font-weight: var(--weight-body);
+  line-height: 1.74;
 }
 
 .about-now {
@@ -248,7 +257,8 @@
   border-block: 1px solid var(--line-strong);
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
   line-height: 1.5;
   letter-spacing: 0.02em;
 }
@@ -291,16 +301,16 @@
   gap: 8px;
   color: var(--text);
   font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 650;
+  font-size: 0.84rem;
+  font-weight: var(--weight-display);
   line-height: 1.3;
 }
 
 .tool-collection h3 span {
   color: var(--signal);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
 }
 
 .tool-collection ul {
@@ -345,8 +355,8 @@
 .tool-tile__name {
   color: var(--text-soft);
   font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 620;
+  font-size: 0.84rem;
+  font-weight: var(--weight-heading);
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
