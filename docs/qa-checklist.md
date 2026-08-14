@@ -320,3 +320,9 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] Component-level borders on cards, media, facts, metrics, tool rails, and next links remain intact because they communicate local information structure rather than dividing the viewport.
 - [x] The robotic hand, Hero actions, default Motion/Depth modes, reduced-motion fallback, and document-level horizontal overflow remain unchanged.
 - [x] `npm.cmd run build` succeeds with 90 modules and browser warning/error logs are empty.
+
+## 2026-08-14 Deployment package and MRI media verification
+
+- [x] The static worker forwards requests directly to the hosting asset binding, and `npm.cmd run verify:dist` verifies the worker plus all 15 user-facing deployment entries.
+- [x] The Brain Tumor MRI demonstration preserves its 1320×1032 frame, 30 fps rate, 51.53-second duration, H.264/AAC browser-compatible streams, and fast-start playback metadata.
+- [x] The optimized MRI asset is 3.64 MB rather than 37.38 MB and scores 0.9962 full-frame SSIM against the original encode.

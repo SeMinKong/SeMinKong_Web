@@ -325,3 +325,9 @@
 - Decision: Keep Vite as the production builder and ship a minimal Cloudflare Workers-compatible entry that forwards every request to the generated static asset binding.
 - Reason: The portfolio is a pre-rendered multi-page site and does not need application-server rendering, while the hosting contract still requires a worker entry point.
 - Impact: The existing HTML routes, relative asset URLs, navigation, motion, and browser behavior remain unchanged. Distribution verification now requires the worker entry alongside the fifteen user-facing deployment files.
+
+## 2026-08-14 — Web-ready MRI demonstration
+
+- Decision: Re-encode the Brain Tumor MRI screen recording as H.264 High Profile with AAC audio and fast-start metadata while preserving its 1320×1032 frame and 51.53-second duration.
+- Reason: The original 37.38 MB encode delayed case-study evidence and exceeded the practical source-upload envelope despite containing mostly compressible screen content.
+- Impact: The deployed asset is 3.64 MB and measures 0.9962 full-frame SSIM against the original. The case-study markup, controls, aspect ratio, and visible content are unchanged.
