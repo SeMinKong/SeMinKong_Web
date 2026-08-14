@@ -319,3 +319,9 @@
 - Decision: Remove the full-height 64% Home guide and 58% About guide from their Hero backgrounds.
 - Reason: The 1px decorative rules read as accidental panel seams instead of useful hierarchy, cutting through the opening compositions on both dark and paper surfaces.
 - Impact: Home and About now use uninterrupted opening fields. Section rules, catalogue rails, card borders, layout, motion, and responsive positioning remain unchanged.
+
+## 2026-08-14 — Static portfolio deployment adapter
+
+- Decision: Keep Vite as the production builder and ship a minimal Cloudflare Workers-compatible entry that forwards every request to the generated static asset binding.
+- Reason: The portfolio is a pre-rendered multi-page site and does not need application-server rendering, while the hosting contract still requires a worker entry point.
+- Impact: The existing HTML routes, relative asset URLs, navigation, motion, and browser behavior remain unchanged. Distribution verification now requires the worker entry alongside the fifteen user-facing deployment files.

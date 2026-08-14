@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 const expectedFiles = [
   'index.html',
   'favicon.svg',
+  'server/index.js',
   'work/index.html',
   'work/thing/index.html',
   'work/aqis/index.html',

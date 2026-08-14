@@ -15,6 +15,7 @@ All notable changes to this project are recorded here. The project follows Seman
 - Made essential Hero information visible on first paint and strengthened small captions, proof labels, file actions, and low-contrast interface details.
 - Replaced curatorial exhibition labels and sentence-form display copy with concise, factual noun headings across Home, Work, About, Resume, Copyright, and every project case study.
 - Removed full-height decorative dividers from the Home and About Heroes so both opening compositions use uninterrupted background fields.
+- Added the minimal static-asset worker entry required for the validated Vite build to deploy without changing route behavior.
 
 ## [1.3.0] - 2026-08-11
 
