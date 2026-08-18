@@ -482,3 +482,7 @@ This section supersedes the lighter display-weight guidance in the contemporary 
 - Remove decorative `01–04` labels from Copyright sections while preserving semantic headings and content order.
 - Break the introductory statement by meaning on wide layouts and allow natural wrapping on small screens.
 - Use exactly one custom list marker; browser-default markers must be reset so the page never resembles broken Markdown.
+## 2026-08-18 — Browser-tab mark override
+
+- The browser-tab icon uses a borderless, high-contrast `SK` tile optimized for 16px rather than reproducing the more detailed navigation mark.
+- Every route references one versioned SVG favicon URL so a released icon change is not hidden by a cached legacy asset.

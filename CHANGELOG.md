@@ -6,6 +6,8 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Reworked the browser-tab favicon into a high-contrast `SK` tile and versioned its URL across every route so browsers replace the cached legacy icon.
+
 - Simplified the Copyright page by removing decorative section numbers, balancing the introductory copy, and eliminating duplicated list markers.
 
 - Reframed the Resume profile around broad software, vision, robotics, backend, and hardware-integration experience; corrected THING to Jul–Aug 2026 across the site and synchronized downloadable Resume artifacts.

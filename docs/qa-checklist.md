@@ -373,3 +373,8 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] Permission and restriction lists show one marker per item with no Markdown syntax or duplicate browser marker.
 - [x] At 390px, 768px, and 1280px, the page has no horizontal overflow; the shared 2px keyboard focus rule remains intact and browser warning/error logs are empty.
 - [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
+## 2026-08-18 Browser-tab favicon verification
+
+- [x] All 11 HTML routes reference `/favicon.svg?v=20260818-2` with SVG type and `sizes="any"`.
+- [x] The favicon source uses a high-contrast bone `S` and vermilion `K` on graphite with no legacy outline-square or lime marker.
+- [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
