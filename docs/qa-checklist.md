@@ -386,3 +386,13 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] Keyboard settlement and reduced-motion expose every Hero action without residual transforms.
 - [x] The Hero and following Projects section have zero horizontal overflow; browser warning/error logs are empty.
 - [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
+
+## 2026-08-18 Name-first Hero and hand-edge verification
+
+- [x] At scroll zero in full/lite motion, only the name and robotic hand are visible; the name sits near the optical middle without overlapping the hand.
+- [x] Forward and reverse scrolling reveal both greeting lines and actions continuously while the outer wrappers end at the established completed layout.
+- [x] At 390px, 768px, and 1280px, the completed Hero has no clipping, overlap, or horizontal overflow; the Projects section releases normally.
+- [x] Resizing or rotating across the 900px Hero breakpoint preserves the current scroll state while applying the correct responsive start offsets.
+- [x] The hand ambient light has no visible rectangular top, side, or bottom edge in default, static-depth, and reduced-motion states.
+- [x] Tab settlement and reduced motion expose the complete Hero with active actions and no residual wrapper transforms.
+- [x] Browser warning/error logs are empty, `npm.cmd run build` and `npm.cmd run verify:dist` succeed, and `git diff --check` reports no whitespace errors.

@@ -23,9 +23,15 @@ export const initHeroStory = (environment) => {
   let keyboardSettled = false;
   let actionsReady = false;
   let targetDirty = true;
+  let stageOffsetsKey = '';
 
   const stagedElements = [role, ...statementLines, actions].filter(Boolean);
   const shiftedElements = [copy, hand].filter(Boolean);
+
+  const readStageOffset = (property) => {
+    const value = Number.parseFloat(getComputedStyle(track).getPropertyValue(property));
+    return Number.isFinite(value) ? value : 0;
+  };
 
   const setActionsReady = (ready) => {
     if (actionsReady === ready) return;
@@ -45,47 +51,73 @@ export const initHeroStory = (environment) => {
     actionsReady = false;
   };
 
+  const readStageOffsets = () => {
+    const copyStartY = readStageOffset('--hero-copy-start-y');
+    const handStartX = readStageOffset('--hero-hand-start-x');
+    const handStartY = readStageOffset('--hero-hand-start-y');
+
+    return {
+      copyStartY,
+      handStartX,
+      handStartY,
+      key: `${copyStartY}:${handStartX}:${handStartY}`
+    };
+  };
+
   const buildTimeline = () => {
-    if (timeline || environment.motion === 'reduced') return;
+    if (environment.motion === 'reduced') return false;
+
+    const offsets = readStageOffsets();
+    if (timeline && offsets.key === stageOffsetsKey) return false;
+
+    timeline?.revert?.();
+    timeline = null;
+    stageOffsetsKey = offsets.key;
+
+    const { copyStartY, handStartX, handStartY } = offsets;
 
     timeline = createTimeline({ autoplay: false });
 
     timeline.add(copy, {
-      y: [0, -32],
-      duration: 3200,
-      ease: 'out(2)'
+      y: [copyStartY, 0],
+      duration: 3000,
+      ease: 'inOut(2)'
     }, 0);
 
     if (hand) {
       timeline.add(hand, {
-        y: [0, -24],
-        duration: 3200,
-        ease: 'out(2)'
+        x: [handStartX, 0],
+        y: [handStartY, 0],
+        duration: 3000,
+        ease: 'inOut(2)'
       }, 0);
     }
 
     if (role) {
       timeline.add(role, {
-        y: [6, 0],
-        duration: 720,
+        opacity: [0, 1],
+        y: [12, 0],
+        duration: 620,
         ease: 'out(3)'
-      }, 240);
+      }, 420);
     }
 
     statementLines.forEach((line, index) => {
       timeline.add(line, {
-        y: [14, 0],
-        duration: 1180,
+        opacity: [0, 1],
+        y: [18, 0],
+        duration: index === 0 ? 1000 : 1150,
         ease: 'out(3)'
-      }, 780 + (index * 1220));
+      }, 900 + (index * 1050));
     });
 
     if (actions) {
       timeline.add(actions, {
-        y: [8, 0],
-        duration: 860,
+        opacity: [0, 1],
+        y: [12, 0],
+        duration: 800,
         ease: 'out(4)'
-      }, 3440);
+      }, 3300);
     }
 
     timeline.add(progress, {
@@ -94,16 +126,17 @@ export const initHeroStory = (environment) => {
       ease: 'linear'
     }, 0);
 
-    timeline.seek(0, true);
+    timeline.seek(timeline.duration * clamp(currentProgress, 0, 1), true);
     track.setAttribute('data-hero-enhanced', '');
-    setActionsReady(true);
+    setActionsReady(false);
+    return true;
   };
 
   const render = (value) => {
     if (!timeline) return;
     const normalized = clamp(value, 0, 1);
     timeline.seek(timeline.duration * normalized, true);
-    setActionsReady(true);
+    setActionsReady(keyboardSettled || normalized >= 0.75);
   };
 
   const updateTarget = () => {
@@ -162,6 +195,7 @@ export const initHeroStory = (environment) => {
     targetProgress = 0;
     targetDirty = true;
     keyboardSettled = false;
+    stageOffsetsKey = '';
     clearStageStyles();
   };
 
@@ -174,8 +208,16 @@ export const initHeroStory = (environment) => {
     render(1);
   };
 
+  const handleResize = () => {
+    if (buildTimeline()) {
+      syncImmediately();
+      return;
+    }
+    schedule();
+  };
+
   window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule, { passive: true });
+  window.addEventListener('resize', handleResize, { passive: true });
   window.addEventListener('pageshow', syncImmediately);
   window.addEventListener('keydown', settleForKeyboard, { capture: true });
   actions?.addEventListener('focusin', settleForKeyboard);

@@ -378,3 +378,9 @@
 - Decision: Home Hero의 인사말과 CTA는 각 Anime.js segment가 시작되기 전에도 해당 segment의 시작 Y 위치를 유지한다.
 - Reason: 콘텐츠를 처음부터 보이도록 바꾼 뒤에도 지연된 tween은 시작 시점에만 translate 값을 적용해, 스크롤 경계를 지날 때 문구와 버튼이 아래로 튀었다가 올라왔다.
 - Impact: 타임라인 순서와 스크롤 거리는 유지하면서 정방향·역방향 스크롤의 위치 변화가 연속적으로 이어진다. reduced-motion에서는 기존처럼 transform을 제거한다.
+
+## 2026-08-18 — 이름 중심 Hero와 경계 없는 손 조명
+
+- Decision: full/lite Home Hero는 이름과 손만 보이는 상태로 시작하고, 스크롤에 따라 인사말과 CTA를 누적 노출하면서 기존 완성 배열로 이동한다. 손 뒤 조명은 장면 사각형 안쪽에서 완전히 투명해지는 타원형으로 제한한다.
+- Reason: 모든 문구가 처음부터 보이면 이름 중심의 스크롤 서사가 사라지고, 손 장면의 넓은 그림자가 3D 합성 경계를 따라 사각 이미지처럼 보였다.
+- Impact: 이름·손의 외곽 wrapper와 문구만 Hero timeline이 제어한다. 반응형 breakpoint를 넘는 resize에서는 현재 scroll progress를 보존한 채 offset을 다시 읽는다. 손 내부 manipulation, depth, native scroll은 유지하며 keyboard, reduced motion, 실패 fallback에서는 전체 정보를 즉시 표시한다.

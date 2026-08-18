@@ -397,3 +397,13 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 - The visible role, statement lines, and action group hold their Anime.js starting Y positions during each delayed segment's pre-roll.
 - Crossing a segment boundary must not introduce a fresh translate value or make a visible line or button jump downward before settling upward.
 - The existing scroll timing, parent copy/hand lift, progress line, keyboard settlement, reduced-motion fallback, and native scroll behavior remain unchanged.
+
+## 2026-08-18 — Name-first Hero scroll rearrangement
+
+- This choreography supersedes the scroll-zero visibility statement in `Deck entry and Hero visibility stabilization`. The full semantic copy remains present, but full/lite enhancement shows only the name and hand at zero progress.
+- Anime.js owns the outer identity and hand wrapper rearrangement plus the two greeting lines, actions, and progress line. The hand scene, depth root, rig, cube, and finger transforms retain their existing owners.
+- The identity wrapper settles from its responsive start offset to `0` over the first `3000ms` of a `4400ms` timeline. The hand uses only a small responsive outer X/Y correction and also ends at `0`, matching the established completed layout.
+- When a resize or orientation change crosses a responsive start-offset breakpoint, rebuild the timeline with the new offsets and immediately seek it to the current scroll progress; stale desktop transforms must never survive into a tablet or mobile composition.
+- Greeting line one reveals at `900–1900ms`, line two at `1950–3100ms`, and actions at `3300–4100ms`; all use matching hidden pre-roll poses so forward and reverse scroll remain continuous.
+- Actions ignore pointer input before `75%` progress. Any Tab entry or action focus settles the Hero to its complete state. Reduced motion and enhancement failure show the complete static Hero without sticky staging.
+- The hand's local ambient glow and shadow use bounded ellipses that reach zero alpha inside the scene on every side; no rectangular compositor boundary may remain visible.

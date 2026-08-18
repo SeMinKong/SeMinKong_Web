@@ -491,3 +491,12 @@ This section supersedes the lighter display-weight guidance in the contemporary 
 
 - Visible Hero copy must not acquire a new offset only when a delayed scroll segment begins.
 - Preserve the staged settling rhythm, but hold every delayed element at its start pose during pre-roll so forward and reverse scrolling remain continuous.
+
+## 2026-08-18 — Name-first Hero composition override
+
+This section supersedes the Home-only visibility requirement in `Visible-first catalogue detail override`, the visible-copy assumption in `Hero scroll continuity override`, and any earlier Core message or acceptance criterion requiring the Home role, greeting, or CTA to be visible at scroll position zero or within the first five seconds.
+
+- Full and lite motion begin with `SeMinKong` and the robotic hand as the only visible Hero content. The greeting and actions remain in the document flow but are visually staged until scrolling reveals them.
+- The name starts near the optical middle of the opening composition. As the greeting accumulates, the outer identity and hand wrappers move into the existing completed two-column or stacked layout without changing the internal hand rig, cube, finger, or depth transforms.
+- The completed state preserves the current greeting, actions, spacing, and responsive layout. Keyboard entry, reduced motion, and failed enhancement expose the complete state immediately.
+- Ambient light behind the hand must fade to full transparency before the local scene boundary so the decorative object never reads as a rectangular image tile.

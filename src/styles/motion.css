@@ -93,6 +93,7 @@ html[data-motion="reduced"] [data-hero-actions] {
 
 html[data-motion="reduced"] [data-dexterous-hand] {
   opacity: 1 !important;
+  transform: none !important;
   filter: none !important;
 }
 
@@ -147,6 +148,17 @@ html[data-motion="reduced"] .page-curtain {
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="full"]) {
     scroll-behavior: auto;
+  }
+
+  html:not([data-motion="full"]) [data-hero-copy],
+  html:not([data-motion="full"]) [data-hero-role],
+  html:not([data-motion="full"]) [data-hero-line],
+  html:not([data-motion="full"]) [data-hero-actions],
+  html:not([data-motion="full"]) [data-dexterous-hand] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    pointer-events: auto !important;
   }
 
   html:not([data-motion="full"]) [data-inertia] {

@@ -6,7 +6,7 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
-- Removed the Home Hero's delayed scroll-stage snap so visible greeting lines and actions now settle continuously in both scroll directions.
+- Rebuilt the Home Hero around a name-and-hand opening state that rearranges into the full greeting and actions on scroll, while removing the robotic hand's visible ambient-light box.
 
 - Reworked the browser-tab favicon into a high-contrast `SK` tile and versioned its URL across every route so browsers replace the cached legacy icon.
 
