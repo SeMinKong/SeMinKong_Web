@@ -509,3 +509,11 @@ This section supersedes, only during the final Hero stage, the earlier requireme
 - Use `4920–5820` for a cube-only flourish above the palm: four Y-axis turns plus an X-axis tumble that peaks at a half turn in full motion, and two Y-axis turns without tumble in lite/mobile. Lift the cube by at most `10px`, keep the hand visually steady, and return the flourish wrapper to its identity pose before release.
 - Hold the settled result from `5820–6000` before releasing into Projects. Keyboard settlement, reduced motion, and failed enhancement show the completed copy and a static cube without replaying the flourish.
 - Use Hero track heights of `175svh` desktop, `170svh` at `960px` and below, `165svh` at `900px` and below, and `160svh` at `720px` and below. Short mobile viewports at `760px` height and below retain at least `1020px` of track height so the hold and flourish do not collapse into a flick.
+
+## 2026-08-18 — Hero cube rotation-count correction
+
+This section supersedes the rotation counts, full-mode X tumble peak, and full-mode identity endpoint in `Hero reading hold and cube-finale override`; its reading hold, track height, ownership, and reduced-motion fallback remain unchanged.
+
+- Full motion uses `1.5` Y-axis turns; lite/mobile uses `1` Y-axis turn; reduced motion remains static.
+- Preserve the existing `25% → 87.5% → 100%` three-phase acceleration, whip, and landing rhythm. Reduce the full-mode X tumble peak from `180deg` to `90deg` so Y remains the primary gesture.
+- Full motion deliberately holds its half-turned `540deg` endpoint through the final hold; lite/mobile finishes at its identity orientation. Keyboard settlement skips the decorative flourish and uses the neutral pose, while reduced motion and enhancement failure remain neutral and static.

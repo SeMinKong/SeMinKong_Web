@@ -421,3 +421,12 @@ This section supersedes the `4400ms` timing in `Name-first Hero scroll rearrange
 - `5820–6000` is the final settled hold. Forward and reverse seeking remain continuous at every boundary.
 - Actions become pointer-interactive at `4100 / 6000`. Keyboard settlement seeks directly to the completed static state; reduced motion removes the sticky travel and applies no flourish transform.
 - Normal-mode track heights are `175svh`, `170svh` at `≤960px`, `165svh` at `≤900px`, and `160svh` at `≤720px`; `≤720px × ≤760px` layouts use a `1020px` minimum track height so the reading hold and lite flourish retain usable scroll distance.
+
+## 2026-08-18 — Cube-finale rotation-count correction
+
+This section supersedes the full/lite Y-axis turn counts, intermediate Y keyframes, full-mode X tumble peak, and keyboard endpoint behavior in `Hero reading hold and cube flourish`.
+
+- Full motion rotates Y by `135deg` at `5280`, `472.5deg` at `5640`, and `540deg` at `5820`; it holds the deliberate half-turned endpoint through `6000` without a release snap.
+- Lite/mobile rotates Y by `90deg` at `5280`, `315deg` at `5640`, and `360deg` at `5820`, finishing at its identity orientation.
+- Reduce the full-mode X tumble peak to `90deg`. Keep the `4920–5820` timing, easing, `10px` maximum lift, autonomous-loop pause, and reverse behavior unchanged.
+- Keyboard settlement completes the copy/actions but overrides the flourish wrapper to its identity pose, preventing a decorative half-turn jump at scroll position zero. Reduced motion and failed enhancement remain neutral and static.

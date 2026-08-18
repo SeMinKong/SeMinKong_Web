@@ -390,3 +390,9 @@
 - Decision: Home Hero를 `6000` 단위 scroll timeline으로 확장하고, CTA가 완성되는 `4100`부터 `4920`까지 읽기 구간을 둔 뒤 `4920–5820`에 cube finale를 실행하고 `5820–6000`을 정착 상태로 유지한다. Full은 Y축 네 바퀴와 중간에 `180deg`까지 갔다 돌아오는 X축 tumble, lite/mobile은 Y축 두 바퀴, reduced motion은 정지 상태를 사용한다.
 - Reason: 인사말과 행동을 읽을 여유를 보존하면서 Hero 끝에는 더 분명하고 기억에 남는 움직임을 주기 위해서다.
 - Impact: Hero timeline은 새 cube flourish wrapper만 추가로 소유한다. Finale와 final hold 동안 기존 manipulation과 pointer transient는 잠시 멈추고 역스크롤로 구간을 벗어나면 다시 시작한다. 반응형 track은 desktop부터 `175 / 170 / 165 / 160svh`를 사용하고, 짧은 mobile은 최소 `1020px`을 확보한다. Keyboard·reduced-motion·실패 fallback은 완성된 정적 상태로 바로 이동한다.
+
+## 2026-08-18 — Cube finale 회전 수 절제
+
+- Decision: Hero cube finale의 Y축 회전을 full `4 → 1.5`바퀴, lite/mobile `2 → 1`바퀴로 줄이고, full X축 tumble peak를 `180 → 90deg`로 낮춘다. 읽기 hold, 피날레 길이, lift와 easing은 유지한다.
+- Reason: 네 바퀴는 프로젝트 진입보다 큐브 자체에 시선을 과도하게 머물게 했고, 사용자가 선호한 원래의 약 한 바퀴 반보다 장식성이 강했다.
+- Impact: 같은 스크롤 거리에서 회전 속도가 낮아지고 피날레가 Hero의 마침표로 보인다. Full scroll은 `540deg`의 반대 면을 final hold에 유지하고 lite/mobile은 `360deg`로 원래 면에 정착한다. Keyboard settlement는 장식 회전을 건너뛰고 중립 면을 유지하며, reduced-motion과 기존 transform ownership은 바뀌지 않는다.

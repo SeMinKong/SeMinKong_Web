@@ -406,3 +406,11 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] At 1280px, 768px, and 390px, the Hero uses the applicable `175 / 165 / 160svh` track, releases Projects normally, and has no clipping, overlap, or horizontal overflow.
 - [x] Tab settlement and `?motion=reduced` expose the complete Hero with active actions, no flourish playback, and no residual flourish transform.
 - [x] Browser warning/error logs are empty; `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
+
+## 2026-08-18 Cube-finale rotation-count correction verification
+
+- [x] Full motion reaches Y `135deg / 472.5deg / 540deg` at the three flourish boundaries and lite/mobile reaches `90deg / 315deg / 360deg`.
+- [x] The smaller turn count preserves continuous forward/reverse seeking, the completed-copy reading hold, and the autonomous-loop pause; full holds its half-turned endpoint while lite/mobile lands at identity.
+- [x] At 1280px, 768px, and 390px, the cube remains inside the hand composition with zero horizontal overflow; reduced motion remains static.
+- [x] Tab settlement exposes complete copy/actions while keeping the flourish at identity, without a visible half-turn jump.
+- [x] Browser warning/error logs are empty; `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.

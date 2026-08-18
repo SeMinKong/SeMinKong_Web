@@ -9,6 +9,7 @@ const FLOURISH_WHIP_END = 5640;
 const FLOURISH_END = 5820;
 const ACTIONS_READY_PROGRESS = ACTIONS_END / HERO_TIMELINE_DURATION;
 const FLOURISH_START_PROGRESS = FLOURISH_START / HERO_TIMELINE_DURATION;
+const FLOURISH_IDENTITY = 'translateY(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
 
 export const initHeroStory = (environment) => {
   const track = document.querySelector('[data-hero-story]');
@@ -140,8 +141,8 @@ export const initHeroStory = (environment) => {
     }
 
     if (cubeFlourish) {
-      const turnDegrees = environment.motion === 'full' ? 1440 : 720;
-      const tumbleDegrees = environment.motion === 'full' ? 180 : 0;
+      const turnDegrees = environment.motion === 'full' ? 540 : 360;
+      const tumbleDegrees = environment.motion === 'full' ? 90 : 0;
 
       timeline
         .add(cubeFlourish, {
@@ -186,6 +187,7 @@ export const initHeroStory = (environment) => {
     if (!timeline) return;
     const normalized = clamp(value, 0, 1);
     timeline.seek(timeline.duration * normalized, true);
+    if (keyboardSettled && cubeFlourish) cubeFlourish.style.transform = FLOURISH_IDENTITY;
     setActionsReady(keyboardSettled || normalized >= ACTIONS_READY_PROGRESS);
     setFlourishActive(normalized >= FLOURISH_START_PROGRESS);
   };
