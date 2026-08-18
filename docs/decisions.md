@@ -396,3 +396,9 @@
 - Decision: Hero cube finale의 Y축 회전을 full `4 → 1.5`바퀴, lite/mobile `2 → 1`바퀴로 줄이고, full X축 tumble peak를 `180 → 90deg`로 낮춘다. 읽기 hold, 피날레 길이, lift와 easing은 유지한다.
 - Reason: 네 바퀴는 프로젝트 진입보다 큐브 자체에 시선을 과도하게 머물게 했고, 사용자가 선호한 원래의 약 한 바퀴 반보다 장식성이 강했다.
 - Impact: 같은 스크롤 거리에서 회전 속도가 낮아지고 피날레가 Hero의 마침표로 보인다. Full scroll은 `540deg`의 반대 면을 final hold에 유지하고 lite/mobile은 `360deg`로 원래 면에 정착한다. Keyboard settlement는 장식 회전을 건너뛰고 중립 면을 유지하며, reduced-motion과 기존 transform ownership은 바뀌지 않는다.
+
+## 2026-08-18 — Cube finale 속도 곡선 완화
+
+- Decision: full `1.5`회전과 lite/mobile `1`회전은 유지하되, Y축의 빠른 3단 회전을 `5000–6600`의 단일 `inOut(2)` tween으로 바꾼다. 전체 timeline은 `6800`, reading hold는 `4100–5000`, final hold는 `6600–6800`으로 확장한다.
+- Reason: 중간 경계에서 속도가 급변하는 느낌을 줄이고 같은 회전 수를 더 자연스럽게 보여 주기 위해서다.
+- Impact: X/Z/lift만 `5000–5500–6200–6600`의 보조 구간을 유지한다. 회전 수, X축 `90deg` peak, lift 제한, 손의 안정성, keyboard/reduced-motion fallback과 반응형 track 높이는 바뀌지 않는다.

@@ -414,3 +414,12 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] At 1280px, 768px, and 390px, the cube remains inside the hand composition with zero horizontal overflow; reduced motion remains static.
 - [x] Tab settlement exposes complete copy/actions while keeping the flourish at identity, without a visible half-turn jump.
 - [x] Browser warning/error logs are empty; `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
+
+## 2026-08-18 Continuous cube-finale pacing verification
+
+- [x] Copy and actions remain visually identical and interactive throughout the `4100–5000` reading hold.
+- [x] Full Y rotation follows one continuous `inOut(2)` tween from `0deg` to `540deg` over `5000–6600`; lite/mobile follows the same curve to `360deg`.
+- [x] Crossing `5500` and `6200` introduces no Y-axis position or velocity kink; those boundaries affect only X/Z/lift.
+- [x] X/Z/lift respect their existing limits, return to zero at `6600`, and the applicable Y endpoint remains unchanged through `6800`.
+- [x] Forward/reverse seeking, manipulation pause/resume, keyboard-neutral settlement, and reduced-motion fallback remain continuous and static where required.
+- [x] At 1280px, 768px, and 390px there is no clipping, overlap, horizontal overflow, or browser error; build, deployment verification, and `git diff --check` succeed.

@@ -517,3 +517,12 @@ This section supersedes the rotation counts, full-mode X tumble peak, and full-m
 - Full motion uses `1.5` Y-axis turns; lite/mobile uses `1` Y-axis turn; reduced motion remains static.
 - Preserve the existing `25% → 87.5% → 100%` three-phase acceleration, whip, and landing rhythm. Reduce the full-mode X tumble peak from `180deg` to `90deg` so Y remains the primary gesture.
 - Full motion deliberately holds its half-turned `540deg` endpoint through the final hold; lite/mobile finishes at its identity orientation. Keyboard settlement skips the decorative flourish and uses the neutral pose, while reduced motion and enhancement failure remain neutral and static.
+
+## 2026-08-18 — Hero finale pacing override
+
+This section supersedes the `6000`-unit timing and three-phase Y-axis rhythm in the preceding Hero finale overrides. Rotation counts and all visual/accessibility limits remain unchanged.
+
+- Use a `6800`-unit scroll timeline: completed copy holds from `4100–5000`, the cube flourish runs from `5000–6600`, and the settled result holds from `6600–6800`.
+- Animate Y as one continuous `inOut(2)` rotation: `1.5` turns in full motion and one turn in lite/mobile.
+- Keep X/Z/lift subordinate to Y, using auxiliary phases at `5000–5500`, `5500–6200`, and `6200–6600`. Preserve the `90deg` full-mode X peak, `10px` lift limit, stationary hand, and zeroed auxiliary transforms at landing.
+- Existing track heights, keyboard-neutral settlement, reduced motion, failed-enhancement fallback, and lifecycle safeguards remain unchanged.

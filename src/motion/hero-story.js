@@ -1,12 +1,12 @@
 import { createTimeline } from 'animejs';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-const HERO_TIMELINE_DURATION = 6000;
+const HERO_TIMELINE_DURATION = 6800;
 const ACTIONS_END = 4100;
-const FLOURISH_START = 4920;
-const FLOURISH_ACCEL_END = 5280;
-const FLOURISH_WHIP_END = 5640;
-const FLOURISH_END = 5820;
+const FLOURISH_START = 5000;
+const FLOURISH_ENTRY_END = 5500;
+const FLOURISH_POSE_END = 6200;
+const FLOURISH_END = 6600;
 const ACTIONS_READY_PROGRESS = ACTIONS_END / HERO_TIMELINE_DURATION;
 const FLOURISH_START_PROGRESS = FLOURISH_START / HERO_TIMELINE_DURATION;
 const FLOURISH_IDENTITY = 'translateY(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
@@ -146,29 +146,31 @@ export const initHeroStory = (environment) => {
 
       timeline
         .add(cubeFlourish, {
-          y: [0, -6],
-          rotateX: ['0deg', `${tumbleDegrees * 0.2}deg`],
-          rotateY: ['0deg', `${turnDegrees * 0.25}deg`],
-          rotateZ: ['0deg', '-8deg'],
-          duration: FLOURISH_ACCEL_END - FLOURISH_START,
-          ease: 'in(3)'
+          rotateY: ['0deg', `${turnDegrees}deg`],
+          duration: FLOURISH_END - FLOURISH_START,
+          ease: 'inOut(2)'
         }, FLOURISH_START)
         .add(cubeFlourish, {
-          y: [-6, -10],
+          y: [0, -4],
+          rotateX: ['0deg', `${tumbleDegrees * 0.2}deg`],
+          rotateZ: ['0deg', '-6deg'],
+          duration: FLOURISH_ENTRY_END - FLOURISH_START,
+          ease: 'inOut(2)'
+        }, FLOURISH_START)
+        .add(cubeFlourish, {
+          y: [-4, -10],
           rotateX: [`${tumbleDegrees * 0.2}deg`, `${tumbleDegrees}deg`],
-          rotateY: [`${turnDegrees * 0.25}deg`, `${turnDegrees * 0.875}deg`],
-          rotateZ: ['-8deg', '14deg'],
-          duration: FLOURISH_WHIP_END - FLOURISH_ACCEL_END,
-          ease: 'linear'
-        }, FLOURISH_ACCEL_END)
+          rotateZ: ['-6deg', '10deg'],
+          duration: FLOURISH_POSE_END - FLOURISH_ENTRY_END,
+          ease: 'inOut(2)'
+        }, FLOURISH_ENTRY_END)
         .add(cubeFlourish, {
           y: [-10, 0],
           rotateX: [`${tumbleDegrees}deg`, '0deg'],
-          rotateY: [`${turnDegrees * 0.875}deg`, `${turnDegrees}deg`],
-          rotateZ: ['14deg', '0deg'],
-          duration: FLOURISH_END - FLOURISH_WHIP_END,
-          ease: 'out(4)'
-        }, FLOURISH_WHIP_END);
+          rotateZ: ['10deg', '0deg'],
+          duration: FLOURISH_END - FLOURISH_POSE_END,
+          ease: 'inOut(2)'
+        }, FLOURISH_POSE_END);
     }
 
     timeline.add(progress, {

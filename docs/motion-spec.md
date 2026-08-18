@@ -430,3 +430,14 @@ This section supersedes the full/lite Y-axis turn counts, intermediate Y keyfram
 - Lite/mobile rotates Y by `90deg` at `5280`, `315deg` at `5640`, and `360deg` at `5820`, finishing at its identity orientation.
 - Reduce the full-mode X tumble peak to `90deg`. Keep the `4920–5820` timing, easing, `10px` maximum lift, autonomous-loop pause, and reverse behavior unchanged.
 - Keyboard settlement completes the copy/actions but overrides the flourish wrapper to its identity pose, preventing a decorative half-turn jump at scroll position zero. Reduced motion and failed enhancement remain neutral and static.
+
+## 2026-08-18 — Continuous cube-finale pacing override
+
+This section supersedes the `6000`-unit duration, `4920–5820` flourish timing, and intermediate Y keyframes/easing in `Hero reading hold and cube flourish` and `Cube-finale rotation-count correction`.
+
+- The timeline duration is `6800`. Copy timing remains unchanged through action completion at `4100`; `4100–5000` is the completed-copy reading hold.
+- Y uses one tween from `5000–6600` with `inOut(2)`: full moves from `0deg` to `540deg`, while lite/mobile moves from `0deg` to `360deg`. Do not add Y keyframes at the auxiliary phase boundaries.
+- X/Z/lift retain their existing limits and use three auxiliary segments: `5000–5500`, `5500–6200`, and `6200–6600`. They return to zero at `6600`.
+- `6600–6800` is the final hold. Full retains its `540deg` Y endpoint and lite/mobile retains `360deg`, without normalization or release snapping.
+- Pause autonomous manipulation and clear pointer transients at `5000`; reverse scrolling below `5000` resumes the existing loop. Actions become interactive at `4100 / 6800`.
+- Keyboard settlement continues to bypass the flourish and keep the neutral cube pose. Reduced motion and failed enhancement remain static; responsive track geometry remains unchanged.

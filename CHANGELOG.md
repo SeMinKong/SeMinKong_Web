@@ -6,7 +6,7 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
-- Extended the name-first Home Hero with a settled reading hold and a restrained scroll-synchronized cube finale that makes one-and-a-half turns in full motion, one turn in lite/mobile, and remains static for reduced motion.
+- Extended the name-first Home Hero with a longer reading hold and a restrained scroll-synchronized cube finale, using one continuous eased Y rotation of one-and-a-half turns in full motion and one turn in lite/mobile while remaining static for reduced motion.
 
 - Rebuilt the Home Hero around a name-and-hand opening state that rearranges into the full greeting and actions on scroll, while removing the robotic hand's visible ambient-light box.
 
