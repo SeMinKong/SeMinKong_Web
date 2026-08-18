@@ -349,7 +349,7 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 - Hero statement는 두 개의 data-hero-line으로 구성하고 기존 scroll-seek Anime.js timeline을 그대로 사용한다. 두 줄 사이에는 초기 line translate가 겹치지 않을 만큼의 layout gap을 확보한다.
 - 버튼과 case-next hover는 control 전체를 들어 올리지 않고 화살표만 X축 3px 이내로 이동한다.
 - project evidence rail은 media wrapper의 pseudo-element이며 data-depth-card transform을 소유하지 않는다. 실제 media child의 기존 depth/inertia만 유지하고 THING portrait video에는 depth layer를 추가하지 않는다.
-- mobile reduced mode에서는 absolute Hero hand를 document flow로 되돌려 다음 section과 겹치지 않게 한다. hand animation, pointer response, video autoplay는 계속 정지한다.
+- mobile reduced mode에서는 absolute Hero hand를 document flow로 되돌려 다음 section과 겹치지 않게 하고, 내부 rig를 정중앙에 고정해 3D 외곽이 viewport를 넘지 않게 한다. hand animation, pointer response, video autoplay는 계속 정지한다.
 - scrolled navigation은 24px 이후 12px blur와 hairline으로 전환하되 viewport 밖으로 숨지 않는다.
 
 ## 2026-08-11 — THING manual demonstration lifecycle

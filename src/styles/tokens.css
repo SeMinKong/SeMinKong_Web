@@ -32,6 +32,7 @@
   --font-body: "Noto Sans KR Variable", "Manrope Variable", sans-serif;
   --font-mono: "JetBrains Mono Variable", Consolas, monospace;
   --weight-body: 450;
+  --weight-support: 500;
   --weight-meta: 580;
   --weight-ui: 630;
   --weight-heading: 650;

@@ -3688,20 +3688,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .work-showcase::before {
-  content: "SELECTED / 2026";
-  position: absolute;
-  top: 42px;
-  right: max(40px, calc((100vw - var(--page-max)) / 2));
-  width: auto;
-  aspect-ratio: auto;
-  border: 0;
-  color: var(--paper-muted);
-  font-family: var(--font-mono);
-  font-size: var(--type-meta);
-  font-weight: var(--weight-meta);
-  letter-spacing: 0.14em;
-  pointer-events: none;
-  box-shadow: none;
+  content: none;
 }
 
 .section-heading h2 {

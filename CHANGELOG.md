@@ -6,6 +6,9 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Strengthened the site-wide typographic hierarchy with bolder display, heading, action, body, and metadata weights while preserving responsive title fit and Korean readability.
+- Synchronized the browser Resume and downloadable DOCX, PDF, and preview image, placing THING first with verified team-level robotics and edge-AI details, correcting the English PDF language metadata, and routing THING to the public GitHub Pages case study.
+- Removed the remaining CSS-generated `SELECTED / 2026` subtitle from Home and centered the static mobile Hero hand so reduced-motion mode cannot create horizontal overflow.
 - Simplified the Home Hero actions to a project archive link and an About link while keeping THING featured immediately below.
 - Increased Home Hero action typography and replaced the simultaneous intro with a reversible scroll sequence that centers the initial name/hand pair, lifts both outer wrappers slightly, and reveals the role, two statement lines, and actions in order.
 - Reframed the portfolio as a contemporary digital gallery with charcoal, bone paper, graphite, and restrained vermilion wayfinding accents.

@@ -452,3 +452,13 @@ This section supersedes the curatorial naming in the contemporary gallery overri
 - Keep recruiter-relevant facts visible: project name, team or personal scope, domain, year, technology, metric, result, and action.
 - Compact summaries may use dot-separated factual keywords. Explanatory prose remains in body copy, captions, accessible names, and alt text where complete sentences improve comprehension.
 - Empty decorative media-label rails must collapse so removed copy does not leave a blank strip.
+
+## 2026-08-18 — Typographic hierarchy and Resume synchronization
+
+This section supersedes the lighter display-weight guidance in the contemporary gallery override. The font families, noun-led copy, colour system, spacing, and interaction model remain unchanged.
+
+- Keep Manrope for display and interface text, Noto Sans KR for Korean body copy, and JetBrains Mono for compact factual metadata.
+- Use an assertive but readable hierarchy: display text around weight 680, section and item headings around 650, interface actions around 630, metadata around 580, and body copy around 450.
+- Relax the previous extremely tight display tracking and compressed line heights so heavier titles remain legible without clipping. Korean headings use restrained negative tracking and keep words intact.
+- Preserve a minimum 12px rendered size for meaningful metadata. Mobile navigation keeps its compact size and gains weight instead of width-consuming scale.
+- The browser Resume and its downloadable DOCX, PDF, and preview PNG form one synchronized artifact set. THING appears first as a team project, and every description stays within publicly verifiable team-level scope.

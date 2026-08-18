@@ -337,3 +337,15 @@
 - Decision: Keep one semantic detail link per Home card and Work row, and let pointer events pass through decorative preview media to that existing stretched link.
 - Reason: A separate anchor around each image or silent preview video would duplicate navigation for assistive technology and add a second keyboard stop. The Work copy wrapper also must remain transform-free after reveal so its absolute link overlay uses the positioned row, rather than the smaller copy column, as its containing block.
 - Impact: All nine project previews respond to pointer clicks, right-click, and touch through the same route as their project title. Deck spreading, depth tracking, autoplay previews, focus outlines, and the one-tab-stop-per-project model remain unchanged.
+
+## 2026-08-18 — Stronger type hierarchy and unified Resume artifacts
+
+- Decision: Raise the shared display, heading, interface, metadata, and body weights while keeping the existing Manrope, Noto Sans KR, and JetBrains Mono roles. Synchronize THING across the browser Resume, DOCX source, one-page PDF, and preview image.
+- Reason: The previous 420–520 weight range made major headings and small factual labels feel visually weak across the gallery system. The downloadable Resume also lagged behind the site and omitted the current flagship robotics project.
+- Impact: Large headings use heavier but less compressed tracking and line height, Korean titles retain readable spacing, and responsive long titles receive safer clamps. THING now leads the downloadable Resume using team-scoped, verifiable system facts; DOCX, PDF, and preview are generated from the same content and remain a single A4 page.
+
+## 2026-08-18 — Detail cleanup and reduced-motion fit
+
+- Decision: Remove the last CSS-generated Home subtitle and center the internal robotic-hand rig only when mobile reduced-motion mode returns the hand to document flow.
+- Reason: `SELECTED / 2026` contradicted the direct noun-led copy rule, while the normal mobile hand offset produced a 35px document overflow after reduced motion changed its containing layout.
+- Impact: The visible Home hierarchy begins directly with `Projects`. Full and lite motion retain their existing hand position; the reduced static hand fits within 390px with no horizontal scroll.

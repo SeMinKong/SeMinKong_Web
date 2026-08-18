@@ -138,6 +138,10 @@ html[data-motion="reduced"] .page-curtain {
     inset: auto;
     margin: 20px auto 0;
   }
+
+  html[data-motion="reduced"] .home-page .robot-hand-rig {
+    left: 50%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

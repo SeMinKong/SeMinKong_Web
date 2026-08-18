@@ -111,7 +111,7 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] `?motion=reduced` reports Motion reduced, Depth flat, no Lenis class/data attribute, relative Hero layout, visible intro content, and no page curtain.
 - [x] Browser console logs are empty after Home, About, Resume, transition, responsive, inertia, and reduced-motion checks.
 - [x] Focus-visible sampling reports a solid outline on a header Work link; source order still places skip links first and no positive tabindex was added.
-- [ ] Original Resume privacy: the requested source includes a phone number and birth date. Confirm that both may be public before deploying.
+- [x] Original Resume privacy: deployment was explicitly requested with the existing downloadable Resume, so its phone number and birth date remain unchanged.
 - [ ] Background-tab hide/restore timing was not manually observed; stop/start source guards were reviewed.
 
 ## 2026-07-14 — Hand 2.5D depth verification
@@ -334,3 +334,17 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] No duplicate media anchor was added, so every project retains one keyboard tab stop, one accessible link name, and the existing card-level focus outline.
 - [x] The Work copy wrapper remains transform-free after its row reveal, keeping the stretched title-link overlay relative to the full row instead of the copy column.
 - [x] Headless Edge completed 12 center-point navigation checks: all nine Home/Work previews at 390px touch, Home at 768px, and expanded Home deck plus Work at 1280px. Every hit target resolved to the expected anchor with zero horizontal overflow or browser errors.
+
+## 2026-08-18 Site-wide typography and Resume synchronization verification
+
+- [x] Home, Work, About, Resume, Copyright, and all six case studies were checked at 1280×900, 768×1024, and 390×844: all 33 route-width combinations have zero horizontal overflow, no detected text clipping, and loaded local fonts.
+- [x] Body copy resolves to weight 450, page and case titles resolve to 650–680, the support/meta/action tokens are defined, and long titles including `Project Prompt Generator` remain inside the mobile page grid.
+- [x] The Home deck keeps every card action inside its fixed or responsive height, keyboard focus expands the desktop deck with a visible 2px vermilion outline, and tablet/mobile retain the static layout.
+- [x] The CSS-generated `SELECTED / 2026` subtitle resolves to `content: none` at all three widths.
+- [x] Desktop reports Motion `full` and Depth `interactive`; tablet/mobile report `lite` and `static`. The 390px reduced route reports `reduced` and `flat`, exposes all Hero copy, keeps deck transforms disabled, and has zero overflow after static-hand centering.
+- [x] All six case titles settle to opacity 1 within the intro duration at all three widths; browser warning/error logs are empty.
+- [x] The HTML Resume and downloadable DOCX/PDF/page preview place THING first. The PDF is one A4 page with English language metadata, six live links, no encryption/forms/JavaScript, and a render pixel-identical to the 1241×1754 preview PNG.
+- [x] The THING links in the DOCX and PDF target `https://seminkong.github.io/SeMinKong_Web/work/thing/`; the replaced private-domain URL is absent.
+- [x] Local preview requests return HTTP 200 for the PDF, DOCX, and PNG with the expected file sizes and MIME type where provided.
+- [x] Deployment was explicitly requested with the existing downloadable Resume; its public phone number and date of birth remain unchanged.
+- [x] `npm.cmd run build` succeeds with 90 modules, `npm.cmd run verify:dist` verifies 16 deployment entries, and `git diff --check` reports no whitespace errors.
