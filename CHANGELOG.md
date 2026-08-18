@@ -6,6 +6,8 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Removed the Home Hero's delayed scroll-stage snap so visible greeting lines and actions now settle continuously in both scroll directions.
+
 - Reworked the browser-tab favicon into a high-contrast `SK` tile and versioned its URL across every route so browsers replace the cached legacy icon.
 
 - Simplified the Copyright page by removing decorative section numbers, balancing the introductory copy, and eliminating duplicated list markers.

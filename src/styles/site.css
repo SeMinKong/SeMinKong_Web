@@ -126,6 +126,21 @@
   will-change: transform;
 }
 
+/* Keep delayed scroll-seek stages on their Anime.js start pose before each
+   segment begins. Without this hold, a visible line snaps down at its delay
+   boundary and then animates back up. */
+[data-hero-story][data-hero-enhanced] [data-hero-role] {
+  transform: translateY(6px);
+}
+
+[data-hero-story][data-hero-enhanced] [data-hero-line] {
+  transform: translateY(14px);
+}
+
+[data-hero-story][data-hero-enhanced] [data-hero-actions] {
+  transform: translateY(8px);
+}
+
 .dexterous-hand {
   --hand-size: clamp(430px, 40vw, 540px);
   --rig-scale: 1;

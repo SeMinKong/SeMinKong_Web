@@ -486,3 +486,8 @@ This section supersedes the lighter display-weight guidance in the contemporary 
 
 - The browser-tab icon uses a borderless, high-contrast `SK` tile optimized for 16px rather than reproducing the more detailed navigation mark.
 - Every route references one versioned SVG favicon URL so a released icon change is not hidden by a cached legacy asset.
+
+## 2026-08-18 — Hero scroll continuity override
+
+- Visible Hero copy must not acquire a new offset only when a delayed scroll segment begins.
+- Preserve the staged settling rhythm, but hold every delayed element at its start pose during pre-roll so forward and reverse scrolling remain continuous.

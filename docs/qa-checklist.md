@@ -378,3 +378,11 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] All 11 HTML routes reference `/favicon.svg?v=20260818-2` with SVG type and `sizes="any"`.
 - [x] The favicon source uses a high-contrast bone `S` and vermilion `K` on graphite with no legacy outline-square or lime marker.
 - [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
+
+## 2026-08-18 Hero scroll continuity verification
+
+- [x] At the first statement, second statement, and CTA timeline boundaries, computed Y positions change continuously with no downward snap.
+- [x] Forward and reverse scrolling preserve stable spacing between the name, greeting lines, and actions at 390px, 768px, and 1280px.
+- [x] Keyboard settlement and reduced-motion expose every Hero action without residual transforms.
+- [x] The Hero and following Projects section have zero horizontal overflow; browser warning/error logs are empty.
+- [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.

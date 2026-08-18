@@ -391,3 +391,9 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 - The outer `.work-row` owns the row-level reveal translation and opacity. Index and arrow children may keep their short stagger.
 - `.work-row__copy` remains transform-free so the title link's absolute stretched overlay resolves against the positioned row and covers the preview media as well as the copy.
 - Preview images and silent videos remain non-interactive evidence surfaces; pointer and touch navigation uses the same single semantic title link. Depth tracking continues to read the media bounds from the row-level pointer target.
+
+## 2026-08-18 — Hero delayed-stage continuity
+
+- The visible role, statement lines, and action group hold their Anime.js starting Y positions during each delayed segment's pre-roll.
+- Crossing a segment boundary must not introduce a fresh translate value or make a visible line or button jump downward before settling upward.
+- The existing scroll timing, parent copy/hand lift, progress line, keyboard settlement, reduced-motion fallback, and native scroll behavior remain unchanged.
