@@ -51,6 +51,14 @@
   word-break: keep-all;
 }
 
+.legal-hero__lede span {
+  display: block;
+}
+
+.legal-hero__lede span + span {
+  margin-top: 0.38em;
+}
+
 .legal-hero__summary strong {
   color: var(--text);
   font-weight: 680;
@@ -68,8 +76,7 @@
   padding: 18px 0 0;
 }
 
-.legal-hero__summary dt,
-.legal-section > div:first-child > span {
+.legal-hero__summary dt {
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: var(--type-meta);
@@ -134,6 +141,9 @@
 .legal-section ul {
   display: grid;
   gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .legal-section li {
@@ -224,6 +234,14 @@
 
   .legal-hero h1 {
     font-size: clamp(2.75rem, 14vw, 4.2rem);
+  }
+
+  .legal-hero__lede span {
+    display: inline;
+  }
+
+  .legal-hero__lede span + span {
+    margin-top: 0;
   }
 
   .legal-hero__summary dl {

@@ -6,6 +6,12 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Simplified the Copyright page by removing decorative section numbers, balancing the introductory copy, and eliminating duplicated list markers.
+
+- Reframed the Resume profile around broad software, vision, robotics, backend, and hardware-integration experience; corrected THING to Jul–Aug 2026 across the site and synchronized downloadable Resume artifacts.
+- Replaced the legacy signal-square brand mark with a shared `SK` monogram in the site header and favicon, and removed the old AI-and-robotics role wording from general page identity.
+- Increased the Home section-title line box so descenders such as the `j` in `Projects` remain fully visible after the reveal animation.
+- Replaced the Home Hero's role-and-location label and abstract capability slogan with a concise Korean greeting about enjoying learning and making new things.
 - Strengthened the site-wide typographic hierarchy with bolder display, heading, action, body, and metadata weights while preserving responsive title fit and Korean readability.
 - Synchronized the browser Resume and downloadable DOCX, PDF, and preview image, placing THING first with verified team-level robotics and edge-AI details, correcting the English PDF language metadata, and routing THING to the public GitHub Pages case study.
 - Removed the remaining CSS-generated `SELECTED / 2026` subtitle from Home and centered the static mobile Hero hand so reduced-motion mode cannot create horizontal overflow.

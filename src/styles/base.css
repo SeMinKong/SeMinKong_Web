@@ -189,20 +189,31 @@ ol {
 
 .wordmark__signal {
   position: relative;
-  width: 12px;
-  height: 12px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
   border: 1px solid var(--line-strong);
+  color: var(--signal);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 750;
+  letter-spacing: -0.08em;
+}
+
+.wordmark__signal::before {
+  content: "SK";
+  transform: translateX(-0.04em);
 }
 
 .wordmark__signal::after {
   content: "";
   position: absolute;
-  right: -2px;
-  bottom: -2px;
-  width: 5px;
-  height: 5px;
+  right: 3px;
+  bottom: 3px;
+  width: 7px;
+  height: 1px;
   background: var(--signal);
-  box-shadow: 0 0 0 2px var(--bg);
 }
 
 .site-nav__links {
@@ -459,8 +470,9 @@ ol {
   }
 
   .wordmark__signal {
-    width: 10px;
-    height: 10px;
+    width: 22px;
+    height: 22px;
+    font-size: 0.5rem;
   }
 
   .site-nav__links {

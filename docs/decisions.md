@@ -349,3 +349,21 @@
 - Decision: Remove the last CSS-generated Home subtitle and center the internal robotic-hand rig only when mobile reduced-motion mode returns the hand to document flow.
 - Reason: `SELECTED / 2026` contradicted the direct noun-led copy rule, while the normal mobile hand offset produced a 35px document overflow after reduced motion changed its containing layout.
 - Impact: The visible Home hierarchy begins directly with `Projects`. Full and lite motion retain their existing hand position; the reduced static hand fits within 390px with no horizontal scroll.
+
+## 2026-08-18 — Home Hero 인사말 전환
+
+- Decision: Home Hero에서 직무·지역 라벨을 제거하고 `Vision · Robotics / Systems`를 `안녕하세요! 새로운 것을 배우고 직접 만드는 일이 즐겁습니다.`로 교체한다.
+- Reason: 첫 화면을 기술 키워드 나열보다 지원자의 태도와 성향이 바로 느껴지는 자연스러운 자기소개로 시작하기 위해서다.
+- Impact: 기존 두 줄 reveal과 Hero motion은 유지한다. 직무 적합성은 프로젝트, About, Resume에서 계속 증명하며 새 한글 문구는 390px·768px·1280px에서 잘림 없이 보여야 한다.
+
+## 2026-08-18 — 개인 중심 Profile과 SK 모노그램
+
+- Decision: Resume Profile은 특정 프로젝트 요약이 아니라 전공, 기술 범위, 학습 태도, 구현 방식을 설명한다. THING의 상세 시스템 설명은 Projects와 case study에만 두고 개발 기간은 `Jul 2026 - Aug 2026`으로 통일한다.
+- Reason: 일반 자기소개가 THING의 기능 목록으로 시작하면 지원자의 전체 역량과 확장성이 한 프로젝트에 가려진다. 기존 작은 사각 신호 마크와 `AI & Robotics Software Developer` 문구도 새 Home 인사말과 넓어진 정체성을 충분히 반영하지 못했다.
+- Impact: Home, About, Resume, Work, THING case, DOCX, PDF, preview PNG가 같은 기간과 개인 중심 소개를 사용한다. 헤더와 favicon은 동일한 `SK` 모노그램을 사용하고, 프로젝트 증거와 기술 스택은 그대로 유지한다.
+
+## 2026-08-18 — 저작권 페이지의 단순한 읽기 흐름
+
+- Decision: Copyright 섹션의 `01–04` 장식 번호를 제거하고, 도입 문장은 의미 단위로 두 줄 배치하며, 목록에는 하나의 원형 표식만 사용한다.
+- Reason: 장식 번호가 정보 탐색에 기여하지 않았고 브라우저 기본 목록 점과 CSS 표식이 겹쳐 Markdown이 깨진 것처럼 보였다.
+- Impact: 섹션 제목과 의미 구조는 유지한다. 작은 화면에서는 도입 문장이 고정 줄바꿈에 얽매이지 않고 자연스럽게 감긴다.

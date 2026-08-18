@@ -462,3 +462,23 @@ This section supersedes the lighter display-weight guidance in the contemporary 
 - Relax the previous extremely tight display tracking and compressed line heights so heavier titles remain legible without clipping. Korean headings use restrained negative tracking and keep words intact.
 - Preserve a minimum 12px rendered size for meaningful metadata. Mobile navigation keeps its compact size and gains weight instead of width-consuming scale.
 - The browser Resume and its downloadable DOCX, PDF, and preview PNG form one synchronized artifact set. THING appears first as a team project, and every description stays within publicly verifiable team-level scope.
+
+## 2026-08-18 — Home greeting override
+
+- Remove the visible `AI & Robotics Software Developer · Seoul` line from the Home Hero. Job positioning remains available through project evidence, metadata, About, and Resume instead of occupying the opening composition.
+- Replace the abstract `Vision · Robotics / Systems` statement with the direct Korean greeting `안녕하세요! 새로운 것을 배우고 직접 만드는 일이 즐겁습니다.`
+- Keep the existing two-stage statement markup and scroll choreography. The greeting must remain readable without clipping or hand overlap at 390px, 768px, and 1280px.
+
+## 2026-08-18 — Candidate profile and brand-mark override
+
+- General profile copy leads with Software Engineering, the breadth from Computer Vision and ROS 2 to backend and hardware integration, and enjoyment of learning, making, and validation. It must not read as a THING feature summary.
+- Keep THING as the first project and strongest robotics evidence, but confine its 21-point perception, guarded command, seven-axis actuation, monitoring, and experiment-record details to project contexts.
+- Display the verified THING period as `Jul–Aug 2026` in compact web metadata and `Jul 2026 - Aug 2026` in Resume documents.
+- Use one restrained `SK` monogram for the navigation mark and favicon. The adjacent `SeMinKong` wordmark remains visible, so the monogram is identity reinforcement rather than an icon-only navigation control.
+- General identity uses `Software Developer` rather than the narrower `AI & Robotics Software Developer`; domain specialization remains visible through About facts, tools, and project evidence.
+
+## 2026-08-18 — Copyright readability override
+
+- Remove decorative `01–04` labels from Copyright sections while preserving semantic headings and content order.
+- Break the introductory statement by meaning on wide layouts and allow natural wrapping on small screens.
+- Use exactly one custom list marker; browser-default markers must be reset so the page never resembles broken Markdown.

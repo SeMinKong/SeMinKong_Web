@@ -348,3 +348,28 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] Local preview requests return HTTP 200 for the PDF, DOCX, and PNG with the expected file sizes and MIME type where provided.
 - [x] Deployment was explicitly requested with the existing downloadable Resume; its public phone number and date of birth remain unchanged.
 - [x] `npm.cmd run build` succeeds with 90 modules, `npm.cmd run verify:dist` verifies 16 deployment entries, and `git diff --check` reports no whitespace errors.
+
+## 2026-08-18 Home greeting verification
+
+- [x] The Home Hero contains no visible role/location element and presents `안녕하세요!` followed by `새로운 것을 배우고 직접 만드는 일이 즐겁습니다.`
+- [x] At 390×844, 768×1024, and 1280×900, both greeting lines remain fully visible with no positive horizontal overflow and no overlap with the robotic hand or Hero actions.
+- [x] Keyboard focus retains its visible 2px outline, browser warning/error logs are empty, and 390px reduced-motion mode keeps both greeting lines visible with the hand separated from the statement.
+- [x] The `Projects` heading uses a 1.04 line-height at 390px, 768px, and 1280px so the `j` descender remains fully visible after reveal; all three widths retain zero horizontal overflow and empty warning/error logs.
+- [x] `npm.cmd run build` succeeds with 90 modules, `npm.cmd run verify:dist` verifies 16 deployment entries, and `git diff --check` reports no whitespace errors.
+
+## 2026-08-18 Profile, THING period, and brand-mark verification
+
+- [x] Home, About, and browser Resume use broad candidate identity copy; general Profile and role areas no longer describe THING or use `AI & Robotics Software Developer`.
+- [x] THING shows the verified Jul–Aug 2026 period on Home, Work, its case page, browser Resume, DOCX, PDF, and preview PNG.
+- [x] The header mark and favicon use the same `SK` monogram, remain legible on dark and paper routes, and do not compress navigation at 390px.
+- [x] The regenerated DOCX and one-page PDF contain the broad profile and correct period; the PDF keeps six live links, English language metadata, and matches the 1241×1754 preview PNG without clipping.
+- [x] At 390px, 768px, and 1280px, Home, About, Resume, Work, and THING have zero horizontal overflow, visible keyboard focus, and empty browser warning/error logs.
+- [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
+
+## 2026-08-18 Copyright readability verification
+
+- [x] Copyright section headings contain no decorative `01–04` labels.
+- [x] The introductory statement breaks by meaning on wide layouts and wraps naturally at 390px.
+- [x] Permission and restriction lists show one marker per item with no Markdown syntax or duplicate browser marker.
+- [x] At 390px, 768px, and 1280px, the page has no horizontal overflow; the shared 2px keyboard focus rule remains intact and browser warning/error logs are empty.
+- [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.

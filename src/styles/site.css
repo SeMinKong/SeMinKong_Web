@@ -1573,7 +1573,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 .section-heading h2 {
   max-width: 760px;
   font-size: clamp(2.8rem, 6.4vw, 5.4rem);
-  line-height: 0.94;
+  line-height: 1.04;
   letter-spacing: -0.06em;
 }
 
