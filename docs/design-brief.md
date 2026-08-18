@@ -526,3 +526,16 @@ This section supersedes the `6000`-unit timing and three-phase Y-axis rhythm in 
 - Animate Y as one continuous `inOut(2)` rotation: `1.5` turns in full motion and one turn in lite/mobile.
 - Keep X/Z/lift subordinate to Y, using auxiliary phases at `5000–5500`, `5500–6200`, and `6200–6600`. Preserve the `90deg` full-mode X peak, `10px` lift limit, stationary hand, and zeroed auxiliary transforms at landing.
 - Existing track heights, keyboard-neutral settlement, reduced motion, failed-enhancement fallback, and lifecycle safeguards remain unchanged.
+
+## 2026-08-18 — Hero cube loop-handoff override
+
+This section supersedes only the static final-hold and autonomous-pause-through-release requirements in the preceding Hero finale overrides. The `6800`-unit timeline, copy timing, `5000–6600` flourish, rotation counts, axis limits, outer endpoints, responsive geometry, and accessibility fallbacks remain unchanged.
+
+- Pause the existing coordinated manipulation master only from `5000–6400`.
+- At `6400`, resume that same master from its preserved playhead while the outer flourish completes its eased landing through `6600`. Keep pointer and drag responses locked during this overlap so the handoff has one predictable motion source per wrapper.
+- From `6600–6800` and after the Hero releases, keep the outer flourish at full `540deg` or lite/mobile `360deg` while the existing cube, finger, tendon, and hand loop continues at its established pace.
+- Do not normalize the outer endpoint, add another turn, create a second infinite spinner, or reset the coordinated loop to its first grip pose.
+- A full/lite breakpoint change rebuilds the loop at the same normalized phase so resizing does not expose the first grip pose between the flourish and ambient motion.
+- Reverse scrolling below `6400` pauses the base loop again for deterministic flourish seeking; crossing below `5000` restores the normal autonomous loop. Keyboard settlement, reduced motion, failed enhancement, hidden, and offscreen states retain their established static or paused behavior.
+
+Visual acceptance: the cube does not freeze when the Hero reaches its final scroll position, and the flourish flows into the familiar manipulation loop without a pose snap, direction reversal, added rotation, or pointer interruption.

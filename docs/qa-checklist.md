@@ -423,3 +423,17 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] X/Z/lift respect their existing limits, return to zero at `6600`, and the applicable Y endpoint remains unchanged through `6800`.
 - [x] Forward/reverse seeking, manipulation pause/resume, keyboard-neutral settlement, and reduced-motion fallback remain continuous and static where required.
 - [x] At 1280px, 768px, and 390px there is no clipping, overlap, horizontal overflow, or browser error; build, deployment verification, and `git diff --check` succeed.
+
+## 2026-08-18 Cube-finale loop-handoff verification
+
+This section supersedes the current-behavior interpretation of earlier checked items that require the autonomous loop or composed cube to remain static through the final hold; those entries remain historical verification records.
+
+- [x] Holding progress below `6400` during the flourish keeps the inner manipulation transforms unchanged over time; crossing `6400` resumes them from the preserved phase rather than the first grip pose.
+- [x] The `6400–6600` overlap introduces no visible pose snap, direction reversal, stop-and-restart, or rapid pause/resume churn at the boundary.
+- [x] Pointer spring, press, and drag remain blocked until the outer flourish completes at `6600`, even though the base master resumes at `6400`.
+- [x] At `6600`, outer X/Z/lift resolve to zero and outer Y remains full `540deg` or lite/mobile `360deg`, while the inner cube axes, fingers, and tendons continue changing through `6800` and after scroll input stops.
+- [x] Reverse scrolling below `6400` pauses the master without resetting its pose, and crossing below `5000` resumes the original loop without a discontinuity.
+- [x] Resizing across the full/lite breakpoint preserves the manipulation loop's normalized phase instead of returning to the first grip pose.
+- [x] Tab settlement remains neutral and static; `?motion=reduced`, failed enhancement, hidden, and offscreen states also remain static or paused as specified.
+- [x] Full motion at 1280px and lite motion at 768px and 390px retain coordinated hand contact, zero horizontal overflow, and normal Projects release; browser warning/error logs are empty.
+- [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.

@@ -101,6 +101,7 @@ export const initDexterousHand = (environment) => {
   let geometryUpdatedAt = 0;
   let dragState = null;
   let flourishActive = false;
+  let flourishBaseActive = false;
 
   const cubeState = {
     x: 0,
@@ -279,6 +280,7 @@ export const initDexterousHand = (environment) => {
   };
 
   const buildMotion = () => {
+    const preservedProgress = manipulation?.iterationProgress ?? 0;
     clearMotion();
     applyPose(poses[0]);
     if (environment.motion === 'reduced') return;
@@ -298,7 +300,8 @@ export const initDexterousHand = (environment) => {
       );
     }
 
-    if (visible && !document.hidden && !flourishActive) manipulation.resume();
+    if (preservedProgress > 0) manipulation.iterationProgress = preservedProgress;
+    if (visible && !document.hidden && (!flourishActive || flourishBaseActive)) manipulation.resume();
     requestGeometryUpdate();
   };
 
@@ -484,16 +487,26 @@ export const initDexterousHand = (environment) => {
   };
 
   const resumeMotion = () => {
-    if (!visible || document.hidden || environment.motion === 'reduced' || flourishActive) return;
+    if (
+      !visible ||
+      document.hidden ||
+      environment.motion === 'reduced' ||
+      (flourishActive && !flourishBaseActive)
+    ) return;
     manipulation?.resume?.();
   };
 
-  const setFlourishActive = (active) => {
-    if (flourishActive === active) return;
+  const setFlourishActive = (active, baseActive = false) => {
+    const nextBaseActive = active && baseActive;
+    if (flourishActive === active && flourishBaseActive === nextBaseActive) return;
+
+    const wasActive = flourishActive;
     flourishActive = active;
+    flourishBaseActive = nextBaseActive;
     if (active) {
-      pauseMotion();
-      clearTransient();
+      if (!wasActive) clearTransient();
+      if (flourishBaseActive) resumeMotion();
+      else pauseMotion();
       return;
     }
     requestGeometryUpdate();
@@ -511,7 +524,10 @@ export const initDexterousHand = (environment) => {
   window.addEventListener('blur', finishCubeDrag, { passive: true });
   window.addEventListener('resize', requestGeometryUpdate, { passive: true });
   window.addEventListener('portfolio:hero-cube-flourish', (event) => {
-    setFlourishActive(Boolean(event.detail?.active));
+    setFlourishActive(
+      Boolean(event.detail?.active),
+      Boolean(event.detail?.baseActive)
+    );
   });
 
   if ('IntersectionObserver' in window) {

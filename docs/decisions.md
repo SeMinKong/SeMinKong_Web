@@ -402,3 +402,9 @@
 - Decision: full `1.5`회전과 lite/mobile `1`회전은 유지하되, Y축의 빠른 3단 회전을 `5000–6600`의 단일 `inOut(2)` tween으로 바꾼다. 전체 timeline은 `6800`, reading hold는 `4100–5000`, final hold는 `6600–6800`으로 확장한다.
 - Reason: 중간 경계에서 속도가 급변하는 느낌을 줄이고 같은 회전 수를 더 자연스럽게 보여 주기 위해서다.
 - Impact: X/Z/lift만 `5000–5500–6200–6600`의 보조 구간을 유지한다. 회전 수, X축 `90deg` peak, lift 제한, 손의 안정성, keyboard/reduced-motion fallback과 반응형 track 높이는 바뀌지 않는다.
+
+## 2026-08-18 — Cube finale와 기본 loop의 겹침 인계
+
+- Decision: Hero cube finale에서는 기존 manipulation master를 `5000–6400`에만 멈추고, `6400`부터 보존된 phase에서 다시 실행한다. `6400–6600`에는 scroll flourish의 감속과 기본 loop를 겹치며 pointer interaction은 계속 잠근다.
+- Reason: `6600`까지 완전히 정지한 뒤 loop를 다시 켜면 미세한 재출발감이 생긴다. 마지막 `200` 단위에서 두 wrapper의 움직임을 겹치면 추가 회전 없이 기존의 느린 동작으로 자연스럽게 이어진다.
+- Impact: Full `540deg`, lite/mobile `360deg`, `6800` timeline, 축 제한과 반응형 geometry는 유지한다. 역스크롤은 `6400` 아래에서 다시 pause하고 `5000` 아래에서 resume한다. Full/lite master를 다시 만들 때는 기존 iteration progress를 이관하며, keyboard·reduced-motion·실패 fallback과 hidden/offscreen pause가 항상 우선한다.

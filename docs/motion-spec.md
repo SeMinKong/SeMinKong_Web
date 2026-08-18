@@ -441,3 +441,15 @@ This section supersedes the `6000`-unit duration, `4920–5820` flourish timing,
 - `6600–6800` is the final hold. Full retains its `540deg` Y endpoint and lite/mobile retains `360deg`, without normalization or release snapping.
 - Pause autonomous manipulation and clear pointer transients at `5000`; reverse scrolling below `5000` resumes the existing loop. Actions become interactive at `4100 / 6800`.
 - Keyboard settlement continues to bypass the flourish and keep the neutral cube pose. Reduced motion and failed enhancement remain static; responsive track geometry remains unchanged.
+
+## 2026-08-18 — Cube-finale inertial handoff override
+
+This section supersedes only the autonomous-loop active range and static composed-cube interpretation in the preceding cube-finale overrides. All scroll timings, outer transforms, turn counts, easing, and transform ownership remain unchanged.
+
+- Treat `[5000, 6400)` as the flourish-exclusive pause window. Clear pointer transients at entry and preserve the autonomous master playhead.
+- At `6400`, resume the existing full `9.6s` or lite `14.4s` coordinated manipulation timeline at its normal configured speed and preserved phase. The `6400–6600` overlap with the decelerating outer flourish is the inertial handoff; no extra turn, speed ramp, or second rotation owner is added.
+- Keep pointer spring, press, and drag responses blocked through `6600` even though the inner master is running. The Hero event therefore distinguishes an active flourish from permission to run the base master.
+- At `6600`, X/Z/lift are zero and outer Y remains at full `540deg` or lite/mobile `360deg`. The inner manipulation loop continues through `6800` and after scroll input stops while the scene remains visible.
+- On reverse travel, crossing below `6400` pauses the master without resetting it; crossing below `5000` resumes normal autonomous manipulation.
+- If a responsive environment change rebuilds the full/lite master, transfer its normalized iteration progress to the new timeline before applying the current pause/resume state; a breakpoint change must not return the cube to the first grip pose.
+- Keyboard settlement takes precedence over the handoff branch and keeps the neutral static pose. Reduced motion, failed enhancement, hidden, offscreen, and page lifecycle behavior remain unchanged.

@@ -6,9 +6,9 @@ const ACTIONS_END = 4100;
 const FLOURISH_START = 5000;
 const FLOURISH_ENTRY_END = 5500;
 const FLOURISH_POSE_END = 6200;
+const FLOURISH_HANDOFF_START = 6400;
 const FLOURISH_END = 6600;
 const ACTIONS_READY_PROGRESS = ACTIONS_END / HERO_TIMELINE_DURATION;
-const FLOURISH_START_PROGRESS = FLOURISH_START / HERO_TIMELINE_DURATION;
 const FLOURISH_IDENTITY = 'translateY(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
 
 export const initHeroStory = (environment) => {
@@ -33,6 +33,7 @@ export const initHeroStory = (environment) => {
   let keyboardSettled = false;
   let actionsReady = false;
   let flourishActive = false;
+  let flourishBaseActive = false;
   let targetDirty = true;
   let stageOffsetsKey = '';
 
@@ -50,11 +51,13 @@ export const initHeroStory = (environment) => {
     track.toggleAttribute('data-hero-actions-ready', ready);
   };
 
-  const setFlourishActive = (active) => {
-    if (flourishActive === active) return;
+  const setFlourishState = (active, baseActive = false) => {
+    const nextBaseActive = active && baseActive;
+    if (flourishActive === active && flourishBaseActive === nextBaseActive) return;
     flourishActive = active;
+    flourishBaseActive = nextBaseActive;
     window.dispatchEvent(new CustomEvent('portfolio:hero-cube-flourish', {
-      detail: { active }
+      detail: { active, baseActive: nextBaseActive }
     }));
   };
 
@@ -68,7 +71,7 @@ export const initHeroStory = (environment) => {
     track.removeAttribute('data-hero-enhanced');
     track.removeAttribute('data-hero-actions-ready');
     actionsReady = false;
-    setFlourishActive(false);
+    setFlourishState(false);
   };
 
   const readStageOffsets = () => {
@@ -191,7 +194,17 @@ export const initHeroStory = (environment) => {
     timeline.seek(timeline.duration * normalized, true);
     if (keyboardSettled && cubeFlourish) cubeFlourish.style.transform = FLOURISH_IDENTITY;
     setActionsReady(keyboardSettled || normalized >= ACTIONS_READY_PROGRESS);
-    setFlourishActive(normalized >= FLOURISH_START_PROGRESS);
+
+    const timelinePosition = normalized * HERO_TIMELINE_DURATION;
+    if (keyboardSettled) {
+      setFlourishState(true);
+    } else if (timelinePosition >= FLOURISH_START && timelinePosition < FLOURISH_HANDOFF_START) {
+      setFlourishState(true);
+    } else if (timelinePosition >= FLOURISH_HANDOFF_START && timelinePosition < FLOURISH_END) {
+      setFlourishState(true, true);
+    } else {
+      setFlourishState(false);
+    }
   };
 
   const updateTarget = () => {
