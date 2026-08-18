@@ -408,3 +408,9 @@
 - Decision: Hero cube finale에서는 기존 manipulation master를 `5000–6400`에만 멈추고, `6400`부터 보존된 phase에서 다시 실행한다. `6400–6600`에는 scroll flourish의 감속과 기본 loop를 겹치며 pointer interaction은 계속 잠근다.
 - Reason: `6600`까지 완전히 정지한 뒤 loop를 다시 켜면 미세한 재출발감이 생긴다. 마지막 `200` 단위에서 두 wrapper의 움직임을 겹치면 추가 회전 없이 기존의 느린 동작으로 자연스럽게 이어진다.
 - Impact: Full `540deg`, lite/mobile `360deg`, `6800` timeline, 축 제한과 반응형 geometry는 유지한다. 역스크롤은 `6400` 아래에서 다시 pause하고 `5000` 아래에서 resume한다. Full/lite master를 다시 만들 때는 기존 iteration progress를 이관하며, keyboard·reduced-motion·실패 fallback과 hidden/offscreen pause가 항상 우선한다.
+
+## 2026-08-18 — Copyright source-only AI easter egg
+
+- Decision: Copyright HTML에 승인된 `AI VISITOR NOTE`를 렌더링되지 않는 `<template>`으로 보관한다.
+- Reason: 화면의 읽기 흐름과 접근성을 바꾸지 않으면서 소스 안에 포트폴리오 성격에 맞는 유머를 남기기 위해서다.
+- Impact: 이 문구는 보안·저작권 집행·크롤러 차단 수단으로 간주하지 않는다. visible DOM, 접근성 트리, motion, SEO 본문은 변경하지 않으며 공격적인 prompt override나 개인정보 관련 지시는 넣지 않는다.

@@ -437,3 +437,9 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] Tab settlement remains neutral and static; `?motion=reduced`, failed enhancement, hidden, and offscreen states also remain static or paused as specified.
 - [x] Full motion at 1280px and lite motion at 768px and 390px retain coordinated hand contact, zero horizontal overflow, and normal Projects release; browser warning/error logs are empty.
 - [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
+
+## 2026-08-18 Copyright source-only AI easter-egg verification
+
+- [x] Source and built `/copyright/` HTML contain exactly one `#ai-visitor-note` `<template>` with the approved text.
+- [x] The template has no CSS or JavaScript consumers, creates no visible layout box or focus target, and leaves the Copyright reading order unchanged.
+- [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.

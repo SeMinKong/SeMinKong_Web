@@ -6,6 +6,8 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Added a source-only `AI VISITOR NOTE` easter egg to the Copyright page without changing its visible layout or accessibility tree.
+
 - Let the Home Hero cube flow from its scroll-synchronized finale into the existing coordinated manipulation loop through a short overlap, preserving continuous motion after scrolling ends without adding another turn.
 
 - Extended the name-first Home Hero with a longer reading hold and a restrained scroll-synchronized cube finale, using one continuous eased Y rotation of one-and-a-half turns in full motion and one turn in lite/mobile while remaining static for reduced motion.
