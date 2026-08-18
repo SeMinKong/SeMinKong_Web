@@ -396,3 +396,13 @@ The browser-control plugin could not attach (`Cannot redefine property: process`
 - [x] The hand ambient light has no visible rectangular top, side, or bottom edge in default, static-depth, and reduced-motion states.
 - [x] Tab settlement and reduced motion expose the complete Hero with active actions and no residual wrapper transforms.
 - [x] Browser warning/error logs are empty, `npm.cmd run build` and `npm.cmd run verify:dist` succeed, and `git diff --check` reports no whitespace errors.
+
+## 2026-08-18 Hero reading-hold and cube-finale verification
+
+- [x] At timeline units `4100` and `4920`, the completed greeting and actions have identical settled transforms, remain readable, and accept pointer input.
+- [x] Full motion reaches cumulative Y rotations of `1`, `3.5`, and `4` turns at `5280`, `5640`, and `5820`; lite motion reaches `0.5`, `1.75`, and `2` turns at the same boundaries.
+- [x] The flourish lifts and tumbles without scaling or materially moving the hand, then remains visually settled from `5820–6000`.
+- [x] Forward and reverse scrolling cross `4100`, `4920`, `5280`, `5640`, and `5820` without copy, hand, or cube jumps.
+- [x] At 1280px, 768px, and 390px, the Hero uses the applicable `175 / 165 / 160svh` track, releases Projects normally, and has no clipping, overlap, or horizontal overflow.
+- [x] Tab settlement and `?motion=reduced` expose the complete Hero with active actions, no flourish playback, and no residual flourish transform.
+- [x] Browser warning/error logs are empty; `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.

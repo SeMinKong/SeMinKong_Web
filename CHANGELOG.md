@@ -6,6 +6,8 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Extended the name-first Home Hero with a settled reading hold and a scroll-synchronized cube finale that makes four turns in full motion, two in lite/mobile, and remains static for reduced motion.
+
 - Rebuilt the Home Hero around a name-and-hand opening state that rearranges into the full greeting and actions on scroll, while removing the robotic hand's visible ambient-light box.
 
 - Reworked the browser-tab favicon into a high-contrast `SK` tile and versioned its URL across every route so browsers replace the cached legacy icon.

@@ -100,6 +100,7 @@ export const initDexterousHand = (environment) => {
   let geometryFrame = 0;
   let geometryUpdatedAt = 0;
   let dragState = null;
+  let flourishActive = false;
 
   const cubeState = {
     x: 0,
@@ -145,7 +146,7 @@ export const initDexterousHand = (environment) => {
 
   const tick = (time) => {
     frame = 0;
-    if (!visible || document.hidden || environment.motion === 'reduced') return;
+    if (!visible || document.hidden || environment.motion === 'reduced' || flourishActive) return;
 
     const dt = Math.min(0.05, Math.max(0.001, (time - (lastTime || time)) / 1000));
     lastTime = time;
@@ -169,7 +170,7 @@ export const initDexterousHand = (environment) => {
   };
 
   const schedule = () => {
-    if (frame || !visible || document.hidden || environment.motion === 'reduced') return;
+    if (frame || !visible || document.hidden || environment.motion === 'reduced' || flourishActive) return;
     lastTime = 0;
     frame = requestAnimationFrame(tick);
   };
@@ -297,7 +298,7 @@ export const initDexterousHand = (environment) => {
       );
     }
 
-    if (visible && !document.hidden) manipulation.resume();
+    if (visible && !document.hidden && !flourishActive) manipulation.resume();
     requestGeometryUpdate();
   };
 
@@ -367,7 +368,7 @@ export const initDexterousHand = (environment) => {
   };
 
   const onPointerMove = (event) => {
-    if (environment.depth !== 'interactive' || environment.motion === 'reduced' || event.pointerType === 'touch') return;
+    if (flourishActive || environment.depth !== 'interactive' || environment.motion === 'reduced' || event.pointerType === 'touch') return;
     if (dragState) return;
     const pointer = getPointerGeometry(event);
     if (!pointer) return;
@@ -437,7 +438,7 @@ export const initDexterousHand = (environment) => {
   };
 
   const onPointerDown = (event) => {
-    if (environment.depth !== 'interactive' || environment.motion === 'reduced' || event.pointerType === 'touch' || event.button !== 0) return;
+    if (flourishActive || environment.depth !== 'interactive' || environment.motion === 'reduced' || event.pointerType === 'touch' || event.button !== 0) return;
     const pointer = getPointerGeometry(event, true);
     if (!pointer) return;
 
@@ -483,8 +484,20 @@ export const initDexterousHand = (environment) => {
   };
 
   const resumeMotion = () => {
-    if (!visible || document.hidden || environment.motion === 'reduced') return;
+    if (!visible || document.hidden || environment.motion === 'reduced' || flourishActive) return;
     manipulation?.resume?.();
+  };
+
+  const setFlourishActive = (active) => {
+    if (flourishActive === active) return;
+    flourishActive = active;
+    if (active) {
+      pauseMotion();
+      clearTransient();
+      return;
+    }
+    requestGeometryUpdate();
+    resumeMotion();
   };
 
   scene.addEventListener('pointerenter', requestGeometryUpdate, { passive: true });
@@ -497,6 +510,9 @@ export const initDexterousHand = (environment) => {
   window.addEventListener('pointercancel', finishCubeDrag, { passive: true });
   window.addEventListener('blur', finishCubeDrag, { passive: true });
   window.addEventListener('resize', requestGeometryUpdate, { passive: true });
+  window.addEventListener('portfolio:hero-cube-flourish', (event) => {
+    setFlourishActive(Boolean(event.detail?.active));
+  });
 
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(([entry]) => {

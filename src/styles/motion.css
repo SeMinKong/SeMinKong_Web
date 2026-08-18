@@ -145,6 +145,10 @@ html[data-motion="reduced"] .page-curtain {
   }
 }
 
+html[data-motion="reduced"] [data-cube-flourish] {
+  transform: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="full"]) {
     scroll-behavior: auto;

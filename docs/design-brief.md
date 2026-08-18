@@ -500,3 +500,12 @@ This section supersedes the Home-only visibility requirement in `Visible-first c
 - The name starts near the optical middle of the opening composition. As the greeting accumulates, the outer identity and hand wrappers move into the existing completed two-column or stacked layout without changing the internal hand rig, cube, finger, or depth transforms.
 - The completed state preserves the current greeting, actions, spacing, and responsive layout. Keyboard entry, reduced motion, and failed enhancement expose the complete state immediately.
 - Ambient light behind the hand must fade to full transparency before the local scene boundary so the decorative object never reads as a rectangular image tile.
+
+## 2026-08-18 — Hero reading hold and cube-finale override
+
+This section supersedes, only during the final Hero stage, the earlier requirement that Hero scroll never changes a cube transform. The name-first opening, completed layout, hand rig, and accessibility fallbacks remain unchanged.
+
+- Extend the scroll-seek story to `6000` units. The greeting and actions finish by `4100`, remain fully settled and readable through `4920`, and stay visible for the rest of the Hero.
+- Use `4920–5820` for a cube-only flourish above the palm: four Y-axis turns plus an X-axis tumble that peaks at a half turn in full motion, and two Y-axis turns without tumble in lite/mobile. Lift the cube by at most `10px`, keep the hand visually steady, and return the flourish wrapper to its identity pose before release.
+- Hold the settled result from `5820–6000` before releasing into Projects. Keyboard settlement, reduced motion, and failed enhancement show the completed copy and a static cube without replaying the flourish.
+- Use Hero track heights of `175svh` desktop, `170svh` at `960px` and below, `165svh` at `900px` and below, and `160svh` at `720px` and below. Short mobile viewports at `760px` height and below retain at least `1020px` of track height so the hold and flourish do not collapse into a flick.

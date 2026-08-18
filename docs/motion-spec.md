@@ -407,3 +407,17 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 - Greeting line one reveals at `900–1900ms`, line two at `1950–3100ms`, and actions at `3300–4100ms`; all use matching hidden pre-roll poses so forward and reverse scroll remain continuous.
 - Actions ignore pointer input before `75%` progress. Any Tab entry or action focus settles the Hero to its complete state. Reduced motion and enhancement failure show the complete static Hero without sticky staging.
 - The hand's local ambient glow and shadow use bounded ellipses that reach zero alpha inside the scene on every side; no rectangular compositor boundary may remain visible.
+
+## 2026-08-18 — Hero reading hold and cube flourish
+
+This section supersedes the `4400ms` timing in `Name-first Hero scroll rearrangement` and narrows the earlier cube-independence rule only for a dedicated flourish wrapper. The autonomous manipulation timeline continues to own the inner cube axes, float, fingers, tendons, pointer response, and lifecycle.
+
+- The scroll-seek timeline uses `6000` units. Existing copy timing remains: the outer wrappers settle by `3000`, greeting lines finish by `3100`, and actions run from `3300–4100`.
+- `4100–4920` is a transform-free reading hold for the completed greeting and actions.
+- Full motion rotates the flourish wrapper four Y-axis turns: `4920–5280` adds one turn with `in(3)`, `5280–5640` adds `2.5` turns linearly, and `5640–5820` adds the final `0.5` turn with `out(4)`.
+- Lite/mobile uses the same phase boundaries and easing with two total turns: `0.5 + 1.25 + 0.25`.
+- Full motion adds a secondary X tumble that peaks at `180deg`, a brief Z-axis whip, and no more than `10px` of lift, then returns X/Z/lift to zero; lite/mobile omits the X tumble. Neither mode scales or materially moves the hand.
+- Pause the autonomous manipulation timeline and clear pointer transients from flourish entry through the final hold, so the visible result is exactly four or two turns. Reverse scrolling below flourish entry resumes the existing autonomous loop.
+- `5820–6000` is the final settled hold. Forward and reverse seeking remain continuous at every boundary.
+- Actions become pointer-interactive at `4100 / 6000`. Keyboard settlement seeks directly to the completed static state; reduced motion removes the sticky travel and applies no flourish transform.
+- Normal-mode track heights are `175svh`, `170svh` at `≤960px`, `165svh` at `≤900px`, and `160svh` at `≤720px`; `≤720px × ≤760px` layouts use a `1020px` minimum track height so the reading hold and lite flourish retain usable scroll distance.

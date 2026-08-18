@@ -1,6 +1,14 @@
 import { createTimeline } from 'animejs';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+const HERO_TIMELINE_DURATION = 6000;
+const ACTIONS_END = 4100;
+const FLOURISH_START = 4920;
+const FLOURISH_ACCEL_END = 5280;
+const FLOURISH_WHIP_END = 5640;
+const FLOURISH_END = 5820;
+const ACTIONS_READY_PROGRESS = ACTIONS_END / HERO_TIMELINE_DURATION;
+const FLOURISH_START_PROGRESS = FLOURISH_START / HERO_TIMELINE_DURATION;
 
 export const initHeroStory = (environment) => {
   const track = document.querySelector('[data-hero-story]');
@@ -10,6 +18,7 @@ export const initHeroStory = (environment) => {
   const statementLines = track ? Array.from(track.querySelectorAll('[data-hero-line]')) : [];
   const actions = track?.querySelector('[data-hero-actions]');
   const hand = track?.querySelector('[data-dexterous-hand]');
+  const cubeFlourish = track?.querySelector('[data-cube-flourish]');
   const progress = track?.querySelector('[data-hero-progress]');
 
   if (!track || !sticky || !copy || !progress) return;
@@ -22,11 +31,12 @@ export const initHeroStory = (environment) => {
   let visible = true;
   let keyboardSettled = false;
   let actionsReady = false;
+  let flourishActive = false;
   let targetDirty = true;
   let stageOffsetsKey = '';
 
   const stagedElements = [role, ...statementLines, actions].filter(Boolean);
-  const shiftedElements = [copy, hand].filter(Boolean);
+  const shiftedElements = [copy, hand, cubeFlourish].filter(Boolean);
 
   const readStageOffset = (property) => {
     const value = Number.parseFloat(getComputedStyle(track).getPropertyValue(property));
@@ -39,6 +49,14 @@ export const initHeroStory = (environment) => {
     track.toggleAttribute('data-hero-actions-ready', ready);
   };
 
+  const setFlourishActive = (active) => {
+    if (flourishActive === active) return;
+    flourishActive = active;
+    window.dispatchEvent(new CustomEvent('portfolio:hero-cube-flourish', {
+      detail: { active }
+    }));
+  };
+
   const clearStageStyles = () => {
     stagedElements.forEach((element) => {
       element.style.removeProperty('opacity');
@@ -49,6 +67,7 @@ export const initHeroStory = (environment) => {
     track.removeAttribute('data-hero-enhanced');
     track.removeAttribute('data-hero-actions-ready');
     actionsReady = false;
+    setFlourishActive(false);
   };
 
   const readStageOffsets = () => {
@@ -60,7 +79,7 @@ export const initHeroStory = (environment) => {
       copyStartY,
       handStartX,
       handStartY,
-      key: `${copyStartY}:${handStartX}:${handStartY}`
+      key: `${environment.motion}:${copyStartY}:${handStartX}:${handStartY}`
     };
   };
 
@@ -120,9 +139,40 @@ export const initHeroStory = (environment) => {
       }, 3300);
     }
 
+    if (cubeFlourish) {
+      const turnDegrees = environment.motion === 'full' ? 1440 : 720;
+      const tumbleDegrees = environment.motion === 'full' ? 180 : 0;
+
+      timeline
+        .add(cubeFlourish, {
+          y: [0, -6],
+          rotateX: ['0deg', `${tumbleDegrees * 0.2}deg`],
+          rotateY: ['0deg', `${turnDegrees * 0.25}deg`],
+          rotateZ: ['0deg', '-8deg'],
+          duration: FLOURISH_ACCEL_END - FLOURISH_START,
+          ease: 'in(3)'
+        }, FLOURISH_START)
+        .add(cubeFlourish, {
+          y: [-6, -10],
+          rotateX: [`${tumbleDegrees * 0.2}deg`, `${tumbleDegrees}deg`],
+          rotateY: [`${turnDegrees * 0.25}deg`, `${turnDegrees * 0.875}deg`],
+          rotateZ: ['-8deg', '14deg'],
+          duration: FLOURISH_WHIP_END - FLOURISH_ACCEL_END,
+          ease: 'linear'
+        }, FLOURISH_ACCEL_END)
+        .add(cubeFlourish, {
+          y: [-10, 0],
+          rotateX: [`${tumbleDegrees}deg`, '0deg'],
+          rotateY: [`${turnDegrees * 0.875}deg`, `${turnDegrees}deg`],
+          rotateZ: ['14deg', '0deg'],
+          duration: FLOURISH_END - FLOURISH_WHIP_END,
+          ease: 'out(4)'
+        }, FLOURISH_WHIP_END);
+    }
+
     timeline.add(progress, {
       scaleX: [0, 1],
-      duration: 4400,
+      duration: HERO_TIMELINE_DURATION,
       ease: 'linear'
     }, 0);
 
@@ -136,7 +186,8 @@ export const initHeroStory = (environment) => {
     if (!timeline) return;
     const normalized = clamp(value, 0, 1);
     timeline.seek(timeline.duration * normalized, true);
-    setActionsReady(keyboardSettled || normalized >= 0.75);
+    setActionsReady(keyboardSettled || normalized >= ACTIONS_READY_PROGRESS);
+    setFlourishActive(normalized >= FLOURISH_START_PROGRESS);
   };
 
   const updateTarget = () => {

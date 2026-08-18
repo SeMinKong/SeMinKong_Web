@@ -259,6 +259,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .control-cube__float,
 .control-cube__interactive,
+.control-cube__flourish,
 .control-cube__impulse,
 .control-cube__axis,
 .control-cube__body {
@@ -269,6 +270,10 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .control-cube__interactive {
   transform: translate3d(var(--cube-x), var(--cube-y), 0);
+}
+
+.control-cube__flourish {
+  transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
 }
 
 .control-cube__axis--x {
@@ -3479,7 +3484,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   --hero-copy-start-y: 144px;
   --hero-hand-start-x: -36px;
   --hero-hand-start-y: 0px;
-  height: 158svh;
+  height: 175svh;
   min-height: 900px;
 }
 
@@ -3518,7 +3523,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 @media (max-width: 960px) {
   .home-page .hero-story {
-    height: 150svh;
+    height: 170svh;
     min-height: 920px;
   }
 
@@ -3533,7 +3538,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     --hero-copy-start-y: 184px;
     --hero-hand-start-x: 0px;
     --hero-hand-start-y: 0px;
-    height: 145svh;
+    height: 165svh;
     min-height: 920px;
   }
 
@@ -3566,7 +3571,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   .home-page .hero-story {
     --hero-copy-start-y: 220px;
     --hero-hand-start-y: 0px;
-    height: 142svh;
+    height: 160svh;
     min-height: 920px;
   }
 
@@ -3592,8 +3597,8 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 @media (max-width: 720px) and (max-height: 760px) {
   .home-page .hero-story {
     --hero-copy-start-y: 148px;
-    height: 148svh;
-    min-height: 920px;
+    height: 160svh;
+    min-height: 1020px;
   }
 
   .home-page .hero-story__sticky {

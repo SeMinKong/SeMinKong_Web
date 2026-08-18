@@ -384,3 +384,9 @@
 - Decision: full/lite Home Hero는 이름과 손만 보이는 상태로 시작하고, 스크롤에 따라 인사말과 CTA를 누적 노출하면서 기존 완성 배열로 이동한다. 손 뒤 조명은 장면 사각형 안쪽에서 완전히 투명해지는 타원형으로 제한한다.
 - Reason: 모든 문구가 처음부터 보이면 이름 중심의 스크롤 서사가 사라지고, 손 장면의 넓은 그림자가 3D 합성 경계를 따라 사각 이미지처럼 보였다.
 - Impact: 이름·손의 외곽 wrapper와 문구만 Hero timeline이 제어한다. 반응형 breakpoint를 넘는 resize에서는 현재 scroll progress를 보존한 채 offset을 다시 읽는다. 손 내부 manipulation, depth, native scroll은 유지하며 keyboard, reduced motion, 실패 fallback에서는 전체 정보를 즉시 표시한다.
+
+## 2026-08-18 — Hero 읽기 구간과 cube finale
+
+- Decision: Home Hero를 `6000` 단위 scroll timeline으로 확장하고, CTA가 완성되는 `4100`부터 `4920`까지 읽기 구간을 둔 뒤 `4920–5820`에 cube finale를 실행하고 `5820–6000`을 정착 상태로 유지한다. Full은 Y축 네 바퀴와 중간에 `180deg`까지 갔다 돌아오는 X축 tumble, lite/mobile은 Y축 두 바퀴, reduced motion은 정지 상태를 사용한다.
+- Reason: 인사말과 행동을 읽을 여유를 보존하면서 Hero 끝에는 더 분명하고 기억에 남는 움직임을 주기 위해서다.
+- Impact: Hero timeline은 새 cube flourish wrapper만 추가로 소유한다. Finale와 final hold 동안 기존 manipulation과 pointer transient는 잠시 멈추고 역스크롤로 구간을 벗어나면 다시 시작한다. 반응형 track은 desktop부터 `175 / 170 / 165 / 160svh`를 사용하고, 짧은 mobile은 최소 `1020px`을 확보한다. Keyboard·reduced-motion·실패 fallback은 완성된 정적 상태로 바로 이동한다.
