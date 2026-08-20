@@ -75,15 +75,6 @@
   grid-column: 1 / -1;
 }
 
-.case-hero__lead {
-  max-width: 600px;
-  padding-bottom: 4px;
-  color: var(--text-soft);
-  font-size: clamp(1.02rem, 1.45vw, 1.18rem);
-  font-weight: var(--weight-body);
-  line-height: 1.7;
-}
-
 .case-hero__summary {
   display: grid;
   gap: 22px;
@@ -823,10 +814,6 @@
 
   .case-hero__meta {
     grid-column: auto;
-  }
-
-  .case-hero__lead {
-    max-width: 680px;
   }
 
   .case-hero--thing > h1,
