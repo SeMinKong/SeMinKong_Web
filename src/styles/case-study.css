@@ -216,7 +216,7 @@
   width: 100%;
   max-height: min(74vh, 780px);
   border-radius: 1px;
-  background: #050806;
+  background: #070605;
   object-fit: contain;
 }
 
@@ -225,7 +225,7 @@
 }
 
 .case-media--thing {
-  background: #07100d;
+  background: #0e0d0b;
 }
 
 .case-media--thing img {
@@ -273,13 +273,13 @@
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 1px;
-  background: #07100d;
+  background: #0e0d0b;
 }
 
 .thing-evidence-media img {
   width: 100%;
   display: block;
-  background: #050806;
+  background: #070605;
   object-fit: cover;
 }
 
@@ -324,7 +324,7 @@
 .thing-demo-section__head > p:not(.eyebrow) {
   max-width: 590px;
   color: var(--text-soft);
-  font-size: clamp(0.98rem, 1.3vw, 1.08rem);
+  font-size: var(--type-body-lg);
   font-weight: var(--weight-body);
   line-height: 1.72;
 }
@@ -386,7 +386,7 @@
   padding: 8px;
   border: 1px solid var(--line-strong);
   border-radius: 2px;
-  background: #07100d;
+  background: #0e0d0b;
   box-shadow: none;
 }
 
@@ -395,7 +395,7 @@
   height: 100%;
   display: block;
   border-radius: 1px;
-  background: #050806;
+  background: #070605;
   object-fit: contain;
 }
 
@@ -434,7 +434,7 @@
   font-family: var(--font-mono);
   font-size: var(--type-meta);
   font-weight: var(--weight-meta);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -453,7 +453,7 @@
 
 .thing-demo-card figcaption > p {
   color: var(--text-soft);
-  font-size: 0.9rem;
+  font-size: var(--type-body-sm);
   font-weight: var(--weight-body);
   line-height: 1.68;
   word-break: keep-all;
@@ -506,11 +506,11 @@
 }
 
 .case-section__copy {
-  max-width: var(--reading-max);
+  max-width: var(--measure);
   display: grid;
   gap: 18px;
   color: var(--text-soft);
-  font-size: clamp(0.96rem, 1.2vw, 1.04rem);
+  font-size: var(--type-body-lg);
   font-weight: var(--weight-body);
   line-height: 1.74;
 }
@@ -570,7 +570,7 @@
 }
 
 .case-flow p {
-  font-size: 0.94rem;
+  font-size: var(--type-body);
 }
 
 .case-metrics {
@@ -623,7 +623,7 @@
   width: 100%;
   max-height: min(72vh, 760px);
   border-radius: 1px;
-  background: #050806;
+  background: #070605;
   object-fit: contain;
 }
 
@@ -676,7 +676,7 @@
 
 .case-aside > p:not(.eyebrow, .source-note) {
   color: var(--text-soft);
-  font-size: 0.92rem;
+  font-size: var(--type-body-sm);
   font-weight: var(--weight-body);
   line-height: 1.72;
 }

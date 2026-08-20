@@ -91,7 +91,7 @@
   max-width: 630px;
   margin-top: 14px;
   color: var(--text-soft);
-  font-size: 0.9rem;
+  font-size: var(--type-body-sm);
   line-height: 1.72;
 }
 
@@ -194,7 +194,8 @@
   max-width: 680px;
   margin-top: 0;
   color: var(--text-soft);
-  font-size: 1.04rem;
+  max-width: var(--measure);
+  font-size: var(--type-body-lg);
   font-weight: var(--weight-body);
   line-height: 1.74;
 }
@@ -266,7 +267,7 @@
   max-width: 720px;
   margin-top: 15px;
   color: var(--text-soft);
-  font-size: 0.96rem;
+  font-size: var(--type-body);
   font-weight: var(--weight-body);
   line-height: 1.72;
 }
@@ -319,7 +320,7 @@
 .skill-groups p {
   margin-top: 8px;
   color: var(--text-soft);
-  font-size: 0.9rem;
+  font-size: var(--type-body-sm);
   font-weight: var(--weight-body);
   line-height: 1.65;
 }
