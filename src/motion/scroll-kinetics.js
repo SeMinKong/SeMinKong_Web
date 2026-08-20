@@ -1,4 +1,4 @@
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+import { clamp } from './utils.js';
 
 export const initScrollKinetics = (environment) => {
   const elements = Array.from(document.querySelectorAll('[data-inertia]'));

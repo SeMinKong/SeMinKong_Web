@@ -1,8 +1,4 @@
-const springStep = (value, velocity, target, dt, stiffness = 132, damping = 21) => {
-  const acceleration = (target - value) * stiffness - velocity * damping;
-  const nextVelocity = velocity + acceleration * dt;
-  return [value + nextVelocity * dt, nextVelocity];
-};
+import { springStep } from './utils.js';
 
 export const initDepthEffects = (environment) => {
   const elements = Array.from(document.querySelectorAll('[data-depth-root], [data-depth-card]'))
@@ -75,9 +71,9 @@ export const initDepthEffects = (environment) => {
     entries.forEach((entry) => {
       if (!entry.active) return;
 
-      [entry.x, entry.vx] = springStep(entry.x, entry.vx, entry.targetX, dt);
-      [entry.y, entry.vy] = springStep(entry.y, entry.vy, entry.targetY, dt);
-      [entry.scale, entry.vs] = springStep(entry.scale, entry.vs, entry.targetScale, dt);
+      [entry.x, entry.vx] = springStep(entry.x, entry.vx, entry.targetX, dt, 132, 21);
+      [entry.y, entry.vy] = springStep(entry.y, entry.vy, entry.targetY, dt, 132, 21);
+      [entry.scale, entry.vs] = springStep(entry.scale, entry.vs, entry.targetScale, dt, 132, 21);
       render(entry);
 
       const unsettled =

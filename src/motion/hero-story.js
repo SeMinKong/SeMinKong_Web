@@ -1,6 +1,6 @@
 import { createTimeline } from 'animejs';
 
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+import { clamp } from './utils.js';
 const HERO_TIMELINE_DURATION = 6800;
 const ACTIONS_END = 4100;
 const FLOURISH_START = 5000;

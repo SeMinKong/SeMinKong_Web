@@ -151,8 +151,7 @@ ol {
   backdrop-filter: blur(5px);
 }
 
-.site-nav,
-.resume-nav {
+.site-nav {
   position: fixed;
   z-index: 200;
   top: 0;
@@ -168,8 +167,7 @@ ol {
   transition: background-color 500ms var(--ease-out), border-color 500ms var(--ease-out), backdrop-filter 500ms var(--ease-out);
 }
 
-.site-nav.is-scrolled,
-.resume-nav {
+.site-nav.is-scrolled {
   border-bottom-color: var(--line);
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(16px);
@@ -441,8 +439,7 @@ ol {
     width: min(calc(100% - 48px), var(--page-max));
   }
 
-  .site-nav,
-  .resume-nav {
+  .site-nav {
     grid-template-columns: 1fr auto auto;
     gap: 18px;
     padding-inline: 24px;
@@ -458,8 +455,7 @@ ol {
     width: min(calc(100% - 32px), var(--page-max));
   }
 
-  .site-nav,
-  .resume-nav {
+  .site-nav {
     gap: 12px;
     padding-inline: 16px;
   }

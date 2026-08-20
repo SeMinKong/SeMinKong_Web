@@ -1,4 +1,4 @@
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+import { clamp } from '../motion/utils.js';
 
 export const initNavigation = (environment) => {
   const navigation = document.querySelector('[data-site-nav]');

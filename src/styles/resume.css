@@ -27,7 +27,6 @@
   padding-bottom: clamp(64px, 8vw, 92px);
 }
 
-.resume-kicker,
 .resume-label {
   color: var(--muted);
   font-family: var(--font-mono);
