@@ -497,7 +497,12 @@
   border-bottom: 1px solid var(--line);
 }
 
+html.js .case-section:not(.is-revealed) h2 {
+  color: var(--muted);
+}
+
 .case-section h2 {
+  transition: color 640ms var(--ease-out) 120ms;
   color: var(--project-accent);
   font-size: clamp(1.15rem, 2vw, 1.45rem);
   font-weight: var(--weight-heading);

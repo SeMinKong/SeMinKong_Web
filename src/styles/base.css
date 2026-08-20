@@ -374,6 +374,39 @@ ol {
   background: var(--line-strong);
 }
 
+.cursor-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 320;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid var(--paper-line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--paper-raised);
+  color: var(--paper-ink);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: var(--weight-ui);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.9;
+  transition: opacity 200ms var(--ease-out), scale 260ms var(--ease-out);
+}
+
+.cursor-label i {
+  color: var(--signal-on-light);
+  font-style: normal;
+}
+
+.cursor-label.is-visible {
+  opacity: 1;
+  scale: 1;
+}
+
 .name-letter {
   display: inline-block;
   will-change: transform;

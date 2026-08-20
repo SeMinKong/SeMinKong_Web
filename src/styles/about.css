@@ -178,7 +178,12 @@
   border-right: 0;
 }
 
+html.js .about-method__list li:not(.is-revealed) span {
+  color: var(--muted);
+}
+
 .about-method__list span {
+  transition: color 640ms var(--ease-out) 120ms;
   color: var(--signal);
   font-family: var(--font-mono);
   font-size: var(--type-meta);

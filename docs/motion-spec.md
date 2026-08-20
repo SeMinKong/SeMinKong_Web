@@ -474,3 +474,14 @@ This section supersedes only the autonomous-loop active range and static compose
 - Name hover wave: Hero 이름(h1 hover)과 내비 워드마크 텍스트에 글자 단위 웨이브 — `y 0 → -6 → 0`(워드마크 -3), Manrope 가변 weight `680 → 800 → 680`(워드마크 650 → 780), `inOut(2)`, 글자당 36/30ms 지연. 실행 중 재트리거를 막고 종료 시 인라인 스타일을 제거한다.
 - Focus keyword ignition: reveal이 완료되면 요소에 `is-revealed` 상태 클래스가 붙고, `.focus-list h3`의 34×2px vermilion 밑줄이 `scaleX(0 → 1)`로 점화된다(CSS 전용, `480ms var(--ease-out) 260ms`). 밑줄은 모든 티어에서 최종 상태로 존재하는 디자인 요소이며 reduced에서는 즉시 표시된다.
 - `is-revealed`는 이후 단계에서 재사용할 수 있는 범용 reveal 상태 클래스다.
+
+
+## 2026-08-20 — Micro-interaction suite (phase 2)
+
+lannino 레퍼런스 로드맵의 잔여 패턴. 절제 원칙: hover·리빌 시점에만 동작하고, 케이스 증거 프레임은 확대하지 않으며, 마퀴는 계속 보류한다.
+
+- Cursor follower label: Work 행과 Home deck 카드 hover 시 `VIEW ↗` mono 칩이 커서를 `springStep(210, 24)`로 따라온다(`data-cursor-label`로 문구 교체 가능). full motion + fine pointer 전용, 스크롤·pointerdown·hidden 시 즉시 숨고 reduced에서는 `display: none`.
+- Hover media zoom: Home deck 카드와 Work 행의 미디어 내부 `img/video`만 `scale(1.03)`(`720ms var(--ease-soft)`, `:hover`/`:focus-within`). depth 틸트는 컨테이너, 줌은 자식이라 합성된다. 케이스 스터디 증거 미디어는 제외.
+- Ignition color: reveal 완료 시 붙는 `is-revealed`를 이용해 케이스 섹션 라벨(h2)과 About 방식 번호가 `--muted → 액센트`로 점화된다(`640ms`, `html.js`의 `:not(.is-revealed)` 사전 상태라 최종 상태·no-JS·reduced 픽셀이 기존과 동일).
+- Contact row stagger: Home Contact 패널의 연락처 행들이 기존 `row` 리빌로 순차 등장한다(마크업 속성 추가만).
+- Button press dip: magnetic 대상의 pointerdown 시 `scale 0.97`로 눌렸다 복귀한다(spring, full motion 전용).

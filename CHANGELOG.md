@@ -8,6 +8,7 @@ All notable changes to this project are recorded here. The project follows Seman
 
 - Added a Lannino-inspired micro-interaction layer (phase 1): line-masked title reveals for plain-text page and Home section headings that restore the original text after settling, spring-based magnetic pull on primary CTAs (full motion, fine pointer only), and a left-to-right underline slide on text links — all inert under reduced motion. Documented the adaptation boundaries in `docs/lannino-design-reference.md`.
 - Added a name-emphasis layer: the Hero name enters letter by letter through a transient mask and, together with the header wordmark, plays a variable-weight hover wave; Focus keywords ignite a vermilion underline once revealed via a reusable `is-revealed` state class. Full-motion only; reduced keeps a static final state.
+- Completed the restrained micro-interaction suite: a cursor-follower `VIEW` chip over Work rows and Home deck cards, a 1.03x hover zoom on their media (case-study evidence frames excluded), reveal-driven ignition color on case-section labels and About method numerals via the `is-revealed` state, staggered Contact rows, and a press dip on magnetic buttons — all full-motion only with unchanged static states.
 - Relaxed the motion-library rule with owner approval: Anime.js stays the default, and GSAP may be introduced per-pattern where it is clearly stronger (scrubbed scroll choreography, pinned sequences, repeated text splitting).
 
 ### Changed

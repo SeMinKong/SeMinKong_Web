@@ -1413,6 +1413,28 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   font-weight: var(--weight-meta);
 }
 
+
+.project-card--deck .project-card__media img,
+.project-card--deck .project-card__media video,
+.work-row__media img,
+.work-row__media video {
+  transition: transform 720ms var(--ease-soft);
+}
+
+.project-card--deck:hover .project-card__media img,
+.project-card--deck:focus-within .project-card__media img,
+.project-card--deck:hover .project-card__media video,
+.project-card--deck:focus-within .project-card__media video {
+  transform: scale(1.03);
+}
+
+.work-row:hover .work-row__media img,
+.work-row:focus-within .work-row__media img,
+.work-row:hover .work-row__media video,
+.work-row:focus-within .work-row__media video {
+  transform: scale(1.03);
+}
+
 .work-row__media {
   position: relative;
   aspect-ratio: 16 / 10;

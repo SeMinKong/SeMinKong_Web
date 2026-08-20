@@ -21,10 +21,12 @@ export const initMagnetic = (environment, selector = '.button, .nav-resume, .res
     states.forEach((state, element) => {
       [state.x, state.vx] = springStep(state.x, state.vx, state.targetX, dt, 190, 22);
       [state.y, state.vy] = springStep(state.y, state.vy, state.targetY, dt, 190, 22);
+      [state.s, state.vs] = springStep(state.s, state.vs, state.targetS, dt, 260, 24);
 
-      const resting = state.targetX === 0 && state.targetY === 0
+      const resting = state.targetX === 0 && state.targetY === 0 && state.targetS === 1
         && Math.abs(state.x) < 0.05 && Math.abs(state.y) < 0.05
-        && Math.abs(state.vx) < 0.05 && Math.abs(state.vy) < 0.05;
+        && Math.abs(state.vx) < 0.05 && Math.abs(state.vy) < 0.05
+        && Math.abs(state.s - 1) < 0.002;
 
       if (resting) {
         element.style.transform = '';
@@ -32,7 +34,7 @@ export const initMagnetic = (environment, selector = '.button, .nav-resume, .res
         return;
       }
 
-      element.style.transform = `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0)`;
+      element.style.transform = `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0) scale(${state.s.toFixed(3)})`;
       active = true;
     });
 
@@ -49,7 +51,7 @@ export const initMagnetic = (environment, selector = '.button, .nav-resume, .res
   const getState = (element) => {
     let state = states.get(element);
     if (!state) {
-      state = { x: 0, y: 0, vx: 0, vy: 0, targetX: 0, targetY: 0 };
+      state = { x: 0, y: 0, vx: 0, vy: 0, targetX: 0, targetY: 0, s: 1, vs: 0, targetS: 1 };
       states.set(element, state);
     }
     return state;
@@ -59,6 +61,7 @@ export const initMagnetic = (environment, selector = '.button, .nav-resume, .res
     states.forEach((state) => {
       state.targetX = 0;
       state.targetY = 0;
+      state.targetS = 1;
     });
     schedule();
   };
@@ -80,13 +83,29 @@ export const initMagnetic = (environment, selector = '.button, .nav-resume, .res
     if (!state) return;
     state.targetX = 0;
     state.targetY = 0;
+    state.targetS = 1;
+    schedule();
+  };
+
+  const onPress = (event) => {
+    if (!enabled) return;
+    const state = getState(event.currentTarget);
+    state.targetS = 0.97;
+    schedule();
+  };
+
+  const onRelease = (event) => {
+    const state = states.get(event.currentTarget);
+    if (!state) return;
+    state.targetS = 1;
     schedule();
   };
 
   elements.forEach((element) => {
     element.addEventListener('pointermove', onMove);
     element.addEventListener('pointerleave', onSettle);
-    element.addEventListener('pointerdown', onSettle);
+    element.addEventListener('pointerdown', onPress);
+    element.addEventListener('pointerup', onRelease);
   });
 
   const sync = () => {
