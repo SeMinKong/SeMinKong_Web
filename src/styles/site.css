@@ -180,10 +180,6 @@ html.hero-pending:not([data-motion="reduced"]) [data-hero-actions],
   --cube-half: 39px;
   --cube-x: 0px;
   --cube-y: 0px;
-  --shell-hi: #e6e8e2;
-  --shell: #aab2ad;
-  --shell-edge: #5d6762;
-  --joint: #18201d;
   width: min(100%, 570px);
   justify-self: end;
   isolation: isolate;
@@ -984,7 +980,6 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .project-card__media {
-  --media-scale: 1.018;
   position: relative;
   display: block;
   aspect-ratio: 16 / 8.1;
@@ -1438,7 +1433,6 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .work-row__media {
-  --media-scale: 1.018;
   position: relative;
   aspect-ratio: 16 / 10;
   overflow: hidden;
@@ -2112,8 +2106,6 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 
 .home-page .dexterous-hand {
   --hand-accent: var(--signal);
-  --tendon-flexor: var(--signal);
-  --tendon-return: var(--cyan);
 }
 
 .home-page .dexterous-hand__scene::before {
