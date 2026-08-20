@@ -485,3 +485,10 @@ lannino 레퍼런스 로드맵의 잔여 패턴. 절제 원칙: hover·리빌 �
 - Ignition color: reveal 완료 시 붙는 `is-revealed`를 이용해 케이스 섹션 라벨(h2)과 About 방식 번호가 `--muted → 액센트`로 점화된다(`640ms`, `html.js`의 `:not(.is-revealed)` 사전 상태라 최종 상태·no-JS·reduced 픽셀이 기존과 동일).
 - Contact row stagger: Home Contact 패널의 연락처 행들이 기존 `row` 리빌로 순차 등장한다(마크업 속성 추가만).
 - Button press dip: magnetic 대상의 pointerdown 시 `scale 0.97`로 눌렸다 복귀한다(spring, full motion 전용).
+
+
+## 2026-08-20 — Signal thread scroll spine + Hero cube harmonization (phase 3)
+
+- Signal thread: 데스크톱(≥961px)·비 reduced에서 `main` 왼쪽 여백에 1px 레일이 생기고, 버밀리언 fill이 GSAP ScrollTrigger `scrub(0.6)`으로 문서 진행도에 맞춰 차오른다. 최상위 섹션마다 노드가 놓이고 `top 62%` 통과 시 점화, 역스크롤 시 소등된다(가역). 케이스 페이지처럼 단일 래퍼(article) 구조는 내부 섹션으로 자동 드릴다운한다. 모바일·reduced에서는 생성하지 않으며 리사이즈로 조건을 벗어나면 트리거를 kill하고 레일을 제거한다.
+- GSAP 도입 범위: gsap 코어와 ScrollTrigger는 이 모듈에서만 동적 import되어 데스크톱 비 reduced 세션에서만 로드된다(gzip: gsap 27.4KB + ScrollTrigger 17.4KB + 모듈 청크 22.5KB). 기존 Anime.js 모듈은 그대로다.
+- Hero cube: 면 팔레트를 웜 세트로 통일 — front `--surface-strong`, right `--surface`, left `--bg-raised`, back `#14120f`, bottom `--bg`, top만 `--signal`. 유휴 사이클에서는 차분한 차콜 큐브로 읽히다 버밀리언 면이 한 번씩 스치고, 스크롤 피날레는 red 면으로 정착한다. 케스케이드에 남아 있던 구세대 그린·시안 면 색 선언은 완전히 제거했다.
