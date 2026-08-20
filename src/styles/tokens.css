@@ -36,12 +36,17 @@
   --weight-heading: 650;
   --weight-display: 680;
   --type-meta: clamp(0.75rem, 0.73rem + 0.1vw, 0.8rem);
+  --type-body-sm: 0.92rem;
+  --type-body: 0.96rem;
+  --type-body-lg: clamp(0.96rem, 1.2vw, 1.06rem);
+  --type-lead: clamp(1.02rem, 1.45vw, 1.16rem);
   --type-hero-name: clamp(3.35rem, 7vw, 5.8rem);
   --type-page: clamp(2.8rem, 5.6vw, 4.75rem);
   --type-section: clamp(2rem, 3.2vw, 2.9rem);
   --type-project: clamp(1.55rem, 2.2vw, 2.1rem);
   --page-max: 1280px;
   --reading-max: 720px;
+  --measure: 640px;
   --nav-height: 64px;
   --section-space: clamp(112px, 12vw, 176px);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

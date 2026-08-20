@@ -6,6 +6,10 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Balanced the Home Hero greeting so wide viewports no longer strand a single word on its last line, and let stacked project cards below 960px size to their content instead of holding the fixed deck height.
+- Unified small mono-label tracking at 0.08em (display numerals keep 0.12em), consolidated body text onto shared `--type-body` tokens, and capped long-form paragraphs on case, resume, and copyright routes at a 640px `--measure`.
+- Warmed the case-study and project media letterboxes from legacy green-tinted blacks to the charcoal palette, evened the contact-panel arrow spacing, and removed the orphaned Hero role styles.
+
 - Removed the two inactive `max-width: 0px` style archives (the legacy tendon-driven hand geometry and the superseded precision-detail experiment) together with every selector no route renders — the pre-deck featured-work and proofs layout, the deck hint, the unused frame-label affordance, and leftover About/Resume/case-study styles — reducing the shipped CSS from 213 KB to 182 KB without changing any computed style.
 - Dropped the design tokens and hand-local custom properties that only the removed legacy styles consumed.
 - Removed the three THING source photos that the 1600px WebP and portrait delivery assets superseded.
