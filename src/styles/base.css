@@ -374,8 +374,21 @@ ol {
   background: var(--line-strong);
 }
 
+.reveal-line {
+  display: block;
+  overflow: hidden;
+  padding: 0.09em 0 0.16em;
+  margin: -0.09em 0 -0.16em;
+}
+
+.reveal-line__inner {
+  display: block;
+  will-change: transform;
+}
+
 .text-link,
 .source-link {
+  position: relative;
   width: max-content;
   min-height: 44px;
   display: inline-flex;
@@ -386,6 +399,27 @@ ol {
   font-size: 0.8rem;
   font-weight: var(--weight-heading);
   transition: color 260ms ease;
+}
+
+.text-link::after,
+.source-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 340ms var(--ease-out);
+}
+
+.text-link:hover::after,
+.text-link:focus-visible::after,
+.source-link:hover::after,
+.source-link:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .text-link:hover,

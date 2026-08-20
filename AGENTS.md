@@ -28,7 +28,7 @@
 ## Design constraints
 
 - Use reference sites for principles, not for direct copying of branding, copy, layout, or assets.
-- Preserve Anime.js as the primary motion library.
+- Keep Anime.js as the default motion library for entrance, hover, and timeline work. GSAP (with ScrollTrigger/SplitText) is approved by the owner (2026-08-20) for cases where it is clearly stronger — scrubbed scroll choreography, pinned sequences, or repeated text splitting — and should be introduced per-pattern with a bundle-size note, not as a wholesale migration.
 - Prefer lightweight 2.5D effects over adding a full Three.js stack unless the user changes this decision.
 - Apply motion and depth automatically when supported; do not expose manual Motion or Depth on/off buttons.
 - Preserve `prefers-reduced-motion` and automatically simplify depth for touch, coarse-pointer, and constrained layouts.

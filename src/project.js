@@ -12,11 +12,13 @@ import { initIntro, initReveals } from './motion/reveal.js';
 import { initScrollKinetics } from './motion/scroll-kinetics.js';
 import { initSmoothScroll } from './motion/smooth-scroll.js';
 import { initNavigation } from './ui/navigation.js';
+import { initMagnetic } from './motion/magnetic.js';
 
 const environment = initEnvironment();
 
 initSmoothScroll(environment);
 initNavigation(environment);
+initMagnetic(environment);
 initPageTransitions(environment);
 initIntro(environment, '[data-intro]');
 initReveals(environment, '[data-reveal]', { distance: 34, threshold: 0.08 });

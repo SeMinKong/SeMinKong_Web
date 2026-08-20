@@ -4,6 +4,11 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Added
+
+- Added a Lannino-inspired micro-interaction layer (phase 1): line-masked title reveals for plain-text page and Home section headings that restore the original text after settling, spring-based magnetic pull on primary CTAs (full motion, fine pointer only), and a left-to-right underline slide on text links — all inert under reduced motion. Documented the adaptation boundaries in `docs/lannino-design-reference.md`.
+- Relaxed the motion-library rule with owner approval: Anime.js stays the default, and GSAP may be introduced per-pattern where it is clearly stronger (scrubbed scroll choreography, pinned sequences, repeated text splitting).
+
 ### Changed
 
 - Balanced the Home Hero greeting so wide viewports no longer strand a single word on its last line, and let stacked project cards below 960px size to their content instead of holding the fixed deck height.

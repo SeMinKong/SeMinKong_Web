@@ -1,0 +1,103 @@
+import { clamp, springStep } from './utils.js';
+
+const MAX_PULL_X = 8;
+const MAX_PULL_Y = 6;
+
+export const initMagnetic = (environment, selector = '.button, .nav-resume, .resume-back') => {
+  const elements = Array.from(document.querySelectorAll(selector));
+  if (!elements.length) return;
+
+  const states = new Map();
+  let frame = 0;
+  let lastTime = 0;
+  let enabled = false;
+
+  const step = (time) => {
+    frame = 0;
+    const dt = Math.min(0.04, Math.max(0.001, (time - (lastTime || time)) / 1000));
+    lastTime = time;
+    let active = false;
+
+    states.forEach((state, element) => {
+      [state.x, state.vx] = springStep(state.x, state.vx, state.targetX, dt, 190, 22);
+      [state.y, state.vy] = springStep(state.y, state.vy, state.targetY, dt, 190, 22);
+
+      const resting = state.targetX === 0 && state.targetY === 0
+        && Math.abs(state.x) < 0.05 && Math.abs(state.y) < 0.05
+        && Math.abs(state.vx) < 0.05 && Math.abs(state.vy) < 0.05;
+
+      if (resting) {
+        element.style.transform = '';
+        states.delete(element);
+        return;
+      }
+
+      element.style.transform = `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0)`;
+      active = true;
+    });
+
+    if (active) frame = requestAnimationFrame(step);
+  };
+
+  const schedule = () => {
+    if (!frame) {
+      lastTime = 0;
+      frame = requestAnimationFrame(step);
+    }
+  };
+
+  const getState = (element) => {
+    let state = states.get(element);
+    if (!state) {
+      state = { x: 0, y: 0, vx: 0, vy: 0, targetX: 0, targetY: 0 };
+      states.set(element, state);
+    }
+    return state;
+  };
+
+  const release = () => {
+    states.forEach((state) => {
+      state.targetX = 0;
+      state.targetY = 0;
+    });
+    schedule();
+  };
+
+  const onMove = (event) => {
+    if (!enabled) return;
+    const element = event.currentTarget;
+    const rect = element.getBoundingClientRect();
+    const relX = (event.clientX - rect.left - (rect.width / 2)) / (rect.width / 2);
+    const relY = (event.clientY - rect.top - (rect.height / 2)) / (rect.height / 2);
+    const state = getState(element);
+    state.targetX = clamp(relX, -1, 1) * MAX_PULL_X;
+    state.targetY = clamp(relY, -1, 1) * MAX_PULL_Y;
+    schedule();
+  };
+
+  const onSettle = (event) => {
+    const state = states.get(event.currentTarget);
+    if (!state) return;
+    state.targetX = 0;
+    state.targetY = 0;
+    schedule();
+  };
+
+  elements.forEach((element) => {
+    element.addEventListener('pointermove', onMove);
+    element.addEventListener('pointerleave', onSettle);
+    element.addEventListener('pointerdown', onSettle);
+  });
+
+  const sync = () => {
+    enabled = environment.motion === 'full';
+    if (!enabled) release();
+  };
+
+  window.addEventListener('portfolio:environment-change', sync);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) release();
+  });
+
+  sync();
+};

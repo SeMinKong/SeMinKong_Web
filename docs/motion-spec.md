@@ -453,3 +453,14 @@ This section supersedes only the autonomous-loop active range and static compose
 - On reverse travel, crossing below `6400` pauses the master without resetting it; crossing below `5000` resumes normal autonomous manipulation.
 - If a responsive environment change rebuilds the full/lite master, transfer its normalized iteration progress to the new timeline before applying the current pause/resume state; a breakpoint change must not return the cube to the first grip pose.
 - Keyboard settlement takes precedence over the handoff branch and keeps the neutral static pose. Reduced motion, failed enhancement, hidden, offscreen, and page lifecycle behavior remain unchanged.
+
+
+## 2026-08-20 — Lannino-inspired micro-interaction layer (phase 1)
+
+`docs/lannino-design-reference.md`의 1단계 승인 범위. 기존 environment 티어와 Anime.js 체계 안에 다음 세 패턴을 추가한다.
+
+- Line-masked title reveal: `[data-intro]`가 붙은 순수 텍스트 `h1`과 `data-reveal="title"` 섹션 제목은 full motion에서 단어를 줄 단위로 재구성해 `overflow: hidden` 마스크 안에서 `translateY(118% → 0)`으로 상승시킨다. 줄당 stagger `90ms`, `out(4)`, 제목당 `780–860ms`. 분할 중에는 요소에 원문 `aria-label`을 달고 완료·settle 시 원본 텍스트 노드로 복원해 선택·검색·리사이즈에 흔적을 남기지 않는다. lite는 기존 요소 단위 fade, reduced는 정적이다. `<br>`나 자식 요소가 있는 제목은 자동으로 기존 동작으로 폴백한다.
+- Magnetic CTA: `.button`, `.nav-resume`, `.resume-back`이 full motion + fine pointer에서 커서 방향으로 최대 `8px(x) / 6px(y)` 끌려오고 `springStep(190, 22)`으로 복귀한다. rAF는 상호작용 중에만 돌고, 정착하면 transform을 제거하며, hidden·environment 변경 시 즉시 해제한다.
+- Underline slide: `.text-link`, `.source-link`에 `currentColor` 1px 언더라인이 왼쪽에서 `scaleX(0 → 1)`로 채워진다(CSS 전용, `340ms var(--ease-out)`). reduced에서는 전환 없이 즉시 상태만 반영한다.
+
+라이브러리 정책: 소유자 결정(2026-08-20)으로 GSAP 도입이 허용되었다. 단, 이 단계의 패턴은 Anime.js + 자체 spring으로 충분해 번들 증가 없이 유지하고, GSAP(ScrollTrigger·SplitText)은 스크럽 초레오그래피·핀 시퀀스·반복 텍스트 분할이 필요한 패턴부터 패턴 단위로 도입한다.
