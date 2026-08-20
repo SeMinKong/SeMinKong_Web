@@ -257,7 +257,7 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   inset: 0;
   display: block;
   border: 1px solid rgba(241, 242, 233, 0.35);
-  background: #1b2a21;
+  background: #14120f;
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.26), 0 0 1px rgba(255, 255, 255, 0.35);
   backface-visibility: hidden;
 }
@@ -270,32 +270,26 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .control-cube__face--front {
-  background: #b9ef55;
   transform: translateZ(var(--cube-half));
 }
 
 .control-cube__face--back {
-  background: #16231b;
   transform: rotateY(180deg) translateZ(var(--cube-half));
 }
 
 .control-cube__face--right {
-  background: #2f6658;
   transform: rotateY(90deg) translateZ(var(--cube-half));
 }
 
 .control-cube__face--left {
-  background: #243d32;
   transform: rotateY(-90deg) translateZ(var(--cube-half));
 }
 
 .control-cube__face--top {
-  background: #5edbd0;
   transform: rotateX(90deg) translateZ(var(--cube-half));
 }
 
 .control-cube__face--bottom {
-  background: #0c1511;
   transform: rotateX(-90deg) translateZ(var(--cube-half));
 }
 
@@ -383,21 +377,9 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   border-radius: 2px;
 }
 
-.control-cube__face--front {
-  background: linear-gradient(145deg, #d9ff82, #a9dc4c 56%, #638d2b);
-}
 
-.control-cube__face--right {
-  background: linear-gradient(145deg, #3f7568, #214b40 68%, #132f27);
-}
 
-.control-cube__face--left {
-  background: linear-gradient(145deg, #355348, #182c25 72%);
-}
 
-.control-cube__face--top {
-  background: linear-gradient(145deg, #86e8df, #4bc3b9 60%, #28776f);
-}
 
 .robot-wrist {
   position: absolute;
@@ -1148,6 +1130,27 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   letter-spacing: -0.035em;
 }
 
+.focus-list h3 {
+  position: relative;
+}
+
+.focus-list h3::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 34px;
+  height: 2px;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 480ms var(--ease-out) 260ms;
+}
+
+.focus-list > div.is-revealed h3::after {
+  transform: scaleX(1);
+}
+
 .focus-list p {
   color: var(--text-soft);
   font-size: var(--type-body);
@@ -1390,6 +1393,28 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   font-family: var(--font-mono);
   font-size: var(--type-meta);
   font-weight: var(--weight-meta);
+}
+
+
+.project-card--deck .project-card__media img,
+.project-card--deck .project-card__media video,
+.work-row__media img,
+.work-row__media video {
+  transition: transform 720ms var(--ease-soft);
+}
+
+.project-card--deck:hover .project-card__media img,
+.project-card--deck:focus-within .project-card__media img,
+.project-card--deck:hover .project-card__media video,
+.project-card--deck:focus-within .project-card__media video {
+  transform: scale(1.03);
+}
+
+.work-row:hover .work-row__media img,
+.work-row:focus-within .work-row__media img,
+.work-row:hover .work-row__media video,
+.work-row:focus-within .work-row__media video {
+  transform: scale(1.03);
 }
 
 .work-row__media {
@@ -2050,23 +2075,23 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
 }
 
 .home-page .control-cube__face--front {
-  background: var(--signal);
-}
-
-.home-page .control-cube__face--right {
-  background: var(--signal-deep);
-}
-
-.home-page .control-cube__face--left {
   background: var(--surface-strong);
 }
 
+.home-page .control-cube__face--right {
+  background: var(--surface);
+}
+
+.home-page .control-cube__face--left {
+  background: var(--bg-raised);
+}
+
 .home-page .control-cube__face--top {
-  background: var(--text);
+  background: var(--signal);
 }
 
 .home-page .control-cube__face--back {
-  background: var(--surface);
+  background: #14120f;
 }
 
 .project-card > .project-card__media,
@@ -2571,4 +2596,66 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   .project-card--deck {
     transition: none;
   }
+}
+
+/* Pinned Focus chapters (desktop full motion; applied by scroll-story.js) */
+.focus-chapters-pinned {
+  position: relative;
+  margin-block: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.focus-chapters-pinned .focus-layout {
+  display: block;
+}
+
+.focus-chapters-pinned .focus-list {
+  position: relative;
+  display: block;
+  min-height: 46vh;
+  margin-top: 30px;
+  border-top: 0;
+}
+
+.focus-chapters-pinned .focus-list > div {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  border: 0;
+  padding: 0;
+  min-height: 0;
+  will-change: transform, opacity;
+}
+
+.focus-chapters-pinned .focus-list > div > span {
+  display: none;
+}
+
+.focus-chapters-pinned .scene-readout {
+  right: max(24px, calc((100vw - var(--page-max)) / 2));
+  bottom: 44px;
+}
+
+.focus-chapters-pinned .focus-list h3 {
+  font-size: clamp(3.6rem, 7.2vw, 6.6rem);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.focus-chapters-pinned .focus-list h3::after {
+  bottom: -14px;
+  width: 52px;
+  height: 3px;
+}
+
+.focus-chapters-pinned .focus-list p {
+  max-width: 34em;
+  font-size: var(--type-lead);
+  color: var(--text-soft);
 }

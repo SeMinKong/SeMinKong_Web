@@ -374,8 +374,102 @@ ol {
   background: var(--line-strong);
 }
 
+.signal-thread {
+  position: absolute;
+  z-index: 60;
+  left: max(18px, calc((100vw - var(--page-max)) / 2 - 48px));
+  width: 1px;
+  background: rgba(142, 136, 128, 0.32);
+  pointer-events: none;
+}
+
+.signal-thread__fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: linear-gradient(180deg, var(--signal), var(--signal-deep));
+  transform: scaleY(0);
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.signal-thread__node {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  translate: -50% 0;
+  border-radius: 50%;
+  border: 1px solid rgba(142, 136, 128, 0.65);
+  background: #14120f;
+  transition: background-color 340ms var(--ease-out), border-color 340ms var(--ease-out), box-shadow 340ms var(--ease-out);
+}
+
+.signal-thread__node.is-lit {
+  border-color: var(--signal);
+  background: var(--signal);
+  box-shadow: 0 0 10px rgba(232, 74, 50, 0.4);
+}
+
+.cursor-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 320;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid var(--paper-line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--paper-raised);
+  color: var(--paper-ink);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: var(--weight-ui);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.9;
+  transition: opacity 200ms var(--ease-out), scale 260ms var(--ease-out);
+}
+
+.cursor-label i {
+  color: var(--signal-on-light);
+  font-style: normal;
+}
+
+.cursor-label.is-visible {
+  opacity: 1;
+  scale: 1;
+}
+
+.name-letter {
+  display: inline-block;
+  will-change: transform;
+}
+
+.name-mask {
+  overflow: hidden;
+  padding: 8px 0 40px;
+  margin: -8px 0 -40px;
+}
+
+.reveal-line {
+  display: block;
+  overflow: hidden;
+  padding: 0.09em 0 0.16em;
+  margin: -0.09em 0 -0.16em;
+}
+
+.reveal-line__inner {
+  display: block;
+  will-change: transform;
+}
+
 .text-link,
 .source-link {
+  position: relative;
   width: max-content;
   min-height: 44px;
   display: inline-flex;
@@ -386,6 +480,27 @@ ol {
   font-size: 0.8rem;
   font-weight: var(--weight-heading);
   transition: color 260ms ease;
+}
+
+.text-link::after,
+.source-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 340ms var(--ease-out);
+}
+
+.text-link:hover::after,
+.text-link:focus-visible::after,
+.source-link:hover::after,
+.source-link:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .text-link:hover,

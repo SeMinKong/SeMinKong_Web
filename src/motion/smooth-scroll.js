@@ -1,6 +1,10 @@
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 
+let activeLenis = null;
+
+export const getLenis = () => activeLenis;
+
 export const initSmoothScroll = (environment) => {
   let lenis = null;
 
@@ -9,6 +13,7 @@ export const initSmoothScroll = (environment) => {
   const stop = () => {
     lenis?.destroy();
     lenis = null;
+    activeLenis = null;
     delete document.documentElement.dataset.smoothScroll;
   };
 
@@ -25,6 +30,7 @@ export const initSmoothScroll = (environment) => {
       wheelMultiplier: 0.9
     });
 
+    activeLenis = lenis;
     document.documentElement.dataset.smoothScroll = 'active';
     if (document.hidden) lenis.stop();
   };

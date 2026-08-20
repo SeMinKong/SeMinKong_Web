@@ -112,6 +112,24 @@ html[data-motion="reduced"] [data-hero-progress] {
   transform: scaleX(1) !important;
 }
 
+html[data-motion="reduced"] .case-section h2,
+html[data-motion="reduced"] .about-method__list span,
+html[data-motion="reduced"] .project-card__media img,
+html[data-motion="reduced"] .project-card__media video,
+html[data-motion="reduced"] .work-row__media img,
+html[data-motion="reduced"] .work-row__media video {
+  transition: none;
+}
+
+html[data-motion="reduced"] .cursor-label {
+  display: none;
+}
+
+html[data-motion="reduced"] .text-link::after,
+html[data-motion="reduced"] .source-link::after {
+  transition: none;
+}
+
 html[data-motion="reduced"] .page-curtain {
   display: none;
 }
