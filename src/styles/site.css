@@ -2597,3 +2597,65 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
     transition: none;
   }
 }
+
+/* Pinned Focus chapters (desktop full motion; applied by scroll-story.js) */
+.focus-chapters-pinned {
+  position: relative;
+  margin-block: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.focus-chapters-pinned .focus-layout {
+  display: block;
+}
+
+.focus-chapters-pinned .focus-list {
+  position: relative;
+  display: block;
+  min-height: 46vh;
+  margin-top: 30px;
+  border-top: 0;
+}
+
+.focus-chapters-pinned .focus-list > div {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  border: 0;
+  padding: 0;
+  min-height: 0;
+  will-change: transform, opacity;
+}
+
+.focus-chapters-pinned .focus-list > div > span {
+  display: none;
+}
+
+.focus-chapters-pinned .scene-readout {
+  right: max(24px, calc((100vw - var(--page-max)) / 2));
+  bottom: 44px;
+}
+
+.focus-chapters-pinned .focus-list h3 {
+  font-size: clamp(3.6rem, 7.2vw, 6.6rem);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.focus-chapters-pinned .focus-list h3::after {
+  bottom: -14px;
+  width: 52px;
+  height: 3px;
+}
+
+.focus-chapters-pinned .focus-list p {
+  max-width: 34em;
+  font-size: var(--type-lead);
+  color: var(--text-soft);
+}

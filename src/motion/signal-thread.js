@@ -1,3 +1,5 @@
+import { loadGsap } from './gsap-loader.js';
+
 const DESKTOP = '(min-width: 961px)';
 
 export const initSignalThread = (environment) => {
@@ -27,13 +29,7 @@ export const initSignalThread = (environment) => {
   let teardown = null;
 
   (async () => {
-    const [gsapModule, triggerModule] = await Promise.all([
-      import('gsap'),
-      import('gsap/ScrollTrigger')
-    ]);
-    const gsap = gsapModule.gsap ?? gsapModule.default;
-    const { ScrollTrigger } = triggerModule;
-    gsap.registerPlugin(ScrollTrigger);
+    const { gsap, ScrollTrigger } = await loadGsap();
 
     const rail = document.createElement('div');
     rail.className = 'signal-thread';

@@ -17,6 +17,7 @@ import { initNavigation } from './ui/navigation.js';
 import { initMagnetic } from './motion/magnetic.js';
 import { initNameEmphasis } from './motion/name-emphasis.js';
 import { initSignalThread } from './motion/signal-thread.js';
+import { initScrollStory } from './motion/scroll-story.js';
 import { initCursorLabel } from './motion/cursor-label.js';
 
 const environment = initEnvironment();
@@ -26,6 +27,7 @@ initNavigation(environment);
 initMagnetic(environment);
 initNameEmphasis(environment);
 initSignalThread(environment);
+initScrollStory(environment);
 initCursorLabel(environment);
 initPageTransitions(environment);
 initDexterousHand(environment);

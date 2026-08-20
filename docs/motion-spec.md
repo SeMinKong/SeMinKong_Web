@@ -492,3 +492,14 @@ lannino 레퍼런스 로드맵의 잔여 패턴. 절제 원칙: hover·리빌 �
 - Signal thread: 데스크톱(≥961px)·비 reduced에서 `main` 왼쪽 여백에 1px 레일이 생기고, 버밀리언 fill이 GSAP ScrollTrigger `scrub(0.6)`으로 문서 진행도에 맞춰 차오른다. 최상위 섹션마다 노드가 놓이고 `top 62%` 통과 시 점화, 역스크롤 시 소등된다(가역). 케이스 페이지처럼 단일 래퍼(article) 구조는 내부 섹션으로 자동 드릴다운한다. 모바일·reduced에서는 생성하지 않으며 리사이즈로 조건을 벗어나면 트리거를 kill하고 레일을 제거한다.
 - GSAP 도입 범위: gsap 코어와 ScrollTrigger는 이 모듈에서만 동적 import되어 데스크톱 비 reduced 세션에서만 로드된다(gzip: gsap 27.4KB + ScrollTrigger 17.4KB + 모듈 청크 22.5KB). 기존 Anime.js 모듈은 그대로다.
 - Hero cube: 면 팔레트를 웜 세트로 통일 — front `--surface-strong`, right `--surface`, left `--bg-raised`, back `#14120f`, bottom `--bg`, top만 `--signal`. 유휴 사이클에서는 차분한 차콜 큐브로 읽히다 버밀리언 면이 한 번씩 스치고, 스크롤 피날레는 red 면으로 정착한다. 케스케이드에 남아 있던 구세대 그린·시안 면 색 선언은 완전히 제거했다.
+
+
+## 2026-08-20 — Pinned scroll scenes (phase 3.5)
+
+banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입한다. 데스크톱(≥961px) + full motion 전용이며, lite·mobile·reduced는 기존 정적 레이아웃을 그대로 쓴다(스테이지 클래스와 readout은 JS가 조건 충족 시에만 부착).
+
+- THING demo scenes: `.thing-demo-section`이 ScrollTrigger `pin(fixed)`으로 고정되고 270% 스크롤 동안 시연 4장면이 `scrub(0.5)` + 챕터 `snap`으로 교체된다. 우하단 `scene-readout`(01/04 + 틱)이 진행을 표시하고, 활성 챕터의 영상은 muted 자동재생·비활성은 일시정지(기존 media-playback의 상호 배타 규칙과 협동). 섹션을 벗어나면 전부 정지한다.
+- Focus chapters: 홈 `.focus-section`이 170% 동안 핀되어 Vision→Robotics→Systems가 디스플레이 타이포(최대 6.6rem)로 전환된다. 행의 소형 번호는 readout과 중복되어 핀 모드에서 숨긴다.
+- Proof count-up: `.project-card__facts strong`, `.work-row__proofs dt`, `.case-facts dd` 중 숫자로 시작하는 값이 진입 시 0부터 1.1s 카운트업(1회, 접미사·소수점 보존). 비숫자 값은 건드리지 않는다.
+- Lenis 연동: gsap-loader가 Lenis 인스턴스에 `ScrollTrigger.update`를 구독시킨다. 핀은 `pinType: fixed`로 고정하며, 계측상 약 22px의 고정 오프셋이 있으나 88px 상단 패딩 안에서 시각적으로 무해함을 확인했다.
+- 검증 노트: 헤드리스 Chromium은 H.264 미탑재라 자동재생 경로는 호출·포스터 폴백까지 확인했고 실제 재생은 실브라우저 확인 항목으로 남긴다.
