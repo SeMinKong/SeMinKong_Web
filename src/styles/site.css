@@ -1018,27 +1018,6 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   background: var(--bg);
 }
 
-.project-card__media--window::before,
-.work-row__media--window::before {
-  content: attr(data-frame-label);
-  position: absolute;
-  z-index: 2;
-  top: auto;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  padding-inline: 13px;
-  border-top: 1px solid rgba(241, 238, 230, 0.22);
-  background: rgba(17, 16, 14, 0.9);
-  color: #bdb7ae;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-}
-
 .project-card__media--window > img,
 .project-card__media--window > video,
 .work-row__media--window > img,
@@ -2284,17 +2263,6 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   aspect-ratio: auto;
   border-radius: 1px;
   background: #11100e;
-}
-
-.project-card--deck .project-card__media--window::before {
-  top: auto;
-  bottom: 0;
-  height: 30px;
-  padding-inline: 11px;
-  border-top-color: rgba(241, 238, 230, 0.2);
-  background: rgba(17, 16, 14, 0.9);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
 }
 
 .project-card--deck .project-card__media--window > img,
