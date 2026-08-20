@@ -464,3 +464,13 @@ This section supersedes only the autonomous-loop active range and static compose
 - Underline slide: `.text-link`, `.source-link`에 `currentColor` 1px 언더라인이 왼쪽에서 `scaleX(0 → 1)`로 채워진다(CSS 전용, `340ms var(--ease-out)`). reduced에서는 전환 없이 즉시 상태만 반영한다.
 
 라이브러리 정책: 소유자 결정(2026-08-20)으로 GSAP 도입이 허용되었다. 단, 이 단계의 패턴은 Anime.js + 자체 spring으로 충분해 번들 증가 없이 유지하고, GSAP(ScrollTrigger·SplitText)은 스크럽 초레오그래피·핀 시퀀스·반복 텍스트 분할이 필요한 패턴부터 패턴 단위로 도입한다.
+
+
+## 2026-08-20 — Name emphasis layer (phase 1.5)
+
+이름과 키워드에 정체성을 싣는 강조 모션. 전부 full motion 전용이며 lite/reduced는 기존 표현을 그대로 쓴다.
+
+- Hero name letter entrance: `.hero-identity__name`을 full motion에서 글자 span으로 분할하고, h1에 임시 `name-mask`(overflow hidden, px 단위 상쇄 패딩)를 씌운 채 글자를 `translateY(114% → 0)`, stagger `34ms`, `out(4)`, `880ms`로 올린다. 등장 후 마스크를 제거하고 글자 span은 hover wave를 위해 유지한다(요소에 원문 `aria-label`, 글자는 `aria-hidden`).
+- Name hover wave: Hero 이름(h1 hover)과 내비 워드마크 텍스트에 글자 단위 웨이브 — `y 0 → -6 → 0`(워드마크 -3), Manrope 가변 weight `680 → 800 → 680`(워드마크 650 → 780), `inOut(2)`, 글자당 36/30ms 지연. 실행 중 재트리거를 막고 종료 시 인라인 스타일을 제거한다.
+- Focus keyword ignition: reveal이 완료되면 요소에 `is-revealed` 상태 클래스가 붙고, `.focus-list h3`의 34×2px vermilion 밑줄이 `scaleX(0 → 1)`로 점화된다(CSS 전용, `480ms var(--ease-out) 260ms`). 밑줄은 모든 티어에서 최종 상태로 존재하는 디자인 요소이며 reduced에서는 즉시 표시된다.
+- `is-revealed`는 이후 단계에서 재사용할 수 있는 범용 reveal 상태 클래스다.

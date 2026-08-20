@@ -374,6 +374,17 @@ ol {
   background: var(--line-strong);
 }
 
+.name-letter {
+  display: inline-block;
+  will-change: transform;
+}
+
+.name-mask {
+  overflow: hidden;
+  padding: 8px 0 40px;
+  margin: -8px 0 -40px;
+}
+
 .reveal-line {
   display: block;
   overflow: hidden;

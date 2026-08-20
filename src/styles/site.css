@@ -1148,6 +1148,27 @@ html[data-depth="interactive"] .dexterous-hand.is-dragging .dexterous-hand__scen
   letter-spacing: -0.035em;
 }
 
+.focus-list h3 {
+  position: relative;
+}
+
+.focus-list h3::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 34px;
+  height: 2px;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 480ms var(--ease-out) 260ms;
+}
+
+.focus-list > div.is-revealed h3::after {
+  transform: scaleX(1);
+}
+
 .focus-list p {
   color: var(--text-soft);
   font-size: var(--type-body);

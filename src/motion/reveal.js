@@ -48,6 +48,7 @@ const restoreLines = (element) => {
 
 const settle = (element) => {
   restoreLines(element);
+  element.classList.add('is-revealed');
   element.style.opacity = '1';
   element.style.filter = 'none';
   element.style.clipPath = 'none';
@@ -68,7 +69,10 @@ const animateLines = (element, inners, baseDelay, duration) => {
     duration,
     delay: (_, index) => baseDelay + (index * LINE_STAGGER),
     ease: 'out(4)',
-    onComplete: () => restoreLines(element)
+    onComplete: () => {
+      restoreLines(element);
+      element.classList.add('is-revealed');
+    }
   });
 };
 
@@ -91,6 +95,7 @@ export const initIntro = (environment, selector) => {
   fontsReady().then(() => {
     if (cancelled) return;
     elements.forEach((element, index) => {
+      if (environment.motion === 'full' && element.matches('.hero-identity__name')) return;
       const isTitle = element.matches('h1, .hero-identity__name');
       const isMeta = element.matches('.hero-identity__role, .case-hero__meta, .eyebrow');
 
@@ -169,7 +174,8 @@ export const initReveals = (environment, selector, options = {}) => {
       const properties = {
         opacity: [0, 1],
         duration: type === 'media' ? 940 : type === 'row' ? 720 : 780,
-        ease: 'out(4)'
+        ease: 'out(4)',
+        onComplete: () => element.classList.add('is-revealed')
       };
 
       if (type === 'media') {

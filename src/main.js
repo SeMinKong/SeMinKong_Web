@@ -15,12 +15,14 @@ import { initScrollKinetics } from './motion/scroll-kinetics.js';
 import { initSmoothScroll } from './motion/smooth-scroll.js';
 import { initNavigation } from './ui/navigation.js';
 import { initMagnetic } from './motion/magnetic.js';
+import { initNameEmphasis } from './motion/name-emphasis.js';
 
 const environment = initEnvironment();
 
 initSmoothScroll(environment);
 initNavigation(environment);
 initMagnetic(environment);
+initNameEmphasis(environment);
 initPageTransitions(environment);
 initDexterousHand(environment);
 initHeroStory(environment);
