@@ -1,16 +1,11 @@
 import { animate, createTimeline } from 'animejs';
 
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+import { clamp, springStep } from './utils.js';
+
 const HOVER_LIMIT_X = 18;
 const HOVER_LIMIT_Y = 14;
 const DRAG_LIMIT_X = 32;
 const DRAG_LIMIT_Y = 24;
-
-const springStep = (value, velocity, target, dt, stiffness = 120, damping = 19) => {
-  const acceleration = ((target - value) * stiffness) - (velocity * damping);
-  const nextVelocity = velocity + (acceleration * dt);
-  return [value + (nextVelocity * dt), nextVelocity];
-};
 
 const poses = [
   {
