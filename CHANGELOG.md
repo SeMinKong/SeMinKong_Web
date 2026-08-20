@@ -6,6 +6,11 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Removed the two inactive `max-width: 0px` style archives (the legacy tendon-driven hand geometry and the superseded precision-detail experiment) together with every selector no route renders — the pre-deck featured-work and proofs layout, the deck hint, the unused frame-label affordance, and leftover About/Resume/case-study styles — reducing the shipped CSS from 213 KB to 182 KB without changing any computed style.
+- Dropped the design tokens and hand-local custom properties that only the removed legacy styles consumed.
+- Removed the three THING source photos that the 1600px WebP and portrait delivery assets superseded.
+- Consolidated the duplicated `clamp` and `springStep` helpers into a shared `src/motion/utils.js` while keeping every spring tuning value identical.
+
 - Added a source-only `AI VISITOR NOTE` easter egg to the Copyright page without changing its visible layout or accessibility tree.
 
 - Let the Home Hero cube flow from its scroll-synchronized finale into the existing coordinated manipulation loop through a short overlap, preserving continuous motion after scrolling ends without adding another turn.

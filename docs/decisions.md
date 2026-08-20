@@ -414,3 +414,9 @@
 - Decision: Copyright HTML에 승인된 `AI VISITOR NOTE`를 렌더링되지 않는 `<template>`으로 보관한다.
 - Reason: 화면의 읽기 흐름과 접근성을 바꾸지 않으면서 소스 안에 포트폴리오 성격에 맞는 유머를 남기기 위해서다.
 - Impact: 이 문구는 보안·저작권 집행·크롤러 차단 수단으로 간주하지 않는다. visible DOM, 접근성 트리, motion, SEO 본문은 변경하지 않으며 공격적인 prompt override나 개인정보 관련 지시는 넣지 않는다.
+
+## 2026-08-20 — 배포판 기준 레거시 코드 정리
+
+- Decision: 렌더링에 관여하지 않는 코드를 저장소에서 제거한다. `max-width: 0px`로 보관하던 구세대 손 지오메트리와 정밀 디테일 실험 아카이브, featured-work·proofs·deck hint·frame-label 등 어떤 라우트도 참조하지 않는 선택자, 레거시 전용 custom property, WebP 전달본으로 대체된 THING 원본 사진 3장을 삭제하고, 네 곳에 중복 정의된 `clamp`와 두 곳의 `springStep`을 `src/motion/utils.js`로 통합한다.
+- Reason: 비활성 아카이브와 죽은 선택자는 cascade에 영향을 주지 않으면서 파일 크기, 빌드 산출물, 코드 탐색 비용만 키우고, 과거 구현은 git 이력(v1.3.0 이전)으로 언제든 복원할 수 있기 때문이다.
+- Impact: `site.css`가 4,272줄에서 2,659줄로, 배포 CSS 합계가 약 213KB에서 182KB로 줄어든다. 계산된 스타일, 모션 튜닝 값, 마크업, 접근성 트리는 변경하지 않는다. 검증은 빌드 산출물 규칙 비교(제거된 75개 규칙 전수 확인)와 라우트별 스크린샷 픽셀 비교로 수행한다.
