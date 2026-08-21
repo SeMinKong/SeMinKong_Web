@@ -146,7 +146,7 @@ export const initReveals = (environment, selector, options = {}) => {
     if (type === 'media') {
       element.style.clipPath = 'inset(7% 0 7% 0 round 14px)';
     } else {
-      element.style.transform = `translateY(${type === 'row' ? 18 : 22}px)`;
+      element.style.transform = `translateY(${type === 'video' ? 14 : type === 'row' ? 18 : 22}px)`;
       if (type === 'text') element.style.clipPath = 'inset(0 0 14% 0)';
     }
   });
@@ -173,7 +173,7 @@ export const initReveals = (environment, selector, options = {}) => {
 
       const properties = {
         opacity: [0, 1],
-        duration: type === 'media' ? 940 : type === 'row' ? 720 : 780,
+        duration: type === 'media' ? 940 : type === 'video' ? 840 : type === 'row' ? 720 : 780,
         ease: 'out(4)',
         onComplete: () => element.classList.add('is-revealed')
       };
@@ -181,7 +181,7 @@ export const initReveals = (environment, selector, options = {}) => {
       if (type === 'media') {
         properties.clipPath = ['inset(7% 0 7% 0 round 14px)', 'inset(0% 0 0% 0 round 14px)'];
       } else {
-        properties.y = [type === 'row' ? 18 : 22, 0];
+        properties.y = [type === 'video' ? 14 : type === 'row' ? 18 : 22, 0];
         if (type === 'text') {
           properties.clipPath = ['inset(0 0 14% 0)', 'inset(0 0 0% 0)'];
         }

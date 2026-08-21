@@ -44,6 +44,8 @@ export const initToolLogos = () => {
   document.querySelectorAll('[data-tool-icon]').forEach((mark) => {
     const icon = iconByName[mark.dataset.toolIcon];
     if (!icon) return;
+    mark.style.setProperty('--tool-color', `#${icon.hex}`);
+    mark.closest('[data-tool-item]')?.style.setProperty('--tool-color', `#${icon.hex}`);
     mark.replaceChildren(createIcon(icon));
     mark.classList.add('is-logo-ready');
   });

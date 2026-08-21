@@ -503,3 +503,90 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Proof count-up: `.project-card__facts strong`, `.work-row__proofs dt`, `.case-facts dd` 중 숫자로 시작하는 값이 진입 시 0부터 1.1s 카운트업(1회, 접미사·소수점 보존). 비숫자 값은 건드리지 않는다.
 - Lenis 연동: gsap-loader가 Lenis 인스턴스에 `ScrollTrigger.update`를 구독시킨다. 핀은 `pinType: fixed`로 고정하며, 계측상 약 22px의 고정 오프셋이 있으나 88px 상단 패딩 안에서 시각적으로 무해함을 확인했다.
 - 검증 노트: 헤드리스 Chromium은 H.264 미탑재라 자동재생 경로는 호출·포스터 폴백까지 확인했고 실제 재생은 실브라우저 확인 항목으로 남긴다.
+
+## 2026-08-21 — Work-only editorial scroll chapters override
+
+이 항목은 `Signal thread scroll spine`의 전역 rail과 `Pinned scroll scenes`의 Home Focus·THING Demos pin을 대체한다. Proof count-up도 제거한다.
+
+- 모든 진행 UI와 readout을 제거하고, GSAP ScrollTrigger는 Work index의 프로젝트 소개에만 사용한다.
+- 데스크톱 full + fine pointer + 961px 이상에서 각 `.work-row`를 최소 `108svh` chapter로 확장한다. 미디어 바깥 wrapper는 CSS sticky로 잠시 고정하고, ScrollTrigger `scrub: 0.55`가 clip, scale, 작은 rotation, opacity를 가역적으로 진행한다.
+- 홀수·짝수 chapter는 미디어와 copy의 좌우 위치를 교차한다. 제목 링크의 stretched hit area를 지키기 위해 `.work-row__copy`와 제목에는 transform을 적용하지 않고 opacity만 변화시킨다.
+- snap, wheel/touch interception, 별도 progress bar, counter, tick을 사용하지 않는다. 기존 `01–06` 프로젝트 번호가 유일한 위치 표식이다.
+- 960px 이하, coarse pointer, lite, reduced motion에서는 GSAP chapter class를 붙이지 않고 완전한 정적 목록과 native vertical scroll을 사용한다.
+- environment 또는 viewport가 바뀌면 context와 trigger를 revert하고 class·inline style을 정리한다. 다시 desktop full로 돌아오면 현재 문서 흐름에서 새 geometry로 재구성한다.
+- Home Focus는 짧은 row reveal만, THING Demos는 수동 영상 재생과 정적 gallery만 유지한다.
+
+## 2026-08-21 — Work chapter readability and handoff override
+
+- 이 항목은 앞 항목의 `.work-row__copy` opacity 변화 규칙을 대체한다. title link, metadata, summary, proof, stack, CTA는 scroll 전체에서 opacity 1을 유지하며 transform 대상이 아니다.
+- media는 18% opacity와 작은 clip/rotation에서 진입해 30% 지점까지 완성되고, 다음 chapter가 들어올 때 58–76% 구간에서 6% opacity로 빠르게 이탈한다. 마지막 index/arrow tween을 100%에 끝내 timeline의 상대 구간을 명시적으로 유지한다.
+- THING media는 `min(68svh, 604px)` 높이로 제한하고 별도 portrait sticky top을 사용한다. screen frame은 16:9 contain, Alkkagi는 1:1 cover를 사용한다.
+- GSAP 비동기 setup은 generation token으로 pagehide·environment 변경 뒤의 stale completion을 폐기한다. `loadGsap()`을 다시 호출할 때 현재 Lenis instance와 기존 instance를 비교해 `off/on` 구독을 교체한다.
+- hover zoom은 `transform` 대신 CSS individual `scale` property를 사용해 depth layer의 translate transform을 덮지 않는다.
+
+## 2026-08-21 — Stacked Project Scenes override
+
+이 항목은 미디어만 sticky로 두고 `01–06` index와 arrow를 별도로 움직이던 Work chapter 규칙을 대체한다.
+
+- 각 Work article은 미디어·copy·proof·stack·CTA를 하나의 실제 semantic link인 `.work-row__composition`에 넣고, 바깥 `.work-row__scene` 전체를 sticky stage로 사용한다.
+- GSAP scrub은 composition의 작은 X/Y 이동·scale·rotation·filter, 미디어 mask, 제목 line mask, supporting copy stagger를 한 timeline에서 동기화한다. 활성 장면은 완전한 대비와 identity transform에서 충분히 머문다.
+- 다음 장면으로 넘어갈 때 이전 composition 전체가 `scale .975`, 최대 `-4vh`, 작은 rotation과 brightness/saturation 감소로 물러난다. 미디어만 0에 가깝게 사라지는 전환은 사용하지 않는다.
+- snap, wheel/touch interception, progress, counter, tick은 사용하지 않는다. 스크롤 transport는 계속 native/Lenis 정책을 따르고 역스크롤에서도 같은 timeline을 가역적으로 seek한다.
+- full motion + interactive depth + `min-width: 961px` + `min-height: 700px`에서만 sticky scene을 활성화한다. 짧은 desktop, tablet, mobile, coarse pointer, lite, reduced, GSAP 실패는 inline transform이 없는 정적 editorial grid로 복귀한다.
+- focus가 장면 link에 들어오면 composition, title, supporting copy, media mask를 즉시 완성 상태로 정리한다. 프로젝트당 focusable link는 하나다.
+- viewport 조건 변경 시 GSAP context를 revert하고 빈 style attribute까지 정리한 뒤, 조건을 다시 만족할 때 현재 geometry로 재구성한다.
+
+## 2026-08-21 — About tool icon interaction
+
+- Simple Icons의 `hex`를 CSS custom property로 전달해 SVG mark에 실제 브랜드 색을 적용한다. 별도 icon runtime이나 image request를 추가하지 않는다.
+- full motion + fine pointer hover에서만 icon을 최대 `-3px`, `1.05` scale, `±2deg`로 반응시키고 배경 tint를 강화한다. list item 자체는 interactive control로 가장하지 않는다.
+- lite, reduced, touch, coarse pointer에서는 모든 기술명과 색 표식을 정적으로 표시한다.
+
+## 2026-08-21 — About logo wall interaction override
+
+- 이 항목은 앞선 58px badge hover를 대체한다. full motion + fine pointer에서만 100px급 mark를 최대 `translateY(-4px) scale(1.1) rotate(±1deg)`로 반응시키고 브랜드색 기반의 얕은 drop shadow를 더한다.
+- Hover한 항목의 기술명은 220–260ms에 나타난다. 자동 순환 spotlight나 상시 움직임은 추가하지 않는다.
+- lite에서는 transform 없이 hover label만 제공한다. Touch/coarse pointer와 520px 이하에서는 label을 항상 표시한다.
+- reduced motion에서는 icon의 transform·filter와 icon/name transition을 모두 제거한다. 목록은 link나 button이 아니므로 focus target과 pointer cursor를 만들지 않는다.
+
+## 2026-08-21 — Native-ratio video motion override
+
+- Work의 frame-free THING·Alkkagi stage는 rectangular `clip-path`를 사용하지 않는다. 전체 composition의 opacity·translate·scale handoff는 유지하되 영상 자체를 inset mask나 hover crop 안에 넣지 않는다.
+- Case-study video는 `data-reveal="video"`를 사용한다. 이 타입은 `14px → 0`의 작은 Y 이동과 opacity만 840ms 동안 적용하며 border radius 또는 clip-path를 만들지 않는다.
+- Video와 `figcaption`은 별도 reveal target이다. Caption은 영상이 보이기 시작했다는 이유로 강제 표시하지 않고 자신의 정상 흐름 위치에 진입할 때 text reveal을 수행한다.
+- Reduced motion에서는 Work video stage와 case video·caption 모두 transform, clip, opacity 잔여 상태 없이 즉시 완성된 정적 레이아웃을 사용한다.
+
+## 2026-08-21 — About compact tool interaction override
+
+이 항목은 100px급 logo wall의 hover label과 `translateY(-4px) scale(1.1) rotate(±1deg)` 반응을 대체한다.
+
+- 기술명은 모든 motion tier와 pointer 환경에서 처음부터 opacity 1의 정적 최종 상태로 표시한다. Hover는 essential label을 reveal하는 조건이 아니다.
+- Full motion + fine pointer에서만 44px 이하 mark를 `translateY(-2px) scale(1.04)`로 반응시키고 작은 브랜드색 drop shadow를 더한다. Rotation은 사용하지 않는다.
+- Lite, touch, coarse pointer에는 transform을 추가하지 않는다. Reduced motion은 icon과 name의 transition, transform, filter를 모두 제거한다.
+- 개별 도구는 click·focus·pointer cursor를 받지 않으며, CSS micro feedback은 레이아웃이나 인접 기술명의 위치를 바꾸지 않는다.
+
+## 2026-08-21 — Home split-entry intro
+
+- Home direct navigation/reload의 scroll top에서만 별도 overlay timeline을 실행한다. `SeMinKong`은 full에서 640ms 동안 `y 14px → 0`, `scale .985 → 1`, opacity 0→1로 들어오고 260ms 읽기 beat 뒤 split을 시작한다.
+- Full split은 780ms 동안 두 paper panel을 X `±100.5%`로 보내고 이름의 두 절반을 X `±18vw`와 opacity 0으로 정리한다. Hero frame에는 transform을 추가하지 않고 opacity `.72 → 1`만 사용한다. 실제 Hero copy는 분할 이름의 fade가 끝나는 split 56% 지점부터 나타나 mobile에서도 두 이름이 겹치지 않게 한다. 총 길이는 약 1.68초다.
+- Lite/mobile은 360ms name entrance, 120ms hold, 560ms panel split로 축소하고 name scale을 사용하지 않는다. Reduced motion은 overlay를 생성 상태에서 즉시 제거한다.
+- Intro는 기존 page exit curtain, Hero copy/hand scroll timeline, name hover wave, hand rig와 transform ownership을 공유하지 않는다. Lenis는 intro 완료 후 시작한다.
+- Wheel, pointer, touch, 실제 scroll, Tab, Escape, Enter, Space, 모든 방향키, PageUp/PageDown, Home/End는 preventDefault 없이 즉시 intro를 완료한다. Hidden, pagehide, nonzero-scroll pageshow, BFCache pageshow, environment→reduced, 2.3초 watchdog도 모든 inline style과 overlay를 정리한다.
+- Head의 조건부 prepaint cover는 CSS/module이 준비되기 전 Hero가 먼저 번쩍이는 것을 막는다. Overlay가 활성화되면 이 임시 cover는 즉시 사라져 split 사이로 Hero가 보이며, reduced/hash/back-forward/background-tab에서는 처음부터 만들지 않는다. Intro 동안 stable scrollbar gutter를 유지해 종료 프레임에서 Hero의 가로축이 움직이지 않게 한다.
+
+## 2026-08-21 — Home FLIP handoff override
+
+- Overlay 이름의 typography를 실제 Hero 이름과 맞추고, font 준비 뒤 두 rect의 중심·폭 차이를 측정한다. Full에서는 중앙 이름이 `440ms`에 들어오고 `560ms`부터 panel이 열리며, `610–1320ms`에 실제 h1 위치로 이동한 뒤 `1320–1380ms`에 실제 h1로 crossfade한다.
+- Lite/mobile은 `280ms` entrance, `350–920ms` panel split, `385–870ms` FLIP, `870–920ms` crossfade를 사용한다. 고정 좌표 없이 현재 viewport의 실제 h1 rect를 사용한다.
+- Intro 재생 중 Hero 이름의 letter entrance와 generic `data-intro` animation은 실행하지 않는다. Name emphasis는 착지 후 hover wave만 제공한다.
+- Hero의 초기 normalized progress는 `4100 / 6800` reading state다. Native scroll progress는 `landing + raw × (1 - landing)`으로 매핑해 완료된 copy·hand·CTA를 유지하면서 cube flourish로만 전진한다.
+- Anime timeline에는 `6600–6800`의 명시적 final hold를 두어 normalized progress와 실제 timeline duration을 일치시킨다.
+- Supporting copy와 navigation은 FLIP의 마지막 구간에 panel opening과 동기화해 조립하고, 조기 입력·resize·pagehide에서는 모든 임시 opacity와 overlay를 한 번에 제거해 완성된 Hero를 즉시 노출한다.
+
+## 2026-08-21 — Home handwritten word entrance override
+
+- Overlay word를 아홉 개의 intro 전용 글자로 분할하고, 각 글자에 10–12° 사선 edge의 `clip-path`와 opacity `.48 → 1`을 적용한다. 글자 자식에는 translate·scale·weight 변화를 주지 않으며, writing layer의 전체 폭만 exact word rect에 맞춰 lite의 kerning 차이를 흡수한다.
+- Full은 글자당 `150ms`, `42ms` stagger로 약 `486ms` 동안 쓴다. `500–550ms`에 정확한 FLIP용 word로 crossfade하고, panel은 `560ms`, 부모 FLIP은 `610ms`에 시작한다.
+- Lite/mobile은 글자당 `120ms`, `34ms` stagger로 약 `392ms` 동안 쓴다. `400–440ms` word crossfade, `450ms` panel opening, `485ms` FLIP으로 이어져 전체를 약 `1.02s` 안에 끝낸다.
+- 하나의 3×10px nib만 글자 진행 방향으로 움직이며 opening 전 opacity 0이 된다. Nib은 body의 fixed 장식 요소라 word rect에 포함되지 않고, 완료·취소·scroll·resize·pagehide 모든 경로에서 overlay와 함께 제거한다.
+- Reduced motion, hash entry, BFCache는 writing DOM을 만들지 않는다. 실제 Hero h1과 name hover wave의 소유권은 기존 모듈에 남긴다.

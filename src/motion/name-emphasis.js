@@ -28,7 +28,7 @@ export const initNameEmphasis = (environment) => {
     targets.push({
       element: heroName,
       trigger: heroName.closest('h1') ?? heroName,
-      entrance: true,
+      entrance: false,
       maskTarget: heroName.closest('h1') ?? heroName,
       lift: 6,
       weightPeak: 800,

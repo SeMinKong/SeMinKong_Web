@@ -539,3 +539,117 @@ This section supersedes only the static final-hold and autonomous-pause-through-
 - Reverse scrolling below `6400` pauses the base loop again for deterministic flourish seeking; crossing below `5000` restores the normal autonomous loop. Keyboard settlement, reduced motion, failed enhancement, hidden, and offscreen states retain their established static or paused behavior.
 
 Visual acceptance: the cube does not freeze when the Hero reaches its final scroll position, and the flourish flows into the familiar manipulation loop without a pose snap, direction reversal, added rotation, or pointer interruption.
+
+## 2026-08-21 — 읽기 중심 페이지 흐름 정리
+
+이 항목은 전역 시그널 스레드와 Home Focus·THING Demos의 핀 챕터 구성을 대체한다.
+
+- 문서 진행도를 나타내는 상단 bar, 좌측 rail/node, Home Hero 하단 line을 모든 route에서 제거한다. 스크롤 위치는 브라우저 기본 scrollbar로만 확인한다.
+- Home Focus는 `Vision / Robotics / Systems` 세 키워드와 소형 번호만 남긴 정적인 editorial index로 사용한다. 키워드 아래의 요약 문구와 핀 전환·readout은 사용하지 않는다.
+- THING Demos는 작은 순번 badge, native video controls, 2열/모바일 1열 갤러리를 유지한다. 상세 페이지에서 scene pin, 자동 chapter 전환, 별도 counter를 사용하지 않는다.
+- Work index만 프로젝트별 scroll chapter를 가진다. 실제 미디어와 프로젝트 정보는 정상 문서 순서에 남고, 데스크톱에서만 좌우가 교차하는 큰 chapter로 전개한다.
+- About의 추상적인 `개발 방식` 3단계 대신 `요즘 붙잡고 있는 질문`을 사용한다. Retargeting, Sim-to-real, Local AI를 현재 공부하고 탐색하는 질문으로 표현하며 완성된 전문성처럼 과장하지 않는다.
+
+## 2026-08-21 — Work 증거 프레임 정교화
+
+- Work index의 실제 제품 화면은 동일 비율로 억지 crop하지 않는다. dashboard·분류 결과·제품 cover·diagram은 전체 interface가 보이는 16:9 contain, 게임은 1:1, THING은 9:16으로 원본 성격을 유지한다.
+- chapter의 시각적 전환은 미디어에 집중하고 프로젝트 제목, 역할, 요약, 기술, CTA는 어떤 scroll 위치에서도 완전한 대비로 읽혀야 한다.
+- 세로 미디어는 desktop viewport 높이에 맞춰 제한하며 720px 높이에서도 fixed navigation 아래에 전체 frame이 들어와야 한다.
+- poster가 없는 큰 autoplay preview는 첫 frame 공백을 피할 수 있도록 실제 video frame에서 만든 가벼운 poster를 제공한다.
+
+## 2026-08-21 — 순서 번호 제거와 프로젝트 장면화 override
+
+이 항목은 Home·Work·About·THING에서 장식용 `01–06`을 유지하던 앞선 결정을 대체한다.
+
+- 실제 읽기 순서가 HTML과 문서 흐름으로 이미 분명한 곳에는 장식용 순번을 표시하지 않는다. Home project deck, Focus, Work 목록, About 기술 분류, THING Demos의 `01–06`은 제거한다.
+- 날짜·연도·버전·영상 길이·landmark와 axis 수·성능처럼 프로젝트 근거인 숫자는 그대로 유지한다.
+- Work desktop은 썸네일 하나가 따라오는 구성이 아니라 미디어, 제목, 역할, 요약, 기술, CTA가 한 화면의 `project scene`으로 함께 머무르고 전환된다.
+- Saffron의 전체 sticky stage와 Mathis Biabiany의 비대칭 편집 구도에서 원리만 참고한다. 두 사이트의 WebGL, 브랜딩, 자산, 카피, 구체적인 카드 외형은 복제하지 않는다.
+- THING portrait, dashboard 16:9, game square, editorial cover, diagram의 실제 비율 차이를 장면의 구도 차이로 사용한다. 모든 프로젝트를 같은 크기의 카드로 평준화하지 않는다.
+
+## 2026-08-21 — About 기술 언어와 컬러 도구 표식
+
+- `요즘 붙잡고 있는 질문`은 Retargeting, Sim-to-real, Edge inference를 현재 탐구하는 문제로 유지하되 `7-DoF`, `joint limit`, `domain gap`, `latency`, `memory budget`, `observability`처럼 실제 검증 대상을 구체적으로 드러낸다.
+- 기술 스택은 기존 Simple Icons SVG를 사용하고 각 브랜드 색은 아이콘과 얕은 배경에만 제한한다. 기술명과 분류 제목은 중립 잉크색으로 유지한다.
+- 기술 항목은 링크나 버튼이 아니므로 가짜 pointer cursor나 `tabindex`를 추가하지 않는다. full-motion fine pointer에서만 작은 lift와 회전을 제공하고 lite/reduced에서는 정적으로 표시한다.
+- llama.cpp는 정확한 공개 아이콘이 없으므로 `L.CPP` monogram을 유지하고 Isaac Sim·Isaac Lab은 NVIDIA 표식을 공유한다.
+
+## 2026-08-21 — 원본 비율 영상과 독립 캡션 override
+
+이 항목은 `Work 증거 프레임 정교화`의 고정 video frame 결정을 영상에 한해 대체한다. Dashboard screenshot, diagram, product cover 같은 정적 evidence의 기존 contain 규칙은 유지한다.
+
+- 모든 video는 실제 source의 `width`와 `height`를 HTML에 명시하고 `height: auto`로 표시한다. 720×1280 THING, 1280×720 AQIS, 1276×1270 Alkkagi, 1320×1032 MRI의 비율을 임의의 16:9·1:1 box로 바꾸지 않는다.
+- Video figure와 preview에서 inset border, frame padding, 채움용 background, box shadow를 제거한다. 세로 영상의 최대 폭과 Work viewport 높이 제한은 비율을 바꾸지 않는 responsive size constraint로만 사용한다.
+- `figcaption`은 video와 같은 figure 안에서 의미 관계를 유지하되, 영상 아래 정상 문서 흐름의 독립 행으로 표시한다. 얇은 rule, 여백, metadata typography만 사용하고 영상 배경이나 외곽선 안에 포함하지 않는다.
+- Work의 THING과 Alkkagi preview에는 영상 아래 별도 evidence caption을 둔다. 프로젝트 설명과 링크는 계속 copy column이 담당하며, preview caption은 프로젝트당 하나인 semantic link에 focusable control을 추가하지 않는다.
+- THING Demos는 desktop 2열과 mobile 1열을 유지하되 각 video는 원본 9:16 그대로 표시하고 설명 블록은 영상 다음에 이어진다.
+
+## 2026-08-21 — About 기술 스택 크기와 정렬 override
+
+이 항목은 기술 스택을 About 제목 옆의 좁은 우측 영역에 두고 tablet까지 4열로 유지하던 앞선 catalogue 배치를 대체한다. 도구 목록, 브랜드 색 범위, 비상호작용 의미 구조는 유지한다.
+
+- `기술 스택` 제목과 catalogue를 같은 page-width 세로축에 놓고, catalogue는 제목 아래의 전체 폭을 사용한다.
+- 901px 이상은 네 기술 분류를 4열로, 521–900px은 2열로, 520px 이하는 1열로 표시한다.
+- 각 도구는 58px icon과 항상 보이는 기술명을 한 행에 배치한다. 분류 제목, icon, 기술명은 모든 열에서 같은 시작선과 간격을 공유한다.
+- 3개와 4개 항목을 가진 목록을 각자 남은 높이로 늘리지 않는다. Desktop/tablet 행은 108px, mobile 행은 100px의 공통 리듬을 사용하고, 짧은 목록의 여백은 마지막 항목 뒤에만 남긴다.
+- 브랜드 색은 icon과 얕은 tint에만 쓰고, 분류명과 기술명은 중립 잉크색을 유지한다. 비동작 항목에는 pointer cursor, 링크, 버튼, `tabindex`를 추가하지 않는다.
+
+## 2026-08-21 — About 대형 컬러 로고 wall override
+
+이 항목은 바로 앞의 4/2/1 분류 catalogue와 58px icon 행을 대체한다. `jb-cheng.github.io`에서는 카드 없는 100px 로고의 3열 wall과 넓은 여백이라는 원리만 참고하고, 배경 패턴·자산·브랜딩·구체적인 화면 장식은 복제하지 않는다.
+
+- 기술 스택은 분류 칸, 외곽선, 셀 배경이 없는 하나의 13개 semantic list로 표시한다. 각 브랜드 mark 자체가 주 시각 요소다.
+- 901px 이상에서는 section title을 왼쪽에 두고 오른쪽 최대 560px 영역에 3열 logo wall을 정렬한다. Logo viewport는 약 100px이며 마지막 13번째 항목은 가운데 열에 둔다.
+- 521–900px은 제목 아래 최대 620px의 3열 wall, 520px 이하는 page grid 안의 3열 wall을 사용한다. Mobile mark는 최대 70px이고 기술명은 최소 12px로 항상 표시한다.
+- Desktop fine pointer에서는 기술명이 hover 때만 나타난다. Touch/coarse pointer에서는 동일 NVIDIA mark를 쓰는 Isaac Sim과 Isaac Lab도 구분되도록 이름을 정적으로 표시한다.
+- 정확한 llama.cpp 브랜드 mark를 임의로 만들지 않고 `L.CPP` monogram을 유지한다. 비동작 list item에는 pointer cursor나 keyboard tab stop을 추가하지 않는다.
+
+## 2026-08-21 — THING Prototype evidence layout override
+
+이 항목은 정적 evidence를 동일 폭의 frame 안에 두던 앞선 결정을 THING Prototype의 두 사진에 한해 대체한다.
+
+- 3:4 통합 로봇 핸드 사진과 4:3 Jetson 시험 사진은 원본 비율을 유지한다. Desktop과 tablet에서는 `9 / 16` 폭 비율로 나란히 배치해 서로 다른 가로폭 대신 같은 표시 높이와 같은 상·하단 축을 만든다.
+- 두 사진 묶음은 최대 600px로 제한해 본문보다 과도하게 커지지 않게 한다. 세로 사진은 제작물, 가로 사진은 시험 환경이라는 읽기 순서에 따라 왼쪽에서 오른쪽으로 둔다.
+- Figure의 외곽선, 채움 배경, 잘라내기, 강제 aspect ratio를 제거한다. Caption은 이미지 아래의 독립적인 label 행으로 두고, 이미지 폭 안에서 얇은 rule과 metadata typography만 사용한다.
+- 600px 이하에서는 한 열로 쌓는다. 세로 사진은 `min(60%, 220px)`로 제한하고 가로 사진은 가용 본문 폭을 사용해 작은 화면에서도 두 증거의 시각 무게가 크게 벌어지지 않게 한다.
+
+## 2026-08-21 — About compact tool matrix override
+
+이 항목은 13개 기술을 분류 없이 100px급 mark의 3열 wall로 표시하던 앞선 결정을 대체한다. 브랜드 색, Simple Icons, llama.cpp monogram, 비상호작용 의미 구조는 유지한다.
+
+- 기술 스택은 `Robotics / Code / AI · Agents / Systems`의 네 semantic group으로 다시 묶는다. 각 group은 얇은 가로 rule, 분류명, 네 칸의 도구 행만 사용하며 카드·셀 배경·외곽 box는 만들지 않는다.
+- 기술명은 pointer 종류와 motion tier에 관계없이 항상 표시한다. 같은 NVIDIA mark를 공유하는 Isaac Sim과 Isaac Lab, 형태가 덜 익숙한 FastAPI와 LangChain도 hover 없이 구분되어야 한다.
+- Desktop은 page-width 전체에서 44px mark와 네 도구 열을 사용한다. 900px 이하는 38px, 520px 이하는 32px mark로 줄이며 mobile group 내부 도구는 두 열로 쌓는다.
+- 분류 순서와 도구 순서는 `Robotics: ROS 2 → NVIDIA Isaac Sim → Isaac Lab`, `Code: C++ → Python → FastAPI`, `AI / Agents: PyTorch → Ollama → llama.cpp → LangChain`, `Systems: Ubuntu → Git → Docker`로 유지한다.
+- 개별 도구는 여전히 링크나 버튼이 아니다. 기술명은 12px 아래로 줄이지 않고, tooltip과 가짜 pointer cursor 또는 keyboard tab stop을 추가하지 않는다.
+
+## 2026-08-21 — llama.cpp 공식 mark override
+
+이 항목은 llama.cpp에 공개된 정확한 mark가 없어 `L.CPP` monogram을 사용한다는 앞선 결정을 대체한다.
+
+- llama.cpp는 공식 저장소의 `llama1-icon-transparent.svg`를 로컬 SVG asset으로 사용한다. 첨부된 불투명 PNG의 흰 배경을 시각 효과로 감추지 않고, 같은 형태의 공식 투명 벡터를 사용한다.
+- Mark의 공식 orange `#ff8236`은 아이콘과 hover shadow에만 사용한다. 크기, 정렬, 항상 보이는 기술명, 비상호작용 list 의미는 compact tool matrix의 공통 규칙을 그대로 따른다.
+
+## 2026-08-21 — Home split-entry intro
+
+- Home을 문서 상단에서 직접 열 때 warm-paper cover 중앙에 `SeMinKong`만 먼저 표시하고, 짧은 정지 뒤 이름과 좌우 cover가 양옆으로 갈라지며 기존 graphite Hero를 드러낸다.
+- Intro는 별도의 fixed decorative overlay이며 실제 Hero h1, robotic hand, sticky scroll timeline의 transform을 소유하지 않는다. 중앙 이름은 `aria-hidden`이고 실제 문서 제목은 기존 h1 하나만 유지한다.
+- Full motion은 약 1.7초, lite/mobile은 약 1초 안에 끝낸다. Hash 진입, back-forward 복귀, 복원된 scroll 위치, reduced motion에서는 건너뛰고 Hero를 즉시 표시한다.
+- Warm paper, graphite, 기존 Manrope wordmark만 사용한다. 별도 logo, 진행 UI, HUD, blur, 번호는 추가하지 않는다.
+
+## 2026-08-21 — Home intro-to-Hero FLIP handoff override
+
+이 항목은 중앙 이름을 두 조각으로 흩어 없애고, Hero를 이름과 손만 보이는 scroll-zero 단계로 시작하던 앞선 Home intro 및 name-first opening 결정을 대체한다.
+
+- 중앙 `SeMinKong`은 사라지지 않고 실제 Hero h1의 responsive 위치와 크기로 이동한다. 마지막 짧은 crossfade 뒤 overlay를 제거하며, 제거 직전과 직후 화면은 같아야 한다.
+- 좌우 paper panel만 reveal mask로 움직인다. 실제 Hero copy와 hand wrapper의 transform은 계속 Hero scroll timeline이 소유하고 intro는 이를 직접 이동하지 않는다.
+- Intro의 착지점은 이름, 인사말, CTA, 손이 모두 완성된 Hero reading state다. 따라서 intro가 끝난 뒤 두 번째 이름 entrance나 추가 조립 animation이 시작되지 않는다.
+- Hero scroll은 이 reading state에서 앞으로만 진행해 cube flourish와 다음 섹션으로 이어진다. 첫 1–10px scroll에서 copy나 hand가 이전 pose로 되감기지 않는다.
+- 이동 중 이름은 `difference` blending으로 paper 위에서는 dark ink, graphite 위에서는 off-white 대비를 유지한다. 의미가 있는 실제 h1은 하나만 두고 overlay word는 계속 `aria-hidden` 장식으로 취급한다.
+
+## 2026-08-21 — Home handwritten word entrance override
+
+- 중앙 `SeMinKong`은 단어 전체 fade가 아니라 왼쪽에서 오른쪽으로 아홉 글자가 차례로 채워지는 ink-wipe로 등장한다. Manrope live text와 실제 Hero h1은 유지하며 glyph를 임의의 SVG outline으로 바꾸지 않는다.
+- 글자 reveal 가장자리에는 작은 vermilion nib 하나만 따라간다. 펜 그림, underline, particle, sound는 추가하지 않고 필기가 끝나면 nib도 panel opening 전에 사라진다.
+- 필기 단계는 자식 글자의 clip과 opacity만 소유하고, 단어 부모의 transform은 이후 Hero h1으로 이동하는 FLIP에만 사용한다. 따라서 필기와 착지가 두 개의 독립된 entrance처럼 보이지 않아야 한다.
+- Lite/mobile은 같은 방향과 순서를 더 짧게 유지하고, reduced motion·hash·BFCache·조기 입력 경로에서는 기존처럼 intro 전체를 생략하거나 즉시 완성한다.

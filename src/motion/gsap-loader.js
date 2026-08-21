@@ -1,18 +1,28 @@
 let promise = null;
+let connectedLenis = null;
 
-export const loadGsap = () => {
+const connectLenis = async (ScrollTrigger) => {
+  const { getLenis } = await import('./smooth-scroll.js');
+  const nextLenis = getLenis?.() ?? null;
+  if (nextLenis === connectedLenis) return;
+
+  connectedLenis?.off?.('scroll', ScrollTrigger.update);
+  connectedLenis = nextLenis;
+  connectedLenis?.on?.('scroll', ScrollTrigger.update);
+};
+
+export const loadGsap = async () => {
   promise ??= Promise.all([
     import('gsap'),
-    import('gsap/ScrollTrigger')
+    import('gsap/ScrollTrigger.js')
   ]).then(([gsapModule, triggerModule]) => {
     const gsap = gsapModule.gsap ?? gsapModule.default;
     const { ScrollTrigger } = triggerModule;
     gsap.registerPlugin(ScrollTrigger);
-    import('./smooth-scroll.js').then(({ getLenis }) => {
-      const lenis = getLenis?.();
-      lenis?.on('scroll', ScrollTrigger.update);
-    });
     return { gsap, ScrollTrigger };
   });
-  return promise;
+
+  const modules = await promise;
+  await connectLenis(modules.ScrollTrigger);
+  return modules;
 };

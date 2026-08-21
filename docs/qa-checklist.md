@@ -443,3 +443,112 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] Source and built `/copyright/` HTML contain exactly one `#ai-visitor-note` `<template>` with the approved text.
 - [x] The template has no CSS or JavaScript consumers, creates no visible layout box or focus target, and leaves the Copyright reading order unchanged.
 - [x] `npm.cmd run build`, `npm.cmd run verify:dist`, and `git diff --check` succeed.
+
+## 2026-08-21 Progress cleanup and Work chapter verification
+
+- [x] Home, Work, THING, and About contain no top page-progress bar, side signal thread, Hero progress line, scene readout, or pinned Focus/Demos class at 1280px, 768px, and 390px.
+- [x] Home Focus renders only `Vision`, `Robotics`, and `Systems` in a static three-column desktop index and compact one-column tablet/mobile rows; no subtitle, overlap, raw counter, or horizontal overflow remains.
+- [x] THING Demos uses the base two-column desktop and one-column mobile gallery, small metadata badges, native controls, and no auto chapter pin. The Repository aside no longer competes with a viewport-fixed demo stage.
+- [x] Work desktop full renders six normal-flow chapters with alternating sticky media and reversible GSAP scrub. Forward and reverse wheel checks preserve finite transforms and continuous opacity; no snap, tick, counter, or scroll interception is present.
+- [x] Work at 768px and 390px is a transform-free static list with native vertical scroll. `?motion=reduced` reports reduced/flat, shows all six project links, and leaves all outer row transforms at `none`.
+- [x] Resizing Work from 1280px to 768px removes the story class and every GSAP inline style, retains zero overflow, and rebuilds cleanly when returning to 1280px.
+- [x] Each Work project row retains one semantic link; keyboard-focused THING shows a 2px link outline and 2px row outline.
+- [x] About replaces the tall numbered method cards with responsive Retargeting, Sim-to-real, and Local AI question rows. Copy is framed as current study/exploration rather than unverified achievement.
+- [x] Browser warning/error logs are empty for Home, Work, THING, and About. `npm.cmd run verify` verifies all 16 deployment entries, and `git diff --check` reports no whitespace errors.
+
+## 2026-08-21 Final visual polish verification
+
+- [x] Work at 1280×900 shows THING at 340×604, UI evidence at uncropped 16:9, and Alkkagi at 1:1. Briefit's left title and all dashboard/diagram edges remain visible.
+- [x] Work at 1280×720 keeps the complete 275×490 THING frame between the fixed navigation and viewport bottom with zero horizontal overflow. All project copy resolves to opacity 1 throughout the scrub.
+- [x] The media handoff leaves the outgoing chapter at 6% opacity before the incoming chapter becomes dominant; index/arrow timing extends the normalized timeline to 100%. Reverse/forward transforms remain finite.
+- [x] Work at 768×1024 and 390×844 remains a static native-scroll list with no story class or GSAP inline styles. Alkkagi renders as a square frame and exposes a 27KB poster before its 9.39MB video is ready.
+- [x] Resizing the same Work tab 1280→768→1280 removes and rebuilds the story cleanly, recreates full/interactive Motion and active Lenis, and updates the scrub after returning to desktop.
+- [x] Home Focus uses one `ol` with three `li` items. Row heights are 204px desktop, 112px tablet, and about 110px mobile; the removed subtitles leave no excessive desktop void.
+- [x] About questions use two columns at 768px (`topic | question + note`) and one column at 390px. Both widths have zero horizontal overflow.
+- [x] Work and all six case-study skip targets use `tabindex="-1"`; activating sampled Work and THING skip links moves focus to the target section/main. The focused THING project retains one link, a 2px link outline, and a 2px row outline.
+- [x] THING Demos remains a two-column desktop/one-column mobile gallery with no pinned class or readout, and the source/license note follows the gallery instead of crowding its heading.
+- [x] Browser warning/error logs are empty. `npm.cmd run verify` builds 103 modules and verifies all 16 deployment entries; `git diff --check` reports no whitespace errors.
+
+## 2026-08-21 Stacked project scenes and About tool-color verification
+
+- [x] Home Projects and Focus, all six Work rows, all four THING demo cards, and all four About tool groups contain no decorative ordinal labels. Dates, durations, versions, and measured results remain intact.
+- [x] Work at 1280×720 uses one sticky composition per project: media, title, metadata, description, stack, and CTA enter and recede together. There is no progress indicator, snap, wheel interception, or media-only trailing effect.
+- [x] Every Work composition remains exactly one semantic project link. Its media and copy resolve to the same hit target, and keyboard focus exposes the complete scene with visible 2px link and row outlines.
+- [x] Work at 768×1024 and 390×844 uses the static asymmetric two-column or native one-column fallback with zero horizontal overflow. At 1280×650, reduced motion, and lite motion, no sticky story or residual GSAP inline style remains.
+- [x] Resizing the same Work page 1280→768→1280 removes and recreates the story without stale transforms, hidden copy, or duplicate listeners.
+- [x] About uses Retargeting, Sim-to-real, and Edge inference terminology while retaining current-study framing. The question layout remains readable at 1280px and 390px with zero horizontal overflow.
+- [x] About renders 12 Simple Icons SVG marks in their brand colors and keeps the llama.cpp monogram fallback. Fine-pointer full motion adds a restrained lift, tint, and rotation; reduced motion remains static, and non-action tool items stay outside the tab order.
+- [x] `npm.cmd run verify` builds 103 modules and verifies all 16 deployment entries; `git diff --check` reports no whitespace errors.
+
+## 2026-08-21 Native-ratio video and separate-caption verification
+
+- [x] Every source MP4 has explicit intrinsic dimensions in HTML: THING 720×1280, AQIS 1280×720, Alkkagi 1276×1270, and Brain MRI 1320×1032.
+- [x] Work THING and Alkkagi previews have transparent, borderless, overflow-visible media wrappers. Their rendered aspect ratios follow the source or poster within sub-pixel rounding, and their evidence captions occupy separate rows below the video.
+- [x] Work native-video stages report `clip-path: none` throughout the GSAP story. The whole composition handoff remains active at 1280×720, while 768×1024, 390×844, and `?motion=reduced` remain static with no residual transform or clip.
+- [x] THING Hero and all four Demos remove frame padding, border, and fill. Demos remain a two-column desktop and one-column mobile gallery; each description follows its video in normal flow.
+- [x] AQIS, Alkkagi, and Brain MRI detail videos render at source ratio without a 16:9 or square container. Their captions use an independent rule-and-label row rather than sharing a filled media surface.
+- [x] Work, THING, AQIS, Alkkagi, and Brain MRI have zero horizontal overflow at 1280×720, 768×1024, and 390×844.
+- [x] Case video reveal uses opacity plus a 14px Y settle with no clip-path. Keyboard-focused Alkkagi video retains the shared 2px outline and 4px offset because its figure overflow is visible.
+- [x] Vite reports only expected HMR/page reloads with no transform or stylesheet errors. `npm.cmd run verify` builds 103 modules and verifies all 16 deployment entries; `git diff --check` reports no whitespace errors.
+
+## 2026-08-21 About tool catalogue alignment verification
+
+- [x] At 1280×900 the catalogue uses the full 1185px page width instead of the former 676px right column. Four groups render at equal 296px widths with 58px icon boxes and aligned 108px tool rows.
+- [x] At 768×900 the catalogue becomes a two-column grid with 352px groups; at 390×844 it becomes one 343px column. All 13 names remain at least 15px, no label is clipped, and document width stays within the viewport scrollbar width.
+- [x] Three-item groups no longer stretch their rows independently from the four-item AI / Agents group. Their first three icon, name, and divider baselines match, with any remaining space following the final tool.
+- [x] The tool catalogue adds no links, buttons, pointer cursor, or tab stops. `?motion=reduced` reports reduced/flat with icon transform `none`; browser logs contain only expected Vite debug messages and no warning or error.
+- [x] `npm.cmd run build`, `npm.cmd run verify`, and `git diff --check` succeed; Vite builds 103 modules and the distribution verifier checks all 16 entries.
+
+## 2026-08-21 About large-logo wall verification
+
+- [x] The prior four-column catalogue chrome is absent. About contains one semantic tool list with 13 items, no category-cell borders or badge backgrounds, and no tool links, buttons, pointer cursor, or tab stops.
+- [x] At 1280×900 the title aligns with a right-side 560×803px three-column wall. Simple Icons render at 100px and the 13th Docker item occupies the center column.
+- [x] At 768×900 the wall stacks below the title at 620px wide with 84px marks. At 390×844 it remains a 343px three-column wall with marks up to 70px, names at 12px, a centered final item, and zero horizontal overflow.
+- [x] Full fine-pointer hover raises the sampled ROS 2 mark by 4px, scales it to 1.1, rotates it by 1 degree, adds a brand-tinted drop shadow, and exposes the name. Lite keeps the static marks while labels remain available on hover.
+- [x] `?motion=reduced` reports reduced/flat and keeps the hovered mark at `transform: none`, `filter: none`, and zero-duration icon/name transitions. Touch/mobile names are statically visible.
+- [x] Browser logs contain only expected Vite connection/HMR debug entries. `npm.cmd run verify` builds 103 modules and verifies all 16 distribution entries; `git diff --check` succeeds.
+
+## 2026-08-21 THING Prototype evidence verification
+
+- [x] 두 source 이미지는 1200×1600과 1600×1200 intrinsic 크기를 HTML에 명시하고, CSS가 강제 crop이나 aspect ratio 없이 원본 3:4·4:3 비율을 유지한다.
+- [x] 1280px 이상에서 evidence grid는 최대 600px의 `9fr / 16fr` 구도를 사용한다. 실제 표시 크기 207×276px과 369×276px으로 이미지 상·하단과 caption 시작선이 일치한다.
+- [x] Figure의 border, fill, overflow clip을 제거해 가로 사진 아래의 검은 빈 frame이 남지 않는다. Caption은 사진 밖 정상 흐름의 rule-and-label 행이다.
+- [x] 768px에서는 600px 한 줄 구도가 본문 아래에 놓이고, 390px에서는 206×274px portrait와 343×257px landscape가 한 열로 쌓인다. 두 viewport 모두 수평 overflow가 없다.
+- [x] Full motion과 `?motion=reduced`에서 사진과 caption의 위치가 동일하며, Prototype 아래 Pipeline 섹션과 겹치지 않는다.
+
+## 2026-08-21 About compact tool matrix verification
+
+- [x] About 기술 스택은 13개 도구를 Robotics 3개, Code 3개, AI / Agents 4개, Systems 3개의 네 labelled region과 semantic list로 제공한다.
+- [x] 1280×900에서 matrix는 page-width 1185px와 44px mark를 사용하며 높이는 349px이다. 이전 560×803px logo wall보다 절반 이하로 줄고, 모든 기술명이 hover 없이 표시된다.
+- [x] 768×900에서는 38px mark와 네 도구 열을 유지해 matrix 높이 317px로 표시된다. `NVIDIA Isaac Sim`만 자연스럽게 두 줄이고 다른 기술명은 잘리거나 겹치지 않는다.
+- [x] 390×844에서는 32px mark와 분류별 두 도구 열을 사용한다. 343px 안에서 네 분류와 13개 이름이 표시되고 문서 수평 overflow가 없다.
+- [x] Tool item은 링크·버튼·tab stop·pointer cursor·title tooltip을 추가하지 않는다. 장식 SVG는 `aria-hidden`, 실제 이름은 DOM text로 유지한다.
+- [x] `?motion=reduced`는 `motion=reduced`, `depth=flat`, icon transform/filter `none`, transition `0s`, name opacity `1`을 보고한다.
+- [x] Browser warning/error log는 비어 있다. `npm.cmd run verify`가 103 modules를 build하고 16개 deployment entry를 검증하며, `git diff --check`가 성공한다.
+
+## 2026-08-21 llama.cpp official mark verification
+
+- [x] About의 `L.CPP` fallback을 llama.cpp 공식 `llama1-icon-transparent.svg` 기반의 로컬 asset으로 교체했다. SVG는 250×250 intrinsic size와 투명 배경을 가지며 첨부 PNG의 흰 사각형을 가져오지 않는다.
+- [x] 1280×900, 768×900, 390×844에서 mark는 각각 기존 matrix 규칙의 44px, 38px, 32px wrapper에 맞춰 표시된다. Fallback border와 fill은 없고 인접한 `llama.cpp` 이름은 항상 12px 이상으로 보인다.
+- [x] 세 viewport 모두 문서 수평 overflow가 없고 기술 목록에는 link, button, `tabindex`가 추가되지 않았다. Browser log에는 Vite 연결 debug 외 warning/error가 없다.
+- [x] `?motion=reduced`에서 mark wrapper의 transform과 filter는 `none`, transition duration은 `0s`이며 SVG는 정상 로드된다.
+- [x] `npm.cmd run verify`가 103 modules를 build하고 16개 deployment entry를 검증하며, `git diff --check`가 성공한다.
+
+## 2026-08-21 Home FLIP-entry intro verification
+
+- [x] 1280px direct top entry에서 warm-paper 중앙 이름이 한 덩어리로 나타나고 실제 Hero h1의 40px left axis와 glyph line box에 착지한다. Crossfade 전 overlay word와 실제 target의 표시 폭은 443.94px로 같다.
+- [x] 768px과 390px은 lite FLIP을 사용한다. 390px 이동 중 이름은 paper와 graphite 양쪽에서 대비를 유지하며, 최종 16px left axis의 h1·인사말·CTA·손으로 직접 이어진다.
+- [x] Intro 종료 직후 1280px, 768px, 390px 모두 greeting line과 CTA opacity가 1이고 CTA pointer input이 활성화된다. Overlay, pending class, name/copy/navigation inline opacity가 남지 않는다.
+- [x] Hero scroll 0→10px에서 copy와 hand transform은 identity, greeting과 CTA는 opacity 1을 유지하며 역방향 jump가 없다.
+- [x] End 조기 종료와 intro 중 1280→768 resize가 overlay와 모든 임시 opacity를 즉시 정리하고 완성된 Hero를 노출한다. Reduced motion, hash entry, BFCache 복귀도 intro를 생략하거나 원자적으로 정리한다.
+- [x] Head prepaint cover와 stable scrollbar gutter는 첫 paint의 Hero 선노출 및 종료 순간 가로축 이동을 막는다. 세 viewport 모두 수평 overflow가 없다.
+- [x] Final `npm.cmd run verify` builds 105 modules and verifies all 16 deployment entries; `git diff --check` reports no whitespace errors.
+
+## 2026-08-21 Home handwritten intro verification
+
+- [x] Full 1280px entry reveals the nine `SeMinKong` letters left-to-right with a slanted ink mask; the small nib follows the active edge and is gone before the Hero handoff completes.
+- [x] Lite 768px and 390px entries preserve the same writing order with the shorter timing. At 175ms the mobile sequence has reached five letters rather than revealing the complete word at once.
+- [x] The exact word layer replaces the temporary writing layer before FLIP. At 390px the landing overlay and actual h1 share the same left/top/width within sub-pixel rounding.
+- [x] Natural completion removes the overlay and body-level nib, exposes name/copy/CTA at opacity 1, and leaves zero horizontal overflow. Scroll interruption also removes both temporary nodes and clears Hero inline opacity.
+- [x] Reduced motion creates neither intro nor nib and exposes the complete Hero immediately.
+- [x] Final `npm.cmd run verify` builds 105 modules and verifies all 16 deployment entries. `git diff --check` succeeds and Browser logs contain no warning or error.

@@ -108,12 +108,8 @@ html[data-motion="reduced"] [data-inertia] {
   --inertia-y: 0px !important;
 }
 
-html[data-motion="reduced"] [data-hero-progress] {
-  transform: scaleX(1) !important;
-}
-
 html[data-motion="reduced"] .case-section h2,
-html[data-motion="reduced"] .about-method__list span,
+html[data-motion="reduced"] .about-questions__topic,
 html[data-motion="reduced"] .project-card__media img,
 html[data-motion="reduced"] .project-card__media video,
 html[data-motion="reduced"] .work-row__media img,
@@ -132,6 +128,10 @@ html[data-motion="reduced"] .source-link::after {
 
 html[data-motion="reduced"] .page-curtain {
   display: none;
+}
+
+html[data-motion="reduced"] .home-intro {
+  display: none !important;
 }
 
 @media (max-width: 720px) {
@@ -168,6 +168,10 @@ html[data-motion="reduced"] [data-cube-flourish] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .home-intro {
+    display: none !important;
+  }
+
   html:not([data-motion="full"]) {
     scroll-behavior: auto;
   }

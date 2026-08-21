@@ -1,10 +1,6 @@
-import { clamp } from '../motion/utils.js';
-
 export const initNavigation = (environment) => {
   const navigation = document.querySelector('[data-site-nav]');
-  const progress = document.querySelector('.page-progress span');
   let frame = 0;
-  let progressCurrent = 0;
 
   const params = new URLSearchParams(window.location.search);
   const motion = params.get('motion');
@@ -22,51 +18,25 @@ export const initNavigation = (environment) => {
     });
   }
 
-  const update = (immediate = false) => {
+  const update = () => {
     frame = 0;
     const scrollTop = Math.max(0, window.scrollY || document.documentElement.scrollTop);
-    const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const progressTarget = clamp(scrollTop / scrollable, 0, 1);
-
     navigation?.classList.toggle('is-scrolled', scrollTop > 24);
-
-    progressCurrent = immediate ? progressTarget : progressCurrent + (progressTarget - progressCurrent) * 0.72;
-    if (progress) progress.style.transform = `scaleX(${progressCurrent.toFixed(5)})`;
-
-    if (!immediate && Math.abs(progressTarget - progressCurrent) > 0.0005) {
-      frame = requestAnimationFrame(() => update(false));
-    }
   };
 
   const schedule = () => {
-    if (!frame) frame = requestAnimationFrame(() => update(false));
-  };
-
-  const reset = () => {
-    progressCurrent = 0;
-    update(true);
-  };
-
-  const onEnvironmentChange = () => reset();
-  const onVisibilityChange = () => {
-    if (!document.hidden) reset();
+    if (!frame) frame = requestAnimationFrame(update);
   };
 
   window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', reset, { passive: true });
-  window.addEventListener('pageshow', reset);
-  window.addEventListener('portfolio:environment-change', onEnvironmentChange);
-  document.addEventListener('visibilitychange', onVisibilityChange);
-  reset();
+  window.addEventListener('pageshow', update);
+  update();
 
   return {
     destroy() {
       if (frame) cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', reset);
-      window.removeEventListener('pageshow', reset);
-      window.removeEventListener('portfolio:environment-change', onEnvironmentChange);
-      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('pageshow', update);
     }
   };
 };

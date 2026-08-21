@@ -13,7 +13,6 @@
   </head>
   <body class="work-index-page">
     <a class="skip-link" href="#work-list">프로젝트 목록으로 바로가기</a>
-    <div class="page-progress" aria-hidden="true"><span></span></div>
     <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
 
     <header class="site-nav" data-site-nav>
@@ -21,7 +20,7 @@
       <nav class="site-nav__links" aria-label="주요 페이지">
         <a href="./" aria-current="page">Work</a><a href="../about/">About</a>
       </nav>
-      <a class="nav-resume" href="../resume/">Resume <span aria-hidden="true">↗</span></a>
+      <a class="nav-resume" href="../resume/">Resume <span aria-hidden="true">→</span></a>
     </header>
 
     <main class="work-index">
@@ -31,100 +30,132 @@
         </div>
       </header>
 
-      <section class="work-list page-width" id="work-list" aria-label="프로젝트">
+      <section class="work-list page-width" id="work-list" tabindex="-1" aria-label="프로젝트">
         <article class="work-row work-row--featured" data-reveal="row">
-          <span class="work-row__index">01</span>
-          <div class="work-row__media work-row__media--thing" data-depth-card aria-hidden="true">
-            <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" muted loop playsinline preload="none" data-auto-video></video>
+          <div class="work-row__scene">
+            <a class="work-row__composition" href="./thing/" aria-label="THING 프로젝트 살펴보기">
+              <div class="work-row__media-stage work-row__media-stage--portrait work-row__media-stage--native">
+                <div class="work-row__media work-row__media--thing work-row__media--native-video" aria-hidden="true">
+                  <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" muted loop playsinline preload="none" data-auto-video></video>
+                </div>
+                <span class="work-row__media-caption" aria-hidden="true"><span lang="en">Hardware motion demo</span><span>00:07</span></span>
+              </div>
+              <div class="work-row__copy">
+                <p>Team · Robotics &amp; Edge AI · Jul—Aug 2026</p>
+                <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text">THING</span></span></h2>
+                <span>21 landmarks · 7축 제어 · 텐던 핸드 · 관제</span>
+                <dl class="work-row__proofs" aria-label="THING 핵심 구현">
+                  <div><dt>21</dt><dd>landmarks</dd></div>
+                  <div><dt>7</dt><dd>actuation axes</dd></div>
+                  <div><dt>ROS 2</dt><dd>edge control</dd></div>
+                </dl>
+                <ul aria-label="주요 기술"><li>ROS 2</li><li>MediaPipe</li><li>DYNAMIXEL</li></ul>
+                <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+              </div>
+              <span class="work-row__arrow" aria-hidden="true">↗</span>
+            </a>
           </div>
-          <div class="work-row__copy">
-            <p>Team · Robotics &amp; Edge AI · Jul—Aug 2026</p>
-            <h2><a href="./thing/" lang="en" aria-label="THING 프로젝트 살펴보기">THING</a></h2>
-            <span>21 landmarks · 7축 제어 · 텐던 핸드 · 관제</span>
-            <dl class="work-row__proofs" aria-label="THING 핵심 구현">
-              <div><dt>21</dt><dd>landmarks</dd></div>
-              <div><dt>7</dt><dd>actuation axes</dd></div>
-              <div><dt>ROS 2</dt><dd>edge control</dd></div>
-            </dl>
-            <ul aria-label="주요 기술"><li>ROS 2</li><li>MediaPipe</li><li>DYNAMIXEL</li></ul>
-            <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
-          </div>
-          <span class="work-row__arrow" aria-hidden="true">↗</span>
         </article>
 
         <article class="work-row" data-reveal="row">
-          <span class="work-row__index">02</span>
-          <div class="work-row__media work-row__media--window work-row__media--aqis" data-depth-card aria-hidden="true">
-            <img src="/src/assets/projects/aqis/real-ops.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="14" />
+          <div class="work-row__scene">
+            <a class="work-row__composition" href="./aqis/" aria-label="AQIS 프로젝트 살펴보기">
+              <div class="work-row__media-stage">
+                <div class="work-row__media work-row__media--window work-row__media--aqis" data-depth-card aria-hidden="true">
+                  <img src="/src/assets/projects/aqis/real-ops.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="14" />
+                </div>
+              </div>
+              <div class="work-row__copy">
+                <p>Team Lead · Full-stack / Robotics · 2026</p>
+                <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text">AQIS</span></span></h2>
+                <span>RealSense 검사 · 컨베이어 · Dobot · 실시간 관제</span>
+                <ul aria-label="주요 기술"><li>ROS 2</li><li>FastAPI</li><li>RealSense</li></ul>
+                <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+              </div>
+              <span class="work-row__arrow" aria-hidden="true">↗</span>
+            </a>
           </div>
-          <div class="work-row__copy">
-            <p>Team Lead · Full-stack / Robotics · 2026</p>
-            <h2><a href="./aqis/" lang="en" aria-label="AQIS 프로젝트 살펴보기">AQIS</a></h2>
-            <span>RealSense 검사 · 컨베이어 · Dobot · 실시간 관제</span>
-            <ul aria-label="주요 기술"><li>ROS 2</li><li>FastAPI</li><li>RealSense</li></ul>
-            <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
-          </div>
-          <span class="work-row__arrow" aria-hidden="true">↗</span>
         </article>
 
         <article class="work-row" data-reveal="row">
-          <span class="work-row__index">03</span>
-          <div class="work-row__media work-row__media--window" data-depth-card aria-hidden="true">
-            <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="12" />
+          <div class="work-row__scene">
+            <a class="work-row__composition" href="./brain-tumor-mri/" aria-label="Brain Tumor MRI 프로젝트 살펴보기">
+              <div class="work-row__media-stage">
+                <div class="work-row__media work-row__media--window work-row__media--mri" data-depth-card aria-hidden="true">
+                  <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="12" />
+                </div>
+              </div>
+              <div class="work-row__copy">
+                <p>Personal · Computer Vision · 2026</p>
+                <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text">Brain Tumor MRI</span></span></h2>
+                <span>YOLO11 · MRI 4-class 분류 · 종양 분할</span>
+                <ul aria-label="주요 기술"><li>PyTorch</li><li>YOLO11</li><li>OpenCV</li></ul>
+                <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+              </div>
+              <span class="work-row__arrow" aria-hidden="true">↗</span>
+            </a>
           </div>
-          <div class="work-row__copy">
-            <p>Personal · Computer Vision · 2026</p>
-            <h2><a href="./brain-tumor-mri/" lang="en" aria-label="Brain Tumor MRI 프로젝트 살펴보기">Brain Tumor MRI</a></h2>
-            <span>YOLO11 · MRI 4-class 분류 · 종양 분할</span>
-            <ul aria-label="주요 기술"><li>PyTorch</li><li>YOLO11</li><li>OpenCV</li></ul>
-            <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
-          </div>
-          <span class="work-row__arrow" aria-hidden="true">↗</span>
         </article>
 
         <article class="work-row" data-reveal="row">
-          <span class="work-row__index">04</span>
-          <div class="work-row__media work-row__media--window" data-depth-card aria-hidden="true">
-            <video src="/src/assets/projects/alkkagi/demo.mp4" muted loop playsinline preload="none" data-auto-video data-depth-layer="6" data-inertia="12"></video>
+          <div class="work-row__scene">
+            <a class="work-row__composition" href="./alkkagi/" aria-label="Alkkagi.io 프로젝트 살펴보기">
+              <div class="work-row__media-stage work-row__media-stage--native">
+                <div class="work-row__media work-row__media--alkkagi work-row__media--native-video" aria-hidden="true">
+                  <video src="/src/assets/projects/alkkagi/demo.mp4" poster="/src/assets/projects/alkkagi/demo-poster.png" width="1276" height="1270" muted loop playsinline preload="none" data-auto-video></video>
+                </div>
+                <span class="work-row__media-caption" aria-hidden="true"><span lang="en">Multiplayer gameplay</span><span>60 FPS</span></span>
+              </div>
+              <div class="work-row__copy">
+                <p>Personal · Real-time Web · 2026</p>
+                <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text">Alkkagi.io</span></span></h2>
+                <span>Custom physics · Socket.io · 서버 권위 멀티플레이</span>
+                <ul aria-label="주요 기술"><li>TypeScript</li><li>Node.js</li><li>Socket.io</li></ul>
+                <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+              </div>
+              <span class="work-row__arrow" aria-hidden="true">↗</span>
+            </a>
           </div>
-          <div class="work-row__copy">
-            <p>Personal · Real-time Web · 2026</p>
-            <h2><a href="./alkkagi/" lang="en" aria-label="Alkkagi.io 프로젝트 살펴보기">Alkkagi.io</a></h2>
-            <span>Custom physics · Socket.io · 서버 권위 멀티플레이</span>
-            <ul aria-label="주요 기술"><li>TypeScript</li><li>Node.js</li><li>Socket.io</li></ul>
-            <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
-          </div>
-          <span class="work-row__arrow" aria-hidden="true">↗</span>
         </article>
 
         <article class="work-row" data-reveal="row">
-          <span class="work-row__index">05</span>
-          <div class="work-row__media work-row__media--window work-row__media--briefit" data-depth-card aria-hidden="true">
-            <img src="/src/assets/projects/briefit/cover.webp" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="12" />
+          <div class="work-row__scene">
+            <a class="work-row__composition" href="./briefit/" aria-label="Briefit 프로젝트 살펴보기">
+              <div class="work-row__media-stage">
+                <div class="work-row__media work-row__media--window work-row__media--briefit" data-depth-card aria-hidden="true">
+                  <img src="/src/assets/projects/briefit/cover.webp" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="12" />
+                </div>
+              </div>
+              <div class="work-row__copy">
+                <p>Team · AI Engineer · NLP · 2025</p>
+                <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text">Briefit</span></span></h2>
+                <span>뉴스 수집 · 유사 기사 그룹핑 · KoBART 요약</span>
+                <ul aria-label="주요 기술"><li>Python</li><li>Transformers</li><li>KoBART</li></ul>
+                <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+              </div>
+              <span class="work-row__arrow" aria-hidden="true">↗</span>
+            </a>
           </div>
-          <div class="work-row__copy">
-            <p>Team · AI Engineer · NLP · 2025</p>
-            <h2><a href="./briefit/" lang="en" aria-label="Briefit 프로젝트 살펴보기">Briefit</a></h2>
-            <span>뉴스 수집 · 유사 기사 그룹핑 · KoBART 요약</span>
-            <ul aria-label="주요 기술"><li>Python</li><li>Transformers</li><li>KoBART</li></ul>
-            <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
-          </div>
-          <span class="work-row__arrow" aria-hidden="true">↗</span>
         </article>
 
         <article class="work-row" data-reveal="row">
-          <span class="work-row__index">06</span>
-          <div class="work-row__media work-row__media--window work-row__media--prompt" data-depth-card aria-hidden="true">
-            <img src="/src/assets/projects/prompt-generator/flow.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="10" />
+          <div class="work-row__scene">
+            <a class="work-row__composition" href="./project-prompt-generator/" aria-label="Project Prompt Generator 프로젝트 살펴보기">
+              <div class="work-row__media-stage">
+                <div class="work-row__media work-row__media--window work-row__media--prompt" data-depth-card aria-hidden="true">
+                  <img src="/src/assets/projects/prompt-generator/flow.png" alt="" loading="lazy" decoding="async" data-depth-layer="6" data-inertia="10" />
+                </div>
+              </div>
+              <div class="work-row__copy">
+                <p>Personal · AI Agent · 2026</p>
+                <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text">Project Prompt Generator</span></span></h2>
+                <span>6개 설계 에이전트 · 병렬 대화 · LangGraph 문서 합성</span>
+                <ul aria-label="주요 기술"><li>LangGraph</li><li>FastAPI</li><li>WebSocket</li></ul>
+                <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+              </div>
+              <span class="work-row__arrow" aria-hidden="true">↗</span>
+            </a>
           </div>
-          <div class="work-row__copy">
-            <p>Personal · AI Agent · 2026</p>
-            <h2><a href="./project-prompt-generator/" lang="en" aria-label="Project Prompt Generator 프로젝트 살펴보기">Project Prompt Generator</a></h2>
-            <span>6개 설계 에이전트 · 병렬 대화 · LangGraph 문서 합성</span>
-            <ul aria-label="주요 기술"><li>LangGraph</li><li>FastAPI</li><li>WebSocket</li></ul>
-            <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
-          </div>
-          <span class="work-row__arrow" aria-hidden="true">↗</span>
         </article>
       </section>
 

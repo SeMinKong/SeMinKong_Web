@@ -13,16 +13,15 @@
   </head>
   <body class="case-page case-page--aqis">
     <a class="skip-link" href="#case-content">프로젝트 본문으로 바로가기</a>
-    <div class="page-progress" aria-hidden="true"><span></span></div>
     <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
 
     <header class="site-nav" data-site-nav>
       <a class="wordmark" href="../../" aria-label="SeMinKong 홈"><span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span></a>
       <nav class="site-nav__links" aria-label="주요 페이지"><a href="../">Work</a><a href="../../about/">About</a></nav>
-      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">↗</span></a>
+      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">→</span></a>
     </header>
 
-    <main id="case-content">
+    <main id="case-content" tabindex="-1">
       <article class="case-study">
         <header class="case-hero page-width">
           <p class="case-hero__meta" data-intro>Smart Factory · Team · 2026</p>
@@ -35,9 +34,9 @@
           </dl>
         </header>
 
-        <figure class="case-media case-media--video page-width" data-reveal="media" data-depth-card>
-          <video src="/src/assets/projects/aqis/process-demo.mp4" muted loop playsinline controls preload="metadata" data-depth-layer="6" aria-label="AQIS 실제 생산 검사와 Dobot 분류 구동 영상"></video>
-          <figcaption>Inspection · Dobot Sorting</figcaption>
+        <figure class="case-media case-media--video page-width">
+          <video src="/src/assets/projects/aqis/process-demo.mp4" width="1280" height="720" muted loop playsinline controls preload="metadata" data-reveal="video" aria-label="AQIS 실제 생산 검사와 Dobot 분류 구동 영상"></video>
+          <figcaption data-reveal="text" lang="en">Inspection · Dobot Sorting</figcaption>
         </figure>
 
         <div class="case-body page-width">

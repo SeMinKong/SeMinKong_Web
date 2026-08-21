@@ -8,15 +8,44 @@
     <meta name="theme-color" content="#11100e" />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg?v=20260818-2" type="image/svg+xml" sizes="any" />
+    <style>
+      html.home-intro-pending {
+        background: #f1eee6;
+        scrollbar-gutter: stable;
+      }
+
+      html.home-intro-pending body {
+        overflow: hidden;
+      }
+
+      html.home-intro-pending:not(.home-intro-active) body::before {
+        content: "";
+        position: fixed;
+        z-index: 949;
+        inset: 0;
+        background: #f1eee6;
+      }
+    </style>
     <script>
+      const navigationType = performance.getEntriesByType?.('navigation')?.[0]?.type;
+      const introEligible = !location.hash
+        && !document.hidden
+        && !matchMedia('(prefers-reduced-motion: reduce)').matches
+        && navigationType !== 'back_forward';
+
       document.documentElement.classList.add('js', 'hero-pending');
-      window.setTimeout(() => document.documentElement.classList.remove('hero-pending'), 2000);
+      if (introEligible) document.documentElement.classList.add('home-intro-pending');
+      window.setTimeout(() => document.documentElement.classList.remove('hero-pending', 'home-intro-pending', 'home-intro-active'), 2600);
     </script>
     <title>SeMinKong — Software Developer Portfolio</title>
   </head>
   <body class="home-page">
     <a class="skip-link" href="#main-content">본문으로 바로가기</a>
-    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="home-intro" data-home-intro aria-hidden="true" hidden>
+      <span class="home-intro__panel home-intro__panel--left" data-home-intro-panel></span>
+      <span class="home-intro__panel home-intro__panel--right" data-home-intro-panel></span>
+      <span class="home-intro__brand" data-home-intro-brand lang="en">SeMinKong</span>
+    </div>
     <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
 
     <header class="site-nav" data-site-nav>
@@ -36,7 +65,7 @@
           <div class="hero-story__frame page-width">
             <div class="hero-identity" data-hero-copy>
               <h1 id="hero-title">
-                <span class="hero-identity__name" data-intro lang="en">SeMinKong</span>
+                <span class="hero-identity__name" lang="en">SeMinKong</span>
               </h1>
               <p class="hero-identity__statement" id="hero-summary">
                 <span data-hero-line>안녕하세요!</span>
@@ -183,7 +212,6 @@
               </div>
             </div>
 
-            <div class="hero-story__progress" aria-hidden="true"><span data-hero-progress></span></div>
           </div>
         </div>
       </section>
@@ -199,8 +227,8 @@
             <div class="project-deck__stage" data-deck-stage>
               <div class="project-deck__slot" data-deck-card style="--deck-index: 0; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck project-card--deck-thing">
-                  <span class="project-card__edge" aria-hidden="true">01 THING</span>
-                  <div class="project-card__topline"><span>01</span><span>2026.07—08</span></div>
+                  <span class="project-card__edge" aria-hidden="true">THING</span>
+                  <div class="project-card__topline"><span>2026.07—08</span></div>
                   <div class="project-card__media project-card__media--thing" aria-hidden="true">
                     <img src="/src/assets/projects/thing/final-demo-poster.webp" alt="" loading="lazy" decoding="async" />
                   </div>
@@ -219,8 +247,8 @@
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 1; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <span class="project-card__edge" aria-hidden="true">02 AQIS</span>
-                  <div class="project-card__topline"><span>02</span><span>2026</span></div>
+                  <span class="project-card__edge" aria-hidden="true">AQIS</span>
+                  <div class="project-card__topline"><span>2026</span></div>
                   <div class="project-card__media project-card__media--window project-card__media--aqis" aria-hidden="true">
                     <img src="/src/assets/projects/aqis/real-ops.png" alt="" loading="lazy" decoding="async" />
                   </div>
@@ -239,8 +267,8 @@
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 2; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <span class="project-card__edge" aria-hidden="true">03 MRI</span>
-                  <div class="project-card__topline"><span>03</span><span>2026</span></div>
+                  <span class="project-card__edge" aria-hidden="true">MRI</span>
+                  <div class="project-card__topline"><span>2026</span></div>
                   <div class="project-card__media project-card__media--window" aria-hidden="true">
                     <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="" loading="lazy" decoding="async" />
                   </div>
@@ -266,11 +294,11 @@
           <header>
             <h2 id="focus-title" data-reveal="title">Focus</h2>
           </header>
-          <div class="focus-list">
-            <div data-reveal="row"><span>01</span><h3 lang="en">Vision</h3><p>랜드마크 · 분류 · 검사</p></div>
-            <div data-reveal="row"><span>02</span><h3 lang="en">Robotics</h3><p>ROS 2 · 안전 제어 · 장치 연동</p></div>
-            <div data-reveal="row"><span>03</span><h3 lang="en">Systems</h3><p>API · 관제 · 데이터</p></div>
-          </div>
+          <ul class="focus-list">
+            <li data-reveal="row"><h3 lang="en">Vision</h3></li>
+            <li data-reveal="row"><h3 lang="en">Robotics</h3></li>
+            <li data-reveal="row"><h3 lang="en">Systems</h3></li>
+          </ul>
         </div>
       </section>
 

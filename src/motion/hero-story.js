@@ -9,6 +9,7 @@ const FLOURISH_POSE_END = 6200;
 const FLOURISH_HANDOFF_START = 6400;
 const FLOURISH_END = 6600;
 const ACTIONS_READY_PROGRESS = ACTIONS_END / HERO_TIMELINE_DURATION;
+const HERO_LANDING_PROGRESS = ACTIONS_READY_PROGRESS;
 const FLOURISH_IDENTITY = 'translateY(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
 
 export const initHeroStory = (environment) => {
@@ -20,14 +21,13 @@ export const initHeroStory = (environment) => {
   const actions = track?.querySelector('[data-hero-actions]');
   const hand = track?.querySelector('[data-dexterous-hand]');
   const cubeFlourish = track?.querySelector('[data-cube-flourish]');
-  const progress = track?.querySelector('[data-hero-progress]');
 
-  if (!track || !sticky || !copy || !progress) return;
+  if (!track || !sticky || !copy) return;
 
   let timeline = null;
   let frame = 0;
-  let targetProgress = 0;
-  let currentProgress = 0;
+  let targetProgress = HERO_LANDING_PROGRESS;
+  let currentProgress = HERO_LANDING_PROGRESS;
   let lastTime = 0;
   let visible = true;
   let keyboardSettled = false;
@@ -173,14 +173,13 @@ export const initHeroStory = (environment) => {
           rotateZ: ['10deg', '0deg'],
           duration: FLOURISH_END - FLOURISH_POSE_END,
           ease: 'inOut(2)'
-        }, FLOURISH_POSE_END);
+        }, FLOURISH_POSE_END)
+        .add(cubeFlourish, {
+          rotateY: [`${turnDegrees}deg`, `${turnDegrees}deg`],
+          duration: HERO_TIMELINE_DURATION - FLOURISH_END,
+          ease: 'linear'
+        }, FLOURISH_END);
     }
-
-    timeline.add(progress, {
-      scaleX: [0, 1],
-      duration: HERO_TIMELINE_DURATION,
-      ease: 'linear'
-    }, 0);
 
     timeline.seek(timeline.duration * clamp(currentProgress, 0, 1), true);
     track.setAttribute('data-hero-enhanced', '');
@@ -211,7 +210,9 @@ export const initHeroStory = (environment) => {
     if (!timeline) return;
     const travel = Math.max(1, track.offsetHeight - sticky.offsetHeight);
     const scrollProgress = clamp(-track.getBoundingClientRect().top / travel, 0, 1);
-    targetProgress = keyboardSettled ? 1 : scrollProgress;
+    targetProgress = keyboardSettled
+      ? 1
+      : HERO_LANDING_PROGRESS + (scrollProgress * (1 - HERO_LANDING_PROGRESS));
   };
 
   const tick = (time) => {
@@ -259,8 +260,8 @@ export const initHeroStory = (environment) => {
     frame = 0;
     timeline?.revert?.();
     timeline = null;
-    currentProgress = 0;
-    targetProgress = 0;
+    currentProgress = HERO_LANDING_PROGRESS;
+    targetProgress = HERO_LANDING_PROGRESS;
     targetDirty = true;
     keyboardSettled = false;
     stageOffsetsKey = '';

@@ -13,15 +13,14 @@
   </head>
   <body class="case-page case-page--mri">
     <a class="skip-link" href="#case-content">프로젝트 본문으로 바로가기</a>
-    <div class="page-progress" aria-hidden="true"><span></span></div>
     <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
     <header class="site-nav" data-site-nav>
       <a class="wordmark" href="../../" aria-label="SeMinKong 홈"><span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span></a>
       <nav class="site-nav__links" aria-label="주요 페이지"><a href="../">Work</a><a href="../../about/">About</a></nav>
-      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">↗</span></a>
+      <a class="nav-resume" href="../../resume/">Resume <span aria-hidden="true">→</span></a>
     </header>
 
-    <main id="case-content">
+    <main id="case-content" tabindex="-1">
       <article class="case-study">
         <header class="case-hero page-width">
           <p class="case-hero__meta" data-intro>Computer Vision · Personal · 2026</p>
@@ -60,9 +59,9 @@
             </div>
           </section>
 
-          <figure class="case-video" data-reveal>
-            <video src="/src/assets/projects/brain-mri/demo.mp4" controls playsinline preload="metadata" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
-            <figcaption>Classification + segmentation web demo</figcaption>
+          <figure class="case-video case-video--native">
+            <video src="/src/assets/projects/brain-mri/demo.mp4" width="1320" height="1032" controls playsinline preload="metadata" data-reveal="video" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
+            <figcaption data-reveal="text" lang="en">Classification + segmentation web demo</figcaption>
           </figure>
 
           <section class="case-section" data-reveal>

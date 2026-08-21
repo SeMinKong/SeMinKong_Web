@@ -456,3 +456,86 @@
 - Decision: 소유자가 지목한 banhmivietnam.xyz류 스크롤 스토리텔링을 THING 시연(핀 4장면)과 홈 Focus(핀 3챕터)에 도입하고, 증거 숫자 카운트업을 추가한다. 기존 마크업(figure 카드, focus 행)을 재사용해 콘텐츠 이중화 없이 데스크톱 full에서만 스테이지화한다.
 - Reason: 이 장르의 핀+스크럽+스냅은 ScrollTrigger의 핵심 영역이고, THING 시연 4개와 Focus 3키워드는 챕터 구조를 이미 갖춘 콘텐츠다. 케이스 증거를 가리지 않는 선에서 "스크롤이 장면을 넘기는" 경험을 사이트 서사(시연·역량)에만 부여한다.
 - Impact: 모바일·lite·reduced는 DOM·스타일 변화가 없다(클래스 미부착 구조 보장). Lenis와 ScrollTrigger는 gsap-loader에서 1회 연결한다. 프로브 과정에서 인스턴트 점프+snap 조합이 비단조로 보이는 계측 함정을 확인했고, 실제 휠 스크롤 기준 01→04 단조 진행과 12틱 연속 고정 유지를 검증했다.
+
+## 2026-08-21 — 진행 UI 제거와 Work 중심 스크롤 연출
+
+- Decision: 상단 page progress, 좌측 signal thread, Home Hero 하단 progress를 전부 제거한다. Home Focus와 THING Demos는 정적 구조로 복귀시키고, GSAP scrub 연출은 Work의 여섯 프로젝트 chapter에 집중한다.
+- Reason: 진행 표시가 콘텐츠보다 먼저 보였고, Home Focus readout의 누락된 스타일과 breakpoint cleanup 결함, THING Demos의 viewport보다 큰 pin stage가 실제 레이아웃 파손과 불편한 숫자 UI를 만들었다. Work는 사용자가 명시적으로 프로젝트별 fancy scroll 소개를 원한 페이지다.
+- Impact: Work desktop full은 sticky media + 좌우 교차 chapter와 가역 scrub을 사용하며 snap이나 입력 가로채기는 없다. tablet/mobile/reduced는 정적 목록이다. THING 영상은 다시 native controls 기반 2열/1열 gallery가 되고 Home Focus에는 세 키워드만 남는다. 사용하지 않는 signal-thread/scroll-story 모듈과 관련 CSS를 제거한다.
+
+## 2026-08-21 — About을 현재의 질문으로 설명
+
+- Decision: `개발 방식`의 추상적인 3단계 카드를 `요즘 붙잡고 있는 질문`의 Retargeting, Sim-to-real, Local AI 세 행으로 교체한다.
+- Reason: 일반화된 명사와 동일한 높이의 번호 카드가 지원자 고유의 관심보다 템플릿을 먼저 떠올리게 했다. 현재 프로젝트와 학습 도구에서 실제로 이어지는 질문이 지원자의 방향을 더 자연스럽고 정직하게 설명한다.
+- Impact: 문구는 달성한 성과가 아니라 `공부하고 있습니다`, `탐색하고 있습니다`의 현재형으로 제한한다. 시각 구조는 큰 빈 카드 대신 topic, 질문, 짧은 현재 note를 가진 horizontal editorial rows를 사용하고 모바일에서는 한 열로 쌓는다.
+
+## 2026-08-21 — Work chapter 프레이밍과 접근성 폴리시
+
+- Decision: Work chapter의 필수 copy는 항상 opacity 1로 유지하고, GSAP scrub은 미디어·번호·방향 화살표에만 적용한다. THING은 viewport 높이에 맞춘 9:16 frame, AQIS·MRI·Briefit·Prompt Generator는 전체 화면이 보이는 16:9 contain frame, Alkkagi는 native에 가까운 1:1 frame과 27KB poster를 사용한다.
+- Reason: 이전 equal frame은 UI screenshot의 좌우를 잘랐고, THING은 짧은 desktop에서 viewport를 넘었으며, copy의 0.34–0.38 opacity는 링크가 활성인 상태에서 작은 텍스트 대비를 떨어뜨렸다. Alkkagi는 9.39MB video에 poster가 없어 첫 진입에서 빈 frame이 보일 수 있었다.
+- Impact: 이전 chapter 미디어는 다음 chapter가 우세해지기 전에 6% opacity로 빠르게 handoff되지만 모든 제목·설명·기술·CTA는 계속 완전한 대비로 읽힌다. 1280×720에서도 THING frame이 viewport 안에 들어오고, 768px·390px·reduced는 기존 정적 fallback을 유지한다. Lenis가 resize/BFCache 뒤 재생성될 때 ScrollTrigger 구독도 새 instance로 교체한다.
+
+## 2026-08-21 — 목록 의미 구조와 건너뛰기 대상 정리
+
+- Decision: Home Focus를 `ol/li`로 표현하고 설명이 없는 현재 구성에 맞춰 desktop 행 높이를 204px 이하로 줄인다. Work 목록과 여섯 case-study main을 `tabindex="-1"` 건너뛰기 대상으로 만들고, 내부 Resume 이동 화살표는 `→`로 통일한다. About 질문은 701–900px에서 topic과 질문·note의 2열 구조를 사용한다.
+- Reason: Focus의 과한 빈 높이와 `div` 나열을 정리하고, skip link가 해시만 바꾸고 focus를 `body`에 남기는 실제 keyboard 실패를 고치기 위해서다. About의 기존 3열은 tablet에서 질문과 note를 지나치게 좁게 만들었다.
+- Impact: 시각적 정보량은 늘지 않으며 desktop·tablet·mobile의 읽기 리듬과 keyboard 이동만 개선된다. THING Demos의 source/license 문장은 gallery 뒤로 이동해 제목 앞의 중복 repository 정보를 줄인다.
+## 2026-08-21 — Decorative numbering, Work scenes, and About tools
+
+- Decision: Home 프로젝트와 Focus, Work, About 기술 그룹, THING Demos의 장식용 순번을 제거한다. Work는 미디어만 고정하는 구조 대신 미디어와 전체 설명을 하나의 semantic link에 담은 sticky scene으로 전환하고, About 질문에는 Retargeting·Sim-to-real·Edge inference 용어를 사용한다. 기술 스택에는 설치되어 있던 Simple Icons SVG와 브랜드 색상을 적용한다.
+- Reason: 순번이 없는 콘텐츠에 `01` 같은 표식은 불필요한 진행감을 만들었고, 미디어만 따라오는 Work 모션은 프로젝트의 설명과 시각 증거를 분리했다. 제공된 Saffron과 Mathis Biabiany 레퍼런스에서 전체 장면 handoff, 비대칭 evidence 크기, 얕은 depth, 모바일 단순화 원칙만 가져왔다. 기술 용어와 색상 표식은 About의 개성과 스캔 가능성을 높인다.
+- Impact: Work desktop full은 전체 scene이 함께 진입하고 물러나며 progress UI, snap, wheel interception을 사용하지 않는다. 높이 700px 미만 desktop과 tablet·mobile·lite·reduced에서는 완전한 정적 grid/list로 돌아간다. 날짜·기간·버전·측정 수치처럼 의미 있는 숫자는 유지하며, 새 의존성이나 비동작 요소의 tab stop은 추가하지 않는다.
+
+## 2026-08-21 — 영상 프레임 제거와 원본 비율 보존
+
+- Decision: Work의 THING·Alkkagi preview와 THING·AQIS·Alkkagi·MRI 상세 video에서 별도 frame을 제거하고 실제 source 비율을 사용한다. Video caption은 media box 밖의 독립 행으로 표시하며, 모든 MP4에 실제 `width`·`height` metadata를 기록한다.
+- Reason: Alkkagi 1276×1270 영상을 16:9로 강제한 레터박스가 가장 큰 왜곡이었고, THING의 720×1280 영상도 border·padding·dark fill 때문에 영상보다 액자 구조가 먼저 보였다. Caption까지 같은 surface에 넣은 구성은 영상 설명의 위계를 약하게 만들었다.
+- Impact: Work 영상 stage에는 GSAP clip mask와 hover crop을 적용하지 않고 composition handoff만 유지한다. 상세 video는 clip 없는 fade/translate reveal을 사용한다. 정적 screenshot·diagram의 기존 evidence frame은 변경하지 않으며, 1280·768·390px과 reduced motion에서 원본 비율과 native controls를 유지한다.
+
+## 2026-08-21 — About 기술 스택 전체 폭 정렬
+
+- Decision: About 기술 스택을 좁은 우측 열에서 page-width 전체로 옮기고, icon과 기술명을 58px icon 기반의 가로 행으로 확대한다. 반응형 분류는 desktop 4열, tablet 2열, mobile 1열로 전환한다.
+- Reason: 1280px에서도 실제 도구 영역이 약 676px에 그쳐 열 너비가 mobile과 비슷했고, 3/3/4/3개 목록이 남은 높이를 서로 다르게 분배해 icon과 구분선의 시작점이 맞지 않았다.
+- Impact: 공통 108px 행 리듬으로 첫 세 행이 모든 분류에서 정렬되고, 추가 LangChain 행은 AI / Agents에만 이어진다. 기존 Simple Icons 색, fine-pointer 미세 반응, reduced-motion 정적 상태, 비상호작용 의미 구조는 유지한다.
+
+## 2026-08-21 — About 기술 스택을 로고 wall로 전환
+
+- Decision: 4개 분류 표와 58px badge/name 행을 제거하고, 13개 도구를 카드 없는 3열 대형 컬러 로고 wall로 전환한다. Desktop은 약 100px, mobile은 최대 70px mark를 사용하며 마지막 Docker는 가운데 열에 둔다.
+- Reason: 사용자가 제시한 JB Cheng 레퍼런스의 의도는 정렬된 catalogue 표가 아니라, 기술 mark 자체가 여백 속에서 크게 읽히는 시각적 wall이었다. 기존 수정은 위치와 크기를 개선했지만 여전히 표 UI의 인상이 강했다.
+- Impact: 기존 Simple Icons와 llama.cpp monogram을 재사용해 새 asset·dependency를 추가하지 않는다. Desktop name은 hover로, touch/mobile name은 최소 12px로 항상 표시한다. Full motion hover만 lift/scale/drop-shadow를 사용하고 reduced에서는 즉시 정적 상태가 된다.
+
+## 2026-08-21 — THING Prototype 사진을 동일 높이로 정렬
+
+- Decision: THING Prototype의 3:4 제작 사진과 4:3 시험 사진을 최대 600px의 `9fr / 16fr` 비대칭 grid로 배치하고, frame 없이 원본 비율로 표시한다. Caption은 사진 아래 별도 rule 행으로 분리한다.
+- Reason: 두 사진을 같은 폭의 늘어난 figure에 넣으면 세로 사진이 1.78배 높아지고, 가로 사진 아래에는 figure의 검은 배경이 빈 frame처럼 남았다. 서로 다른 원본 비율을 같은 표시 높이로 맞추는 편이 제작물과 시험 환경을 한 번에 비교하기 쉽다.
+- Impact: 1280px 이상과 768px에서 두 사진의 상단·하단·caption 시작선이 맞는다. 600px 이하에서는 portrait를 최대 220px로 제한한 한 열 흐름으로 바뀌며, intrinsic `width`와 `height`가 layout shift를 줄인다.
+
+## 2026-08-21 — About 기술 스택을 compact matrix로 재구성
+
+- Decision: 분류 없는 3열 대형 logo wall을 네 개의 가로 분류 행으로 바꾸고, mark를 desktop 44px·tablet 38px·mobile 32px로 줄인다. 모든 기술명은 항상 표시한다.
+- Reason: 기존 560×803px wall은 오른쪽에만 세로로 길게 쌓이면서 왼쪽 page-width를 비웠고, hover 전에는 이름이 없어 같은 NVIDIA mark와 익숙하지 않은 도구를 구분할 수 없었다. 분류와 이름이 사라진 것이 logo 크기보다 큰 스캔 문제였다.
+- Impact: Desktop matrix는 page-width 전체의 약 349px 높이로 줄고, Robotics·Code·AI / Agents·Systems가 같은 네 도구 열을 공유한다. Mobile에서는 각 분류 안의 두 열로 바뀌며 의미 있는 텍스트는 12px 이상, 항목은 비상호작용 상태를 유지한다.
+
+## 2026-08-21 — llama.cpp 공식 아이콘 적용
+
+- Decision: About 기술 스택의 `L.CPP` 임시 monogram을 llama.cpp 공식 저장소의 투명 SVG mark로 교체한다.
+- Reason: 설치된 Simple Icons에는 llama.cpp 항목이 없지만, 공식 프로젝트 저장소에는 사용자가 제시한 orange C++ 형태의 투명 벡터 asset이 공개되어 있다. 흰 배경이 포함된 첨부 PNG보다 이 asset이 paper 배경과 작은 matrix 칸에 자연스럽게 맞는다.
+- Impact: 새 JavaScript dependency나 상호작용은 추가하지 않는다. 공식 `#ff8236` 색, 인접한 항상 보이는 `llama.cpp` 이름, 장식 이미지의 빈 대체 텍스트를 사용하며 기존 44/38/32px responsive 크기와 reduced-motion 동작을 유지한다.
+
+## 2026-08-21 — Home 중앙 이름 split intro
+
+- Decision: Home 첫 진입에 warm-paper 전체 화면 overlay를 두고, 중앙 `SeMinKong`을 보여 준 뒤 이름과 좌우 panel이 벌어지며 현재 Hero를 드러내는 Anime.js intro를 추가한다.
+- Reason: 사용자가 페이지 접속 순간의 명확한 브랜드 장면과 Hero로 이어지는 좌우 전개를 요청했다. 기존 Hero 자체를 이동시키면 scroll-seek와 hand rig의 transform 소유권이 충돌하므로 별도 cover만 움직인다.
+- Impact: 직접 진입/reload의 top 위치에서 full 약 1.7초, lite 약 1초만 실행한다. 조건부 prepaint cover가 느린 첫 로드에서도 Hero 선노출을 막고, user scroll·keyboard·pointer input은 즉시 skip한다. Reduced/hash/background tab/scroll restoration/BFCache는 정적 Hero로 진입한다. Lenis는 intro 뒤 시작하며 기존 page exit curtain과 Hero 모션은 유지한다.
+
+## 2026-08-21 — Home intro를 완성된 Hero로 직접 연결
+
+- Decision: 중앙 overlay 이름을 둘로 흩지 않고 실제 Hero h1으로 FLIP 이동시킨다. Hero scroll의 시작점은 greeting과 CTA까지 완성된 `4100 / 6800` reading state로 옮기고 이후 native scroll을 남은 timeline 구간에 단조 매핑한다.
+- Reason: 별도 overlay 이름의 퇴장, 실제 이름의 두 번째 entrance, Hero copy/navigation fade가 연달아 실행되어 intro와 메인이 서로 다른 장면처럼 보였다.
+- Impact: Panel reveal, 이름 이동, copy/navigation assembly가 한 timeline 안에서 끝나며 마지막 프레임이 곧 interactive main Hero다. Hand/copy transform ownership, reduced/hash/BFCache fallback, input skip, Lenis 지연 초기화는 유지한다.
+
+## 2026-08-21 — Home 이름을 글자별 ink-wipe로 작성
+
+- Decision: 중앙 `SeMinKong`의 단어 전체 fade를 아홉 글자의 사선 ink-wipe와 하나의 작은 vermilion nib으로 교체한다. 필기 완료 뒤에는 정확한 word layer로 짧게 교대하고 기존 Hero FLIP을 그대로 이어간다.
+- Reason: 중앙 이름이 한 번에 나타나는 장면보다 한 글자씩 펜으로 쓰이는 인상을 원한다는 사용자 피드백을 반영하면서, 실제 font glyph와 responsive h1 착지 정합도는 보존해야 한다.
+- Impact: Full 필기는 약 486ms, lite/mobile은 약 392ms다. SVG path·새 asset·dependency는 추가하지 않으며 reduced/hash/BFCache와 조기 입력은 writing layer와 body nib까지 원자적으로 정리한다.

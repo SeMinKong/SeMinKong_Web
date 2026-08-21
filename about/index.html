@@ -13,7 +13,6 @@
   </head>
   <body class="about-page">
     <a class="skip-link" href="#about-main">소개 본문으로 바로가기</a>
-    <div class="page-progress" aria-hidden="true"><span></span></div>
     <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
 
     <header class="site-nav" data-site-nav>
@@ -49,16 +48,16 @@
         </article>
       </section>
 
-      <section class="about-method" aria-labelledby="method-title">
+      <section class="about-questions" aria-labelledby="questions-title">
         <div class="page-width">
           <header class="about-section-heading" data-about-reveal>
-            <h2 id="method-title">개발 방식</h2>
+            <h2 id="questions-title">요즘 붙잡고 있는 질문</h2>
           </header>
-          <ol class="about-method__list">
-            <li data-about-reveal><span>01</span><h3>데이터 흐름</h3><p>입력, 판단, 상태 전달, 장치 동작까지 데이터와 제어의 경로를 먼저 그립니다.</p></li>
-            <li data-about-reveal><span>02</span><h3>인터페이스 검증</h3><p>모델·backend·hardware 사이의 인터페이스를 작게 나누고 실제 데이터로 확인합니다.</p></li>
-            <li data-about-reveal><span>03</span><h3>상태 관찰</h3><p>로그와 운영 화면을 함께 설계해 문제의 위치와 시스템의 현재 상태를 빠르게 파악합니다.</p></li>
-          </ol>
+          <ul class="about-questions__list">
+            <li data-about-reveal><span class="about-questions__topic" lang="en">Retargeting</span><h3>21개 손 랜드마크를 7-DoF 텐던 핸드의 안전한 관절 명령으로 retargeting하려면 어떤 보정이 필요할까?</h3><p>THING의 제어 경로를 출발점으로 joint limit, 입력 평활화, 영점 보정이 실제 손 모양과 모터 동작에 미치는 영향을 정리하고 있습니다.</p></li>
+            <li data-about-reveal><span class="about-questions__topic" lang="en">Sim-to-real</span><h3>시뮬레이션의 동작을 실제 로봇으로 옮길 때 sensor noise·latency·contact dynamics의 domain gap을 어떻게 줄일까?</h3><p>Isaac Sim과 Isaac Lab에서 통신 지연, 센서 오차, 접촉·마찰 차이를 실패 조건과 함께 비교하는 방법을 배우고 있습니다.</p></li>
+            <li data-about-reveal><span class="about-questions__topic" lang="en">Edge inference</span><h3>Jetson·Raspberry Pi 같은 엣지 디바이스에서 AI 추론을 운영하려면 latency·memory budget·observability를 어떻게 함께 설계할까?</h3><p>Ollama와 llama.cpp에서 양자화, context 길이, 초당 토큰 수, RAM·VRAM 사용량을 비교하며 로그와 상태 확인까지 포함한 배포 기준을 정리하고 있습니다.</p></li>
+          </ul>
         </div>
       </section>
 
@@ -67,38 +66,38 @@
           <h2 id="now-title">기술 스택</h2>
         </header>
         <div class="about-now__content">
-          <div class="tool-collections" aria-label="주요 기술 도구">
-            <section class="tool-collection tool-collection--focus" aria-labelledby="tool-robotics-title">
-              <h3 id="tool-robotics-title"><span>01</span>Robotics</h3>
-              <ul>
-                <li><span class="tool-tile__icon" data-tool-icon="ros" aria-hidden="true">R2</span><span class="tool-tile__name">ROS 2</span></li>
-                <li><span class="tool-tile__icon" data-tool-icon="nvidia" aria-hidden="true">NV</span><span class="tool-tile__name">NVIDIA Isaac Sim</span></li>
-                <li><span class="tool-tile__icon" data-tool-icon="nvidia" aria-hidden="true">NV</span><span class="tool-tile__name">Isaac Lab</span></li>
+          <div class="tool-collections">
+            <section class="tool-group" aria-labelledby="tools-robotics">
+              <h3 id="tools-robotics" lang="en">Robotics</h3>
+              <ul class="tool-group__list">
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="ros" aria-hidden="true">R2</span><span class="tool-tile__name">ROS 2</span></li>
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="nvidia" aria-hidden="true">NV</span><span class="tool-tile__name">NVIDIA Isaac Sim</span></li>
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="nvidia" aria-hidden="true">NV</span><span class="tool-tile__name">Isaac Lab</span></li>
               </ul>
             </section>
-            <section class="tool-collection" aria-labelledby="tool-code-title">
-              <h3 id="tool-code-title"><span>02</span>Code</h3>
-              <ul>
-                <li><span class="tool-tile__icon" data-tool-icon="cplusplus" aria-hidden="true">C++</span><span class="tool-tile__name">C++</span></li>
-                <li><span class="tool-tile__icon" data-tool-icon="python" aria-hidden="true">PY</span><span class="tool-tile__name">Python</span></li>
-                <li><span class="tool-tile__icon" data-tool-icon="fastapi" aria-hidden="true">FA</span><span class="tool-tile__name">FastAPI</span></li>
+            <section class="tool-group" aria-labelledby="tools-code">
+              <h3 id="tools-code" lang="en">Code</h3>
+              <ul class="tool-group__list">
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="cplusplus" aria-hidden="true">C++</span><span class="tool-tile__name">C++</span></li>
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="python" aria-hidden="true">PY</span><span class="tool-tile__name">Python</span></li>
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="fastapi" aria-hidden="true">FA</span><span class="tool-tile__name">FastAPI</span></li>
               </ul>
             </section>
-            <section class="tool-collection" aria-labelledby="tool-ai-title">
-              <h3 id="tool-ai-title"><span>03</span>AI</h3>
-              <ul>
-                <li><span class="tool-tile__icon" data-tool-icon="pytorch" aria-hidden="true">PT</span><span class="tool-tile__name">PyTorch</span></li>
-                <li><span class="tool-tile__icon" data-tool-icon="ollama" aria-hidden="true">OL</span><span class="tool-tile__name">Ollama</span></li>
-                <li><span class="tool-tile__icon" aria-hidden="true">L.CPP</span><span class="tool-tile__name">llama.cpp</span></li>
-                <li><span class="tool-tile__icon" data-tool-icon="langchain" aria-hidden="true">LC</span><span class="tool-tile__name">LangChain</span></li>
+            <section class="tool-group" aria-labelledby="tools-ai">
+              <h3 id="tools-ai" lang="en">AI / Agents</h3>
+              <ul class="tool-group__list">
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="pytorch" aria-hidden="true">PT</span><span class="tool-tile__name">PyTorch</span></li>
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="ollama" aria-hidden="true">OL</span><span class="tool-tile__name">Ollama</span></li>
+                <li class="tool-item--llamacpp" data-tool-item><span class="tool-tile__icon tool-tile__icon--image is-logo-ready" aria-hidden="true"><img src="/src/assets/llama-cpp-logo.svg" alt="" width="250" height="250" decoding="async" /></span><span class="tool-tile__name">llama.cpp</span></li>
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="langchain" aria-hidden="true">LC</span><span class="tool-tile__name">LangChain</span></li>
               </ul>
             </section>
-            <section class="tool-collection" aria-labelledby="tool-systems-title">
-              <h3 id="tool-systems-title"><span>04</span>Systems</h3>
-              <ul>
-                <li><span class="tool-tile__icon" data-tool-icon="ubuntu" aria-hidden="true">UB</span><span class="tool-tile__name">Ubuntu</span></li>
-                <li><span class="tool-tile__icon" data-tool-icon="git" aria-hidden="true">GT</span><span class="tool-tile__name">Git</span></li>
-                <li><span class="tool-tile__icon" data-tool-icon="docker" aria-hidden="true">DK</span><span class="tool-tile__name">Docker</span></li>
+            <section class="tool-group" aria-labelledby="tools-systems">
+              <h3 id="tools-systems" lang="en">Systems</h3>
+              <ul class="tool-group__list">
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="ubuntu" aria-hidden="true">UB</span><span class="tool-tile__name">Ubuntu</span></li>
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="git" aria-hidden="true">GT</span><span class="tool-tile__name">Git</span></li>
+                <li data-tool-item><span class="tool-tile__icon" data-tool-icon="docker" aria-hidden="true">DK</span><span class="tool-tile__name">Docker</span></li>
               </ul>
             </section>
           </div>
