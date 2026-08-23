@@ -697,3 +697,18 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [ ] 실제 Lenis chunk fetch 실패와 Vite HMR dispose를 강제로 주입해 unhandled rejection·중복 listener가 없는지 확인한다.
 - [x] Contract test가 공개 이름, 9 letter group·12 path 순서, target bucket, Pressure Jacobi 14회, 최대 12 splat과 192/512 solver size를 고정한다. 실제 브라우저에서 Stable → Lite → Static tier도 확인했다.
 - [x] `npm.cmd run verify`, `git diff --check`, browser warning/error log, 2px/4px keyboard focus와 모든 production local reference 검사가 통과한다.
+
+## 2026-08-23 Site-wide Fluid and adaptive-resolution verification
+
+- [x] Home, Work, About, Resume, Copyright와 6개 case route를 1280×900, 768×1024, 390×844 실제 브라우저에서 검사했다. 33개 조합 모두 fixed Site Fluid layer/canvas가 정확히 1개이고 document horizontal overflow가 0이다.
+- [x] 1280px full/interactive는 모든 route에서 `stable/high/compact`, 768px과 390px lite/static-depth는 `lite/baseline`이다. Canvas backing과 CSS viewport aspect 차이는 모든 조합에서 0.0006 이하이다.
+- [x] Home·Work·About의 warm paper profile과 THING dark case profile을 실제 화면으로 확인했다. 읽기 영역 quiet zone, nav/content/media/page-curtain stacking과 이름 SVG의 원래 비율이 유지된다.
+- [x] Contract test가 `high 256/768`, `balanced 224/640`, `baseline 192/512`, maximum 1536과 390×844 / 768×1024 / 1280×900의 aspect-preserving 16px bucket target을 고정한다.
+- [x] 한 Home 문서에서 1280→768→390→1280 live resize를 실행해 `stable/high → lite/baseline → lite/baseline → stable/high`으로 전환했으며 layer 중복, overflow와 browser warning/error가 없다.
+- [x] About는 initial seed 뒤 `data-fluid-state=idle`로 rAF sleep하고 fine-pointer 이동 직후 `active`로 깨어난다. Home은 continuous `active`를 유지하며 hidden/pagehide용 timer/frame cleanup은 source에서 확인했다.
+- [x] Home Intro 180ms 시점은 canvas 기본 300×150이고 fluid mode가 아직 없으며 page가 locked다. 자연 완료 뒤에만 1139×810 Stable/high를 할당하고 lock을 해제한다.
+- [x] `?motion=reduced`는 Intro lock과 WebGL allocation 없이 `static/none`, canvas display none, 300×150 기본 buffer를 유지한다. Mobile About의 native scroll 뒤에도 fixed layer top은 0이고 viewport height를 유지한다.
+- [x] Home→Work→Back 복원 뒤 Home은 layer와 wordmark가 각각 1개, Stable/high active, Intro lock 없음, overflow 0이다.
+- [x] `npm.cmd run verify`가 119 modules를 build하고 16개 deployment file을 검증했다. `git diff --check`와 개발 브라우저 warning/error log도 비어 있다.
+- [ ] 실제 touch 기기에서 vertical pan, long press, 서로 다른 pointer id와 같은 pointer id의 short-tap impulse를 확인한다. Source는 passive listener, touchmove 제외, 10px/420ms threshold와 pointer-id match를 사용한다.
+- [ ] 강제 framebuffer allocation failure와 실제 `WEBGL_lose_context`로 high→balanced→baseline→Lite→Static 및 context restoration을 관찰한다. Resource cleanup과 fallback 순서는 source와 pure sizing/quality contract로 검증했다.

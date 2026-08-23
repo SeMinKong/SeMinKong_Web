@@ -711,3 +711,17 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Work Story만 `smoothScroll.onScroll()`을 통해 ScrollTrigger update를 구독한다. GSAP loader는 GSAP/ScrollTrigger 등록만 소유하며 Lenis를 역으로 import하거나 전역 singleton으로 결합하지 않는다.
 - Continuous motion은 hidden/offscreen/pagehide에서 멈추고 pageshow/environment change에서 현재 capability를 다시 평가한다. Intro가 pagehide로 완료된 microtask에서는 Fluid가 WebGL을 새로 할당하지 않으며, 활성 pageshow에서만 graphics를 준비한다. 5초 초과 pause의 Stable clear/reseed, context-loss resource 규칙과 Stable → Lite → Static fallback은 유지한다.
 - Intro Promise, async imports, observers, listeners, rAF, timers와 transient DOM은 각 controller의 cleanup 범위에 포함한다. BFCache는 문서를 파기하지 않으므로 pagehide stop과 explicit destroy를 구분한다.
+
+## 2026-08-23 — Site Fluid and adaptive-resolution override
+
+이 항목은 앞선 Pressure Ink의 Home-only, `192 / 512` 고정 target과 항상 실행되는 idle 30fps 규칙을 대체한다.
+
+- `initSiteFluid()`은 route마다 하나만 생성되며 fixed viewport 좌표로 pointer/tap을 해석한다. Home의 `initHeroFluid()`는 Intro 이후 Hero progress와 copy obstacle만 공통 controller에 전달하는 얇은 adapter다.
+- Stable target은 `high 256 / 768`, `balanced 224 / 640`, `baseline 192 / 512`의 simulation/dye short side를 사용한다. 긴 축은 최대 1536px이고 cap에 닿을 때 양 축을 함께 축소한 뒤 16px bucket으로 반올림해 viewport 비율을 보존한다.
+- Full/interactive desktop은 viewport와 `deviceMemory`, `hardwareConcurrency`로 초기 tier를 고른다. 최근 60개 active render interval에서 평균 36ms 초과와 38ms 초과 frame 15개가 함께 누적되거나 70ms 초과 frame이 20개에 도달할 때만 `high → balanced → baseline`으로 한 단계 내린다. 30Hz display는 downgrade하지 않으며 같은 session에서는 자동 승급하지 않고 12초 cooldown으로 출렁임을 막는다.
+- Target allocation은 현재 tier부터 baseline까지 순차 재시도한다. Half-float compact/RGBA target이 모두 실패하면 Lite, Lite program도 실패하면 Static으로 내려가며 이전 target과 program은 controller teardown에서 정리한다.
+- Home은 active 60fps와 calm 30fps current를 계속 유지한다. 다른 route는 초기 seed·pointer·tap·scheduled ambient burst 뒤 field가 안정되면 rAF를 완전히 멈추고 route별 delay 후 짧게 wake한다. `data-fluid-state=active|idle|suspended|static`을 노출한다.
+- Document scroll progress는 solver damping에 최대 35%만 전달해 긴 페이지 하단에서도 ink field가 사라지지 않게 하며, content 자체의 opacity나 transform은 Fluid가 소유하지 않는다.
+- Hidden과 pagehide는 frame과 ambient timer를 모두 멈춘다. pageshow, pointer, 짧은 tap과 ambient wake는 첫 dt를 초기화한 뒤 재개한다. 5초가 넘는 document suspension만 clear/reseed하며 단순 idle은 field를 초기화하지 않는다.
+- Scroll 중 quiet-zone geometry는 별도 rAF에서 프레임당 한 번만 측정한다. Sleeping route는 변경된 obstacle composite를 한 frame 즉시 그린 뒤 다시 idle로 돌아간다.
+- Tablet/mobile은 higher backing scale의 Lite 30fps를 사용하되 touch move를 받지 않는다. Reduced는 WebGL context와 rAF를 만들지 않고 route palette의 정적 background만 표시한다.

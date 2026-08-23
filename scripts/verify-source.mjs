@@ -3,12 +3,12 @@ import { basename, resolve } from 'node:path';
 import { SITE_ROUTES } from '../config/site-routes.js';
 
 const entryStyleContracts = {
-  'about.js': ['tokens.css', 'base.css', 'about.css', 'motion.css'],
-  'case-study.js': ['tokens.css', 'base.css', 'case-study.css', 'motion.css'],
-  'home.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'home.css', 'motion.css'],
-  'legal.js': ['tokens.css', 'base.css', 'legal.css', 'motion.css'],
-  'resume.js': ['tokens.css', 'base.css', 'resume.css', 'motion.css'],
-  'work.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'work.css', 'motion.css']
+  'about.js': ['tokens.css', 'base.css', 'about.css', 'site-fluid.css', 'motion.css'],
+  'case-study.js': ['tokens.css', 'base.css', 'case-study.css', 'site-fluid.css', 'motion.css'],
+  'home.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'home.css', 'site-fluid.css', 'motion.css'],
+  'legal.js': ['tokens.css', 'base.css', 'legal.css', 'site-fluid.css', 'motion.css'],
+  'resume.js': ['tokens.css', 'base.css', 'resume.css', 'site-fluid.css', 'motion.css'],
+  'work.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'work.css', 'site-fluid.css', 'motion.css']
 };
 
 const retiredSourceFiles = [
