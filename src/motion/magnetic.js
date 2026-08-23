@@ -11,9 +11,11 @@ export const initMagnetic = (environment, selector = '.button, .nav-resume, .res
   let frame = 0;
   let lastTime = 0;
   let enabled = false;
+  let destroyed = false;
 
   const step = (time) => {
     frame = 0;
+    if (destroyed) return;
     const dt = Math.min(0.04, Math.max(0.001, (time - (lastTime || time)) / 1000));
     lastTime = time;
     let active = false;
@@ -113,10 +115,32 @@ export const initMagnetic = (environment, selector = '.button, .nav-resume, .res
     if (!enabled) release();
   };
 
-  window.addEventListener('portfolio:environment-change', sync);
-  document.addEventListener('visibilitychange', () => {
+  const onVisibilityChange = () => {
     if (document.hidden) release();
-  });
+  };
+
+  window.addEventListener('portfolio:environment-change', sync);
+  document.addEventListener('visibilitychange', onVisibilityChange);
 
   sync();
+
+  return {
+    destroy() {
+      if (destroyed) return;
+      destroyed = true;
+      enabled = false;
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      elements.forEach((element) => {
+        element.removeEventListener('pointermove', onMove);
+        element.removeEventListener('pointerleave', onSettle);
+        element.removeEventListener('pointerdown', onPress);
+        element.removeEventListener('pointerup', onRelease);
+        element.style.transform = '';
+      });
+      window.removeEventListener('portfolio:environment-change', sync);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      states.clear();
+    }
+  };
 };

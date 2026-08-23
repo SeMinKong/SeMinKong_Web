@@ -16,6 +16,15 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Replaced the monolithic page bootstrap with six route-owned entries and a shared destroyable runtime, while preserving the existing Home, Work, case-study, About, Resume, and Copyright behavior.
+- Split the former site-wide portfolio stylesheet into Home, Work, and intentional Home/Work shared layers; removed the remaining superseded Hand/Cube/Hero cascade and limited reduced-motion rules to the routes that use them.
+- Made Lenis capability-gated and lazy, connected Work Story to it explicitly, and hardened async setup, HMR teardown, repeated BFCache lifecycle, and Home Intro-to-Fluid page transitions.
+- Split the handwritten Intro, lite-fluid shader, and Pressure Ink renderer into readable wordmark, shader, configuration, WebGL-resource, sizing, and controller modules without changing their public contracts or rendering order.
+- Centralized all eleven build routes in one manifest and expanded verification to reject stale entries, legacy CSS, cross-route bundle leakage, root-absolute deployment URLs, and missing local links or assets.
+- Replaced the Home Hero robotic hand and cube finale with a centered `Paper Current` playground: a dependency-free WebGL2 ink field responds to pointer velocity and pressure waves while protecting the handwritten name and CTA with a measured quiet zone; lite, reduced-motion, offscreen, and WebGL-failure fallbacks remain scroll-safe.
+- Replaced the rigid visible type system with locally hosted Dongle for rounded handwritten display/UI and Gowun Dodum for calm long-form text and metadata, while retaining Manrope only as the invisible metric for the unchanged handwritten Intro-to-Hero SVG handoff.
+- Rebuilt the Home first-load wordmark as twelve ordered SVG strokes with a restrained letter-settle bounce, removed the pen-like nib, and enlarged the centered name before it shrinks into the Hero h1; the same handwritten geometry now remains in the final Hero without a font swap, and the public display name is consistently spaced as `Se Min Kong` while technical identifiers remain unchanged.
+- Replaced the About Hero's repeated technology list with a personal Korean statement about enjoying learning, making, and validation.
 - Balanced the Home Hero greeting so wide viewports no longer strand a single word on its last line, and let stacked project cards below 960px size to their content instead of holding the fixed deck height.
 - Unified small mono-label tracking at 0.08em (display numerals keep 0.12em), consolidated body text onto shared `--type-body` tokens, and capped long-form paragraphs on case, resume, and copyright routes at a 640px `--measure`.
 - Warmed the case-study and project media letterboxes from legacy green-tinted blacks to the charcoal palette, evened the contact-panel arrow spacing, and removed the orphaned Hero role styles.

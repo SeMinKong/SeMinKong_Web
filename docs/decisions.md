@@ -539,3 +539,99 @@
 - Decision: 중앙 `SeMinKong`의 단어 전체 fade를 아홉 글자의 사선 ink-wipe와 하나의 작은 vermilion nib으로 교체한다. 필기 완료 뒤에는 정확한 word layer로 짧게 교대하고 기존 Hero FLIP을 그대로 이어간다.
 - Reason: 중앙 이름이 한 번에 나타나는 장면보다 한 글자씩 펜으로 쓰이는 인상을 원한다는 사용자 피드백을 반영하면서, 실제 font glyph와 responsive h1 착지 정합도는 보존해야 한다.
 - Impact: Full 필기는 약 486ms, lite/mobile은 약 392ms다. SVG path·새 asset·dependency는 추가하지 않으며 reduced/hash/BFCache와 조기 입력은 writing layer와 body nib까지 원자적으로 정리한다.
+
+## 2026-08-22 — About Hero를 개인의 태도로 시작
+
+- Decision: About Hero의 `Computer Vision · ROS 2 · Robot Control` 기술 목록을 `배우고, 만들고, 검증하는 과정을 즐깁니다.`라는 개인 문장으로 교체한다. 역할과 위치를 담당하는 `Software Developer · Seoul`은 유지한다.
+- Reason: About의 첫 문장은 지원자의 태도와 성향을 소개해야 하는데, 기존 목록은 기술 분류처럼 읽히고 바로 아래 Focus·본문·기술 스택과 중복됐다.
+- Impact: 기술 전문성은 기존 About facts, narrative, questions, tool matrix에서 계속 확인할 수 있다. Hero의 구조·스타일·모션은 바꾸지 않으며 새 문장의 반응형 줄바꿈만 검증한다.
+
+## 2026-08-22 — Home intro에 읽기 위한 정지 구간 추가
+
+- Decision: Home 첫 진입은 기존 handwritten `SeMinKong`과 FLIP 구조를 유지하되 full `4.7초`, lite/mobile `3.1초`로 늘린다. 완성된 중앙 이름을 각각 약 `1.25초 / 0.74초` 유지한 뒤 좌우 paper panel을 연다.
+- Reason: 기존에는 exact word 교대 후 약 `10ms` 만에 panel이 움직여 브랜드 이름을 읽는 장면이 성립하지 않았다. BeeToGreen 인트로의 긴 브랜드 동작에서 `등장 → hold → 커튼 퇴장 → 본문 조립`이라는 순서만 참고해 포트폴리오에 맞는 길이로 축약한다.
+- Impact: 새 Lottie·asset·dependency는 추가하지 않는다. 입력 즉시 완료, reduced/hash/BFCache 생략, responsive FLIP, 완성된 Hero 착지, Lenis 지연 시작은 유지하며 watchdog과 head fallback만 새 timeline 길이에 맞춰 늘린다.
+
+## 2026-08-22 — Home intro를 실제 획순 SVG로 교체
+
+- Decision: 아홉 글자를 가로로 여는 clip-path와 별도 nib을 제거하고, `SeMinKong`을 12개 SVG 중심 획으로 직접 그린다. 글자 완료마다 한 번의 작은 위쪽 반동을 주고, 중앙 이름은 필기 중 full `1.16 → 1.32배`, lite `1.10 → 1.18배`로 커진 뒤 실제 Hero h1 크기로 축소한다.
+- Reason: 기존 효과는 글씨를 쓰는 동작보다 오른쪽으로 mask가 열리고 포인터가 따라가는 UI처럼 보였다. 사용자가 펜 포인터 제거, 실제 획순, 큰 이름에서 작은 이름으로의 전환, 딱딱하지 않은 탄성을 명시적으로 요청했다.
+- Impact: Anime.js에 이미 포함된 `createDrawable()`만 사용하며 새 asset·dependency는 없다. SVG는 intro 장식으로만 존재하고 최종 프레임은 정확한 Manrope live-text와 기존 semantic h1으로 교대한다. 입력 skip, resize, reduced/hash/BFCache, Hero transform ownership과 Lenis 지연 시작은 유지한다.
+
+## 2026-08-22 — 공개 이름과 Hero 필기체를 하나의 서명으로 통일
+
+- Decision: 공개 이름을 `Se Min Kong`으로 띄어 쓰고, Intro의 12획 손글씨 SVG를 Manrope로 교대하지 않은 채 최종 Hero h1에도 동일하게 유지한다. GitHub 계정·URL·resume asset 같은 기술 식별자 `SeMinKong`은 변경하지 않는다.
+- Reason: 사용자가 Intro에서 완성되는 필기체를 메인에서도 그대로 보고 싶어 했고, 중간·최종 단계에서 폰트가 바뀌는 것이 장면의 연속성을 해쳤다.
+- Impact: 중앙 필기부터 responsive FLIP, 최종 Hero까지 같은 SVG geometry를 사용한다. 초기 HTML부터 SVG와 실문자 fallback을 함께 두고 semantic h1에 `Se Min Kong` 접근성 이름을 직접 제공해 JS 지연과 reduced/hash/BFCache/skip도 동일한 정적 서명으로 끝난다. Header와 일반 UI의 기존 Manrope typography는 유지한다.
+
+## 2026-08-22 — Asta Sans + Geist Mono visible type system
+
+- Decision: 보이는 display, heading, body, navigation을 `Asta Sans Variable`로 통합하고 기술 metadata는 `Geist Mono Variable`로 바꾼다. 한글 metadata는 Asta Sans로 fallback한다.
+- Reason: 손글씨 서명 주변의 기존 sans/mono 조합이 지나치게 딱딱하게 분리돼 보였다. Asta의 절제된 곡선으로 연결감을 만들되 450–680 weight hierarchy와 mono metadata로 전문성을 유지한다.
+- Impact: `Manrope Variable`은 Intro와 Hero SVG의 responsive 폭을 제공하는 투명 metric text에만 남는다. 모든 font asset은 Fontsource npm package로 self-host하며 외부 CDN이나 runtime font request는 추가하지 않는다.
+
+## 2026-08-22 — Dongle-led visible typography
+
+- Decision: 보이는 display, heading, navigation과 주요 action은 `Dongle` 700/400으로 바꾸고, 긴 본문과 metadata는 `Gowun Dodum` 400으로 통일한다. Asta Sans와 Geist Mono는 제거한다.
+- Reason: 사용자가 정돈된 고딕 계열은 여전히 딱딱하다고 판단했고, 원하는 방향이 Gowun Dodum 단독보다 Dongle의 둥근 획과 손글씨 리듬에 가깝다고 명확히 했다. 긴 문장까지 display face로 쓰지 않아 전문성과 가독성은 유지한다.
+- Impact: 큰 제목의 음수 자간과 작은 Dongle UI 크기를 보정하고, header hover의 weight morph는 static 700 lift wave로 단순화한다. `Manrope Variable` 680은 화면에 보이지 않는 Intro/Hero geometry provider로만 유지하며 Fontsource Korean/Latin WOFF2는 외부 요청 없이 self-host한다.
+
+## 2026-08-23 — 동일 서명 노드 handoff와 단일 paper reveal
+
+- Decision: Home Intro의 좌우 paper panel과 복제 SVG crossfade를 제거한다. 필기를 마친 SVG 노드 하나를 Hero의 실제 SVG rect까지 이동한 뒤 그 노드 자체를 Hero h1에 옮기며, 배경은 단일 paper veil이 전체 화면에서 잔잔하게 옅어져 Hero를 드러낸다.
+- Reason: 동일한 path를 사용해도 Intro와 Hero의 서로 다른 line box, `difference` 색, 두 SVG의 opacity 교대, intro 종료 때 바뀌는 scrollbar gutter 때문에 서체와 크기가 순간적으로 달라 보였다. 좌우 panel의 중앙 seam도 서명과 무관한 커튼처럼 읽혔다.
+- Impact: Full은 약 4.75초, lite/mobile은 약 3.2초의 기존 읽기 호흡을 유지한다. 착지 직전과 직후에는 같은 DOM SVG, rect, font-size를 사용하고 global stable scrollbar gutter로 viewport 단위 재계산을 막는다. Reduced/hash/BFCache/입력 skip은 초기 HTML의 정적 Hero SVG를 계속 사용한다.
+
+## 2026-08-23 — Dongle optical sizing과 정렬 보정
+
+- Decision: 글꼴 family는 Dongle/Gowun Dodum/숨은 Manrope 구성을 유지한다. Dongle의 작은 실제 글자 몸집에 맞춰 header, Hero action, 짧은 화면의 Hero 문장, About 질문, 일반 Work 제목을 키우고 desktop header의 왼쪽 inset을 page-width의 40px과 맞춘다.
+- Reason: 390·768·1280 실측에서 44–48px hit area는 충분했지만 내부 Dongle glyph가 작아 보였고, 1280px에서는 header가 x=32px, Hero가 x=40px으로 시작선이 달랐다. Work 일반 제목과 About의 긴 질문도 주변 제목보다 시각적 위계가 약했다.
+- Impact: Font family와 본문 밀도는 바꾸지 않는다. Mobile header는 16px safe inset과 390px 폭 안에 유지하고, 긴 Work 제목은 block wrapping과 descender 여백을 사용한다. Metadata 크기와 tracking은 소폭만 보정한다.
+
+## 2026-08-23 — 필기 완료 후 1초 이내 Hero 전환
+
+- Decision: Home Intro의 획순과 필기 시간은 유지하되 마지막 획이 끝난 뒤 별도 hold를 제거하고, 단일 paper fade와 동일 SVG의 Hero 착지를 full `930ms`, lite/mobile `760ms` 안에 완료한다.
+- Reason: 완성된 이름을 중앙에 오래 붙잡아 두는 구간 때문에 필기 이후의 진행이 느리게 느껴졌다. 마지막 글자의 bounce settle과 fade를 겹치면 손글씨의 생동감은 남기면서도 화면 전환은 즉시 이어진다.
+- Impact: Full Intro 총 길이는 약 `2.38s`, lite/mobile은 약 `1.66s`가 된다. Font, 12개 path, 획순, bounce 크기, Hero의 동일 DOM SVG handoff와 reduced/input-skip 동작은 변경하지 않는다.
+
+## 2026-08-23 — 전역 타이포 크기와 breakpoint 연속성 정리
+
+- Decision: Dongle display, Gowun Dodum 본문·metadata, Home의 동일 SVG 서명은 유지한다. 공통 본문을 16px 기준으로 올리고 의미 있는 label·action은 최소 14px, 보조 metadata는 약 13.2–14.3px의 유동 범위로 분리한다. About·Work·Legal·Case 제목과 Home 문장은 폭이 넓어질수록 커지는 단일 `clamp()` 흐름을 사용한다.
+- Reason: 기존에는 `600 / 700 / 720 / 900px` media query 직후 mobile 전용 큰 글자가 desktop base 값으로 교체되며 화면이 넓어졌는데 제목이 작아졌다. `body-lg`가 일반 본문과 같은 15.36px로 계산되고 Resume 연락처·날짜·action은 12.48px에 머물러 페이지 간 위계도 달랐다.
+- Impact: About `700→701px`, Home·Work `720→721px`, Home 짧은 화면 `900→901px`, Legal·Case `600→601px`에서 크기가 역행하지 않는다. Resume와 Legal의 의미 있는 작은 글자는 14px 이상, Case 본문 소제목은 24–29.6px로 올라간다. Font family, Home 획순·handoff·timing, 구조와 상호작용은 바꾸지 않는다.
+
+## 2026-08-23 — 전역 타이포 150% 확대와 반응형 재배치
+
+- Decision: 바로 앞에서 정리한 타이포 비율을 유지한 채 root 글자 크기를 `150%`로 올리고, `vw`가 포함된 모든 `font-size` 식도 같은 비율로 확대한다. Dongle·Gowun Dodum과 Home의 12획 SVG 서명은 유지한다. 다만 720px 이하 서명은 viewport safe inset 안에 머물도록 별도 유동 상한을 둔다.
+- Reason: 기존의 breakpoint 연속성은 해결됐지만 전체 화면에서 본문·metadata·action과 큰 제목의 시각 몸집이 여전히 작았다. 브라우저 `zoom`이나 transform은 layout과 접근성 측정을 왜곡하므로 실제 computed font-size를 키우는 방식이 필요했다.
+- Impact: 기본 본문은 `24px`이 되고 고정 `rem` 및 유동 `clamp()`가 기존 대비 1.5배로 계산된다. 확대된 글자가 줄어들지 않도록 720px 이하 header는 2행, 960px 이하 Work는 1열, 820px 이하 Resume 날짜는 다음 행, 700px 이하 About tool matrix는 2열로 재배치한다. Motion timeline, SVG path, 색과 페이지 구조는 변경하지 않는다.
+
+## 2026-08-23 — 균형형 120% 타이포와 서명 비율 고정
+
+- Decision: 바로 앞의 150% 확대를 대체해 root와 모든 fluid type을 원래 정리값의 `120%`로 맞춘다. 기본 본문은 `19.2px`로 두고 Dongle·Gowun Dodum의 역할은 유지한다. Home의 정적·동적 SVG는 `xMidYMid meet`와 단일 `scale`만 사용해 어떤 viewport와 handoff 시점에도 가로·세로 비율을 바꾸지 않는다.
+- Reason: 24px 본문과 150% display는 페이지 전체가 한 위계처럼 커져 본문 밀도와 제목 사이의 대비가 약해졌다. 또한 `preserveAspectRatio="none"`과 독립 `scaleX / scaleY`는 동일 path라도 컨테이너와 이동 상태에 따라 손글씨를 눌리거나 늘일 수 있었다.
+- Impact: 390px 이상 header는 다시 64px 한 행으로 읽히고, 실제로 한 행이 들어가지 않는 359px 이하에서만 두 행을 사용한다. Work 960px 이하 1열, Resume 820px 이하 날짜 stack, About 700px 이하 tool 2열은 여유 있는 읽기 흐름으로 유지한다. Intro의 획순, bounce, 총 길이, 1초 이내 전환과 동일 SVG node handoff는 바꾸지 않는다.
+
+## 2026-08-23 — Home Intro 자연 완료 게이트
+
+- Decision: Home의 정상 Intro가 시작된 뒤에는 휠, 클릭, 터치, Tab, Escape, Enter, Space와 스크롤 키로 타임라인을 건너뛸 수 없게 한다. 배경 콘텐츠는 Intro 동안 `inert`와 `aria-busy` 상태로 잠그고, Anime.js의 자연 완료가 발생한 뒤에만 한 번에 해제한다.
+- Reason: 기존에는 방문자의 첫 입력이 곧 `finish()`를 호출해 획순 필기와 Hero handoff를 보기도 전에 화면이 열렸다. 사용자가 첫 장면을 반드시 끝까지 재생한 뒤 본문으로 이어지길 명시적으로 요청했다.
+- Impact: Full 약 `2.38s`, lite/mobile 약 `1.66s`의 기존 길이, 12개 path, bounce, 단일 비율 SVG handoff는 바꾸지 않는다. Head 단계부터 입력을 막아 module 초기화 전 틈도 닫는다. 다만 reduced motion, hash·BFCache·복원 진입, hidden/pagehide, 실행 오류와 watchdog은 사용자를 가두지 않는 fail-open 경로로 유지하며 브라우저 Back·Reload·modifier shortcut은 가로채지 않는다.
+
+## 2026-08-23 — Home Hero를 Paper Current Playground로 교체
+
+- Decision: Home Hero의 로봇 손과 cube flourish를 제거하고, 중앙 정렬된 동일 서명·인사말·CTA 뒤에 full-bleed `Paper Current` 유체장을 둔다. 유체는 warm paper 위 graphite wash와 제한된 vermilion pigment만 사용하며 이름과 CTA의 실제 rect를 확장한 quiet zone을 침범하지 않는다.
+- Reason: Hero를 특정 로봇 프로젝트의 오브젝트보다 방문자가 직접 반응을 만들 수 있는 개인적인 Playground로 전환하고, 손글씨 Intro와 메인의 재료감을 하나의 종이·잉크 언어로 연결하기 위해서다.
+- Impact: Hero scroll은 cube 전용 `175svh / 6800` timeline 대신 약 `118svh`의 짧은 exit-only 진행으로 바뀐다. Full은 포인터 속도와 pressure impulse에 반응하고 lite는 저해상도 30fps와 짧은 tap impulse를 사용한다. Reduced/WebGL 실패는 정적 CSS marbling으로 남으며 touch scroll, 동일 12-path SVG handoff, 균일 비율과 CTA 의미 구조는 유지한다.
+
+## 2026-08-23 — Paper Current를 Pressure Ink solver로 강화
+
+- Decision: Full desktop의 단일 fragment domain-warp를 저해상도 WebGL2 stable-fluid solver로 대체한다. Velocity·pressure·graphite/vermilion dye를 ping-pong target에 보존하고, 빠른 경로와 방향 전환을 batched splat과 vorticity로 증폭한다. Lite는 기존 procedural renderer, reduced와 실패 환경은 CSS marbling을 유지한다.
+- Reason: 기존 current는 포인터 주변 픽셀을 즉시 굽히는 표현이라 강도를 높일수록 유체보다 rubber/lens처럼 보였다. 사용자가 원하는 격렬함에는 입력 뒤에도 이동량과 pigment가 남아 충돌하고 말리는 시간적 상태가 필요하다.
+- Impact: Full renderer에 EXT_color_buffer_float, compact/RGBA half-float framebuffer 검증과 23-pass 내외의 GPU pipeline이 추가된다. 이름·문장·CTA union은 실제 obstacle로 보호하고 SVG는 변형하지 않는다. Active 60fps/idle 30fps, 192/512 target, 14 pressure iteration으로 범위를 고정하며 capability 실패 시 전체 renderer를 즉시 경량 모드로 교체한다.
+
+## 2026-08-23 — Route-owned runtime과 CSS 아키텍처
+
+- Decision: 11개 HTML route를 `home / work / case-study / about / resume / legal` 6개 entry에 명시적으로 연결하고, 공통 환경·navigation·page transition 초기화는 destroy 가능한 `createPageRuntime()`이 소유한다. 삭제된 `site.css` 대신 공통 `tokens / base / motion`, Home·Work 전용 `portfolio-shared`, 각 route stylesheet를 조합한다. Vite와 배포 검증은 `config/site-routes.js` 하나를 공유한다.
+- Reason: Work와 case route가 사용하지 않는 Home Intro·Fluid·deck 코드와 CSS까지 가져오고, 큰 entry·stylesheet·renderer 안에 서로 다른 책임이 섞여 있어 작은 변경의 영향 범위와 cleanup 소유권을 읽기 어려웠다.
+- Impact: 현재 시각·문구·URL·모션 timing은 바꾸지 않는다. Lenis는 full/interactive에서만 동적으로 로드하고 Work Story가 명시적으로 구독한다. Intro wordmark, lite shader, Pressure Ink shader/WebGL/size는 facade 뒤 내부 모듈로 나뉘며 public API와 Stable → Lite → Static fallback 순서는 유지한다. Source/build 검증은 route entry, CSS 경계, legacy selector, 배포 파일과 모든 로컬 참조를 함께 검사한다.

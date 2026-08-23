@@ -100,7 +100,7 @@ Goal 실행 중에도 같은 작업에서 조건을 추가하거나 상태 요�
 종료 조건:
 ```
 
-작업 범위가 애매하면 병렬화하지 않는다. 특히 현재 `src/main.js`와 `src/style.css`는 크기 때문에 모듈 분리 전에는 한 명만 수정한다.
+작업 범위가 애매하면 병렬화하지 않는다. Route 작업은 `src/entries/*`와 해당 `src/styles/<route>.css`를 함께 소유하고, 공통 runtime·tokens·base·motion을 수정하는 작업과 같은 파일에서 병렬 편집하지 않는다. Home Intro/Fluid 내부 helper는 public facade 계약을 유지한 채 별도 파일 소유권으로 나눌 수 있다.
 
 ## 7. Worktree 사용법
 

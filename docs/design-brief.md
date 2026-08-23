@@ -8,7 +8,7 @@ Status: Approved for implementation — 2026-07-14
 
 ## Confirmed identity
 
-- Site name: `SeMinKong`
+- Site name: `Se Min Kong`
 - Type: 개인 포트폴리오
 - Owner: 공세민 / Se Min Kong
 - Target role: 개발 직무 전반. Robotics를 우선 선호하지만 AI, Software, 일반 IT 개발 직무도 열어 둔다.
@@ -21,7 +21,7 @@ Status: Approved for implementation — 2026-07-14
 
 ## Objective
 
-SeMinKong이 진행해 온 프로젝트와 경험을 설득력 있게 보여주고, 개발자를 찾는 방문자가 역량과 관심 분야를 이해한 뒤 협업 또는 채용 연락을 보내도록 만든다.
+Se Min Kong이 진행해 온 프로젝트와 경험을 설득력 있게 보여주고, 개발자를 찾는 방문자가 역량과 관심 분야를 이해한 뒤 협업 또는 채용 연락을 보내도록 만든다.
 
 사이트는 단순한 모션 데모가 아니라 다음 질문에 답해야 한다.
 
@@ -56,7 +56,7 @@ Robotics 선호를 첫인상으로 분명히 하되, 지나치게 좁은 전문�
 
 Hero 첫 상태에서는 5초 안에 이름·역할·행동이 보여야 하고, 기술 범위는 pinned 문장의 system path와 바로 이어지는 AQIS에서 구체화한다.
 
-- 이름: SeMinKong
+- 이름: Se Min Kong
 - 역할: AI & Robotics Software Developer
 - 범위: Perception → Decision → Physical Action → Interface, 이후 AQIS에서 Computer Vision·ROS 2·Backend·Hardware Integration을 증명
 - 행동: 대표 프로젝트 보기 또는 연락하기
@@ -215,7 +215,7 @@ About은 별도 페이지로 제공하고 Contact는 Home의 정보 패널로 �
 - AQIS에서 본인이 직접 작성한 범위와 팀원의 범위, LLM 명령 기능의 완성 수준, 공개 가능한 성능 수치는 무엇인가?
 - Brain Tumor의 데이터셋, train/validation/test 방식과 결과 평가 맥락은 무엇인가?
 - Software Competition Gold Prize와 Capstone 수상의 날짜, 프로젝트, 주최 기관은 무엇인가?
-- 공개 표기는 `SeMinKong`으로 붙여 쓰고, 문서 내부 영문 이름만 `Se Min Kong`으로 사용할 것인가?
+- 공개 이름은 `Se Min Kong`으로 띄어 쓴다. GitHub 계정·저장소 URL·파일명 같은 기술 식별자는 기존 `SeMinKong`을 유지한다.
 
 확인된 공개 자료:
 
@@ -653,3 +653,122 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 글자 reveal 가장자리에는 작은 vermilion nib 하나만 따라간다. 펜 그림, underline, particle, sound는 추가하지 않고 필기가 끝나면 nib도 panel opening 전에 사라진다.
 - 필기 단계는 자식 글자의 clip과 opacity만 소유하고, 단어 부모의 transform은 이후 Hero h1으로 이동하는 FLIP에만 사용한다. 따라서 필기와 착지가 두 개의 독립된 entrance처럼 보이지 않아야 한다.
 - Lite/mobile은 같은 방향과 순서를 더 짧게 유지하고, reduced motion·hash·BFCache·조기 입력 경로에서는 기존처럼 intro 전체를 생략하거나 즉시 완성한다.
+
+## 2026-08-22 — Home intro reading-beat override
+
+이 항목은 Home split-entry, FLIP handoff, handwritten word entrance의 시각 구조를 유지하면서 재생 시간만 대체한다. BeeToGreen의 브랜드 프리로더에서는 `브랜드 동작 → 완성 상태 hold → 커튼 퇴장 → Hero 조립`으로 장면을 분리하는 호흡만 참고하며 색, Lottie 그래픽, 로고 형태, 카피, 자산은 가져오지 않는다.
+
+- Full motion은 약 `4.7초`, lite/mobile은 약 `3.1초`로 늘린다. 기존 `1.38초 / 1.02초` 타임라인은 더 이상 사용하지 않는다.
+- 필기 자체를 무작정 늘이지 않고, 완성된 중앙 `SeMinKong`을 full 약 `1.25초`, lite 약 `0.74초` 읽을 수 있게 유지한 뒤 panel을 연다.
+- Panel reveal은 full `2.0초`, lite `1.4초` 동안 진행하며, Hero copy와 navigation은 후반에 겹쳐 조립되어 마지막 프레임이 곧 완성된 Hero가 된다.
+- 별도 Lottie, image, dependency, progress 또는 Skip 버튼은 추가하지 않는다. 기존 wheel·pointer·touch·keyboard 입력의 즉시 완료, reduced/hash/BFCache 생략, FLIP 정합도, Lenis 지연 시작을 그대로 유지한다.
+
+## 2026-08-22 — Home intro stroke-order wordmark override
+
+이 항목은 `Home handwritten word entrance`의 사선 ink-wipe와 nib, `Home intro reading-beat`의 필기 구간을 대체한다. 읽기 hold와 panel→Hero 순서는 유지한다.
+
+- Intro 전용 `SeMinKong`은 일반 글자의 가로 clip reveal이 아니라, 라틴 손글씨의 자연스러운 쓰기 순서로 직접 설계한 12개 SVG 중심 획을 Anime.js `createDrawable()`로 순차 노출한다. `i`는 몸통 뒤 점, `K`는 세로 뒤 위·아래 대각선 순서로 쓴다.
+- 별도 펜, nib, cursor, 진행선은 두지 않는다. SVG 전체는 `aria-hidden`이고, 의미 있는 제목은 기존 Hero h1 하나만 유지한다.
+- 각 글자는 마지막 획이 끝날 때 full에서 최대 `scale 1.055 / y -7px`, lite에서 `scale 1.035 / y -4px`로 한 번 반동한 뒤 정착한다. 반복 흔들림이나 panel 단계까지 남는 탄성은 사용하지 않는다.
+- 중앙 이름은 필기 중 full `1.16 → 1.32배`, lite `1.10 → 1.18배`로 부드럽게 커진다. 완성된 SVG를 정확한 Manrope live-text로 교대하고, 기존 responsive FLIP이 중앙의 큰 이름을 Hero h1 크기와 위치로 축소·이동한다.
+- 새 asset이나 dependency를 추가하지 않는다. 획 렌더링에 실패하면 기존 원자적 `finish()` 경로로 완성된 Hero를 즉시 노출하며, reduced/hash/BFCache/입력 skip 규칙은 그대로 유지한다.
+
+## 2026-08-22 — Spaced public name and persistent handwritten Hero override
+
+이 항목은 공개 이름을 붙여 쓰던 규칙과 `Home intro stroke-order wordmark`의 SVG→Manrope 교대를 대체한다.
+
+- 방문자에게 보이는 이름은 모든 route의 title, metadata, header, footer와 본문에서 `Se Min Kong`으로 띄어 쓴다. GitHub 계정·저장소 URL, resume asset 이름과 package 식별자는 바꾸지 않는다.
+- Intro에서 완성된 12획 SVG를 Manrope 글자로 바꾸지 않는다. 같은 SVG geometry를 중앙 필기, FLIP 이동, 최종 Hero h1까지 유지해 서체가 바뀌는 순간을 없앤다.
+- Hero h1의 초기 HTML에는 투명한 실문자 fallback과 정적 SVG를 함께 둔다. 실문자는 responsive 폭과 line box를 제공하고 SVG는 장식으로 숨기며, h1 자체의 접근 가능한 이름은 `Se Min Kong` 하나로 유지한다.
+- Reduced motion, hash 진입, BFCache, 조기 skip에서도 Intro 유무와 관계없이 같은 정적 Hero wordmark를 보여 준다. 기존 header wordmark와 일반 UI의 Manrope 역할은 유지한다.
+
+## 2026-08-22 — Professional softened typography override
+
+이 항목은 앞선 typography의 보이는 Manrope, Noto Sans KR, JetBrains Mono 역할과 바로 위 항목의 일반 UI Manrope 유지를 대체한다. 손글씨 SVG의 형태와 획순은 대체하지 않는다.
+
+- 보이는 display, heading, body, navigation은 `Asta Sans Variable`로 통일한다. 기술적인 직선과 완만한 곡선이 공존하는 인상을 사용하되, 둥근 장식체나 유아적인 손글씨체로 일반 UI를 바꾸지 않는다.
+- 본문은 450, 보조 문구는 500, UI는 600, heading은 640, display는 680을 기본 축으로 사용해 진지한 위계를 유지하면서 이전의 과도하게 딱딱한 인상을 줄인다.
+- 영문 metadata와 기술 label은 `Geist Mono Variable`을 사용한다. 한글 glyph는 Asta Sans로 fallback시켜 운영체제 고정폭 글꼴이 갑자기 섞이지 않게 한다.
+- `Manrope Variable`은 화면에 보이는 글꼴로 사용하지 않는다. Intro와 Hero의 동일한 손글씨 SVG 폭·FLIP 착지점을 보존하는 투명 metric text 전용으로만 남긴다.
+- 기존의 절제된 자간, warm-paper/graphite 대비, vermilion signal은 유지한다. 글꼴 교체를 이유로 제목을 더 장식적으로 만들거나 기술 정보의 밀도를 낮추지 않는다.
+
+## 2026-08-22 — Dongle-led handwritten typography override
+
+이 항목은 바로 앞의 Asta Sans/Geist Mono typography 결정을 대체한다. Intro와 Hero의 `Se Min Kong` 12획 SVG 서명은 대체하지 않는다.
+
+- 큰 제목, section heading, navigation, wordmark와 주요 action은 `Dongle` 700을 사용한다. 탈네모꼴과 둥근 획의 리듬을 화면의 주된 인상으로 삼는다.
+- 긴 본문, 설명, metadata와 기술 label은 `Gowun Dodum` 400을 사용한다. 별도의 mono face는 두지 않고 크기, 대문자, 색, rule과 여백으로 정보 위계를 구분한다.
+- Dongle의 글자가 같은 point size에서 작게 보이는 특성을 보정하기 위해 navigation과 action 글자 크기를 키우되 44px 이상의 기존 hit area와 responsive header 구조는 유지한다.
+- 큰 제목의 강한 음수 자간을 약 `-0.012em` 이내로 완화하고 한글 heading은 기본적으로 0에 가깝게 둔다. 둥근 획이 서로 뭉치지 않게 하면서 기존 warm-paper/graphite/vermilion의 진지한 편집 구조로 과도한 귀여움을 억제한다.
+- 두 가시 서체는 Fontsource package의 Korean/Latin WOFF2를 self-host한다. `Manrope Variable`은 Intro와 Hero의 투명 metric text에만 남긴다.
+
+## 2026-08-23 — Home 서명 연속성과 paper reveal override
+
+- Home 첫 장면은 좌우로 갈라지는 커튼을 사용하지 않는다. 하나의 warm-paper 면이 전체 화면에서 잔잔하게 옅어지며 graphite Hero를 드러내고, 중앙 seam, 방향성 wipe 또는 두 장의 문처럼 보이는 경계를 만들지 않는다.
+- Intro에서 획순으로 작성된 `Se Min Kong` SVG는 별도 Hero 복제본으로 바뀌지 않는다. 같은 노드가 중앙에서 Hero 왼쪽 위치까지 축소·이동한 뒤 그대로 h1의 시각 서명이 된다.
+- Dongle, Gowun Dodum, 숨은 Manrope metric의 역할은 유지한다. Dongle UI는 point size보다 작아 보이는 optical size를 보정하되, 390px header의 세 그룹과 44px hit area, page-width 시작선, 긴 제목 줄바꿈을 우선한다.
+
+## 2026-08-23 — Monotonic responsive typography override
+
+- 반응형 글자 크기는 viewport가 넓어질 때 작아지지 않아야 한다. 구조를 바꾸는 media query에서는 grid·여백·줄바꿈만 바꾸고, 같은 역할의 제목 크기는 가능한 한 공통 `clamp()` 하나로 유지한다.
+- 공통 본문은 16px을 기준으로 하고, 긴 보조 본문은 약 16.8–18.6px, 의미 있는 UI label·날짜·연락처·action은 14–14.7px, 짧은 metadata는 약 13.2–14.3px을 사용한다.
+- Dongle의 큰 display는 작은 화면에서도 시각 몸집이 충분하도록 별도 fluid scale을 사용한다. About·Work·Legal·Case의 page title과 Home 문장은 `600 / 700 / 720 / 900px` 경계에서 연속이어야 한다.
+- Home Intro와 Hero의 `Se Min Kong` 12획 SVG, Dongle display, Gowun Dodum 본문·metadata의 역할은 변경하지 않는다. 크기 정리를 이유로 새 font family나 별도 서명 fallback을 추가하지 않는다.
+
+## 2026-08-23 — 150% global typography scale override
+
+이 항목은 바로 위 항목의 font-size 수치만 대체한다. Font family, weight 역할, Home 서명과 motion 규칙은 그대로 유지한다.
+
+- Root `font-size`는 `150%`이며 기본 본문 computed size는 `24px`이다. 현재 stylesheet의 `rem`은 모두 `font-size`에만 사용하므로 spacing이나 media geometry를 함께 확대하지 않는다.
+- `vw`가 포함된 fluid type 식은 viewport 항도 1.5배로 올려 작은 화면, 중간 화면, 큰 화면에서 같은 확대 비율과 단조 증가를 유지한다.
+- Dongle은 display·heading·navigation·action, Gowun Dodum은 본문·metadata, Manrope는 보이지 않는 Home 서명 측정용이라는 기존 역할을 유지한다.
+- 720px 이하 header는 brand와 Resume를 첫 행, Work와 About을 둘째 행에 둔다. 960px 이하 Work project scene은 media 다음에 copy가 오는 1열, 820px 이하 Resume item은 날짜가 제목 다음 행, 700px 이하 About tool matrix는 분류별 2열을 사용한다.
+- 390px Home 서명은 정확한 1.5배가 화면 폭을 넘으므로 동일 SVG와 글꼴 크기 연속성을 유지하면서 viewport-safe fluid size를 사용한다. Intro와 최종 Hero는 같은 값을 공유해 중간 font 변경을 만들지 않는다.
+
+## 2026-08-23 — Balanced 120% typography and invariant signature override
+
+이 항목은 바로 위 150% 수치와 720px 이하 2행 header 규칙을 대체한다. Font family, weight, 색, 페이지 구조와 Intro timing은 유지한다.
+
+- Root `font-size`는 `120%`, 기본 Gowun Dodum 본문은 `19.2px`이다. 모든 `vw` 기반 `font-size`도 원래 정리값의 1.2배로 계산해 viewport가 커질 때 위계가 역행하지 않게 한다.
+- 390px 기준 About h1은 약 `96px`, Work h1은 약 `90px`, case h1은 약 `68px`로 사용한다. 짧은 Dongle display는 충분히 크지만 19.2px 본문·16px 안팎 metadata와 경쟁하지 않아야 한다.
+- Home 서명은 720px 이하에서 `clamp(2.05rem, 13.8vw, 3.6rem)`, 그보다 넓은 화면에서는 공통 Hero token을 사용한다. Intro와 Hero가 항상 같은 값을 공유한다.
+- Home 서명의 12개 path는 `1000 × 190` viewBox 본래 비율을 보존한다. SVG viewport는 `xMidYMid meet`를 사용하며 container를 채우기 위해 획을 가로 또는 세로로 따로 늘리지 않는다.
+- 360px 이상 header는 brand, Work/About, Resume를 한 행에 둔다. 359px 이하에서만 brand/Resume 첫 행과 Work/About 둘째 행을 사용한다. 기존 960px Work 1열, 820px Resume stack, 700px About tool 2열 fallback은 유지한다.
+
+## 2026-08-23 — Mandatory Home intro completion override
+
+이 항목은 앞선 Home Intro 규칙에 남아 있는 `입력 즉시 완료`와 `Escape/Tab skip` 동작을 대체한다. 시각 형태, 서명 비율과 timing은 바꾸지 않는다.
+
+- 정상적인 Home top-entry Intro가 활성화되면 배경의 skip link, header, main, footer와 page transition surface는 일시적으로 비활성화한다. 화면에는 Intro status만 남고 보이지 않는 링크로 focus가 이동하지 않아야 한다.
+- Wheel, single-pointer click/tap, touch pan, Tab, Escape, Enter, Space, Backspace, arrow, PageUp/PageDown, Home/End는 Intro의 완료 시점을 앞당기거나 페이지를 이동시키지 않는다. Entry scroll position은 완료까지 유지한다.
+- 자연 완료 뒤에는 Intro DOM, pending/active/locked class, 임시 `inert`, `aria-busy`와 opacity style을 같은 cleanup에서 제거한다. 그다음 frame부터 navigation, focus, native scroll과 full-mode Lenis를 정상적으로 사용할 수 있다.
+- Reduced motion과 hash/BFCache/restored entry는 처음부터 정적 Hero를 사용한다. Hidden, pagehide, motion→reduced, geometry/Anime 오류와 watchdog은 즉시 정적 Hero로 정리하는 안전 예외다. 브라우저 chrome, Back, Reload와 modifier shortcut은 잠그지 않는다.
+- Full `2.38s`, lite/mobile `1.66s`, 마지막 획 뒤 `1s` 이내 handoff, `xMidYMid meet`, 단일 uniform scale과 동일 12-path SVG node 규칙은 그대로 유지한다.
+
+## 2026-08-23 — Paper Current Home Hero override
+
+이 항목은 기존 Home의 signature robotic hand, control cube와 좌우 Hero 구성을 대체한다. Intro의 동일 12-path 서명, 이름 표기, 인사말과 CTA 문구는 유지한다.
+
+- Hero 정보는 화면 중앙의 `Se Min Kong → 인사말 → Projects / Contact` 순서로 정렬한다. 서명은 `xMidYMid meet`와 단일 scale만 사용하고 유체 또는 hover로 글자 자체를 변형하지 않는다.
+- 배경은 warm bone paper 전체를 하나의 연속 표면으로 사용한다. 넓고 느린 graphite ink wash를 주재료로 두고 vermilion은 작은 pigment 영역 하나에만 제한한다. Glossy gel, rainbow gradient, particle spray, HUD, robot/hand/pen cursor 오브젝트는 사용하지 않는다.
+- 유체는 카피 rect 주변의 둥근 quiet zone에서 밀려나며 이름과 CTA의 대비·클릭 영역을 항상 보존한다. 네이티브 커서는 유지하되 별도의 follower, nib 또는 interaction label은 추가하지 않는다.
+- Intro veil과 Hero가 같은 paper material을 공유한다. 동일 SVG가 착지한 뒤 그 중심에서 한 번의 잔잔한 pressure wave로 유체가 깨어나며, 이 효과 때문에 Intro 완료 시간이 늘어나지 않는다.
+- Desktop은 full interaction, tablet/mobile은 낮은 해상도와 절제된 tap response, reduced/WebGL 실패는 정적 marbling composition을 사용한다.
+
+## 2026-08-23 — Pressure Ink interaction override
+
+이 항목은 바로 위 Paper Current Hero의 색·중앙 정보 구조를 유지하면서 desktop 유체의 강도와 재료 동작을 대체한다.
+
+- Full desktop은 포인터 자국이 즉시 사라지는 표면 왜곡이 아니라, 속도와 잉크가 남아 서로 밀고 말려 들어가는 Pressure Ink playground를 사용한다. 빠른 이동, drag와 급반전일수록 graphite wake와 서로 반대 방향의 vortex pair가 강해진다.
+- Graphite가 주된 넓은 wash이며 vermilion은 빠른 입력과 일부 wake의 좁은 채널에만 나타난다. 과포화 색, 광택 gel, particle spray, cursor follower와 별도 조작 UI는 추가하지 않는다.
+- 서명·인사말·CTA의 실측 rect를 하나의 둥근 obstacle로 보호한다. 유체는 그 앞에서 갈라지고 뒤에서 합쳐지되, Se Min Kong SVG와 content DOM에는 transform, filter, distortion을 적용하지 않는다.
+- Full solver를 지원하지 않는 GPU와 tablet/mobile은 기존의 가벼운 procedural current를 사용한다. Reduced motion과 WebGL 실패는 정적 marbling을 사용하며 세 단계 모두 같은 paper/graphite/vermilion 재료를 공유한다.
+- Canvas의 scroll fade는 Hero wrapper opacity 한 곳에서만 처리한다. Intro 직후 wake가 바로 읽히도록 canvas reveal은 짧게 유지하고, CTA hit area와 native touch scroll은 바꾸지 않는다.
+
+## 2026-08-23 — Multi-page delivery architecture
+
+- 이 구조 변경은 화면의 정보 위계, 시각 방향, 문구, route URL과 motion timing을 변경하지 않는다.
+- Home, Work, case study, About, Resume, Copyright는 각각 명시적인 entry를 사용한다. Home/Work만 project presentation 공통 CSS를 공유하고 case study는 Home·Work page CSS를 로드하지 않는다.
+- `tokens.css`, `base.css`, `motion.css`는 실제 전역 primitive와 shell/fallback만 소유한다. Hero, Work directory, case, About, Resume, Legal의 선택자와 responsive 규칙은 해당 route stylesheet가 소유한다.
+- Home 전용 Intro·Fluid·Project Deck과 Work 전용 Story/GSAP는 다른 route의 초기 bundle이나 DOM 초기화 경로에 포함하지 않는다. Capability가 맞지 않는 optional enhancement는 native/static 결과를 유지한다.
+- 큰 motion 구현은 public controller/facade를 유지한 채 wordmark data, shader source, WebGL resource, sizing helper로 분리한다. Shader 순서, 획순, uniform 이름, fallback 단계와 lifecycle 조건은 시각 사양으로 간주해 단순 리팩터링에서 바꾸지 않는다.

@@ -24,7 +24,7 @@ Manual QA overrides: `?motion=full`, `?motion=lite`, `?motion=reduced`
 - [x] Active JavaScript modules pass `node --check`
 - [x] `git diff --check` reports no whitespace errors
 - [x] Anime.js remains the primary intro, reveal, Hero, and page-transition library
-- [x] Manrope Variable, Noto Sans KR Variable, and JetBrains Mono Variable are self-hosted through npm
+- [x] Dongle and Gowun Dodum are self-hosted through npm; Manrope remains self-hosted only for invisible handwritten-signature metrics
 - [x] Real project images and videos are bundled from `src/assets/projects/`
 - [x] All compiled asset references resolve to files in `dist/`
 - [x] Desktop/full alone uses Lenis wheel smoothing; touchmove, scroll-snap, body scroll lock, syncTouch, and gesture interception are absent
@@ -552,3 +552,148 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] Natural completion removes the overlay and body-level nib, exposes name/copy/CTA at opacity 1, and leaves zero horizontal overflow. Scroll interruption also removes both temporary nodes and clears Hero inline opacity.
 - [x] Reduced motion creates neither intro nor nib and exposes the complete Hero immediately.
 - [x] Final `npm.cmd run verify` builds 105 modules and verifies all 16 deployment entries. `git diff --check` succeeds and Browser logs contain no warning or error.
+
+## 2026-08-22 About personal Hero statement verification
+
+- [x] About Hero uses `배우고, 만들고, 검증하는 과정을 즐깁니다.` as the personal opening statement while retaining `Software Developer · Seoul`; the removed technology list remains represented by the existing Focus, narrative, questions, and tool matrix.
+- [x] At 1280×900 the statement wraps to two lines; at 768×1024 it fits on one line; at 390×844 it wraps to two lines. All three viewports keep the statement and metadata separate with zero horizontal overflow.
+- [x] Desktop default capability resolves to `motion=full` and `depth=interactive`, the intro settles at opacity 1 with an identity transform, and a keyboard-focused navigation link retains its visible 2px outline.
+- [x] At 390×844, `?motion=reduced` resolves to `motion=reduced` and `depth=flat`; the Hero statement remains visible with opacity 1 and no transform, and tool icon transforms and filters remain disabled.
+- [x] Browser warning/error logs are empty. `npm.cmd run verify` builds 105 modules and verifies all 16 deployment entries; `git diff --check` succeeds.
+
+## 2026-08-22 Home intro reading-beat verification
+
+- [x] 1280px 기본 capability는 `motion=full`로 동작한다. 이름은 약 1.55초에 완성된 뒤 2.2초 시점까지 중앙에서 정지하며, 3.4초에는 커튼·FLIP·Hero copy 조립이 진행되고 약 4.9초 안에 overlay와 임시 opacity가 모두 정리된다.
+- [x] 768px `motion=lite`는 약 1.1초에 완성 이름을 보여 주고 2.1초에는 전환 중이며, 3.5초에는 overlay·nib·pending class 없이 완성된 Hero를 노출한다.
+- [x] 390×844 기본 capability는 `motion=lite`, `depth=static`으로 자동 축약된다. 완성 이름의 정지 구간을 유지하고 종료 후 name, copy, navigation, CTA가 opacity 1과 `pointer-events: auto`이며 수평 overflow가 없다.
+- [x] 완성 이름 정지 중 Escape 입력은 intro를 즉시 종료하고 완성된 Hero로 원자적으로 복구한다. `?motion=reduced`는 `reduced/flat`으로 intro와 nib을 만들지 않으며, `#contact` 직접 진입도 intro를 생략하고 목적지로 이동한다.
+- [x] 키보드로 Hero 프로젝트 CTA에 포커스했을 때 2px 주황색 outline이 유지된다. Browser warning/error log는 비어 있다.
+- [x] `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증한다. `git diff --check`는 whitespace error 없이 성공한다.
+
+## 2026-08-22 Home SVG stroke-order intro verification
+
+- [x] 1280×900 full entry는 12개 SVG path를 `S → e → M → i stem → i dot → n → K stem → K upper → K lower → o → n → g` 순서로 `draw 0 → 1` 처리한다. 중간 프레임에서 다음 획은 `0 1010`, 진행 획은 부분 dasharray, 완료 획은 `1000 0`으로 확인되어 가로 polygon wipe가 아니다.
+- [x] Intro DOM과 CSS에는 `.home-intro__nib` 또는 pen/cursor 장식이 없다. 각 글자는 완료 순간 full 최대 약 `scale 1.055 / y -7px`, lite 최대 약 `scale 1.035 / y -4px`로 한 번 튄 뒤 모두 identity에 정착한다.
+- [x] 1280px 중앙 이름은 필기 초반 542.6px에서 완료 시 586px로 커지고, Hero target은 443.9px다. FLIP 막바지 표시 폭은 444.6px로 target과 0.7px 차이며, text line-box 기준 위치로 연속 축소·이동한 뒤 실제 h1로 교대한다.
+- [x] 768px lite와 390×844 기본 `lite/static`에서도 같은 획순과 축약 bounce를 유지한다. 390px 중앙 이름은 314.5px로 viewport의 32px safe inset 안에 있고, 세 viewport 자연 종료 후 SVG·overlay·pending class·임시 opacity가 남지 않으며 수평 overflow는 0이다.
+- [x] 획 중간 Escape, 완성 이름 hold의 pointerdown, 재생 중 1280→768 resize가 다음 프레임 수준으로 overlay와 SVG를 제거하고 name/copy/CTA를 완성 상태로 복구한다. 늦은 callback으로 writing SVG가 재등장하지 않는다.
+- [x] `?motion=reduced`는 `reduced/flat`으로 SVG와 intro를 만들지 않고, `#contact` 직접 진입도 intro를 생략한다. Hero 프로젝트 CTA의 2px 주황색 keyboard outline이 유지되고 Browser warning/error log는 비어 있다.
+- [x] `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증한다. `git diff --check`는 whitespace error 없이 성공한다.
+
+## 2026-08-22 Persistent handwritten Hero and spaced-name verification
+
+- [x] 11개 runtime HTML route의 title, metadata, header wordmark, footer와 본문 공개 이름을 `Se Min Kong`으로 통일했다. 남은 `SeMinKong`은 GitHub 계정·저장소 URL과 resume asset 이름뿐이다.
+- [x] 1280×900 full에서 Intro와 Hero SVG가 같은 `0 0 1000 190` viewBox와 동일한 12개 path data를 사용한다. 완성 hold와 FLIP 중 Intro SVG opacity는 `1`, 숨은 metric Manrope word는 `0`이며 Hero에 `.name-letter`가 생성되지 않는다.
+- [x] 초기 HTML부터 Hero에 12개 정적 SVG path가 있으며 h1이 직접 접근 가능한 이름 `Se Min Kong`을 제공한다. 자연 종료 뒤에도 같은 SVG가 남고, 768×1024 lite와 390×844 lite에서 각각 282.9px / 266.8px 폭으로 렌더링되며 page·header 수평 overflow는 0이다.
+- [x] `?motion=reduced`는 `reduced/flat`으로 Intro 없이 같은 정적 Hero SVG를 표시한다. `#contact` 직접 진입과 필기 중 Escape skip도 overlay·pending state를 제거하고 Hero name/copy를 opacity 1로 복구한다.
+- [x] 390px About route는 title `About — Se Min Kong`, wordmark와 aria-label, footer 저작권을 모두 띄어 쓴 이름으로 표시하며 page·header overflow가 없다.
+- [x] Hero 프로젝트 CTA는 keyboard key input으로 focus했을 때 2px vermilion solid outline과 4px offset을 유지한다.
+- [x] `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증한다. `git diff --check`도 whitespace error 없이 성공한다.
+
+## 2026-08-22 Asta Sans / Geist Mono typography verification
+
+- [x] 1280×900 About에서 body와 h1의 computed family는 `Asta Sans Variable`, metadata는 `Geist Mono Variable`이며 두 variable font가 로드된다. 화면과 문서의 수평 overflow는 0이다.
+- [x] 390×844 About, Work, Resume에서 새 제목·본문·metadata 위계가 유지된다. About의 세 긴 질문, Work의 `Brain Tumor MRI`·`Project Prompt Generator`, Resume의 `semin1224@gmail.com`은 각 container 안에서 줄바꿈되고 수평 overflow는 0이다.
+- [x] Intro 재생 중 숨은 measure와 최종 Hero fallback의 computed family는 `Manrope Variable`이다. Intro/Hero는 동일한 12개 path data를 사용하며 최종 SVG 폭은 1280px에서 466.0px, 768px에서 282.1px, 390px에서 266.8px다.
+- [x] 390×844 `?motion=reduced`는 `motion=reduced`, `depth=flat`으로 진입해 Intro를 활성화하지 않고 정적 12-path Hero SVG, opacity 1 copy, `transform: none`을 표시한다. 새 Asta Sans 본문과 0 horizontal overflow도 유지된다.
+- [x] Keyboard focus는 2px vermilion solid outline과 4px offset을 유지한다. 최종 Vite session에는 warning/error가 없고 HMR error overlay도 없다.
+- [x] `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증한다. `git diff --check`는 whitespace error 없이 성공한다.
+
+## 2026-08-22 Dongle / Gowun Dodum typography verification
+
+- [x] Display, heading, navigation과 주요 action은 `Dongle`; 긴 본문과 metadata는 `Gowun Dodum`; Intro/Hero의 투명 측정 글자는 `Manrope Variable` 680과 `-0.055em`을 사용하도록 source에서 분리했다.
+- [x] Asta Sans와 Geist Mono package/import를 제거하고 Dongle 400/700 및 Gowun Dodum 400 Korean/Latin WOFF2만 production asset으로 생성한다. 외부 runtime font request는 없다.
+- [x] Header wordmark hover는 Dongle 700을 고정한 lift wave로 바뀌었고, Hero의 동일한 12-path SVG와 Intro timeline에는 변경이 없다.
+- [x] 제목 tracking은 최대 약 `-0.012em`, 한글 heading은 0에 가깝게 완화했으며 navigation/action의 Dongle 글자 크기는 기존 44px 이상 hit area 안에서 보정했다.
+- [x] `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증했으며, 현재 `http://127.0.0.1:5173/` preview가 HTTP 200으로 응답한다.
+- [x] 1280px, 768px, 390px real-browser에서 Home, About, Work의 wrapping, horizontal overflow와 computed font를 육안·수치로 확인했다.
+
+## 2026-08-23 Shared-signature handoff and typography verification
+
+- [x] 390×844, 768×1024, 1280×720에서 Intro의 animated SVG와 Hero target rect를 비교했다. 완료 직전 최대 차이는 각각 0.37px, 0.06px, 0.18px이며 완료 후에는 동일 rect다.
+- [x] 세 viewport 모두 필기 SVG reference와 완료 후 `.hero-identity__wordmark`가 같은 DOM node다. Intro 전후 font-size도 각각 48.75px, 57.6px, 88.55px로 바뀌지 않고 문서 horizontal overflow는 0이다.
+- [x] 두 half panel, 중앙 seam과 SVG opacity crossfade가 없다. 단일 paper veil은 방향성 wipe 없이 fade하고, 서명은 dark ink에서 off-white로 대비를 유지하며 Hero copy·hand·navigation은 후반에 조립된다.
+- [x] Home, About, Work를 세 viewport에서 확인해 header left/right safe inset, page-width 정렬, About 긴 질문과 Work 긴 제목의 wrapping을 검증했다. 모든 title element는 container overflow가 없다.
+- [x] Intro 중 Escape는 overlay와 pending state를 제거하고 name/copy/hand/navigation을 opacity 1로 복구한다. `?motion=reduced`는 `reduced/flat`, Intro 없음, 정적 12-path SVG, horizontal overflow 0이다.
+- [x] Hero primary CTA의 keyboard focus는 2px vermilion outline과 4px offset을 유지하며 Browser warning/error log는 비어 있다.
+- [x] `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증했다. `git diff --check`는 whitespace error 없이 성공한다.
+
+## 2026-08-23 One-second post-writing handoff verification
+
+- [x] 실제 브라우저에서 마지막 path의 computed dash가 `1000px, 0px`가 된 시점부터 Intro DOM 제거까지 측정했다. 1280×720 full은 `920ms`, 768×1024 lite는 `801ms`, 390×844 lite는 `761ms`로 모두 `1s` 이내다.
+- [x] 세 viewport 모두 단일 veil opacity가 역행 없이 감소하고, 완료 후 Intro/pending/active state는 남지 않으며 Hero wordmark는 하나, name opacity는 1, horizontal overflow는 0이다.
+- [x] 1280×720의 중간 fade frame을 육안으로 확인해 마지막 bounce 뒤 완성된 이름과 희미해지는 paper 아래 Hero가 연속적으로 이어지고 방향성 curtain이나 seam이 다시 생기지 않았음을 확인했다.
+- [x] `?motion=reduced`는 390×844에서 Intro 없이 `reduced/flat`과 정적 Hero wordmark 하나로 시작한다. 재생 중 Escape는 Intro를 즉시 정리하고 name/copy/hand/navigation을 모두 opacity 1로 복구한다.
+- [x] 개발 브라우저의 warning/error log는 비어 있고 `npm.cmd run build`는 105 modules를 성공적으로 build한다. `git diff --check`도 whitespace error 없이 성공한다.
+
+## 2026-08-23 Responsive typography scale verification
+
+- [x] Home, About, Work, Resume, Copyright와 6개 case route를 390·768·1280px 실제 브라우저에서 검사했다. 33개 조합 모두 제목·본문·link의 viewport 이탈이 없고 document horizontal overflow가 없다. Home의 body 폭만 3D hand rig가 clip 영역 밖으로 16px 확장하지만 root scroll width는 viewport client width에 고정된다.
+- [x] About title은 390·768·1280px에서 `80 / 102.22 / 139.08px`, Work title은 `75.2 / 94.31 / 121.44px`, Case section heading은 `24 / 26.5 / 29.6px`로 단조 증가한다. Resume label은 같은 폭에서 `14 / 14.19 / 14.71px`이다.
+- [x] 경계 폭을 직접 확인했다. About 699·700·701px, Home·Work 719·720·721px, Home 899·900·901px의 720px 높이, Legal·THING 599·600·601px, Resume·Legal 819·820·821px, Prompt case 839·840·841px, Work 959·960·961px 모두 font-size 역행과 text overflow가 없다.
+- [x] 320px에서 Home, About, Work, Resume, Copyright, THING, Prompt case의 제목·본문·header text가 viewport를 벗어나지 않는다. 390px Prompt의 긴 제목은 `Project Prompt / Generator` 두 줄로 자연스럽게 유지된다.
+- [x] Computed font family는 display·heading이 Dongle, 본문·metadata가 Gowun Dodum으로 유지된다. Home의 SVG wordmark와 Intro motion source는 수정하지 않았다.
+- [x] 390px `?motion=reduced`는 `reduced/flat`, tool transform `none`, transition `0s`이고 1280px 기본 About은 `full/interactive`다. Browser log에는 Vite 연결 debug 외 warning/error가 없다.
+- [x] `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증했다. `git diff --check`도 whitespace error 없이 성공한다.
+
+## 2026-08-23 150% global typography verification
+
+- [x] Home, About, Work, Resume, Copyright와 6개 case route를 390·768·1280px 실제 브라우저에서 다시 검사했다. 33개 조합 모두 body computed size가 `24px`이며 제목·본문·link의 viewport 이탈과 document horizontal overflow가 없다.
+- [x] About h1은 390·768·1280px에서 `120 / 153.32 / 208.62px`, Work h1은 `112.8 / 141.46 / 182.17px`, case h1은 `84.56 / 121.42 / 171.34px`로 커지면서 단조 증가한다. 긴 `Project Prompt Generator`도 390px에서 container 안의 세 줄로 유지된다.
+- [x] 390px Home은 최종 SVG 서명이 `57px` metric과 약 `300px` 표시 폭으로 16px 왼쪽 inset 안에 머문다. 1280px은 `132.83px` metric과 약 `493px` 표시 폭을 사용한다. Intro와 Hero는 같은 font-size·12개 path를 공유하고 자연 종료 후 overlay나 horizontal overflow가 남지 않는다.
+- [x] Header 720·721px, About 699·700·701px, Work 719·720·721px 및 959·960·961px, Resume 819·820·821px, Legal 599·600·601px, case 839·840·841px 전환 전후를 검사했다. 2행 header, 1열 Work, stacked Resume date, 2열 tool matrix가 예정된 경계에서 적용되며 text overflow가 없다.
+- [x] 1280px 기본 Home은 `motion=full`, `depth=interactive`; 390px 기본 Home은 `motion=lite`, `depth=static`; `?motion=reduced`는 `reduced/flat`으로 intro 없이 완성된 Hero를 표시한다. Font 확대는 획순·bounce·1초 이내 handoff timeline을 수정하지 않는다.
+- [x] 실제 브라우저 화면으로 390px Home·About·Prompt, 768px Work, 961px Work 전환, 1280px Home·Resume를 확인했다. 개발 브라우저 log에는 Vite 연결 debug 외 warning/error가 없다.
+- [x] 최종 `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증했다. `git diff --check`도 whitespace error 없이 성공한다.
+
+## 2026-08-23 Balanced 120% typography and signature-ratio verification
+
+- [x] Home, About, Work, Resume, Copyright와 6개 case route를 390·768·1280px 실제 브라우저에서 다시 검사했다. 33개 조합 모두 body computed size가 `19.2px`이며 title·본문·link의 viewport 이탈과 document horizontal overflow가 없다.
+- [x] About h1은 390·768·1280px에서 `96 / 122.66 / 166.90px`, Work h1은 `90.24 / 113.17 / 145.73px`, case h1은 `67.65 / 97.13 / 137.07px`로 단조 증가한다. 390px `Project Prompt Generator`는 container 안의 자연스러운 두 줄로 정리된다.
+- [x] Home의 최종 name metric은 390px에서 `51.75px`, 1280px에서 `106.26px`다. 390px 표시 path는 약 `256 × 42.6px`, 1280px은 약 `464 × 77.2px`이며 모두 동일한 약 `6.0133:1` path-bounds 비율을 유지한다.
+- [x] 정적 Home SVG를 390·768·1280px에서 측정한 path-bounds 비율 spread는 약 `0.000001`이다. 1280px full의 필기·handoff·착지 spread는 약 `0.000775`이고, intro parent transform은 `matrix(1.2643, 0, 0, 1.2643, …)`처럼 X/Y가 같은 균일 배율이다. 390px lite도 필기부터 착지까지 같은 비율을 유지한다.
+- [x] Header 358·359·360·390·600·720·721px, About 699·700·701px, Work 959·960·961px, Resume 819·820·821px, case 839·840·841px 경계를 검사했다. 360px부터 header는 한 행, 359px 이하는 두 행이며 모든 필수 검사 폭에서 text overflow가 없다.
+- [x] 1280px 기본 Home은 `full/interactive`, 390px 기본 Home은 `lite/static`, 390px `?motion=reduced`는 `reduced/flat`과 Intro 없는 정적 `xMidYMid meet` SVG로 동작한다. 개발 브라우저 log에는 Vite 연결 debug 외 warning/error가 없다.
+- [x] 최종 `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증했다. `node --check src/motion/home-intro.js`와 `git diff --check`도 오류 없이 성공한다.
+
+## 2026-08-23 Pressure Ink Hero verification
+
+- [x] 1280×900 full/interactive에서 data-fluid-mode=stable, compact half-float profile이며 빠른 이동, drag, 급반전과 click plume이 서로 다른 persistent wake를 만든다.
+- [x] 서명·문장·CTA quiet obstacle 안으로 dye가 번지지 않는다. 입력 전후 동일 12-path Se Min Kong은 559.25 × 95.63px, computed transform none으로 유지된다.
+- [x] 768×1024와 390×844은 lite renderer이며 세 viewport 모두 document horizontal overflow가 0이다. 1280↔768 runtime resize도 stable↔lite로 오류 없이 교대한다.
+- [ ] 실제 touch device에서 native pan과 같은 pointer id의 짧은 tap impulse를 확인한다. Source에는 passive pointer listener, touch move 제외와 pointerId matching이 적용되어 있다.
+- [x] ?motion=reduced는 canvas display none, static marbling, wordmark 1개와 완성 Hero를 즉시 표시한다. CTA는 visible/enabled이며 keyboard focus에서 2px vermilion outline과 4px offset을 유지한다.
+- [x] Hero를 5초 이상 offscreen에 둔 뒤 복귀해 stable mode, horizontal overflow 0, stale burst 없음과 빈 warning/error log를 확인했다.
+- [ ] 실제 WEBGL_lose_context 또는 브라우저 GPU reset으로 context loss/restoration fallback을 확인한다. Source의 loss/restore 재생성 경로는 정적 감사했다.
+- [x] 두 motion module의 node --check, npm.cmd run verify의 106-module build와 16개 deployment entry 검사, git diff --check가 성공한다.
+
+## 2026-08-23 Paper Current Hero verification
+
+- [x] Home HTML에서 robotic hand/cube DOM을 제거하고 full-bleed `aria-hidden` canvas를 semantic h1·인사말·CTA 뒤에 배치했다. Intro와 Hero는 기존 `0 0 1000 190`, `xMidYMid meet`, 12-path 서명을 계속 공유한다.
+- [x] Fluid canvas는 `pointer-events: none`이고 Hero의 passive pointer listener는 link/button을 제외한다. Touch move를 취소하거나 pointer capture하지 않으며 mobile tap은 짧은 pointerup만 impulse로 처리한다.
+- [x] Full/lite/reduced, WebGL 실패·context loss, hidden/offscreen pause와 Intro Promise wake 경로가 source에 분리되어 있다. Reduced는 canvas를 표시하지 않고 정적 paper/graphite/vermilion fallback을 사용한다.
+- [x] `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증했으며 local Home route가 HTTP 200으로 응답한다.
+- [x] 390px, 768px, 1280px 실제 브라우저에서 중앙 정렬, quiet zone, 서명 비율, 수평 overflow, CTA focus/click과 fluid runtime console을 최종 확인했다.
+
+## 2026-08-23 Mandatory Home intro completion verification
+
+- [x] 1280×720 full에서 Intro 초반에 실제 Escape, Tab, PageDown과 overlay click을 연속 입력했다. Intro는 계속 `pending / active / locked`, body는 `aria-busy=true`, 배경 direct child 4개는 `inert`, active element는 body, `scrollY=0`을 유지한다.
+- [x] 같은 입력을 768×1024와 390×844 lite에서도 반복했다. 두 화면 모두 입력 직후 Intro가 남고 scroll이 0이며, 자연 완료 뒤 Intro·locked class·busy·inert가 모두 사라진다.
+- [x] 자연 완료 후 name/copy/fluid/navigation computed opacity는 모두 1이다. Hero wordmark는 1개와 기존 12 path만 남고, 1280px full은 그 뒤에 smooth scroll을 시작하며 PageDown이 다시 정상적으로 문서를 이동한다.
+- [x] 390px `?motion=reduced`는 `reduced/flat`으로 Intro·lock 없이 정적 12-path Hero를 즉시 표시한다. `#contact` 직접 진입도 Intro, inert, busy state를 만들지 않는다.
+- [x] 기본 1280px full 재생 중 viewport를 390×844로 바꿔 motion tier가 lite가 되어도 Intro가 조기 종료되지 않는다. 자연 종료 후 wordmark 1개, 12 path, transform none, horizontal overflow 0이며 lock 흔적이 없다.
+- [x] Head gate는 module 이전 입력을 막고 4초 fallback이 자체 listener와 `data-home-intro-inert/busy` marker를 제거한다. Module `finish()`는 `finally`에서 같은 cleanup을 수행해 timeline/commit 예외에도 영구 lock이 남지 않게 한다.
+- [x] 브라우저 log에는 Vite 연결 debug 외 warning/error가 없다.
+- [x] 최종 `npm.cmd run verify`가 105 modules를 build하고 16개 deployment entry를 검증했다. `node --check src/motion/home-intro.js`와 `git diff --check`도 오류 없이 성공한다.
+
+## 2026-08-23 Route-aware refactor verification
+
+- [x] `config/site-routes.js`의 11개 route가 6개 entry와 일치하고, `verify:source`가 삭제된 legacy entry·`site.css`·Hand/Cube selector의 재등장을 거부한다.
+- [x] Home은 `portfolio-shared + home`, Work는 `portfolio-shared + work`, case study는 `case-study` page CSS만 로드한다. Work production HTML에는 `portfolio-*`, case HTML에는 `portfolio-*` 또는 `work-*` asset이 없다.
+- [x] Home/Work/case/About/Resume/Copyright를 390·768·1280px 실제 브라우저에서 확인했다. 33개 route/width 조합 모두 기존 typography·정렬·wrapping을 유지하고 document horizontal overflow가 0이다.
+- [x] Home full은 Intro 자연 완료 뒤 Stable/compact Fluid와 Lenis를 시작한다. 768px lite는 Lite Fluid와 native scroll, 390px reduced는 Lenis·WebGL canvas 없이 Static Hero를 표시한다.
+- [x] Home Intro 도중 Work로 이탈한 뒤 Back/Forward를 두 번 반복했다. 복귀 Home은 Intro lock 없이 Stable Fluid·wordmark 1개, Work는 story active row 1개를 유지하고 중복 초기화·overflow·browser log가 없다.
+- [x] Lenis async setup은 shared loading Promise, generation token과 `try/catch`로 native-scroll fail-open을 보장하고, HMR/runtime destroy는 controller를 역순으로 정리하도록 source 감사했다.
+- [ ] 실제 Lenis chunk fetch 실패와 Vite HMR dispose를 강제로 주입해 unhandled rejection·중복 listener가 없는지 확인한다.
+- [x] Contract test가 공개 이름, 9 letter group·12 path 순서, target bucket, Pressure Jacobi 14회, 최대 12 splat과 192/512 solver size를 고정한다. 실제 브라우저에서 Stable → Lite → Static tier도 확인했다.
+- [x] `npm.cmd run verify`, `git diff --check`, browser warning/error log, 2px/4px keyboard focus와 모든 production local reference 검사가 통과한다.

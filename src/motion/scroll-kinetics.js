@@ -10,6 +10,8 @@ export const initScrollKinetics = (environment) => {
   let lastScroll = window.scrollY;
   let target = 0;
   let current = 0;
+  let observer = null;
+  let destroyed = false;
 
   const enabled = () => environment.motion === 'full' && environment.depth === 'interactive' && !document.hidden;
 
@@ -33,6 +35,7 @@ export const initScrollKinetics = (environment) => {
 
   const tick = (time) => {
     frame = 0;
+    if (destroyed) return;
     if (!enabled() || !active.size) {
       reset();
       return;
@@ -67,7 +70,7 @@ export const initScrollKinetics = (environment) => {
   };
 
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
+    observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) active.add(entry.target);
         else active.delete(entry.target);
@@ -82,10 +85,25 @@ export const initScrollKinetics = (environment) => {
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('pageshow', reset);
   window.addEventListener('portfolio:environment-change', reset);
-  document.addEventListener('visibilitychange', () => {
+  const onVisibilityChange = () => {
     if (document.hidden) reset();
     else lastScroll = window.scrollY;
-  });
+  };
+  document.addEventListener('visibilitychange', onVisibilityChange);
 
   render(0);
+
+  return {
+    destroy() {
+      if (destroyed) return;
+      destroyed = true;
+      observer?.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('pageshow', reset);
+      window.removeEventListener('portfolio:environment-change', reset);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      reset();
+      active.clear();
+    }
+  };
 };

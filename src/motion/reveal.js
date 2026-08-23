@@ -123,6 +123,15 @@ export const initIntro = (environment, selector) => {
   };
 
   window.addEventListener('portfolio:environment-change', onEnvironmentChange);
+
+  return {
+    destroy() {
+      cancelled = true;
+      animations.forEach((animation) => animation.cancel?.());
+      elements.forEach(settle);
+      window.removeEventListener('portfolio:environment-change', onEnvironmentChange);
+    }
+  };
 };
 
 export const initReveals = (environment, selector, options = {}) => {
@@ -220,4 +229,14 @@ export const initReveals = (environment, selector, options = {}) => {
   };
 
   window.addEventListener('portfolio:environment-change', onEnvironmentChange);
+
+  return {
+    destroy() {
+      observer.disconnect();
+      activeAnimations.forEach((animation) => animation.cancel?.());
+      activeAnimations.clear();
+      elements.forEach(settle);
+      window.removeEventListener('portfolio:environment-change', onEnvironmentChange);
+    }
+  };
 };

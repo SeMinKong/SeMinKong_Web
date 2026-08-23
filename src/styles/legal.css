@@ -31,9 +31,9 @@
 .legal-hero h1 {
   margin-top: 26px;
   font-family: var(--font-display);
-  font-size: clamp(3.15rem, 7vw, 6.4rem);
+  font-size: clamp(3.25rem, calc(2.5rem + 4.8vw), 6.4rem);
   line-height: 0.98;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.012em;
   font-weight: var(--weight-display);
 }
 
@@ -45,7 +45,7 @@
 .legal-hero__summary > p {
   max-width: 680px;
   color: var(--text-soft);
-  font-size: clamp(1.18rem, 2.25vw, 1.75rem);
+  font-size: clamp(1.18rem, 2.7vw, 1.75rem);
   font-weight: var(--weight-support);
   line-height: 1.55;
   word-break: keep-all;
@@ -61,7 +61,7 @@
 
 .legal-hero__summary strong {
   color: var(--text);
-  font-weight: 680;
+  font-weight: var(--weight-body);
 }
 
 .legal-hero__summary dl {
@@ -81,7 +81,7 @@
   font-family: var(--font-mono);
   font-size: var(--type-meta);
   font-weight: var(--weight-meta);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -89,7 +89,8 @@
   min-width: 0;
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: var(--type-label);
+  line-height: 1.5;
 }
 
 .legal-hero__summary a {
@@ -120,10 +121,10 @@
 .legal-section h2 {
   max-width: 280px;
   font-family: var(--font-display);
-  font-size: clamp(1.45rem, 2.4vw, 2rem);
+  font-size: clamp(1.6rem, calc(1.35rem + 0.96vw), 2.1rem);
   font-weight: var(--weight-heading);
   line-height: 1.22;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
   word-break: keep-all;
 }
 
@@ -190,10 +191,10 @@
   max-width: 760px;
   margin: 28px 0 30px;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4.5vw, 4rem);
+  font-size: clamp(2rem, 5.4vw, 4rem);
   font-weight: var(--weight-heading);
   line-height: 1.04;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.012em;
 }
 
 .legal-english > p:not(.eyebrow) {
@@ -230,10 +231,6 @@
 @media (max-width: 600px) {
   .legal-main {
     padding-top: calc(var(--nav-height) + 56px);
-  }
-
-  .legal-hero h1 {
-    font-size: clamp(2.75rem, 14vw, 4.2rem);
   }
 
   .legal-hero__lede span {

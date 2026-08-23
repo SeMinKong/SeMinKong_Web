@@ -2,7 +2,7 @@ import { loadGsap } from './gsap-loader.js';
 
 const STORY_VIEWPORT = window.matchMedia('(min-width: 961px) and (min-height: 700px)');
 
-export const initWorkStory = (environment) => {
+export const initWorkStory = (environment, { smoothScroll } = {}) => {
   const list = document.querySelector('.work-list');
   const chapters = list ? Array.from(list.querySelectorAll('.work-row')) : [];
   if (!list || chapters.length < 2) return;
@@ -14,6 +14,7 @@ export const initWorkStory = (environment) => {
 
   let context = null;
   let scrollTrigger = null;
+  let disconnectSmoothScroll = null;
   let setupVersion = 0;
   let destroyed = false;
 
@@ -25,6 +26,8 @@ export const initWorkStory = (environment) => {
 
   const stop = () => {
     setupVersion += 1;
+    disconnectSmoothScroll?.();
+    disconnectSmoothScroll = null;
     context?.revert();
     context = null;
     chapters.forEach((chapter) => chapter.classList.remove('is-work-active'));
@@ -44,6 +47,7 @@ export const initWorkStory = (environment) => {
       if (destroyed || version !== setupVersion || !shouldEnhance() || context) return;
 
       scrollTrigger = ScrollTrigger;
+      disconnectSmoothScroll = smoothScroll?.onScroll(ScrollTrigger.update) ?? null;
       list.classList.add('work-story-enabled');
 
       context = gsap.context(() => {

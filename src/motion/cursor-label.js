@@ -19,9 +19,11 @@ export const initCursorLabel = (environment, selector = '.work-row, .project-car
   let lastTime = 0;
   let visible = false;
   let enabled = false;
+  let destroyed = false;
 
   const step = (time) => {
     frame = 0;
+    if (destroyed) return;
     const dt = Math.min(0.04, Math.max(0.001, (time - (lastTime || time)) / 1000));
     lastTime = time;
     [state.x, state.vx] = springStep(state.x, state.vx, state.targetX, dt, 210, 24);
@@ -79,11 +81,33 @@ export const initCursorLabel = (environment, selector = '.work-row, .project-car
     if (!enabled) hide();
   };
 
-  window.addEventListener('portfolio:environment-change', sync);
-  document.addEventListener('visibilitychange', () => {
+  const onVisibilityChange = () => {
     if (document.hidden) hide();
-  });
+  };
+
+  window.addEventListener('portfolio:environment-change', sync);
+  document.addEventListener('visibilitychange', onVisibilityChange);
   window.addEventListener('scroll', hide, { passive: true });
 
   sync();
+
+  return {
+    destroy() {
+      if (destroyed) return;
+      destroyed = true;
+      enabled = false;
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      targets.forEach((target) => {
+        target.removeEventListener('pointerenter', onEnter);
+        target.removeEventListener('pointermove', onMove);
+        target.removeEventListener('pointerleave', hide);
+        target.removeEventListener('pointerdown', hide);
+      });
+      window.removeEventListener('portfolio:environment-change', sync);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('scroll', hide);
+      chip.remove();
+    }
+  };
 };
