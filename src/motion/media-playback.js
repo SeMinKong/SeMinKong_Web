@@ -3,6 +3,9 @@ export const initMediaPlayback = (environment) => {
   const demoVideos = Array.from(document.querySelectorAll('video[data-demo-video]'));
   if (!videos.length && !demoVideos.length) return;
 
+  const demoPlayHandlers = new Map();
+  let observer = null;
+
   const pauseDemoVideos = (except = null) => {
     demoVideos.forEach((video) => {
       if (video !== except) video.pause();
@@ -10,15 +13,29 @@ export const initMediaPlayback = (environment) => {
   };
 
   demoVideos.forEach((video) => {
-    video.addEventListener('play', () => pauseDemoVideos(video));
+    const onPlay = () => pauseDemoVideos(video);
+    demoPlayHandlers.set(video, onPlay);
+    video.addEventListener('play', onPlay);
   });
 
-  document.addEventListener('visibilitychange', () => {
+  const pauseWhenHidden = () => {
     if (document.hidden) pauseDemoVideos();
-  });
-  window.addEventListener('pagehide', () => pauseDemoVideos());
+  };
+  const pauseOnPageHide = () => pauseDemoVideos();
 
-  if (!videos.length) return;
+  document.addEventListener('visibilitychange', pauseWhenHidden);
+  window.addEventListener('pagehide', pauseOnPageHide);
+
+  if (!videos.length) {
+    return {
+      destroy() {
+        demoPlayHandlers.forEach((handler, video) => video.removeEventListener('play', handler));
+        document.removeEventListener('visibilitychange', pauseWhenHidden);
+        window.removeEventListener('pagehide', pauseOnPageHide);
+        pauseDemoVideos();
+      }
+    };
+  }
 
   const visible = new Map(videos.map((video) => [video, false]));
 
@@ -34,7 +51,7 @@ export const initMediaPlayback = (environment) => {
   const syncAll = () => videos.forEach(sync);
 
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
+    observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         visible.set(entry.target, entry.isIntersecting && entry.intersectionRatio > 0.12);
         sync(entry.target);
@@ -49,4 +66,18 @@ export const initMediaPlayback = (environment) => {
 
   document.addEventListener('visibilitychange', syncAll);
   window.addEventListener('portfolio:environment-change', syncAll);
+
+  return {
+    destroy() {
+      observer?.disconnect();
+      demoPlayHandlers.forEach((handler, video) => video.removeEventListener('play', handler));
+      document.removeEventListener('visibilitychange', pauseWhenHidden);
+      document.removeEventListener('visibilitychange', syncAll);
+      window.removeEventListener('pagehide', pauseOnPageHide);
+      window.removeEventListener('portfolio:environment-change', syncAll);
+      videos.forEach((video) => video.pause());
+      pauseDemoVideos();
+      visible.clear();
+    }
+  };
 };

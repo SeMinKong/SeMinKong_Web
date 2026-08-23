@@ -57,13 +57,13 @@
   font-size: var(--type-meta);
   font-weight: var(--weight-meta);
   line-height: 1.5;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
 }
 
 .case-hero h1 {
-  font-size: clamp(4.4rem, 9vw, 8rem);
-  line-height: 0.89;
-  letter-spacing: -0.055em;
+  font-size: clamp(3.4rem, calc(2rem + 7.8vw), 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.012em;
   font-weight: var(--weight-display);
 }
 
@@ -141,16 +141,17 @@
   margin-bottom: 2px;
   color: var(--project-accent);
   font-family: var(--font-display);
-  font-size: clamp(1.35rem, 2vw, 1.7rem);
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
   font-weight: var(--weight-display);
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
 }
 
 .case-hero--thing .case-facts dd {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: var(--type-meta);
+  font-size: var(--type-body-sm);
   font-weight: var(--weight-meta);
+  line-height: 1.5;
 }
 
 #thing-demo,
@@ -193,7 +194,7 @@
 
 .case-facts dd {
   color: var(--text-soft);
-  font-size: 0.86rem;
+  font-size: var(--type-body-sm);
   font-weight: var(--weight-support);
   line-height: 1.55;
 }
@@ -341,10 +342,10 @@
 .thing-demo-section__head h2 {
   max-width: 620px;
   color: var(--text);
-  font-size: clamp(2.15rem, 4.4vw, 3.7rem);
+  font-size: clamp(2.25rem, calc(1.8rem + 2.52vw), 3.7rem);
   font-weight: var(--weight-heading);
   line-height: 1.08;
-  letter-spacing: -0.055em;
+  letter-spacing: 0;
   word-break: keep-all;
 }
 
@@ -445,7 +446,7 @@
   font-family: var(--font-mono);
   font-size: var(--type-meta);
   font-weight: var(--weight-meta);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -455,10 +456,10 @@
 
 .thing-demo-card h3 {
   color: var(--text);
-  font-size: clamp(1.18rem, 2vw, 1.5rem);
+  font-size: clamp(1.35rem, calc(1.18rem + 0.6vw), 1.6rem);
   font-weight: var(--weight-heading);
   line-height: 1.28;
-  letter-spacing: -0.035em;
+  letter-spacing: 0;
   word-break: keep-all;
 }
 
@@ -522,10 +523,10 @@ html.js .case-section:not(.is-revealed) h2 {
 .case-section h2 {
   transition: color 640ms var(--ease-out) 120ms;
   color: var(--project-accent);
-  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-size: clamp(1.5rem, calc(1.28rem + 0.96vw), 1.85rem);
   font-weight: var(--weight-heading);
-  line-height: 1.2;
-  letter-spacing: -0.025em;
+  line-height: 1.12;
+  letter-spacing: 0;
 }
 
 .case-section__copy {
@@ -588,8 +589,9 @@ html.js .case-section:not(.is-revealed) h2 {
 
 .case-flow strong {
   color: var(--text);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   font-weight: var(--weight-heading);
+  line-height: 1.35;
 }
 
 .case-flow p {
@@ -620,10 +622,10 @@ html.js .case-section:not(.is-revealed) h2 {
 .case-metrics strong {
   color: var(--project-accent);
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-size: clamp(2.8rem, 7.2vw, 4.2rem);
   font-weight: var(--weight-display);
   line-height: 1;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.012em;
 }
 
 .case-metrics span {
@@ -711,10 +713,10 @@ html.js .case-section:not(.is-revealed) h2 {
 
 .case-aside h2 {
   color: var(--text);
-  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-size: clamp(1.6rem, 3.12vw, 2.2rem);
   font-weight: var(--weight-heading);
   line-height: 1.14;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.008em;
 }
 
 .case-aside > p:not(.eyebrow, .source-note) {
@@ -746,7 +748,7 @@ html.js .case-section:not(.is-revealed) h2 {
 
 .case-aside dd {
   color: var(--text-soft);
-  font-size: 0.82rem;
+  font-size: var(--type-meta);
   font-weight: var(--weight-support);
   line-height: 1.5;
 }
@@ -815,8 +817,9 @@ html.js .case-section:not(.is-revealed) h2 {
 
 .case-next strong {
   font-family: var(--font-display);
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  font-size: clamp(1.2rem, calc(1.05rem + 0.66vw), 1.5rem);
   font-weight: var(--weight-heading);
+  line-height: 1.2;
 }
 
 .case-next strong i {
@@ -906,11 +909,6 @@ html.js .case-section:not(.is-revealed) h2 {
     padding-bottom: 48px;
   }
 
-  .case-hero h1 {
-    font-size: clamp(3.2rem, 14vw, 4.8rem);
-    line-height: 0.92;
-  }
-
   .case-hero--thing .case-media--thing-demo video {
     width: min(100%, 280px);
   }
@@ -954,10 +952,6 @@ html.js .case-section:not(.is-revealed) h2 {
 
   .thing-demo-section {
     padding-block: 62px;
-  }
-
-  .thing-demo-section__head h2 {
-    font-size: clamp(2rem, 10vw, 2.7rem);
   }
 
   .thing-demo-list {
@@ -1058,4 +1052,7 @@ html.js .case-section:not(.is-revealed) h2 {
     border-left: 0;
     text-align: left;
   }
+}
+html[data-motion="reduced"] .case-section h2 {
+  transition: none;
 }

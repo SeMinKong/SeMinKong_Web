@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Computer Vision, software, robot control을 연결해 실제로 작동하는 시스템을 만드는 SeMinKong의 포트폴리오입니다." />
-    <meta name="rights" content="© 2026 SeMinKong. All rights reserved except where a separate license applies." />
-    <meta name="theme-color" content="#11100e" />
+    <meta name="description" content="Computer Vision, software, robot control을 연결해 실제로 작동하는 시스템을 만드는 Se Min Kong의 포트폴리오입니다." />
+    <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
+    <meta name="theme-color" content="#f1eee6" />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg?v=20260818-2" type="image/svg+xml" sizes="any" />
     <style>
@@ -32,25 +32,81 @@
         && !document.hidden
         && !matchMedia('(prefers-reduced-motion: reduce)').matches
         && navigationType !== 'back_forward';
+      const introBlockedKeys = new Set([
+        'Tab', 'Escape', 'Enter', ' ', 'Backspace',
+        'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight',
+        'PageDown', 'PageUp', 'Home', 'End'
+      ]);
+      const introScrollPosition = { x: window.scrollX, y: window.scrollY };
+      const blockIntroInput = (event) => {
+        if (event.type === 'keydown') {
+          if (event.metaKey || event.ctrlKey || event.altKey || !introBlockedKeys.has(event.key)) return;
+        }
+        if (event.cancelable) event.preventDefault();
+        event.stopImmediatePropagation();
+      };
+      const holdIntroScroll = (event) => {
+        event.stopImmediatePropagation();
+        window.scrollTo(introScrollPosition.x, introScrollPosition.y);
+      };
+      const introGateEvents = ['wheel', 'pointerdown', 'touchstart', 'touchmove', 'click'];
+      const introGate = {
+        active: introEligible,
+        fallback: 0,
+        unlock() {
+          if (!this.active) return;
+          this.active = false;
+          introGateEvents.forEach((type) => window.removeEventListener(type, blockIntroInput, true));
+          window.removeEventListener('keydown', blockIntroInput, true);
+          window.removeEventListener('scroll', holdIntroScroll, true);
+        },
+        cancelFallback() {
+          if (this.fallback) window.clearTimeout(this.fallback);
+          this.fallback = 0;
+        }
+      };
+
+      window.__homeIntroGate = introGate;
+      if (introEligible) {
+        introGateEvents.forEach((type) => window.addEventListener(type, blockIntroInput, { capture: true, passive: false }));
+        window.addEventListener('keydown', blockIntroInput, true);
+        window.addEventListener('scroll', holdIntroScroll, { capture: true, passive: true });
+      }
 
       document.documentElement.classList.add('js', 'hero-pending');
       if (introEligible) document.documentElement.classList.add('home-intro-pending');
-      window.setTimeout(() => document.documentElement.classList.remove('hero-pending', 'home-intro-pending', 'home-intro-active'), 2600);
+      introGate.fallback = window.setTimeout(() => {
+        window.__homeIntroTimedOut = true;
+        document.documentElement.classList.remove('hero-pending', 'home-intro-pending', 'home-intro-active', 'home-intro-locked');
+        introGate.unlock();
+        document.querySelectorAll('[data-home-intro-inert]').forEach((element) => {
+          element.removeAttribute('inert');
+          element.removeAttribute('data-home-intro-inert');
+        });
+        if (document.body?.hasAttribute('data-home-intro-busy')) {
+          document.body.removeAttribute('aria-busy');
+          document.body.removeAttribute('data-home-intro-busy');
+        }
+        document.querySelectorAll(
+          '.hero-identity__name, [data-hero-copy], [data-hero-fluid], [data-site-nav]'
+        ).forEach((element) => element.style.removeProperty('opacity'));
+        document.querySelector('[data-home-intro]')?.remove();
+        window.dispatchEvent(new CustomEvent('portfolio:home-intro-timeout'));
+      }, 4000);
     </script>
-    <title>SeMinKong — Software Developer Portfolio</title>
+    <title>Se Min Kong — Software Developer Portfolio</title>
   </head>
   <body class="home-page">
     <a class="skip-link" href="#main-content">본문으로 바로가기</a>
-    <div class="home-intro" data-home-intro aria-hidden="true" hidden>
-      <span class="home-intro__panel home-intro__panel--left" data-home-intro-panel></span>
-      <span class="home-intro__panel home-intro__panel--right" data-home-intro-panel></span>
-      <span class="home-intro__brand" data-home-intro-brand lang="en">SeMinKong</span>
+    <div class="home-intro" data-home-intro role="status" aria-live="polite" aria-label="Se Min Kong 포트폴리오를 여는 중" hidden>
+      <span class="home-intro__veil" data-home-intro-veil></span>
+      <span class="home-intro__brand" data-home-intro-brand lang="en">Se Min Kong</span>
     </div>
     <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
 
     <header class="site-nav" data-site-nav>
-      <a class="wordmark" href="./" aria-label="SeMinKong 홈">
-        <span class="wordmark__signal" aria-hidden="true"></span><span>SeMinKong</span>
+      <a class="wordmark" href="./" aria-label="Se Min Kong 홈">
+        <span class="wordmark__signal" aria-hidden="true"></span><span>Se Min Kong</span>
       </a>
       <nav class="site-nav__links" aria-label="주요 페이지">
         <a href="./work/">Work</a>
@@ -62,10 +118,28 @@
     <main id="main-content" tabindex="-1">
       <section class="hero-story" aria-labelledby="hero-title" data-hero-story>
         <div class="hero-story__sticky" data-hero-sticky>
+          <div class="hero-fluid" data-hero-fluid aria-hidden="true">
+            <canvas class="hero-fluid__canvas" data-hero-fluid-canvas></canvas>
+            <span class="hero-fluid__paper-grain"></span>
+          </div>
+
           <div class="hero-story__frame page-width">
             <div class="hero-identity" data-hero-copy>
-              <h1 id="hero-title">
-                <span class="hero-identity__name" lang="en">SeMinKong</span>
+              <h1 id="hero-title" aria-label="Se Min Kong">
+                <span class="hero-identity__name" lang="en" data-handwritten-wordmark aria-hidden="true">
+                  <span class="hero-identity__name-text">Se Min Kong</span>
+                  <svg class="handwritten-wordmark hero-identity__wordmark" viewBox="0 0 1000 190" preserveAspectRatio="xMidYMid meet" focusable="false" aria-hidden="true">
+                    <g class="handwritten-wordmark__letter" data-letter="S" data-letter-index="0"><path class="handwritten-wordmark__stroke" d="M116 39 C96 20 55 23 38 48 C22 72 46 91 78 97 C111 103 126 121 111 145 C94 170 48 168 25 141" data-stroke-index="0" /></g>
+                    <g class="handwritten-wordmark__letter" data-letter="e" data-letter-index="1"><path class="handwritten-wordmark__stroke" d="M136 108 C157 108 188 103 192 85 C196 67 178 58 159 63 C139 68 130 91 135 114 C141 140 170 153 200 138" data-stroke-index="0" /></g>
+                    <g class="handwritten-wordmark__letter" data-letter="M" data-letter-index="2"><path class="handwritten-wordmark__stroke" d="M256 155 L259 35 L312 112 L366 34 L369 155" data-stroke-index="0" /></g>
+                    <g class="handwritten-wordmark__letter" data-letter="i" data-letter-index="3"><path class="handwritten-wordmark__stroke" d="M396 82 L396 155" data-stroke-index="0" /><path class="handwritten-wordmark__stroke" d="M396 49 L396.1 49" data-stroke-index="1" /></g>
+                    <g class="handwritten-wordmark__letter" data-letter="n" data-letter-index="4"><path class="handwritten-wordmark__stroke" d="M425 155 L425 84 C425 107 441 82 465 82 C486 82 497 97 497 120 L497 155" data-stroke-index="0" /></g>
+                    <g class="handwritten-wordmark__letter" data-letter="K" data-letter-index="5"><path class="handwritten-wordmark__stroke" d="M566 35 L566 155" data-stroke-index="0" /><path class="handwritten-wordmark__stroke" d="M566 101 L650 35" data-stroke-index="1" /><path class="handwritten-wordmark__stroke" d="M566 101 L657 155" data-stroke-index="2" /></g>
+                    <g class="handwritten-wordmark__letter" data-letter="o" data-letter-index="6"><path class="handwritten-wordmark__stroke" d="M735 82 C710 82 693 98 693 120 C693 142 710 157 734 157 C759 157 774 140 774 119 C774 96 759 82 735 82 Z" data-stroke-index="0" /></g>
+                    <g class="handwritten-wordmark__letter" data-letter="n" data-letter-index="7"><path class="handwritten-wordmark__stroke" d="M794 155 L794 84 C794 107 810 82 834 82 C855 82 866 97 866 120 L866 155" data-stroke-index="0" /></g>
+                    <g class="handwritten-wordmark__letter" data-letter="g" data-letter-index="8"><path class="handwritten-wordmark__stroke" d="M930 83 C906 83 890 99 890 120 C890 142 907 156 930 156 C953 156 966 140 966 119 C966 96 953 83 930 83 Z L966 84 L966 153 C966 178 950 188 928 181" data-stroke-index="0" /></g>
+                  </svg>
+                </span>
               </h1>
               <p class="hero-identity__statement" id="hero-summary">
                 <span data-hero-line>안녕하세요!</span>
@@ -75,141 +149,6 @@
                 <a class="button button--primary" href="./work/" aria-label="프로젝트 목록 보기">프로젝트 <span aria-hidden="true">→</span></a>
                 <a class="button button--text" href="#contact" aria-label="연락처 바로가기">Contact <span aria-hidden="true">→</span></a>
               </nav>
-            </div>
-
-            <div class="dexterous-hand" data-dexterous-hand aria-hidden="true">
-              <div class="dexterous-hand__scene" data-hand-scene data-depth-root data-depth-strength="1.45">
-                <div class="dexterous-hand__tilt" data-hand-tilt data-depth-layer="4">
-                  <div class="dexterous-hand__idle" data-hand-idle>
-                    <div class="dexterous-hand__response" data-hand-response>
-                      <div class="robot-hand-rig">
-                        <div class="control-cube" data-hand-cube>
-                          <div class="control-cube__float" data-cube-float>
-                            <div class="control-cube__interactive" data-cube-interactive>
-                              <div class="control-cube__impulse" data-cube-impulse>
-                                <div class="control-cube__flourish" data-cube-flourish>
-                                  <div class="control-cube__axis control-cube__axis--x" data-cube-axis-x>
-                                    <div class="control-cube__axis control-cube__axis--y" data-cube-axis-y>
-                                      <div class="control-cube__body" data-cube-body>
-                                        <span class="control-cube__face control-cube__face--front"></span>
-                                        <span class="control-cube__face control-cube__face--back"></span>
-                                        <span class="control-cube__face control-cube__face--right"></span>
-                                        <span class="control-cube__face control-cube__face--left"></span>
-                                        <span class="control-cube__face control-cube__face--top"></span>
-                                        <span class="control-cube__face control-cube__face--bottom"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="robot-wrist">
-                          <span class="robot-wrist__yoke robot-wrist__yoke--back"></span>
-                          <span class="robot-wrist__bridge"><i data-hand-tendon></i></span>
-                          <span class="robot-wrist__yoke robot-wrist__yoke--front"></span>
-                          <span class="robot-wrist__pivot"><i></i></span>
-                        </div>
-
-                        <div class="robot-palm">
-                          <span class="robot-palm__plate robot-palm__plate--back"></span>
-                          <span class="robot-palm__plate robot-palm__plate--front"></span>
-                          <span class="robot-palm__inset"><i></i></span>
-                          <span class="robot-palm__thumb-saddle"><i></i></span>
-                          <span class="robot-palm__spine robot-palm__spine--one"><i data-hand-tendon></i></span>
-                          <span class="robot-palm__spine robot-palm__spine--two"><i data-hand-tendon></i></span>
-                          <span class="robot-palm__spine robot-palm__spine--three"><i data-hand-tendon></i></span>
-                          <span class="robot-palm__spine robot-palm__spine--four"><i data-hand-tendon></i></span>
-                        </div>
-
-                        <div class="robot-digit robot-digit--thumb">
-                          <div class="robot-digit__response" data-hand-finger data-flex-weight="0.86" data-flex-direction="-1">
-                            <div class="robot-digit__idle" data-finger-idle data-idle-direction="1">
-                              <div class="robot-link robot-link--proximal">
-                                <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                <div class="robot-link robot-link--distal">
-                                  <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                  <span class="robot-contact-pad"><i data-contact-pad></i></span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="robot-digit robot-digit--index">
-                          <div class="robot-digit__response" data-hand-finger data-flex-weight="0.94" data-flex-direction="1">
-                            <div class="robot-digit__idle" data-finger-idle data-idle-direction="-1">
-                              <div class="robot-link robot-link--proximal">
-                                <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                <div class="robot-link robot-link--middle">
-                                  <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                  <div class="robot-link robot-link--distal">
-                                    <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                    <span class="robot-contact-pad"><i data-contact-pad></i></span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="robot-digit robot-digit--middle">
-                          <div class="robot-digit__response" data-hand-finger data-flex-weight="1" data-flex-direction="1">
-                            <div class="robot-digit__idle" data-finger-idle data-idle-direction="1">
-                              <div class="robot-link robot-link--proximal">
-                                <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                <div class="robot-link robot-link--middle">
-                                  <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                  <div class="robot-link robot-link--distal">
-                                    <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                    <span class="robot-contact-pad"><i data-contact-pad></i></span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="robot-digit robot-digit--ring">
-                          <div class="robot-digit__response" data-hand-finger data-flex-weight="0.9" data-flex-direction="-1">
-                            <div class="robot-digit__idle" data-finger-idle data-idle-direction="-1">
-                              <div class="robot-link robot-link--proximal">
-                                <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                <div class="robot-link robot-link--middle">
-                                  <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                  <div class="robot-link robot-link--distal">
-                                    <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                    <span class="robot-contact-pad"><i data-contact-pad></i></span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="robot-digit robot-digit--little">
-                          <div class="robot-digit__response" data-hand-finger data-flex-weight="0.78" data-flex-direction="-1">
-                            <div class="robot-digit__idle" data-finger-idle data-idle-direction="1">
-                              <div class="robot-link robot-link--proximal">
-                                <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                <div class="robot-link robot-link--middle">
-                                  <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                  <div class="robot-link robot-link--distal">
-                                    <span class="robot-link__shell"></span><i class="robot-link__tendon" data-hand-tendon></i>
-                                    <span class="robot-contact-pad"><i data-contact-pad></i></span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
           </div>
@@ -331,12 +270,12 @@
           </address>
         </div>
         <footer class="page-width site-footer">
-          <span>© 2026 SeMinKong</span>
+          <span>© 2026 Se Min Kong</span>
           <nav class="site-footer__links" aria-label="하단 링크"><a href="./copyright/">Copyright</a><a href="https://github.com/SeMinKong" rel="noreferrer">GitHub ↗</a></nav>
         </footer>
       </section>
     </main>
 
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/entries/home.js"></script>
   </body>
 </html>

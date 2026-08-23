@@ -19,11 +19,14 @@ export const initDepthEffects = (environment) => {
     vs: 0,
     targetX: 0,
     targetY: 0,
-    targetScale: 1
+    targetScale: 1,
+    handlers: null
   }));
 
   let frame = 0;
   let lastTime = 0;
+  let observer = null;
+  let destroyed = false;
 
   const render = (entry) => {
     entry.element.style.setProperty('--root-rx', `${(-entry.y * 1.5 * entry.strength).toFixed(3)}deg`);
@@ -59,6 +62,7 @@ export const initDepthEffects = (environment) => {
 
   const tick = (time) => {
     frame = 0;
+    if (destroyed) return;
     if (document.hidden || environment.depth !== 'interactive') {
       settleAll();
       return;
@@ -133,11 +137,12 @@ export const initDepthEffects = (environment) => {
     entry.pointerTarget.addEventListener('pointermove', onPointerMove, { passive: true });
     entry.pointerTarget.addEventListener('pointerleave', onPointerLeave, { passive: true });
     entry.pointerTarget.addEventListener('pointercancel', onPointerLeave, { passive: true });
+    entry.handlers = { onPointerMove, onPointerLeave };
     render(entry);
   });
 
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((observed) => {
+    observer = new IntersectionObserver((observed) => {
       observed.forEach((item) => {
         const entry = entries.find((candidate) => candidate.element === item.target);
         if (!entry) return;
@@ -148,14 +153,38 @@ export const initDepthEffects = (environment) => {
     entries.forEach((entry) => observer.observe(entry.element));
   }
 
-  window.addEventListener('portfolio:environment-change', (event) => {
+  const onEnvironmentChange = (event) => {
     if (event.detail.depth !== 'interactive') settleAll();
-  });
+  };
 
-  document.addEventListener('visibilitychange', () => {
+  const onVisibilityChange = () => {
     if (!document.hidden) return;
     if (frame) cancelAnimationFrame(frame);
     frame = 0;
     settleAll();
-  });
+  };
+
+  window.addEventListener('portfolio:environment-change', onEnvironmentChange);
+  document.addEventListener('visibilitychange', onVisibilityChange);
+
+  return {
+    destroy() {
+      if (destroyed) return;
+      destroyed = true;
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      observer?.disconnect();
+      entries.forEach((entry) => {
+        const { onPointerMove, onPointerLeave } = entry.handlers ?? {};
+        if (onPointerMove) entry.pointerTarget.removeEventListener('pointermove', onPointerMove);
+        if (onPointerLeave) {
+          entry.pointerTarget.removeEventListener('pointerleave', onPointerLeave);
+          entry.pointerTarget.removeEventListener('pointercancel', onPointerLeave);
+        }
+      });
+      window.removeEventListener('portfolio:environment-change', onEnvironmentChange);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      settleAll();
+    }
+  };
 };

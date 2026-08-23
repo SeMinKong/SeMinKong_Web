@@ -36,9 +36,9 @@
 
 .about-hero h1 {
   margin-top: 12px;
-  font-size: clamp(4.5rem, 11vw, 8.7rem);
+  font-size: clamp(5rem, calc(3rem + 8.64vw), 8.7rem);
   line-height: 0.9;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.012em;
   font-weight: var(--weight-display);
 }
 
@@ -50,10 +50,10 @@
 
 .about-hero__statement p {
   font-family: var(--font-display);
-  font-size: clamp(1.65rem, 3.15vw, 2.55rem);
+  font-size: clamp(1.65rem, calc(1.1rem + 2.16vw), 2.55rem);
   font-weight: var(--weight-ui);
-  line-height: 1.24;
-  letter-spacing: -0.025em;
+  line-height: 1.28;
+  letter-spacing: -0.004em;
 }
 
 .about-hero__statement strong {
@@ -101,7 +101,7 @@
 .about-facts dd {
   color: var(--text-soft);
   font-family: var(--font-display);
-  font-size: 0.86rem;
+  font-size: var(--type-body-lg);
   font-weight: var(--weight-support);
   line-height: 1.55;
 }
@@ -169,15 +169,15 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
   font-family: var(--font-mono);
   font-size: var(--type-meta);
   font-weight: var(--weight-meta);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.03em;
 }
 
 .about-questions__list h3 {
   max-width: 690px;
-  font-size: clamp(1.12rem, 1.75vw, 1.38rem);
+  font-size: clamp(1.35rem, 2.4vw, 1.65rem);
   font-weight: var(--weight-heading);
-  line-height: 1.5;
-  letter-spacing: -0.035em;
+  line-height: 1.42;
+  letter-spacing: 0;
   word-break: keep-all;
 }
 
@@ -224,7 +224,7 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
 .tool-group h3 {
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: clamp(0.76rem, 0.9vw, 0.84rem);
+  font-size: var(--type-meta);
   font-weight: var(--weight-meta);
   line-height: 1.35;
   letter-spacing: 0.04em;
@@ -266,8 +266,8 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
   color: var(--tool-color);
   font-family: var(--font-mono);
   font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  letter-spacing: 0;
   transition:
     transform 260ms var(--ease-out),
     filter 260ms var(--ease-out);
@@ -301,10 +301,10 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
 .tool-tile__name {
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: clamp(0.75rem, 0.88vw, 0.82rem);
+  font-size: var(--type-meta);
   font-weight: var(--weight-meta);
   line-height: 1.35;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   opacity: 1;
   word-break: keep-all;
   transition: color 220ms ease;
@@ -440,10 +440,6 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
     padding: 12px 0;
   }
 
-  .tool-group h3 {
-    font-size: 0.75rem;
-  }
-
   .tool-group__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px 12px;
@@ -464,9 +460,6 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
     border-radius: 7px;
   }
 
-  .tool-tile__name {
-    font-size: 0.75rem;
-  }
 }
 
 @media (max-width: 700px) {
@@ -475,14 +468,6 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
     gap: 44px;
     padding-top: calc(var(--nav-height) + 72px);
     padding-bottom: 86px;
-  }
-
-  .about-hero h1 {
-    font-size: clamp(4.1rem, 25vw, 6.6rem);
-  }
-
-  .about-hero__statement p {
-    font-size: clamp(1.5rem, 7.4vw, 2rem);
   }
 
   .about-questions__list li {
@@ -496,6 +481,19 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
   .about-questions__list p {
     grid-column: auto;
     grid-row: auto;
+  }
+
+  .tool-group {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .tool-group__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tool-tile__name {
+    overflow-wrap: anywhere;
   }
 
   .about-next {
@@ -546,4 +544,7 @@ html[data-motion="reduced"] .tool-tile__name {
 html[data-motion="reduced"] .tool-group__list li:hover .tool-tile__icon {
   filter: none;
   transform: none;
+}
+html[data-motion="reduced"] .about-questions__topic {
+  transition: none;
 }

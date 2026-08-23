@@ -1,6 +1,7 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+import { SITE_ROUTES } from './config/site-routes.js';
 
 const rootDirectory = dirname(fileURLToPath(import.meta.url));
 
@@ -8,19 +9,9 @@ export default defineConfig({
   base: './',
   build: {
     rollupOptions: {
-      input: {
-        portfolio: resolve(rootDirectory, 'index.html'),
-        work: resolve(rootDirectory, 'work/index.html'),
-        thing: resolve(rootDirectory, 'work/thing/index.html'),
-        aqis: resolve(rootDirectory, 'work/aqis/index.html'),
-        brainTumorMri: resolve(rootDirectory, 'work/brain-tumor-mri/index.html'),
-        alkkagi: resolve(rootDirectory, 'work/alkkagi/index.html'),
-        briefit: resolve(rootDirectory, 'work/briefit/index.html'),
-        projectPromptGenerator: resolve(rootDirectory, 'work/project-prompt-generator/index.html'),
-        about: resolve(rootDirectory, 'about/index.html'),
-        resume: resolve(rootDirectory, 'resume/index.html'),
-        copyright: resolve(rootDirectory, 'copyright/index.html')
-      }
+      input: Object.fromEntries(
+        SITE_ROUTES.map(({ name, source }) => [name, resolve(rootDirectory, source)])
+      )
     }
   }
 });

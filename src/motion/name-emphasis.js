@@ -24,7 +24,7 @@ export const initNameEmphasis = (environment) => {
   const registry = new Map();
 
   const heroName = document.querySelector('.hero-identity__name');
-  if (heroName) {
+  if (heroName && !heroName.hasAttribute('data-handwritten-wordmark')) {
     targets.push({
       element: heroName,
       trigger: heroName.closest('h1') ?? heroName,
@@ -45,8 +45,8 @@ export const initNameEmphasis = (environment) => {
       trigger: wordmarkText.closest('.wordmark') ?? wordmarkText,
       entrance: false,
       lift: 3,
-      weightPeak: 780,
-      weightBase: 650,
+      weightPeak: 700,
+      weightBase: 700,
       waveDuration: 420,
       stagger: 30
     });
@@ -75,7 +75,7 @@ export const initNameEmphasis = (environment) => {
       element.textContent = original;
       return;
     }
-    const state = { original, letters, busy: false, animations: new Set() };
+    const state = { original, letters, busy: false, animations: new Set(), trigger: target.trigger, wave: null };
     registry.set(element, state);
 
     const wave = () => {
@@ -97,6 +97,8 @@ export const initNameEmphasis = (environment) => {
       });
       state.animations.add(animation);
     };
+
+    state.wave = wave;
 
     if (target.entrance) {
       const maskTarget = target.maskTarget ?? element;
@@ -129,10 +131,23 @@ export const initNameEmphasis = (environment) => {
 
   const teardown = () => {
     disabled = true;
+    registry.forEach((state) => {
+      state.trigger.removeEventListener('pointerenter', state.wave);
+      state.trigger.removeEventListener('focus', state.wave, true);
+    });
     targets.forEach(restore);
   };
 
-  window.addEventListener('portfolio:environment-change', (event) => {
+  const onEnvironmentChange = (event) => {
     if (event.detail.motion !== 'full') teardown();
-  });
+  };
+
+  window.addEventListener('portfolio:environment-change', onEnvironmentChange);
+
+  return {
+    destroy() {
+      window.removeEventListener('portfolio:environment-change', onEnvironmentChange);
+      teardown();
+    }
+  };
 };

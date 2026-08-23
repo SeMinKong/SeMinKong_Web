@@ -7,16 +7,18 @@
     "dev": "vite --configLoader runner",
     "build": "vite build --configLoader runner",
     "preview": "vite preview --configLoader runner",
+    "test": "node --test tests/*.test.mjs",
+    "verify:source": "node scripts/verify-source.mjs",
     "verify:dist": "node scripts/verify-dist.mjs",
-    "verify": "npm run build && npm run verify:dist"
+    "verify": "npm run test && npm run verify:source && npm run build && npm run verify:dist"
   },
   "engines": {
     "node": ">=22.12.0"
   },
   "dependencies": {
-    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource/dongle": "^5.2.6",
+    "@fontsource/gowun-dodum": "^5.2.6",
     "@fontsource-variable/manrope": "^5.3.0",
-    "@fontsource-variable/noto-sans-kr": "^5.3.0",
     "animejs": "^4.0.0",
     "gsap": "^3.15.0",
     "lenis": "^1.3.26",

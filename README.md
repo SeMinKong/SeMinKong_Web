@@ -1,4 +1,4 @@
-# SeMinKong Portfolio
+# Se Min Kong Portfolio
 
 AI, Robotics, Computer Vision, and software projects presented through Home, About, Work, case-study, and Resume pages in Vite.
 
@@ -17,6 +17,21 @@ Production verification:
 npm.cmd run verify
 npm.cmd run preview
 ```
+
+## Source architecture
+
+Each route loads only the entry and stylesheet layers it owns. Shared page behavior is registered through `src/app/create-page-runtime.js`; optional Lenis and GSAP code is loaded only when the active route and capability tier need it.
+
+| Route | Entry | Page styles |
+| --- | --- | --- |
+| Home | `src/entries/home.js` | `portfolio-shared.css`, `home.css` |
+| Work | `src/entries/work.js` | `portfolio-shared.css`, `work.css` |
+| Six case studies | `src/entries/case-study.js` | `case-study.css` |
+| About | `src/entries/about.js` | `about.css` |
+| Resume | `src/entries/resume.js` | `resume.css` |
+| Copyright | `src/entries/legal.js` | `legal.css` |
+
+`config/site-routes.js` is the source of truth for Vite inputs and deployment verification. `npm.cmd run verify` checks route/entry/style boundaries, builds production assets, and validates every local deployment reference.
 
 ## GitHub Flow
 

@@ -20,19 +20,6 @@
   transform: translate3d(var(--depth-x), calc(var(--depth-y) + var(--inertia-y)), 0);
 }
 
-.project-card__media [data-depth-layer],
-.work-row__media [data-depth-layer] {
-  scale: 1.018;
-  transition: scale 820ms var(--ease-soft), filter 360ms ease;
-}
-
-.project-card__media:hover [data-depth-layer],
-.project-card__media:focus-visible [data-depth-layer],
-.work-row__media:hover [data-depth-layer],
-.work-row__media:focus-visible [data-depth-layer] {
-  scale: 1.035;
-}
-
 html[data-depth="flat"] [data-depth-root],
 html[data-depth="flat"] [data-depth-card],
 html[data-depth="static"] [data-depth-root],
@@ -52,73 +39,18 @@ html[data-motion="reduced"] {
   scroll-behavior: auto;
 }
 
-html[data-motion="reduced"] .hero-story {
-  height: auto !important;
-  min-height: 0;
-}
-
-html[data-motion="reduced"] .hero-story__sticky {
-  position: relative !important;
-  top: auto !important;
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible;
-}
-
-html[data-motion="reduced"] .hero-story__frame {
-  min-height: 0;
-  padding-top: calc(var(--nav-height) + 76px);
-  padding-bottom: 92px;
-}
-
 html[data-motion="reduced"] [data-intro],
 html[data-motion="reduced"] [data-reveal],
 html[data-motion="reduced"] [data-resume-intro],
-html[data-motion="reduced"] [data-resume-reveal],
-html[data-motion="reduced"] [data-hero-copy] {
+html[data-motion="reduced"] [data-resume-reveal] {
   opacity: 1 !important;
   transform: none !important;
   filter: none !important;
   clip-path: none !important;
-}
-
-html[data-motion="reduced"] [data-hero-role],
-html[data-motion="reduced"] [data-hero-line],
-html[data-motion="reduced"] [data-hero-actions] {
-  opacity: 1 !important;
-  transform: none !important;
-  clip-path: none !important;
-  pointer-events: auto !important;
-}
-
-html[data-motion="reduced"] [data-dexterous-hand] {
-  opacity: 1 !important;
-  transform: none !important;
-  filter: none !important;
-}
-
-html[data-motion="reduced"] [data-cube-interactive],
-html[data-motion="reduced"] [data-hand-finger] {
-  --cube-x: 0px !important;
-  --cube-y: 0px !important;
-  --finger-flex: 0deg !important;
 }
 
 html[data-motion="reduced"] [data-inertia] {
   --inertia-y: 0px !important;
-}
-
-html[data-motion="reduced"] .case-section h2,
-html[data-motion="reduced"] .about-questions__topic,
-html[data-motion="reduced"] .project-card__media img,
-html[data-motion="reduced"] .project-card__media video,
-html[data-motion="reduced"] .work-row__media img,
-html[data-motion="reduced"] .work-row__media video {
-  transition: none;
-}
-
-html[data-motion="reduced"] .cursor-label {
-  display: none;
 }
 
 html[data-motion="reduced"] .text-link::after,
@@ -128,10 +60,6 @@ html[data-motion="reduced"] .source-link::after {
 
 html[data-motion="reduced"] .page-curtain {
   display: none;
-}
-
-html[data-motion="reduced"] .home-intro {
-  display: none !important;
 }
 
 @media (max-width: 720px) {
@@ -147,44 +75,11 @@ html[data-motion="reduced"] .home-intro {
     --depth-y: 0px !important;
   }
 
-  html[data-motion="reduced"] .hero-story__frame {
-    padding-top: calc(var(--nav-height) + 54px);
-    padding-bottom: 76px;
-  }
-
-  html[data-motion="reduced"] .home-page .dexterous-hand {
-    position: relative;
-    inset: auto;
-    margin: 20px auto 0;
-  }
-
-  html[data-motion="reduced"] .home-page .robot-hand-rig {
-    left: 50%;
-  }
-}
-
-html[data-motion="reduced"] [data-cube-flourish] {
-  transform: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-intro {
-    display: none !important;
-  }
-
   html:not([data-motion="full"]) {
     scroll-behavior: auto;
-  }
-
-  html:not([data-motion="full"]) [data-hero-copy],
-  html:not([data-motion="full"]) [data-hero-role],
-  html:not([data-motion="full"]) [data-hero-line],
-  html:not([data-motion="full"]) [data-hero-actions],
-  html:not([data-motion="full"]) [data-dexterous-hand] {
-    opacity: 1 !important;
-    transform: none !important;
-    clip-path: none !important;
-    pointer-events: auto !important;
   }
 
   html:not([data-motion="full"]) [data-inertia] {

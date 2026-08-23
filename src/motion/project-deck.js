@@ -165,6 +165,10 @@ export const initProjectDeck = (environment) => {
   };
 
   const onEnvironmentChange = () => syncEnvironment();
+  const onVisibilityChange = () => {
+    if (document.hidden && enabled) applyState(expanded, true);
+  };
+  const onPageHide = () => cancelAnimation();
 
   const resizeObserver = new ResizeObserver(() => {
     if (enabled) applyState(expanded, true);
@@ -185,10 +189,24 @@ export const initProjectDeck = (environment) => {
   root.addEventListener('focusin', onFocusIn);
   root.addEventListener('focusout', onFocusOut);
   window.addEventListener('portfolio:environment-change', onEnvironmentChange);
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && enabled) applyState(expanded, true);
-  });
-  window.addEventListener('pagehide', cancelAnimation, { once: true });
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  window.addEventListener('pagehide', onPageHide);
 
   syncEnvironment();
+
+  return {
+    destroy() {
+      root.removeEventListener('pointerover', onPointerOver);
+      root.removeEventListener('pointermove', onPointerMove);
+      root.removeEventListener('pointerleave', onPointerLeave);
+      root.removeEventListener('focusin', onFocusIn);
+      root.removeEventListener('focusout', onFocusOut);
+      window.removeEventListener('portfolio:environment-change', onEnvironmentChange);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('pagehide', onPageHide);
+      resizeObserver.disconnect();
+      visibilityObserver?.disconnect();
+      disable();
+    }
+  };
 };

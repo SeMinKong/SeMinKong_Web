@@ -5,6 +5,7 @@ export const initPageTransitions = (environment) => {
   if (!curtain) return;
 
   let navigating = false;
+  let navigationTimer = 0;
 
   const reset = () => {
     navigating = false;
@@ -23,7 +24,7 @@ export const initPageTransitions = (environment) => {
     return true;
   };
 
-  document.addEventListener('click', (event) => {
+  const onDocumentClick = (event) => {
     const link = event.target.closest?.('a[href]');
     if (!link || navigating) return;
 
@@ -51,13 +52,27 @@ export const initPageTransitions = (environment) => {
       onComplete: navigate
     });
 
-    window.setTimeout(navigate, 250);
-  });
+    navigationTimer = window.setTimeout(navigate, 250);
+  };
 
-  window.addEventListener('pageshow', reset);
-  window.addEventListener('portfolio:environment-change', (event) => {
+  const onEnvironmentChange = (event) => {
     if (event.detail.motion !== 'full') reset();
-  });
+  };
+
+  document.addEventListener('click', onDocumentClick);
+  window.addEventListener('pageshow', reset);
+  window.addEventListener('portfolio:environment-change', onEnvironmentChange);
 
   reset();
+
+  return {
+    destroy() {
+      document.removeEventListener('click', onDocumentClick);
+      window.removeEventListener('pageshow', reset);
+      window.removeEventListener('portfolio:environment-change', onEnvironmentChange);
+      window.clearTimeout(navigationTimer);
+      navigationTimer = 0;
+      reset();
+    }
+  };
 };

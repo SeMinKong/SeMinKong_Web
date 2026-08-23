@@ -1,41 +1,101 @@
 import { access, readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
-
-const expectedFiles = [
-  'index.html',
-  'favicon.svg',
-  'server/index.js',
-  'work/index.html',
-  'work/thing/index.html',
-  'work/aqis/index.html',
-  'work/brain-tumor-mri/index.html',
-  'work/alkkagi/index.html',
-  'work/briefit/index.html',
-  'work/project-prompt-generator/index.html',
-  'about/index.html',
-  'copyright/index.html',
-  'resume/index.html',
-  'resume/SeMinKong-Resume.pdf',
-  'resume/SeMinKong-Resume.docx',
-  'resume/SeMinKong-Resume-page-1.png'
-];
+import { dirname, isAbsolute, relative, resolve } from 'node:path';
+import {
+  EXPECTED_DEPLOYMENT_FILES,
+  SITE_ROUTES
+} from '../config/site-routes.js';
 
 const distDirectory = resolve('dist');
-const absoluteAssetPattern = /(?:href|src)=["']\/(?!\/)/g;
+const rootAbsoluteAssetPattern = /(?:href|src|poster)=["']\/(?!\/)/gi;
+const referencePattern = /(?:href|src|poster)=["']([^"']+)["']/gi;
+const externalReferencePattern = /^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i;
 
-await Promise.all(expectedFiles.map((file) => access(resolve(distDirectory, file))));
+const isInsideDist = (target) => {
+  const pathFromDist = relative(distDirectory, target);
+  return !isAbsolute(pathFromDist) && !pathFromDist.startsWith('..');
+};
 
-const htmlFiles = expectedFiles.filter((file) => file.endsWith('.html'));
-const invalidFiles = [];
+const resolveLocalReferences = (html, htmlPath) => {
+  const references = [];
 
-for (const file of htmlFiles) {
-  const html = await readFile(resolve(distDirectory, file), 'utf8');
-  if (absoluteAssetPattern.test(html)) invalidFiles.push(file);
-  absoluteAssetPattern.lastIndex = 0;
+  for (const match of html.matchAll(referencePattern)) {
+    const rawReference = match[1].replaceAll('&amp;', '&');
+    if (externalReferencePattern.test(rawReference)) continue;
+
+    const fileReference = rawReference.split(/[?#]/, 1)[0];
+    if (!fileReference) continue;
+
+    let decodedReference;
+    try {
+      decodedReference = decodeURIComponent(fileReference);
+    } catch {
+      throw new Error(`Invalid URL encoding in ${htmlPath}: ${rawReference}`);
+    }
+
+    const target = resolve(dirname(htmlPath), decodedReference);
+    if (!isInsideDist(target)) {
+      throw new Error(`Reference escapes dist/ in ${htmlPath}: ${rawReference}`);
+    }
+
+    references.push({ rawReference, target });
+  }
+
+  return references;
+};
+
+const verifyPageBundleBoundary = (route, references) => {
+  const assetNames = references
+    .map(({ rawReference }) => rawReference.split(/[?#]/, 1)[0].split('/').at(-1))
+    .filter(Boolean);
+
+  const forbiddenPrefixes = route.kind === 'work'
+    ? ['portfolio-']
+    : route.kind === 'case-study'
+      ? ['portfolio-', 'work-']
+      : [];
+
+  const leakedAssets = assetNames.filter((assetName) => (
+    forbiddenPrefixes.some((prefix) => assetName.startsWith(prefix))
+  ));
+
+  if (leakedAssets.length) {
+    throw new Error(
+      `${route.output} includes page-specific assets from another route: ${leakedAssets.join(', ')}`
+    );
+  }
+};
+
+await Promise.all(
+  EXPECTED_DEPLOYMENT_FILES.map((file) => access(resolve(distDirectory, file)))
+);
+
+const missingReferences = [];
+
+for (const route of SITE_ROUTES) {
+  const htmlPath = resolve(distDirectory, route.output);
+  const html = await readFile(htmlPath, 'utf8');
+
+  if (rootAbsoluteAssetPattern.test(html)) {
+    throw new Error(`Root-absolute asset path remains in ${route.output}.`);
+  }
+  rootAbsoluteAssetPattern.lastIndex = 0;
+
+  const references = resolveLocalReferences(html, htmlPath);
+  verifyPageBundleBoundary(route, references);
+
+  for (const reference of references) {
+    try {
+      await access(reference.target);
+    } catch {
+      missingReferences.push(`${route.output} -> ${reference.rawReference}`);
+    }
+  }
 }
 
-if (invalidFiles.length) {
-  throw new Error(`Root-absolute asset paths remain in: ${invalidFiles.join(', ')}`);
+if (missingReferences.length) {
+  throw new Error(`Missing local deployment references:\n${missingReferences.join('\n')}`);
 }
 
-console.log(`Verified ${expectedFiles.length} deployment entries in dist/.`);
+console.log(
+  `Verified ${SITE_ROUTES.length} routes and ${EXPECTED_DEPLOYMENT_FILES.length} deployment entries in dist/.`
+);

@@ -590,3 +590,124 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Lite/mobile은 글자당 `120ms`, `34ms` stagger로 약 `392ms` 동안 쓴다. `400–440ms` word crossfade, `450ms` panel opening, `485ms` FLIP으로 이어져 전체를 약 `1.02s` 안에 끝낸다.
 - 하나의 3×10px nib만 글자 진행 방향으로 움직이며 opening 전 opacity 0이 된다. Nib은 body의 fixed 장식 요소라 word rect에 포함되지 않고, 완료·취소·scroll·resize·pagehide 모든 경로에서 overlay와 함께 제거한다.
 - Reduced motion, hash entry, BFCache는 writing DOM을 만들지 않는다. 실제 Hero h1과 name hover wave의 소유권은 기존 모듈에 남긴다.
+
+## 2026-08-22 — Home intro editorial pacing override
+
+이 항목은 바로 앞 세 Home intro 규칙의 타이밍만 대체한다. Reference에서 가져오는 것은 브랜드 모션을 완성 상태로 읽힌 뒤 커튼을 여는 순서이며, 기존 warm-paper, live `SeMinKong` text, nib, split panels, responsive FLIP을 그대로 사용한다.
+
+- Full: ink wipe `120–1346ms`, exact-word swap `1350–1450ms`, centered-name hold `1450–2700ms`, panel split `2700–4700ms`, FLIP `2800–4450ms`, h1 crossfade `4450–4700ms`, copy assembly `3600–4450ms`, navigation assembly `3800–4700ms`.
+- Lite/mobile: ink wipe `80–880ms`, exact-word swap `880–960ms`, centered-name hold `960–1700ms`, panel split `1700–3100ms`, FLIP `1780–2940ms`, h1 crossfade `2940–3100ms`, copy assembly `2400–2940ms`, navigation assembly `2500–3100ms`.
+- Intro watchdog는 timeline end 뒤 `1300ms` 여유를 두어 full `6000ms`, lite `4400ms`에 정리한다. Head prepaint fallback은 font race와 module start를 포함해 `6500ms`에 모든 pending class를 제거한다.
+- Wheel, pointerdown, touchstart, scroll, resize, keyboard, hidden, pagehide, BFCache, environment 변경은 이전처럼 즉시 complete한다. 어떤 경로에서도 입력을 prevent하거나 실제 Hero/hand transform 소유권을 가져오지 않는다.
+- Reduced motion, hash entry, restored scroll, background entry는 intro DOM을 만들지 않고 완성된 Hero를 즉시 노출한다.
+
+## 2026-08-22 — Home intro stroke-order and bounce override
+
+이 항목은 `Home handwritten word entrance`의 clip-path·nib 모션과 `Home intro editorial pacing`의 ink 구간을 대체한다.
+
+- Full path drawing은 `100–1450ms`, 마지막 글자 settle은 약 `1725ms`까지 겹친다. SVG→exact word crossfade는 `1700–1800ms`, centered hold는 `1800–2850ms`, panel split은 `2850–4850ms`다.
+- Full 필기 동안 중앙 부모 scale은 `1.16 → 1.32`, FLIP `2930–4580ms`에는 `1.32 → measured targetScale`이다. Overlay→실제 h1 handoff는 `4580–4830ms`, copy는 `3750–4580ms`, navigation은 `3950–4850ms`에 조립한다.
+- Lite/mobile path drawing은 `80–900ms`, 마지막 settle은 약 `1106ms`까지 겹친다. SVG→exact word는 `1070–1150ms`, hold는 `1150–1850ms`, panel split은 `1850–3250ms`다.
+- Lite/mobile 필기 동안 중앙 부모 scale은 `1.10 → 1.18`, FLIP `1930–3090ms`에는 `1.18 → measured targetScale`이다. H1 handoff는 `3090–3250ms`, copy는 `2550–3090ms`, navigation은 `2650–3250ms`에 조립한다.
+- 획 길이 대신 수동 weight로 전체 drawing window를 나누어 `S → e → M → i stem → i dot → n → K stem → K upper → K lower → o → n → g` 순서를 고정한다. 각 글자 완료 시 full `1 → 1.055 → 1`, lite `1 → 1.035 → 1` scale과 `0 → -7/-4px → 0` Y 반동을 한 번만 실행한다.
+- 기존 `6500ms` head fallback과 timeline end 뒤 `1300ms` watchdog은 새 full `4850ms` / lite `3250ms` 길이를 수용한다. 모든 입력·resize·visibility·page lifecycle·reduced-motion 정리 경로는 유지한다.
+
+## 2026-08-22 — Persistent handwritten Hero handoff override
+
+이 항목은 바로 앞 stroke-order 규칙의 `SVG→exact word` 교대와 실제 Hero Manrope crossfade를 대체한다. 획순, bounce, scale, hold, panel 및 FLIP timing은 유지한다.
+
+- Intro SVG는 path drawing이 끝난 뒤 opacity 1로 유지되어 centered hold와 FLIP을 그대로 수행한다. 중간 Manrope word layer는 geometry 측정용으로만 숨겨 두며 화면에는 나타나지 않는다.
+- Full `4580–4830ms`, lite/mobile `3090–3250ms` handoff는 서로 다른 서체가 아니라 동일한 12획 geometry를 가진 Intro SVG와 정적 Hero SVG 사이의 crossfade다.
+- 정적 Hero SVG는 초기 HTML에 포함하고 intro 재생 여부를 결정하기 전에 존재 여부를 확인한다. 따라서 JS가 늦게 시작하거나 reduced motion, hash, BFCache, scroll restoration, input skip 경로여도 다른 서체를 먼저 그리지 않는다.
+- Hero h1 자체가 `aria-label="Se Min Kong"`으로 의미를 제공하고 SVG 및 폭 측정용 fallback은 접근성 트리에서 제외한다. Name emphasis 모듈은 이 Hero를 글자 span으로 다시 분해하지 않는다.
+
+## 2026-08-22 — Visible typography and signature metric separation
+
+- 보이는 UI 글꼴을 Asta Sans와 Geist Mono로 바꾸더라도 Intro의 12개 SVG path, stroke draw 순서, bounce, reading hold, panel reveal과 FLIP duration은 변경하지 않는다.
+- `.home-intro__word`와 `.hero-identity__name-text`는 투명한 geometry provider이므로 계속 `Manrope Variable` 680을 사용한다. `fontsReady()`도 이 metric font를 기다린 뒤 중앙/착지 rect를 계산한다.
+- Header wordmark의 full-motion weight wave는 Asta heading 기준값 640에서 시작해 기존 peak 780까지 움직인다. Hero의 손글씨 SVG에는 variable-font wave를 적용하지 않는다.
+- Reduced, hash, BFCache와 입력 skip 경로는 이전과 동일하게 Intro를 생략하거나 원자적으로 종료하고, 보이는 정적 SVG와 Asta Sans 본문을 즉시 표시한다.
+
+## 2026-08-22 — Dongle static-weight motion compatibility override
+
+- 보이는 display/UI가 static `Dongle` 400/700으로 바뀌어도 Intro의 12개 SVG path, 획순, 글자별 settle bounce, scale, reading hold, panel reveal과 responsive FLIP timing은 변경하지 않는다.
+- `.home-intro__word`와 `.hero-identity__name-text`는 `Manrope Variable` 680과 `-0.055em` tracking을 명시적으로 고정한다. `fontsReady()`도 계속 이 metric font를 기다린다.
+- Header wordmark hover는 Dongle 700을 유지한 채 글자별 `y 0 → -3px → 0` lift wave만 수행한다. 존재하지 않는 중간 weight를 합성하거나 700/400 사이에서 튀게 바꾸지 않는다.
+
+## 2026-08-23 — Shared SVG paper-reveal override
+
+이 항목은 앞선 좌우 panel reveal과 Intro SVG→Hero SVG crossfade 규칙을 대체한다. 획순, 글자별 bounce, 중앙 hold, 입력 skip과 reduced-motion 규칙은 유지한다.
+
+- Intro cover는 두 half panel이 아니라 warm-paper 단일 veil 하나다. Full `2850–4750ms`, lite `1850–3200ms`에 opacity `1 → 0`으로 옅어지며 실제 Hero 전체를 한 면으로 드러낸다. 별도 방향성 wipe, seam, blur 또는 두 장의 panel 이동은 사용하지 않는다.
+- 서명은 translucent 중간색에서 사라지는 `difference` blending을 쓰지 않는다. Paper가 절반 이상 옅어진 후 stroke color를 `paper-ink → var(--text)`로 짧게 전환해 밝은 배경과 어두운 Hero 모두에서 대비를 유지한다.
+- Hero copy, robotic hand와 navigation은 veil 후반에 opacity로 조립한다. Paper가 아직 밝을 때 hand가 서명 뒤에 유령처럼 겹치지 않으며, 종료 시점에는 모두 opacity 1이다.
+- 필기 SVG는 full `2930–4580ms`, lite `1930–3090ms`에 숨은 Manrope text가 아니라 Hero의 실제 정적 SVG rect를 목표로 X/Y/scaleX/scaleY를 계산한다. 착지 rect의 x/y/width/height는 네 축 모두 target과 같아야 한다.
+- 자연 종료에서는 Intro의 animated SVG 노드를 Hero wrapper로 직접 reparent하고 초기 정적 SVG만 제거한다. opacity crossfade나 새 SVG 생성은 없으며, 완료된 drawable·letter inline style을 정리한 뒤 최종 Hero class만 남긴다.
+- `scrollbar-gutter: stable`을 문서 전체에 유지해 Intro의 body overflow 변경 전후 `vw` 기반 Hero 크기가 바뀌지 않게 한다. 390·768·1280에서 완료 직전과 직후 font-size 및 SVG rect 변화는 0을 목표로 한다.
+- Pointer, wheel, touch, keyboard, resize, visibility, BFCache, watchdog 종료는 animated SVG를 commit하지 않고 초기 HTML의 정적 Hero SVG를 즉시 표시한다. Reduced motion과 hash 진입도 Intro DOM을 활성화하지 않는다.
+- Reduced, hash, BFCache와 input skip에서는 이전과 같이 동일한 정적 Hero SVG와 최종 typography를 즉시 표시한다.
+
+## 2026-08-23 — One-second post-writing handoff override
+
+이 항목은 `Shared SVG paper-reveal`의 중앙 hold와 전환 timing만 대체한다. 획순, 필기 속도, 글자별 bounce, 동일 SVG node handoff와 단일 paper veil은 유지한다.
+
+- Full path drawing은 기존처럼 `100–1450ms`다. 마지막 획 뒤 `50ms`만 두고 veil을 `1500–2380ms`에 fade하며, 마지막 글자 settle이 끝나는 `1725ms`부터 SVG를 `1725–2295ms`에 Hero rect로 옮긴다. 필기 완료부터 Intro 종료까지 `930ms`다.
+- Lite/mobile path drawing은 기존처럼 `80–900ms`다. Veil은 `940–1660ms`, SVG 이동은 마지막 settle과 맞춘 `1105–1595ms`이며 필기 완료부터 Intro 종료까지 `760ms`다.
+- Hero copy와 hand는 full `1720–2380ms`, lite `1090–1660ms`에 조립한다. Navigation은 각각 `1810–2380ms`, `1160–1660ms`로 짧게 뒤따른다.
+- 중앙에서 완성된 이름을 별도로 정지해 읽히는 hold는 두지 않는다. 마지막 글자의 탄성 settle과 veil fade를 겹쳐 필기의 생동감은 유지하면서 다음 화면으로 연속적으로 연결한다.
+- Timeline watchdog은 계산된 종료 뒤 기존 `1300ms` 여유를 유지한다. Head prepaint fallback은 새 full timeline과 font/module startup 여유를 포함해 `4000ms`로 줄인다.
+
+## 2026-08-23 — Aspect-ratio invariant signature handoff override
+
+이 항목은 `Shared SVG paper-reveal`의 `scaleX / scaleY` 착지 계산과 SVG stretch 규칙을 대체한다. 획순, 글자별 bounce, veil, copy assembly와 full/lite timing은 유지한다.
+
+- 초기 HTML의 Hero SVG와 Intro에서 생성하는 SVG는 모두 `preserveAspectRatio="xMidYMid meet"`를 사용한다. 정적 fallback, reduced/hash/BFCache, 조기 종료, 자연 완료 뒤 reparent된 SVG가 같은 비율 정책을 공유한다.
+- 필기 중 확대는 `entryScale → introScale`의 단일 `scale`만 사용한다. Hero 이동도 `introScale → targetScale` 단일 값으로만 보간하며 같은 노드에 독립 `scaleX`와 `scaleY`를 적용하지 않는다.
+- `targetScale`은 target/writing rect의 폭·높이 비율 중 작은 값으로 구한다. X/Y 착지 중심 계산에도 같은 scale을 사용해 container 비율이 달라도 letterbox로 흡수하고 path 자체는 찌그러뜨리지 않는다.
+- 390·768·1280px에서 정적 path bounds 비율, full/lite 필기·이동·착지 path bounds 비율은 동일해야 한다. 미세 sub-pixel 반올림을 제외한 X/Y scale 차이는 허용하지 않는다.
+
+## 2026-08-23 — Mandatory natural-completion gate override
+
+이 항목은 이전 Home Intro 명세의 `wheel / pointer / touch / keyboard / resize 입력이 즉시 complete` 규칙을 대체한다. 획순, bounce, veil, copy assembly, uniform-scale handoff와 full/lite timing은 유지한다.
+
+- 정상 top-entry에서 Intro가 시작되면 head bootstrap capture gate가 module 초기화 전부터 wheel, pointerdown, touchstart/move, click과 페이지 이동·스크롤 키를 취소한다. Module 활성화 뒤에는 Intro를 제외한 body의 실제 콘텐츠를 원래 상태를 보존한 채 임시 `inert`로 만들고 body를 `aria-busy`로 표시한다.
+- Escape, Tab, Enter, Space, Backspace, 방향키, PageUp/PageDown, Home/End는 Intro를 skip하지 않는다. Scroll position은 entry 좌표에 고정하며 overlay는 touch pan과 click-through를 허용하지 않는다.
+- Anime.js `onComplete`가 유일한 정상 unlock 경로다. 자연 완료 시 animated 12-path SVG를 Hero에 commit하고, lock class·임시 inert/busy·capture listeners·inline opacity·overlay를 원자적으로 정리한 뒤 `portfolio:home-intro-complete`를 한 번 보낸다.
+- `prefers-reduced-motion`, local reduced, hash, restored scroll, BFCache와 background entry는 gate/Intro를 만들지 않거나 module 초기화 즉시 해제한다. Hidden, pagehide, motion→reduced, geometry/font/Anime 실패와 module/head watchdog은 정적 Hero로 fail-open하며 영구 lock을 남기지 않는다.
+- Resize와 full↔lite capability 변화는 user skip으로 취급하지 않는다. 진행 중 timeline을 끝까지 실행하고 최종 commit에서 현재 responsive Hero geometry를 사용한다. Browser Back, Reload, 주소창과 Ctrl/Meta/Alt modifier shortcut은 가로채지 않는다.
+- Head fallback은 `4000ms`에 gate, module lock marker와 prepaint class를 모두 제거하고 늦게 도착한 module이 Intro를 다시 시작하지 못하게 한다. Full/lite module watchdog과 `finish()`의 finally cleanup은 별도의 이중 안전장치다.
+
+## 2026-08-23 — Paper Current Hero motion override
+
+이 항목은 `Hero scroll story`, robotic hand pose loop와 cube flourish를 대체한다.
+
+- Renderer는 dependency 없는 WebGL2 full-screen triangle과 단일 fragment pass를 사용한다. CPU는 최대 6개의 느린 pigment body만 갱신하고 shader가 domain warp, 합쳐짐, quiet-zone mask, graphite/vermilion 혼합과 static paper grain을 처리한다. FBO, ping-pong fluid solver, Three.js와 CSS blur는 추가하지 않는다.
+- Full motion은 최대 60fps, 내부 DPR `1.4 × 0.76` 이하에서 pointer velocity를 국소 curl과 displacement로 전달한다. Pointer press는 한 번의 감쇠 pressure wave를 만든다. 별도 cursor follower는 없다.
+- Lite/coarse pointer는 최대 30fps, 내부 DPR `1.15 × 0.68`, 4개 body를 사용한다. Touch move는 입력으로 사용하지 않고 짧은 tap의 pointerup만 impulse로 받아 native `pan-y`를 가로채지 않는다.
+- Reduced motion, WebGL2 미지원과 context loss는 animated canvas를 숨기고 동일 palette의 정적 CSS marbling을 사용한다.
+- `homeIntro` Promise가 완료되기 전에는 rAF를 시작하지 않는다. 완료 후 실제 Hero copy rect를 다시 측정하고 서명 중심 wake impulse를 한 번 실행한다. Event-only 연결은 skip/hash/BFCache에서 완료 신호를 놓칠 수 있으므로 사용하지 않는다.
+- `ResizeObserver`는 canvas buffer와 quiet zone만 재측정한다. `IntersectionObserver`, `visibilitychange`, `pagehide/pageshow`, `webglcontextlost/restored`가 연속 motion lifecycle을 소유한다. 매 frame DOM rect read, `readPixels`, pointer capture와 `preventDefault()`는 금지한다.
+- Hero story는 약 `118svh`의 native scroll에 `0→1`을 단조 매핑한다. 카피는 scale 없이 최대 `-30px` 이동과 절제된 opacity 감소만 사용하고 유체 에너지는 가라앉는다. Reduced에서는 exit transform을 적용하지 않는다.
+
+## 2026-08-23 — Pressure Ink stable-fluid override
+
+이 항목은 바로 위 Paper Current Hero motion의 full desktop 단일-pass 및 FBO 금지 규칙을 대체한다. Lite와 static fallback 계약은 유지한다.
+
+- motion=full과 depth=interactive에서는 dependency 없는 WebGL2 stable-fluid renderer를 사용한다. 순서는 batched splat → velocity advection → curl → vorticity confinement → divergence → pressure decay/Jacobi 14회 → gradient subtraction → dye advection → paper composite다.
+- Simulation은 짧은 변 192px, dye는 512px을 16px bucket으로 할당한다. EXT_color_buffer_float와 실제 framebuffer completeness를 검사하고 RG16F/R16F를 먼저 시도한 뒤 RGBA16F로 재시도한다. 둘 다 실패하면 기존 procedural renderer로 원자적으로 내려간다.
+- Float texture는 NEAREST를 사용하고 advection/display shader가 수동 bilinear sampling을 수행한다. read/write texture는 모든 state pass에서 분리하고 resize, tier 변경, context restore 시 target과 program을 다시 만든다.
+- Pointer coalesced sample을 경로 반경의 약 0.35배 간격으로 재표본화해 frame당 최대 12 splat으로 제한한다. 반응 강도는 정규화 속도의 약 1.55승이며 press는 힘을 키우고 급반전은 counter-rotating pair를 더한다. 빠른 입력만 작은 vermilion dye를 주입한다.
+- Click은 원형 ripple 대신 한쪽으로 흐르는 6-splat plume이다. Touch move는 계속 무시하고 동일 pointer id의 짧은 tap만 축약 impulse로 처리하며 preventDefault, pointer capture와 scroll trap은 사용하지 않는다.
+- Copy와 action의 실측 union을 확장한 rounded-box obstacle을 splat, advection, divergence, pressure, gradient와 최종 composite에 공통 적용한다. 서명 SVG와 content layer는 solver가 소유하지 않는다.
+- Full은 active 60fps, idle 30fps; lite는 30fps다. dt는 최대 1/30s로 제한하고 hidden/offscreen/pagehide에서 rAF를 멈춘다. 5초가 넘는 pause 뒤에는 stale field를 clear/reseed하고 짧은 pause는 상태를 보존한다.
+- Intro Promise 전에는 WebGL setup과 rAF를 시작하지 않는다. 완료 뒤 quiet rect를 재측정해 obstacle 가장자리에서 비대칭 wake를 시작한다. Canvas reveal은 320ms이며 scroll 시각 fade는 wrapper opacity만 소유한다.
+- Reduced는 WebGL context를 만들지 않는다. WebGL2/context/capability 실패는 canvas를 숨기고 CSS paper marbling을 표시하며, context restore에서는 capability 검증부터 다시 실행한다.
+
+## 2026-08-23 — Route-owned motion runtime and lifecycle
+
+- 각 entry는 `createPageRuntime()` 하나를 만들고, 환경·navigation·magnetic·name emphasis·page transition과 route controller를 등록한다. Controller는 `{ destroy() }` 계약을 사용하며 HMR에서는 등록의 역순으로 모두 정리한다. 하나의 cleanup 오류가 나머지 teardown을 막지 않는다.
+- Home은 Intro를 가장 먼저 만들고 runtime에 등록한다. Smooth Scroll은 Intro Promise가 자연 완료하거나 fail-open한 뒤 시작하며, Fluid는 Hero Story보다 먼저 등록해 첫 progress event를 놓치지 않는다. Work는 Work Story를 generic reveal보다 먼저 초기화한다.
+- Lenis JS/CSS는 `motion=full`과 `depth=interactive`일 때만 동적으로 요청한다. 동시에 발생한 reconcile은 하나의 loading Promise를 공유하고 generation token으로 stale completion을 버린다. import/constructor 실패는 dataset을 지우고 native scroll로 fail-open한다.
+- Work Story만 `smoothScroll.onScroll()`을 통해 ScrollTrigger update를 구독한다. GSAP loader는 GSAP/ScrollTrigger 등록만 소유하며 Lenis를 역으로 import하거나 전역 singleton으로 결합하지 않는다.
+- Continuous motion은 hidden/offscreen/pagehide에서 멈추고 pageshow/environment change에서 현재 capability를 다시 평가한다. Intro가 pagehide로 완료된 microtask에서는 Fluid가 WebGL을 새로 할당하지 않으며, 활성 pageshow에서만 graphics를 준비한다. 5초 초과 pause의 Stable clear/reseed, context-loss resource 규칙과 Stable → Lite → Static fallback은 유지한다.
+- Intro Promise, async imports, observers, listeners, rAF, timers와 transient DOM은 각 controller의 cleanup 범위에 포함한다. BFCache는 문서를 파기하지 않으므로 pagehide stop과 explicit destroy를 구분한다.
