@@ -31,6 +31,11 @@ uniform float uPointerEnergy;
 uniform vec4 uQuiet;
 uniform vec4 uImpulse;
 uniform float uScroll;
+uniform vec3 uPaper;
+uniform vec3 uRaisedPaper;
+uniform vec3 uInk;
+uniform vec3 uSignal;
+uniform float uIntensity;
 
 float hash(vec2 point) {
   return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453123);
@@ -125,16 +130,11 @@ void main() {
   wash *= clearMask * scrollVisibility;
   signal *= clearMask * scrollVisibility;
 
-  vec3 paper = vec3(241.0, 238.0, 230.0) / 255.0;
-  vec3 paperRaised = vec3(250.0, 248.0, 243.0) / 255.0;
-  vec3 graphite = vec3(23.0, 21.0, 18.0) / 255.0;
-  vec3 vermilion = vec3(167.0, 53.0, 36.0) / 255.0;
-
   float paperLift = (1.0 - vUv.y) * 0.22 + (1.0 - smoothstep(-0.02, 0.2, quietDistance)) * 0.16;
-  vec3 color = mix(paper, paperRaised, paperLift);
-  float graphiteAmount = min(0.25, (wash * 0.075) + (body * 0.18));
-  color = mix(color, graphite, graphiteAmount);
-  color = mix(color, vermilion, min(0.18, signal * 0.18));
+  vec3 color = mix(uPaper, uRaisedPaper, paperLift);
+  float graphiteAmount = min(0.25, (wash * 0.075) + (body * 0.18)) * uIntensity;
+  color = mix(color, uInk, graphiteAmount);
+  color = mix(color, uSignal, min(0.18, signal * 0.18 * uIntensity));
 
   float grain = (hash(gl_FragCoord.xy) - 0.5) * 0.006;
   outColor = vec4(color + grain, 1.0);

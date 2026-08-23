@@ -1,8 +1,7 @@
 import {
-  DYE_SHORT_SIDE,
   MAX_SPLATS,
+  PRESSURE_INK_QUALITY,
   PRESSURE_ITERATIONS,
-  SIMULATION_SHORT_SIDE
 } from './pressure-ink-config.js';
 import {
   ADVECTION_SHADER,
@@ -36,7 +35,11 @@ const SPLAT_UNIFORM_NAMES = [
   'uAspect'
 ];
 
-export const createPressureInkRenderer = (gl, canvas) => {
+export const createPressureInkRenderer = (gl, canvas, {
+  quality: initialQuality = PRESSURE_INK_QUALITY.baseline,
+  style,
+  continuousAmbient = true
+} = {}) => {
   if (!gl.getExtension('EXT_color_buffer_float')) {
     throw new Error('EXT_color_buffer_float is unavailable.');
   }
@@ -89,6 +92,11 @@ export const createPressureInkRenderer = (gl, canvas) => {
       'uDyeSize',
       'uResolution',
       'uTime',
+      'uPaper',
+      'uRaisedPaper',
+      'uInk',
+      'uSignal',
+      'uIntensity',
       'uQuiet',
       'uAspect'
     ]);
@@ -112,6 +120,7 @@ export const createPressureInkRenderer = (gl, canvas) => {
   let ambientIndex = 0;
   let activeUntil = 0;
   let destroyed = false;
+  let quality = initialQuality;
 
   const bindTexture = (uniform, texture, unit) => {
     gl.activeTexture(gl.TEXTURE0 + unit);
@@ -122,6 +131,14 @@ export const createPressureInkRenderer = (gl, canvas) => {
   const setQuietUniforms = (uniforms) => {
     gl.uniform4fv(uniforms.uQuiet, quiet);
     gl.uniform1f(uniforms.uAspect, aspect);
+  };
+
+  const setStyleUniforms = (uniforms) => {
+    gl.uniform3fv(uniforms.uPaper, style.palette.paper);
+    gl.uniform3fv(uniforms.uRaisedPaper, style.palette.raised);
+    gl.uniform3fv(uniforms.uInk, style.palette.ink);
+    gl.uniform3fv(uniforms.uSignal, style.palette.signal);
+    gl.uniform1f(uniforms.uIntensity, style.intensity);
   };
 
   const beginPass = (pass, target, width, height) => {
@@ -236,6 +253,7 @@ export const createPressureInkRenderer = (gl, canvas) => {
   };
 
   const injectAmbient = (dt, time, scrollProgress) => {
+    if (!continuousAmbient) return;
     if (scrollProgress > 0.82 || pendingSplats.length > MAX_SPLATS - 2) return;
     ambientClock += dt * (1 - scrollProgress);
     if (ambientClock < 0.72) return;
@@ -262,8 +280,19 @@ export const createPressureInkRenderer = (gl, canvas) => {
     aspect = width / Math.max(height, 1);
     quiet.set(nextQuiet);
 
-    const nextSimulationSize = getPressureInkTargetSize(SIMULATION_SHORT_SIDE, width, height);
-    const nextDyeSize = getPressureInkTargetSize(DYE_SHORT_SIDE, width, height);
+    const sizeOptions = { maximum: quality.maximumTextureDimension };
+    const nextSimulationSize = getPressureInkTargetSize(
+      quality.simulationShortSide,
+      width,
+      height,
+      sizeOptions
+    );
+    const nextDyeSize = getPressureInkTargetSize(
+      quality.dyeShortSide,
+      width,
+      height,
+      sizeOptions
+    );
     const sizesMatch = hasPressureInkTargetSize(targets?.velocity?.read, nextSimulationSize)
       && hasPressureInkTargetSize(targets?.dye?.read, nextDyeSize);
 
@@ -376,7 +405,14 @@ export const createPressureInkRenderer = (gl, canvas) => {
     gl.uniform2f(displayPass.uniforms.uResolution, canvas.width, canvas.height);
     gl.uniform1f(displayPass.uniforms.uTime, time);
     setQuietUniforms(displayPass.uniforms);
+    setStyleUniforms(displayPass.uniforms);
     finishPass();
+  };
+
+  const setQuality = (nextQuality) => {
+    if (!nextQuality || quality.name === nextQuality.name) return false;
+    quality = nextQuality;
+    return true;
   };
 
   const destroy = () => {
@@ -391,6 +427,7 @@ export const createPressureInkRenderer = (gl, canvas) => {
 
   return {
     resize,
+    setQuality,
     updateQuiet,
     queueSplat,
     seed,
@@ -403,6 +440,9 @@ export const createPressureInkRenderer = (gl, canvas) => {
     },
     get profile() {
       return targets?.profile || 'unallocated';
+    },
+    get quality() {
+      return quality.name;
     }
   };
 };

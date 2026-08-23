@@ -635,3 +635,9 @@
 - Decision: 11개 HTML route를 `home / work / case-study / about / resume / legal` 6개 entry에 명시적으로 연결하고, 공통 환경·navigation·page transition 초기화는 destroy 가능한 `createPageRuntime()`이 소유한다. 삭제된 `site.css` 대신 공통 `tokens / base / motion`, Home·Work 전용 `portfolio-shared`, 각 route stylesheet를 조합한다. Vite와 배포 검증은 `config/site-routes.js` 하나를 공유한다.
 - Reason: Work와 case route가 사용하지 않는 Home Intro·Fluid·deck 코드와 CSS까지 가져오고, 큰 entry·stylesheet·renderer 안에 서로 다른 책임이 섞여 있어 작은 변경의 영향 범위와 cleanup 소유권을 읽기 어려웠다.
 - Impact: 현재 시각·문구·URL·모션 timing은 바꾸지 않는다. Lenis는 full/interactive에서만 동적으로 로드하고 Work Story가 명시적으로 구독한다. Intro wordmark, lite shader, Pressure Ink shader/WebGL/size는 facade 뒤 내부 모듈로 나뉘며 public API와 Stable → Lite → Static fallback 순서는 유지한다. Source/build 검증은 route entry, CSS 경계, legacy selector, 배포 파일과 모든 로컬 참조를 함께 검사한다.
+
+## 2026-08-23 — 전 route Fluid와 adaptive high-resolution
+
+- Decision: Home 전용 Pressure Ink를 문서당 하나의 fixed `Site Fluid` controller로 일반화해 모든 route background에서 사용한다. Home은 최고 강도의 continuous playground, Work/About는 중간 강도, Resume/Copyright는 낮은 ambient, case study는 dark palette로 운용한다. Stable target은 high `256/768`, balanced `224/640`, baseline `192/512`로 두고 긴 축 1536px cap과 runtime downgrade를 적용한다.
+- Reason: 동일한 물성의 배경을 페이지 전환 뒤에도 유지해 사이트 전체를 하나의 경험으로 묶되, 모든 페이지를 Home만큼 격렬하게 만들거나 저사양 장치에 고정 고해상도를 강제하면 읽기 집중도와 성능이 함께 나빠진다. 기존 독립 축 clamp는 세로 화면에서 texture 비율도 왜곡했다.
+- Impact: 기존 Route-owned architecture의 Home-only Fluid bundle 결정은 이 요청에 한해 대체된다. Light/dark palette uniform, route별 intensity·quiet zone·ambient sleep이 추가된다. Allocation은 high→balanced→baseline→Lite→Static으로 fail-open하고, 실제 active frame이 지속적으로 느릴 때만 같은 session에서 한 방향으로 낮아진다. Intro SVG, 타이포그래피, URL, content 구조와 native touch scroll은 변경하지 않는다.

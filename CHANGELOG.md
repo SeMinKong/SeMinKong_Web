@@ -16,6 +16,8 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Extended the Paper Current material into one fixed, route-aware Site Fluid background across all eleven pages, with a dominant Home playground, restrained light-page profiles, and a dedicated dark case-study palette.
+- Raised Pressure Ink to adaptive high/balanced/baseline simulation and dye resolutions with aspect-preserving 1536px caps, allocation fallback, sustained-frame-time downgrade, and complete idle sleep between ambient bursts on non-Home routes.
 - Replaced the monolithic page bootstrap with six route-owned entries and a shared destroyable runtime, while preserving the existing Home, Work, case-study, About, Resume, and Copyright behavior.
 - Split the former site-wide portfolio stylesheet into Home, Work, and intentional Home/Work shared layers; removed the remaining superseded Hand/Cube/Hero cascade and limited reduced-motion rules to the routes that use them.
 - Made Lenis capability-gated and lazy, connected Work Story to it explicitly, and hardened async setup, HMR teardown, repeated BFCache lifecycle, and Home Intro-to-Fluid page transitions.

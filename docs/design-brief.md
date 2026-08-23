@@ -772,3 +772,13 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - `tokens.css`, `base.css`, `motion.css`는 실제 전역 primitive와 shell/fallback만 소유한다. Hero, Work directory, case, About, Resume, Legal의 선택자와 responsive 규칙은 해당 route stylesheet가 소유한다.
 - Home 전용 Intro·Fluid·Project Deck과 Work 전용 Story/GSAP는 다른 route의 초기 bundle이나 DOM 초기화 경로에 포함하지 않는다. Capability가 맞지 않는 optional enhancement는 native/static 결과를 유지한다.
 - 큰 motion 구현은 public controller/facade를 유지한 채 wordmark data, shader source, WebGL resource, sizing helper로 분리한다. Shader 순서, 획순, uniform 이름, fallback 단계와 lifecycle 조건은 시각 사양으로 간주해 단순 리팩터링에서 바꾸지 않는다.
+
+## 2026-08-23 — Site-wide Fluid background override
+
+이 항목은 바로 위 Multi-page delivery architecture의 `Home 전용 Fluid` 범위를 대체한다. Intro와 Project Deck은 계속 Home 전용이며, Fluid의 시각 재료와 입력 엔진만 모든 route가 공유한다.
+
+- 문서당 하나의 fixed full-viewport Fluid layer를 Home, Work, About, Resume, Copyright와 6개 case study 모두에 둔다. Canvas는 content, footer, navigation, media, page curtain과 focus surface 뒤에 있으며 `pointer-events: none`, `aria-hidden=true`를 유지한다.
+- Home은 기존 Pressure Ink의 주 playground로 가장 강하게 유지한다. Work는 중간 강도, About은 그보다 차분하게, Resume와 Copyright는 거의 paper texture처럼, case study는 어두운 paper 위 restrained off-white wash와 vermilion signal로 표시한다.
+- 각 route의 첫 reading block은 실측 quiet obstacle로 보호한다. 해당 block이 viewport 밖으로 나가면 obstacle을 비활성화해 화면 한가운데에 보이지 않는 장벽을 남기지 않는다.
+- Light route는 warm paper / graphite / vermilion, case route는 charcoal paper / bone ink / vermilion을 사용한다. Shader는 palette uniform을 받아 route 배경을 불투명한 다른 색으로 덮지 않는다.
+- Fluid는 배경의 빈 면에만 시각적 존재감을 주고, 카드·영상·문서 preview처럼 의미 있는 surface의 불투명도와 본문 대비는 유지한다. 이름 SVG와 타이포그래피에는 scale, warp, filter를 적용하지 않는다.

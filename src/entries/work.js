@@ -2,6 +2,7 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/portfolio-shared.css';
 import '../styles/work.css';
+import '../styles/site-fluid.css';
 import '../styles/motion.css';
 
 import { createPageRuntime } from '../app/create-page-runtime.js';
@@ -10,12 +11,14 @@ import { initDepthEffects } from '../motion/depth.js';
 import { initMediaPlayback } from '../motion/media-playback.js';
 import { initIntro, initReveals } from '../motion/reveal.js';
 import { initScrollKinetics } from '../motion/scroll-kinetics.js';
+import { initSiteFluid } from '../motion/site-fluid.js';
 import { initWorkStory } from '../motion/work-story.js';
 
 const runtime = createPageRuntime();
 const { environment } = runtime;
 
 const smoothScroll = runtime.start();
+runtime.register(initSiteFluid(environment, { profile: 'work' }));
 runtime.register(initWorkStory(environment, { smoothScroll }));
 runtime.register(initCursorLabel(environment));
 runtime.register(initIntro(environment, '[data-intro]'));
