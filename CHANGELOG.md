@@ -4,10 +4,16 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-08-24
+
 ### Fixed
 
 - Kept the Home Site Fluid layer fixed above structural content in production by limiting the legacy Hero fluid surface to its pre-runtime sticky placeholder, removing the development-versus-build CSS ordering dependency.
 - Pinned the local Vite server to `127.0.0.1:5173` with strict port handling so stale IPv4/IPv6 development processes cannot silently present different builds on the same numeric port.
+
+### Changed
+
+- Updated the Vite patch dependency from 8.2.1 to 8.2.2.
 
 ## [2.0.0] - 2026-08-24
 
@@ -136,7 +142,8 @@ All notable changes to this project are recorded here. The project follows Seman
 - Reduced-motion, touch, keyboard, responsive, and lifecycle safeguards.
 - GitHub Flow CI, GitHub Pages deployment workflow, and automated dependency update configuration.
 
-[Unreleased]: https://github.com/SeMinKong/SeMinKong_Web/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/SeMinKong/SeMinKong_Web/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/SeMinKong/SeMinKong_Web/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.3.0...v2.0.0
 [1.3.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.1.0...v1.2.0
