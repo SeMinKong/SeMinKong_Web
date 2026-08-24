@@ -1,4 +1,5 @@
 export const MAX_SPLATS = 12;
+export const MAX_QUIET_RECTS = 6;
 export const PRESSURE_ITERATIONS = 14;
 
 export const PRESSURE_INK_QUALITY_ORDER = ['high', 'balanced', 'baseline'];

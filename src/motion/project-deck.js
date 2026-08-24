@@ -1,6 +1,7 @@
 import { animate, set } from 'animejs';
 
 const CLOSED_ROTATIONS = [-1.35, 0.65, 1.15];
+const FLUID_OBSTACLE_EVENT = 'portfolio:fluid-obstacle-change';
 
 export const initProjectDeck = (environment) => {
   const root = document.querySelector('[data-project-deck]');
@@ -16,6 +17,10 @@ export const initProjectDeck = (environment) => {
   let inView = true;
   let closeTimer = 0;
   let activeAnimation = null;
+
+  const notifyObstacleChange = () => {
+    window.dispatchEvent(new CustomEvent(FLUID_OBSTACLE_EVENT));
+  };
 
   const shouldEnable = () => environment.motion === 'full' && environment.depth === 'interactive';
 
@@ -59,6 +64,7 @@ export const initProjectDeck = (environment) => {
 
     if (immediate || document.hidden || !inView) {
       set(cards, properties);
+      notifyObstacleChange();
       return;
     }
 
@@ -69,10 +75,12 @@ export const initProjectDeck = (environment) => {
       delay: (_, index) => expanded ? index * 54 : (cards.length - 1 - index) * 30,
       ease: expanded ? 'out(4)' : 'inOut(3)',
       composition: 'replace',
+      onUpdate: notifyObstacleChange,
       onComplete: () => {
         if (activeAnimation !== animation) return;
         activeAnimation = null;
         root.classList.remove('is-animating');
+        notifyObstacleChange();
       }
     });
 
@@ -88,6 +96,7 @@ export const initProjectDeck = (environment) => {
     if (!activeCard || !root.contains(activeCard)) return;
     clearActiveCard();
     activeCard.classList.add('is-active');
+    notifyObstacleChange();
   };
 
   const enable = () => {
@@ -108,6 +117,7 @@ export const initProjectDeck = (environment) => {
     clearActiveCard();
     cards.forEach((card) => card.style.removeProperty('transform'));
     root.classList.remove('is-deck-mode', 'is-ready', 'is-expanded');
+    notifyObstacleChange();
   };
 
   const syncEnvironment = () => {

@@ -1,3 +1,5 @@
+import { MAX_QUIET_RECTS } from './pressure-ink-config.js';
+
 export const MAX_LITE_BLOBS = 6;
 
 const VERTEX_SHADER = `#version 300 es
@@ -28,18 +30,13 @@ uniform int uBlobCount;
 uniform vec2 uPointer;
 uniform vec2 uPointerVelocity;
 uniform float uPointerEnergy;
-uniform vec4 uQuiet;
+uniform vec4 uQuietRects[${MAX_QUIET_RECTS}];
+uniform int uQuietCount;
 uniform vec4 uImpulse;
 uniform float uScroll;
-uniform vec3 uPaper;
-uniform vec3 uRaisedPaper;
 uniform vec3 uInk;
 uniform vec3 uSignal;
 uniform float uIntensity;
-
-float hash(vec2 point) {
-  return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453123);
-}
 
 vec2 fluidWarp(vec2 point, float time) {
   vec2 broad = vec2(
@@ -74,8 +71,21 @@ void main() {
   vec2 point = vec2((vUv.x - 0.5) * aspect, vUv.y - 0.5);
   vec2 pointer = vec2((uPointer.x - 0.5) * aspect, uPointer.y - 0.5);
   vec2 pointerVelocity = vec2(uPointerVelocity.x * aspect, uPointerVelocity.y);
-  vec2 quietCenter = vec2((uQuiet.x - 0.5) * aspect, uQuiet.y - 0.5);
-  vec2 quietHalfSize = vec2(uQuiet.z * aspect, uQuiet.w);
+  float quietDistance = 2.0;
+  vec2 quietDelta = vec2(1.0, 0.0);
+
+  for (int index = 0; index < ${MAX_QUIET_RECTS}; index++) {
+    if (index >= uQuietCount) break;
+    vec4 rect = uQuietRects[index];
+    vec2 center = vec2((rect.x - 0.5) * aspect, rect.y - 0.5);
+    vec2 delta = point - center;
+    vec2 halfSize = vec2(rect.z * aspect, rect.w);
+    float distance = roundedBoxSdf(delta, halfSize, 0.035);
+    if (distance < quietDistance) {
+      quietDistance = distance;
+      quietDelta = delta;
+    }
+  }
 
   vec2 firstWarp = fluidWarp(point * 1.18, uTime * 0.075);
   vec2 flowedPoint = point + (firstWarp * 0.15);
@@ -85,9 +95,8 @@ void main() {
   flowedPoint -= pointerVelocity * pointerFalloff * 0.052;
   flowedPoint += vec2(-pointerDelta.y, pointerDelta.x) * pointerFalloff * 0.095;
 
-  float quietDistance = roundedBoxSdf(point - quietCenter, quietHalfSize, 0.055);
-  float nearQuiet = 1.0 - smoothstep(-0.018, 0.14, quietDistance);
-  flowedPoint += safeNormalize(point - quietCenter) * nearQuiet * 0.045;
+  float nearQuiet = 1.0 - smoothstep(-0.012, 0.1, quietDistance);
+  flowedPoint += safeNormalize(quietDelta) * nearQuiet * 0.032;
 
   vec2 impulseCenter = vec2((uImpulse.x - 0.5) * aspect, uImpulse.y - 0.5);
   vec2 impulseDelta = point - impulseCenter;
@@ -123,21 +132,18 @@ void main() {
   float body = smoothstep(0.92, 1.58, graphiteField);
   float wash = smoothstep(0.30, 1.04, graphiteField);
   float signal = smoothstep(0.76, 1.42, signalField);
-  float clearMask = smoothstep(-0.012, 0.105, quietDistance);
+  float clearMask = smoothstep(-0.01, 0.07, quietDistance);
   float scrollVisibility = 1.0;
 
-  body *= clearMask * scrollVisibility;
-  wash *= clearMask * scrollVisibility;
-  signal *= clearMask * scrollVisibility;
-
-  float paperLift = (1.0 - vUv.y) * 0.22 + (1.0 - smoothstep(-0.02, 0.2, quietDistance)) * 0.16;
-  vec3 color = mix(uPaper, uRaisedPaper, paperLift);
-  float graphiteAmount = min(0.25, (wash * 0.075) + (body * 0.18)) * uIntensity;
-  color = mix(color, uInk, graphiteAmount);
-  color = mix(color, uSignal, min(0.18, signal * 0.18 * uIntensity));
-
-  float grain = (hash(gl_FragCoord.xy) - 0.5) * 0.006;
-  outColor = vec4(color + grain, 1.0);
+  float graphiteAlpha = min(0.32, (wash * 0.1) + (body * 0.22)) * uIntensity;
+  float signalAlpha = min(0.24, signal * 0.24 * uIntensity);
+  float alpha = 1.0 - ((1.0 - graphiteAlpha) * (1.0 - signalAlpha));
+  vec3 color = (
+    (uInk * graphiteAlpha * (1.0 - signalAlpha)) +
+    (uSignal * signalAlpha)
+  ) / max(alpha, 0.0001);
+  alpha *= clearMask * scrollVisibility;
+  outColor = alpha > 0.0001 ? vec4(color, alpha) : vec4(0.0);
 }
 `;
 

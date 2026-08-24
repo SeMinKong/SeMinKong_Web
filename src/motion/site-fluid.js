@@ -1,11 +1,13 @@
 import { clamp } from './utils.js';
 import {
   getNextPressureInkQuality,
+  MAX_QUIET_RECTS,
   PRESSURE_INK_QUALITY,
   selectPressureInkQuality,
   shouldDowngradePressureInkQuality
 } from './pressure-ink-config.js';
 import { createPressureInkRenderer } from './pressure-ink-renderer.js';
+import { packFluidObstacles } from './site-fluid-obstacles.js';
 import {
   createLiteProgram,
   LITE_BLOB_BLUEPRINTS,
@@ -18,7 +20,8 @@ const FULL_FRAME_INTERVAL = 1000 / 60;
 const FULL_IDLE_FRAME_INTERVAL = 1000 / 30;
 const LITE_FRAME_INTERVAL = 1000 / 30;
 const GLOBAL_SCROLL_DAMPING = 0.35;
-const INTERACTIVE_SELECTOR = [
+const FLUID_OBSTACLE_EVENT = 'portfolio:fluid-obstacle-change';
+const ACTIVATION_SELECTOR = [
   'a',
   'button',
   'input',
@@ -29,7 +32,6 @@ const INTERACTIVE_SELECTOR = [
   '[role="button"]',
   '[contenteditable="true"]'
 ].join(', ');
-const DISABLED_OBSTACLE = new Float32Array([2, 2, 0, 0]);
 
 const getViewportSize = () => ({
   width: document.documentElement.clientWidth || window.innerWidth,
@@ -48,13 +50,15 @@ const createLayer = (profile) => {
   const generated = !wrapper;
   const originalParent = wrapper?.parentNode || null;
   const originalNextSibling = wrapper?.nextSibling || null;
+  const base = document.createElement('div');
+  base.className = `site-fluid-base site-fluid-base--${profile.theme}`;
+  base.setAttribute('data-site-fluid-base', '');
+  base.setAttribute('aria-hidden', 'true');
+  base.innerHTML = '<span class="site-fluid__grain"></span>';
 
   if (!wrapper) {
     wrapper = document.createElement('div');
-    wrapper.innerHTML = [
-      '<canvas class="hero-fluid__canvas site-fluid__canvas" data-hero-fluid-canvas></canvas>',
-      '<span class="hero-fluid__paper-grain site-fluid__grain"></span>'
-    ].join('');
+    wrapper.innerHTML = '<canvas class="hero-fluid__canvas site-fluid__canvas" data-hero-fluid-canvas data-fluid-composite="ink"></canvas>';
   }
 
   wrapper.classList.add('hero-fluid', 'site-fluid', `site-fluid--${profile.theme}`);
@@ -63,19 +67,38 @@ const createLayer = (profile) => {
   wrapper.dataset.fluidRoute = profile.name;
 
   let canvas = wrapper.querySelector('[data-hero-fluid-canvas]');
+  let originalCanvas = null;
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.className = 'hero-fluid__canvas site-fluid__canvas';
     canvas.setAttribute('data-hero-fluid-canvas', '');
+    canvas.dataset.fluidComposite = 'ink';
     wrapper.prepend(canvas);
+  } else if (canvas.dataset.fluidComposite !== 'ink') {
+    originalCanvas = canvas;
+    const replacement = document.createElement('canvas');
+    replacement.className = canvas.className;
+    replacement.setAttribute('data-hero-fluid-canvas', '');
+    replacement.dataset.fluidComposite = 'ink';
+    canvas.replaceWith(replacement);
+    canvas = replacement;
   }
   canvas.classList.add('site-fluid__canvas');
 
-  const grain = wrapper.querySelector('.hero-fluid__paper-grain');
-  grain?.classList.add('site-fluid__grain');
+  const legacyGrain = wrapper.querySelector('.hero-fluid__paper-grain');
+  legacyGrain?.classList.add('site-fluid__legacy-grain');
 
-  document.body.prepend(wrapper);
-  return { wrapper, canvas, generated, originalParent, originalNextSibling };
+  document.body.prepend(base, wrapper);
+  return {
+    base,
+    canvas,
+    generated,
+    legacyGrain,
+    originalCanvas,
+    originalNextSibling,
+    originalParent,
+    wrapper
+  };
 };
 
 const readProfileQuality = () => selectPressureInkQuality({
@@ -92,9 +115,10 @@ export const initSiteFluid = (environment, {
   const layer = createLayer(profile);
   const { wrapper, canvas } = layer;
   const contextOptions = {
-    alpha: false,
+    alpha: true,
     antialias: false,
     depth: false,
+    premultipliedAlpha: false,
     stencil: false,
     preserveDrawingBuffer: false,
     powerPreference: 'high-performance'
@@ -107,7 +131,7 @@ export const initSiteFluid = (environment, {
     vy: 0
   }));
   const blobUniformData = new Float32Array(MAX_LITE_BLOBS * 4);
-  const quiet = new Float32Array(DISABLED_OBSTACLE);
+  const quietRects = new Float32Array(MAX_QUIET_RECTS * 4);
   const pointer = {
     x: 0.5,
     y: 0.5,
@@ -144,6 +168,7 @@ export const initSiteFluid = (environment, {
   let quality = readProfileQuality();
   let qualitySamples = [];
   let qualityCooldownUntil = 0;
+  let quietCount = 0;
 
   const markFallback = () => {
     rendererMode = 'static';
@@ -181,11 +206,10 @@ export const initSiteFluid = (environment, {
       pointer: gl.getUniformLocation(program, 'uPointer'),
       pointerVelocity: gl.getUniformLocation(program, 'uPointerVelocity'),
       pointerEnergy: gl.getUniformLocation(program, 'uPointerEnergy'),
-      quiet: gl.getUniformLocation(program, 'uQuiet'),
+      quietRects: gl.getUniformLocation(program, 'uQuietRects[0]'),
+      quietCount: gl.getUniformLocation(program, 'uQuietCount'),
       impulse: gl.getUniformLocation(program, 'uImpulse'),
       scroll: gl.getUniformLocation(program, 'uScroll'),
-      paper: gl.getUniformLocation(program, 'uPaper'),
-      raisedPaper: gl.getUniformLocation(program, 'uRaisedPaper'),
       ink: gl.getUniformLocation(program, 'uInk'),
       signal: gl.getUniformLocation(program, 'uSignal'),
       intensity: gl.getUniformLocation(program, 'uIntensity')
@@ -235,36 +259,43 @@ export const initSiteFluid = (environment, {
 
   const updateObstacle = () => {
     const viewport = getViewportSize();
-    const elements = [...document.querySelectorAll(profile.quietSelector)]
-      .filter((element) => element.getClientRects().length > 0);
-    const rects = elements.map((element) => element.getBoundingClientRect())
-      .filter((rect) => rect.width > 0 && rect.height > 0)
-      .filter((rect) => rect.bottom > 0 && rect.top < viewport.height);
+    const seen = new Set();
+    const rects = [];
+    const appendRects = (selector, priority) => {
+      if (!selector) return;
+      document.querySelectorAll(selector).forEach((element) => {
+        if (seen.has(element)) return;
+        const clientRects = [...element.getClientRects()];
+        if (clientRects.length === 0) return;
+        seen.add(element);
+        const elementPriority = priority + (element.matches('h1, h2, h3') ? 1 : 0);
+        clientRects.forEach((rect) => {
+          rects.push({
+            bottom: rect.bottom,
+            height: rect.height,
+            left: rect.left,
+            paddingX: priority >= 4 ? 8 : undefined,
+            paddingY: priority >= 4 ? 7 : undefined,
+            priority: elementPriority,
+            right: rect.right,
+            top: rect.top,
+            width: rect.width
+          });
+        });
+      });
+    };
 
-    if (!rects.length) {
-      quiet.set(DISABLED_OBSTACLE);
-      pressureInk?.updateQuiet(quiet);
-      return;
-    }
-
-    const bounds = rects.reduce((result, rect) => ({
-      left: Math.min(result.left, rect.left),
-      right: Math.max(result.right, rect.right),
-      top: Math.min(result.top, rect.top),
-      bottom: Math.max(result.bottom, rect.bottom)
-    }), rects[0]);
-    const viewportWidth = Math.max(viewport.width, 1);
-    const viewportHeight = Math.max(viewport.height, 1);
-    const paddingX = clamp(viewportWidth * 0.04, 24, 72);
-    const paddingY = clamp(viewportHeight * 0.035, 20, 48);
-    const width = bounds.right - bounds.left;
-    const height = bounds.bottom - bounds.top;
-
-    quiet[0] = clamp((bounds.left + (width / 2)) / viewportWidth, 0, 1);
-    quiet[1] = clamp(1 - ((bounds.top + (height / 2)) / viewportHeight), 0, 1);
-    quiet[2] = clamp(((width / 2) + paddingX) / viewportWidth, 0.12, 0.48);
-    quiet[3] = clamp(((height / 2) + paddingY) / viewportHeight, 0.1, 0.44);
-    pressureInk?.updateQuiet(quiet);
+    appendRects(profile.protectSelector, 5);
+    appendRects(':focus-visible', 10);
+    appendRects(profile.quietSelector, 1);
+    const packed = packFluidObstacles(rects, {
+      viewportWidth: viewport.width,
+      viewportHeight: viewport.height
+    });
+    quietRects.set(packed.data);
+    quietCount = packed.count;
+    wrapper.dataset.fluidObstacles = String(quietCount);
+    pressureInk?.updateQuiet(quietRects, quietCount);
   };
 
   const scheduleObstacleUpdate = () => {
@@ -305,7 +336,7 @@ export const initSiteFluid = (environment, {
         if (canvas.height !== height) canvas.height = height;
         pressureInk.setQuality(candidate);
         try {
-          pressureInk.resize(width, height, quiet);
+          pressureInk.resize(width, height, quietRects, quietCount);
           quality = candidate;
           allocated = true;
           wrapper.dataset.fluidQuality = quality.name;
@@ -462,6 +493,7 @@ export const initSiteFluid = (environment, {
 
     gl.useProgram(program);
     gl.bindVertexArray(vertexArray);
+    gl.disable(gl.BLEND);
     gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
     gl.uniform1f(uniforms.time, elapsed);
     gl.uniform4fv(uniforms.blobs, blobUniformData);
@@ -469,11 +501,10 @@ export const initSiteFluid = (environment, {
     gl.uniform2f(uniforms.pointer, pointer.x, pointer.y);
     gl.uniform2f(uniforms.pointerVelocity, pointer.vx, pointer.vy);
     gl.uniform1f(uniforms.pointerEnergy, pointer.energy);
-    gl.uniform4fv(uniforms.quiet, quiet);
+    gl.uniform4fv(uniforms.quietRects, quietRects);
+    gl.uniform1i(uniforms.quietCount, quietCount);
     gl.uniform4f(uniforms.impulse, impulse.x, impulse.y, impulse.age, impulse.strength);
     gl.uniform1f(uniforms.scroll, scrollProgress);
-    gl.uniform3fv(uniforms.paper, profile.palette.paper);
-    gl.uniform3fv(uniforms.raisedPaper, profile.palette.raised);
     gl.uniform3fv(uniforms.ink, profile.palette.ink);
     gl.uniform3fv(uniforms.signal, profile.palette.signal);
     gl.uniform1f(uniforms.intensity, profile.intensity);
@@ -648,21 +679,17 @@ export const initSiteFluid = (environment, {
     pointer.lastTime = sample.timeStamp;
   };
 
-  const isInteractiveTarget = (event) => event.target.closest?.(INTERACTIVE_SELECTOR);
+  const isActivationTarget = (event) => event.target.closest?.(ACTIVATION_SELECTOR);
 
   const handlePointerMove = (event) => {
     if (!readyComplete || environment.motion !== 'full' || event.pointerType === 'touch') return;
-    if (isInteractiveTarget(event)) {
-      pointer.lastTime = 0;
-      return;
-    }
     const samples = event.getCoalescedEvents?.() || [];
     (samples.length ? samples : [event]).slice(-MAX_POINTER_SPLATS).forEach(processPointerSample);
     start();
   };
 
   const handlePointerDown = (event) => {
-    if (!readyComplete || isInteractiveTarget(event)) return;
+    if (!readyComplete || isActivationTarget(event)) return;
     const position = pointerToUv(event);
     if (event.pointerType === 'touch') {
       touchStart = {
@@ -684,7 +711,7 @@ export const initSiteFluid = (environment, {
     if (!touchStart || event.pointerType !== 'touch' || event.pointerId !== touchStart.pointerId) return;
     const distance = Math.hypot(event.clientX - touchStart.x, event.clientY - touchStart.y);
     const duration = event.timeStamp - touchStart.time;
-    if (distance < 10 && duration < 420 && !isInteractiveTarget(event)) {
+    if (distance < 10 && duration < 420 && !isActivationTarget(event)) {
       triggerImpulse(touchStart.position.x, touchStart.position.y, 0.58);
       start();
     }
@@ -763,16 +790,19 @@ export const initSiteFluid = (environment, {
     start();
   };
 
-  window.addEventListener('pointermove', handlePointerMove, { passive: true });
+  window.addEventListener('pointermove', handlePointerMove, { capture: true, passive: true });
   window.addEventListener('pointerdown', handlePointerDown, { passive: true });
   window.addEventListener('pointerup', handlePointerUp, { passive: true });
   window.addEventListener('pointercancel', handlePointerCancel, { passive: true });
   window.addEventListener('portfolio:environment-change', handleEnvironmentChange);
+  window.addEventListener(FLUID_OBSTACLE_EVENT, scheduleObstacleUpdate);
   window.addEventListener('resize', scheduleResize, { passive: true });
   window.addEventListener('scroll', handleScroll, { passive: true });
   window.addEventListener('pagehide', handlePageHide);
   window.addEventListener('pageshow', handlePageShow);
   document.addEventListener('visibilitychange', handleVisibility);
+  document.addEventListener('focusin', scheduleObstacleUpdate);
+  document.addEventListener('focusout', scheduleObstacleUpdate);
   canvas.addEventListener('webglcontextlost', handleContextLost);
   canvas.addEventListener('webglcontextrestored', handleContextRestored);
 
@@ -814,23 +844,29 @@ export const initSiteFluid = (environment, {
       stop();
       if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
       if (obstacleFrame) window.cancelAnimationFrame(obstacleFrame);
-      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointermove', handlePointerMove, true);
       window.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('pointercancel', handlePointerCancel);
       window.removeEventListener('portfolio:environment-change', handleEnvironmentChange);
+      window.removeEventListener(FLUID_OBSTACLE_EVENT, scheduleObstacleUpdate);
       window.removeEventListener('resize', scheduleResize);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('pagehide', handlePageHide);
       window.removeEventListener('pageshow', handlePageShow);
       document.removeEventListener('visibilitychange', handleVisibility);
+      document.removeEventListener('focusin', scheduleObstacleUpdate);
+      document.removeEventListener('focusout', scheduleObstacleUpdate);
       canvas.removeEventListener('webglcontextlost', handleContextLost);
       canvas.removeEventListener('webglcontextrestored', handleContextRestored);
       releaseGraphics();
+      layer.base.remove();
       if (layer.generated) {
         wrapper.remove();
       } else if (layer.originalParent) {
+        if (layer.originalCanvas && canvas.isConnected) canvas.replaceWith(layer.originalCanvas);
         layer.originalParent.insertBefore(wrapper, layer.originalNextSibling);
+        layer.legacyGrain?.classList.remove('site-fluid__legacy-grain');
         wrapper.classList.remove('site-fluid', `site-fluid--${profile.theme}`);
         wrapper.removeAttribute('data-site-fluid');
       }

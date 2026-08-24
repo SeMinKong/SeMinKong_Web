@@ -1,4 +1,5 @@
 import {
+  MAX_QUIET_RECTS,
   MAX_SPLATS,
   PRESSURE_INK_QUALITY,
   PRESSURE_ITERATIONS,
@@ -25,14 +26,15 @@ import {
   hasPressureInkTargetSize
 } from './pressure-ink-size.js';
 
+const QUIET_UNIFORM_NAMES = ['uQuietRects[0]', 'uQuietCount', 'uAspect'];
+
 const SPLAT_UNIFORM_NAMES = [
   'uSource',
   'uSplatData[0]',
   'uSplatForce[0]',
   'uSplatInk[0]',
   'uSplatCount',
-  'uQuiet',
-  'uAspect'
+  ...QUIET_UNIFORM_NAMES
 ];
 
 export const createPressureInkRenderer = (gl, canvas, {
@@ -58,47 +60,38 @@ export const createPressureInkRenderer = (gl, canvas, {
       'uDt',
       'uDissipation',
       'uVelocityField',
-      'uQuiet',
-      'uAspect'
+      ...QUIET_UNIFORM_NAMES
     ]);
-    passes.curl = createPressureInkPass(gl, CURL_SHADER, ['uVelocity', 'uTexel', 'uQuiet', 'uAspect']);
+    passes.curl = createPressureInkPass(gl, CURL_SHADER, ['uVelocity', 'uTexel', ...QUIET_UNIFORM_NAMES]);
     passes.vorticity = createPressureInkPass(gl, VORTICITY_SHADER, [
       'uVelocity',
       'uCurl',
       'uTexel',
       'uDt',
       'uCurlStrength',
-      'uQuiet',
-      'uAspect'
+      ...QUIET_UNIFORM_NAMES
     ]);
-    passes.divergence = createPressureInkPass(gl, DIVERGENCE_SHADER, ['uVelocity', 'uTexel', 'uQuiet', 'uAspect']);
-    passes.pressureDecay = createPressureInkPass(gl, PRESSURE_DECAY_SHADER, ['uPressure', 'uDecay', 'uQuiet', 'uAspect']);
+    passes.divergence = createPressureInkPass(gl, DIVERGENCE_SHADER, ['uVelocity', 'uTexel', ...QUIET_UNIFORM_NAMES]);
+    passes.pressureDecay = createPressureInkPass(gl, PRESSURE_DECAY_SHADER, ['uPressure', 'uDecay', ...QUIET_UNIFORM_NAMES]);
     passes.pressure = createPressureInkPass(gl, PRESSURE_SHADER, [
       'uPressure',
       'uDivergence',
       'uTexel',
-      'uQuiet',
-      'uAspect'
+      ...QUIET_UNIFORM_NAMES
     ]);
     passes.gradient = createPressureInkPass(gl, GRADIENT_SHADER, [
       'uPressure',
       'uVelocity',
       'uTexel',
-      'uQuiet',
-      'uAspect'
+      ...QUIET_UNIFORM_NAMES
     ]);
     passes.display = createPressureInkPass(gl, DISPLAY_SHADER, [
       'uDye',
       'uDyeSize',
-      'uResolution',
-      'uTime',
-      'uPaper',
-      'uRaisedPaper',
       'uInk',
       'uSignal',
       'uIntensity',
-      'uQuiet',
-      'uAspect'
+      ...QUIET_UNIFORM_NAMES
     ]);
   } catch (error) {
     Object.values(passes).forEach((pass) => gl.deleteProgram(pass.program));
@@ -109,7 +102,7 @@ export const createPressureInkRenderer = (gl, canvas, {
   const splatData = new Float32Array(MAX_SPLATS * 4);
   const splatForce = new Float32Array(MAX_SPLATS * 2);
   const splatInk = new Float32Array(MAX_SPLATS * 2);
-  const quiet = new Float32Array([0.5, 0.5, 0.42, 0.24]);
+  const quietRects = new Float32Array(MAX_QUIET_RECTS * 4);
   const pendingSplats = [];
 
   let targets = null;
@@ -121,6 +114,7 @@ export const createPressureInkRenderer = (gl, canvas, {
   let activeUntil = 0;
   let destroyed = false;
   let quality = initialQuality;
+  let quietCount = 0;
 
   const bindTexture = (uniform, texture, unit) => {
     gl.activeTexture(gl.TEXTURE0 + unit);
@@ -129,13 +123,12 @@ export const createPressureInkRenderer = (gl, canvas, {
   };
 
   const setQuietUniforms = (uniforms) => {
-    gl.uniform4fv(uniforms.uQuiet, quiet);
+    gl.uniform4fv(uniforms['uQuietRects[0]'], quietRects);
+    gl.uniform1i(uniforms.uQuietCount, quietCount);
     gl.uniform1f(uniforms.uAspect, aspect);
   };
 
   const setStyleUniforms = (uniforms) => {
-    gl.uniform3fv(uniforms.uPaper, style.palette.paper);
-    gl.uniform3fv(uniforms.uRaisedPaper, style.palette.raised);
     gl.uniform3fv(uniforms.uInk, style.palette.ink);
     gl.uniform3fv(uniforms.uSignal, style.palette.signal);
     gl.uniform1f(uniforms.uIntensity, style.intensity);
@@ -275,10 +268,11 @@ export const createPressureInkRenderer = (gl, canvas, {
     ambientIndex += 1;
   };
 
-  const resize = (width, height, nextQuiet) => {
+  const resize = (width, height, nextQuietRects, nextQuietCount = 0) => {
     if (destroyed) return;
     aspect = width / Math.max(height, 1);
-    quiet.set(nextQuiet);
+    quietRects.set(nextQuietRects);
+    quietCount = Math.min(MAX_QUIET_RECTS, Math.max(0, nextQuietCount));
 
     const sizeOptions = { maximum: quality.maximumTextureDimension };
     const nextSimulationSize = getPressureInkTargetSize(
@@ -307,8 +301,9 @@ export const createPressureInkRenderer = (gl, canvas, {
     seed();
   };
 
-  const updateQuiet = (nextQuiet) => {
-    quiet.set(nextQuiet);
+  const updateQuiet = (nextQuietRects, nextQuietCount = 0) => {
+    quietRects.set(nextQuietRects);
+    quietCount = Math.min(MAX_QUIET_RECTS, Math.max(0, nextQuietCount));
   };
 
   const step = (dt, time, scrollProgress) => {
@@ -399,11 +394,10 @@ export const createPressureInkRenderer = (gl, canvas, {
   const render = (time) => {
     if (!targets || destroyed) return;
     const displayPass = passes.display;
+    gl.disable(gl.BLEND);
     beginPass(displayPass, null, canvas.width, canvas.height);
     bindTexture(displayPass.uniforms.uDye, targets.dye.read.texture, 0);
     gl.uniform2f(displayPass.uniforms.uDyeSize, dyeSize.width, dyeSize.height);
-    gl.uniform2f(displayPass.uniforms.uResolution, canvas.width, canvas.height);
-    gl.uniform1f(displayPass.uniforms.uTime, time);
     setQuietUniforms(displayPass.uniforms);
     setStyleUniforms(displayPass.uniforms);
     finishPass();

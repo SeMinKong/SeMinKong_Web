@@ -641,3 +641,9 @@
 - Decision: Home 전용 Pressure Ink를 문서당 하나의 fixed `Site Fluid` controller로 일반화해 모든 route background에서 사용한다. Home은 최고 강도의 continuous playground, Work/About는 중간 강도, Resume/Copyright는 낮은 ambient, case study는 dark palette로 운용한다. Stable target은 high `256/768`, balanced `224/640`, baseline `192/512`로 두고 긴 축 1536px cap과 runtime downgrade를 적용한다.
 - Reason: 동일한 물성의 배경을 페이지 전환 뒤에도 유지해 사이트 전체를 하나의 경험으로 묶되, 모든 페이지를 Home만큼 격렬하게 만들거나 저사양 장치에 고정 고해상도를 강제하면 읽기 집중도와 성능이 함께 나빠진다. 기존 독립 축 clamp는 세로 화면에서 texture 비율도 왜곡했다.
 - Impact: 기존 Route-owned architecture의 Home-only Fluid bundle 결정은 이 요청에 한해 대체된다. Light/dark palette uniform, route별 intensity·quiet zone·ambient sleep이 추가된다. Allocation은 high→balanced→baseline→Lite→Static으로 fail-open하고, 실제 active frame이 지속적으로 느릴 때만 같은 session에서 한 방향으로 낮아진다. Intro SVG, 타이포그래피, URL, content 구조와 native touch scroll은 변경하지 않는다.
+
+## 2026-08-24 — Paper와 Ink 합성 분리
+
+- Decision: Site Fluid의 불투명 paper composite를 fixed paper base와 straight-alpha Ink overlay로 분리한다. Fine-pointer path는 interactive target 위에서도 계속 수집하고, activation impulse만 control 위에서 제외한다. 단일 union obstacle은 최대 6개의 soft quiet zone으로 대체한다.
+- Reason: 기존 z0 opaque Canvas는 section/card가 Fluid를 완전히 가렸고, project 전체 link 위에서는 pointermove를 버렸으며, Home의 큰 copy union이 viewport 중앙 대부분을 비워 renderer가 실행되어도 정지 화면처럼 보였다.
+- Impact: Dark structural surface에서도 Ink continuity가 보이되 핵심 copy·media·focus UI의 대비는 보호한다. Focus 이동과 Home deck transform은 quiet geometry를 즉시 다시 측정한다. Navigation/button/card/display text는 double-click selection을 막고 연락처·근거 링크·일반 본문과 Resume는 선택 가능하게 유지한다. 하나의 simulation, adaptive quality, native scroll, reduced/static fallback과 route entry 구조는 바꾸지 않는다.

@@ -3,24 +3,65 @@ body {
   isolation: isolate;
 }
 
-body > main,
-body > .site-footer {
+body > main {
   position: relative;
   z-index: 1;
 }
 
-.site-fluid.site-fluid {
+body > .site-footer {
+  position: relative;
+  z-index: 3;
+}
+
+button,
+[role="button"],
+.site-nav,
+.button,
+.hero-story,
+.work-index__hero h1,
+.about-hero h1,
+.resume-hero h1,
+.legal-hero h1,
+.case-hero h1,
+.project-card,
+.work-row__composition,
+.case-next,
+.resume-original__actions,
+.resume-document > a,
+.about-next nav,
+.site-footer__links,
+[data-no-text-select] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body > .resume-footer {
+  position: relative;
+  z-index: 3;
+}
+
+.site-fluid-base {
   position: fixed;
   z-index: 0;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
   contain: strict;
-  opacity: 1;
-  transform: none;
 }
 
-.site-fluid--light {
+.site-fluid.site-fluid {
+  position: fixed;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  opacity: 1;
+  transform: none;
+  background: transparent;
+}
+
+.site-fluid-base--light {
   background:
     radial-gradient(ellipse 46% 42% at -7% 72%, rgba(23, 21, 18, 0.17), transparent 72%),
     radial-gradient(ellipse 38% 34% at 102% 25%, rgba(23, 21, 18, 0.14), transparent 70%),
@@ -28,7 +69,7 @@ body > .site-footer {
     linear-gradient(180deg, #faf8f3, #f1eee6);
 }
 
-.site-fluid--dark {
+.site-fluid-base--dark {
   background:
     radial-gradient(ellipse 44% 40% at -6% 74%, rgba(241, 238, 230, 0.1), transparent 72%),
     radial-gradient(ellipse 36% 32% at 104% 22%, rgba(241, 238, 230, 0.08), transparent 70%),
@@ -49,7 +90,7 @@ body > .site-footer {
   opacity: 1;
 }
 
-.site-fluid .site-fluid__grain {
+.site-fluid-base .site-fluid__grain {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -64,7 +105,7 @@ body > .site-footer {
   opacity: 0.14;
 }
 
-.site-fluid--dark .site-fluid__grain {
+.site-fluid-base--dark .site-fluid__grain {
   background-image: repeating-linear-gradient(
     0deg,
     rgba(250, 248, 243, 0.026) 0,
@@ -74,6 +115,10 @@ body > .site-footer {
   );
   mix-blend-mode: screen;
   opacity: 0.11;
+}
+
+.site-fluid__legacy-grain {
+  display: none;
 }
 
 .home-page .hero-story,
@@ -93,7 +138,7 @@ html[data-motion="reduced"] .site-fluid.site-fluid {
 }
 
 @media (max-width: 720px) {
-  .site-fluid .site-fluid__grain {
+  .site-fluid-base .site-fluid__grain {
     opacity: 0.09;
   }
 }

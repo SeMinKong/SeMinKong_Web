@@ -725,3 +725,13 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Hidden과 pagehide는 frame과 ambient timer를 모두 멈춘다. pageshow, pointer, 짧은 tap과 ambient wake는 첫 dt를 초기화한 뒤 재개한다. 5초가 넘는 document suspension만 clear/reseed하며 단순 idle은 field를 초기화하지 않는다.
 - Scroll 중 quiet-zone geometry는 별도 rAF에서 프레임당 한 번만 측정한다. Sleeping route는 변경된 obstacle composite를 한 frame 즉시 그린 뒤 다시 idle로 돌아간다.
 - Tablet/mobile은 higher backing scale의 Lite 30fps를 사용하되 touch move를 받지 않는다. Reduced는 WebGL context와 rAF를 만들지 않고 route palette의 정적 background만 표시한다.
+
+## 2026-08-24 — Transparent Ink composite and continuous pointer override
+
+- Stable과 Lite의 final display는 opaque paper color가 아니라 straight-alpha Ink를 출력한다. WebGL context는 alpha를 지원하고 paper gradient/grain은 별도 fixed base가 담당한다. Simulation/FBO는 하나만 유지하며 overlay를 위해 solver를 복제하지 않는다.
+- Site Fluid Ink는 structural page surfaces 위, navigation·curtain·focus UI 아래에 합성한다. Canvas는 passive observation만 수행하며 hit testing을 소유하지 않는다.
+- `uQuiet` 단일 rect는 `uQuietRects[6]`, `uQuietCount`와 core/halo attenuation으로 대체한다. Stable solver obstacle은 각 rect의 hard core를 사용하고 final composite는 soft halo를 사용한다. Lite도 같은 rect count와 attenuation 의미를 공유한다.
+- Non-touch `pointermove`는 event target 종류와 관계없이 coalesced path를 수집한다. Pointer down과 short-tap impulse만 activation selector에서 차단하고, touch move·preventDefault·pointer capture는 계속 사용하지 않는다.
+- Full Home은 Intro 완료 직후 seed가 quiet halo 바깥에서 명확히 보이고 계속 active다. Ambient route는 card/control 위 pointer path에도 wake한 뒤 안정되면 기존 delay와 lifecycle에 따라 idle로 돌아간다.
+- `focusin`/`focusout`과 Project Deck의 transform update는 obstacle 재측정을 rAF당 한 번 요청한다. Focus control은 최우선 rect로 보호하고, deck의 이동 중·완료 geometry가 stale rect를 남기지 않게 한다.
+- Reduced와 WebGL failure는 Canvas 없이 paper base와 정적 marbling을 표시한다. Hidden/pagehide/context-loss cleanup, adaptive quality와 Stable → Lite → Static fail-open 순서는 유지한다.

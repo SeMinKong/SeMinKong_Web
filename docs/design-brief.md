@@ -782,3 +782,13 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 각 route의 첫 reading block은 실측 quiet obstacle로 보호한다. 해당 block이 viewport 밖으로 나가면 obstacle을 비활성화해 화면 한가운데에 보이지 않는 장벽을 남기지 않는다.
 - Light route는 warm paper / graphite / vermilion, case route는 charcoal paper / bone ink / vermilion을 사용한다. Shader는 palette uniform을 받아 route 배경을 불투명한 다른 색으로 덮지 않는다.
 - Fluid는 배경의 빈 면에만 시각적 존재감을 주고, 카드·영상·문서 preview처럼 의미 있는 surface의 불투명도와 본문 대비는 유지한다. 이름 SVG와 타이포그래피에는 scale, warp, filter를 적용하지 않는다.
+
+## 2026-08-24 — Fluid Ink overlay and interaction override
+
+이 항목은 바로 위 Site-wide Fluid의 `모든 content 뒤 불투명 Canvas` 계약과 단일 union quiet obstacle을 대체한다. 문서당 하나의 simulation, route별 강도와 palette, native input/fallback 계약은 유지한다.
+
+- Warm/charcoal paper와 grain은 구조적 배경 layer가 소유하고, WebGL Canvas는 투명한 Ink wash만 합성한다. Ink는 큰 section·card 배경 위에서도 이어질 수 있지만 navigation, page curtain과 focus UI를 덮지 않으며 `pointer-events: none`, `aria-hidden=true`를 유지한다.
+- 읽기 보호는 큰 container union 하나가 아니라 실제 제목·문장·action rect를 분리한 최대 6개의 soft quiet zone으로 처리한다. 글자 core는 깨끗하게 유지하고 halo에서는 Ink를 감쇠하되 넓은 화면 중앙을 완전히 비우지 않는다.
+- Fine-pointer 이동은 link, button, video와 project card 위에서도 Fluid에 계속 전달한다. Click/tap impulse만 실제 activation control에서 제외하며 링크 이동, video controls, keyboard focus와 native touch scroll은 그대로 유지한다.
+- Dark structural surface는 Ink를 가리지 않는다. 실제 image/video/document preview와 핵심 copy는 surface별 보호 수준으로 대비를 보존하고, 이름 SVG와 콘텐츠 DOM에는 transform, filter, warp를 적용하지 않는다.
+- Navigation, button, linked project surface와 display-motion text는 의도치 않은 double-click selection을 막는다. Case/About/Resume/Legal의 읽기 본문과 code-like evidence는 선택·복사가 가능해야 한다.

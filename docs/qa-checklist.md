@@ -712,3 +712,15 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify`가 119 modules를 build하고 16개 deployment file을 검증했다. `git diff --check`와 개발 브라우저 warning/error log도 비어 있다.
 - [ ] 실제 touch 기기에서 vertical pan, long press, 서로 다른 pointer id와 같은 pointer id의 short-tap impulse를 확인한다. Source는 passive listener, touchmove 제외, 10px/420ms threshold와 pointer-id match를 사용한다.
 - [ ] 강제 framebuffer allocation failure와 실제 `WEBGL_lose_context`로 high→balanced→baseline→Lite→Static 및 context restoration을 관찰한다. Resource cleanup과 fallback 순서는 source와 pure sizing/quality contract로 검증했다.
+
+## 2026-08-24 Transparent Fluid Ink and interaction verification
+
+- [x] 1280×900 Home full/interactive는 `stable/high/active`, 독립 obstacle 5개로 실행되며 blank 영역의 긴 pointer path 뒤 graphite plume이 Hero 아래에 명확하게 남는다.
+- [x] 1280×720 Work의 project anchor 내부 text 위에서 pointer path가 `idle → active`로 전환되고, overlay는 `pointer-events: none`이라 실제 project-card click이 `/work/thing/`로 이동한다.
+- [x] 390×844과 768×900 Work는 `lite/baseline`, 보이는 media와 heading을 각각 독립 obstacle로 보호하고 anchor 내부 pointer path에도 active를 유지한다. 세 폭 모두 document horizontal overflow는 0이다.
+- [x] Paper/grain base와 transparent Ink canvas는 각각 1개이며 z0 base → z1 main → z2 Ink → navigation/curtain/focus UI 순서를 유지한다. THING dark Hero와 Prototype evidence 이미지 두 개는 pointer 입력 뒤에도 덮이지 않는다.
+- [x] Home deck은 collapsed → expanded transform의 update/completion마다 quiet geometry를 갱신한다. Work keyboard focus는 visible control을 최우선 obstacle로 다시 측정하고 2px focus outline을 유지한다.
+- [x] 제목·nav·button·project surface의 computed `user-select`는 none이고 Home/Resume 연락처, evidence/source link와 장문 본문은 auto라 복사 가능하다.
+- [x] `?motion=reduced`는 `reduced/flat`, `static/none`, canvas display none이며 paper base만 유지한다. 브라우저 warning/error log는 Vite debug 외 0건이다.
+- [x] `npm.cmd run verify`가 120 modules를 build하고 11 route·16 deployment entry를 검증한다. Contract test 6개, JS syntax check와 `git diff --check`도 통과한다.
+- [ ] 실제 touch 기기 short-tap/native vertical pan과 강제 `WEBGL_lose_context` restore는 이번 브라우저 세션에서 주입하지 않았다. Passive touch, context-loss cleanup과 restore 순서는 source 재감사했다.
