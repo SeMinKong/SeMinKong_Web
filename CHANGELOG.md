@@ -4,6 +4,11 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Fixed
+
+- Kept the Home Site Fluid layer fixed above structural content in production by limiting the legacy Hero fluid surface to its pre-runtime sticky placeholder, removing the development-versus-build CSS ordering dependency.
+- Pinned the local Vite server to `127.0.0.1:5173` with strict port handling so stale IPv4/IPv6 development processes cannot silently present different builds on the same numeric port.
+
 ## [2.0.0] - 2026-08-24
 
 ### Added

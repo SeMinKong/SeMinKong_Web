@@ -724,3 +724,13 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `?motion=reduced`는 `reduced/flat`, `static/none`, canvas display none이며 paper base만 유지한다. 브라우저 warning/error log는 Vite debug 외 0건이다.
 - [x] `npm.cmd run verify`가 120 modules를 build하고 11 route·16 deployment entry를 검증한다. Contract test 6개, JS syntax check와 `git diff --check`도 통과한다.
 - [ ] 실제 touch 기기 short-tap/native vertical pan과 강제 `WEBGL_lose_context` restore는 이번 브라우저 세션에서 주입하지 않았다. Passive touch, context-loss cleanup과 restore 순서는 source 재감사했다.
+
+## 2026-08-24 Production Home Fluid cascade verification
+
+- [x] `npm.cmd run verify`가 6개 contract test, 11개 route source boundary, 120-module production build와 16개 deployment entry를 모두 통과했다.
+- [x] Production preview의 Home을 390×844, 768×1024, 1280×720 실제 브라우저에서 확인했다. 세 폭 모두 Site Fluid wrapper/base가 각각 하나이고 wrapper는 body 직계 자식, `position: fixed`, `z-index: 2`, viewport 높이, transparent background이며 document horizontal overflow가 0이다.
+- [x] 390px과 768px은 `lite/baseline`, 1280px은 `stable/high`로 기존 capability fallback을 유지한다. 모든 폭에서 obstacle 5개와 active state가 확인되고 browser warning/error log는 비어 있다.
+- [x] 390×844 `?motion=reduced`는 `reduced/flat`, `static/none`, fixed wrapper, 숨은 canvas와 horizontal overflow 0을 유지한다.
+- [x] Production CSS에서 scoped legacy selector와 fixed Site Fluid contract를 직접 검증한다. broad `.home-page .hero-fluid` root selector의 재도입은 source와 dist verification에서 모두 실패한다.
+- [x] 1280×720 Home 첫 화면을 육안으로 확인해 graphite/vermilion Ink가 Hero copy 주변에 보이고 navigation, 서명과 CTA가 가려지지 않는 것을 확인했다.
+- [ ] 실제 touch 기기와 강제 WebGL context loss는 CSS selector 범위만 바꾼 이번 수정에서 다시 주입하지 않았다. 관련 passive input, fallback과 lifecycle 코드는 변경하지 않았다.
