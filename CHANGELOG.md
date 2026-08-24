@@ -4,6 +4,8 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-08-24
+
 ### Added
 
 - Added a Lannino-inspired micro-interaction layer (phase 1): line-masked title reveals for plain-text page and Home section headings that restore the original text after settling, spring-based magnetic pull on primary CTAs (full motion, fine pointer only), and a left-to-right underline slide on text links — all inert under reduced motion. Documented the adaptation boundaries in `docs/lannino-design-reference.md`.
@@ -19,6 +21,7 @@ All notable changes to this project are recorded here. The project follows Seman
 - Extended the Paper Current material into one fixed, route-aware Site Fluid background across all eleven pages, with a dominant Home playground, restrained light-page profiles, and a dedicated dark case-study palette.
 - Raised Pressure Ink to adaptive high/balanced/baseline simulation and dye resolutions with aspect-preserving 1536px caps, allocation fallback, sustained-frame-time downgrade, and complete idle sleep between ambient bursts on non-Home routes.
 - Replaced the monolithic page bootstrap with six route-owned entries and a shared destroyable runtime, while preserving the existing Home, Work, case-study, About, Resume, and Copyright behavior.
+- Upgraded Vite from 7.3.6 to 8.2.1 and refreshed the production dependencies and GitHub Actions used by the verified build and deployment pipeline.
 - Split the former site-wide portfolio stylesheet into Home, Work, and intentional Home/Work shared layers; removed the remaining superseded Hand/Cube/Hero cascade and limited reduced-motion rules to the routes that use them.
 - Made Lenis capability-gated and lazy, connected Work Story to it explicitly, and hardened async setup, HMR teardown, repeated BFCache lifecycle, and Home Intro-to-Fluid page transitions.
 - Split the handwritten Intro, lite-fluid shader, and Pressure Ink renderer into readable wordmark, shader, configuration, WebGL-resource, sizing, and controller modules without changing their public contracts or rendering order.
@@ -128,7 +131,8 @@ All notable changes to this project are recorded here. The project follows Seman
 - Reduced-motion, touch, keyboard, responsive, and lifecycle safeguards.
 - GitHub Flow CI, GitHub Pages deployment workflow, and automated dependency update configuration.
 
-[Unreleased]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/SeMinKong/SeMinKong_Web/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.3.0...v2.0.0
 [1.3.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.0.0...v1.1.0
