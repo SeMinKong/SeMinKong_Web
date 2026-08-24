@@ -1235,7 +1235,7 @@ html.hero-pending:not([data-motion="reduced"]) [data-hero-actions],
   display: none;
 }
 
-.home-page .hero-fluid {
+.home-page .hero-story__sticky > .hero-fluid:not(.site-fluid) {
   position: absolute;
   z-index: 0;
   inset: 0;

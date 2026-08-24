@@ -49,6 +49,26 @@ for (const [entryName, expectedStyles] of Object.entries(entryStyleContracts)) {
   }
 }
 
+const homeStyles = await readFile(resolve('src/styles/home.css'), 'utf8');
+const siteFluidStyles = await readFile(resolve('src/styles/site-fluid.css'), 'utf8');
+const scopedLegacyHeroFluidPattern = /\.home-page\s+\.hero-story__sticky\s*>\s*\.hero-fluid:not\(\.site-fluid\)\s*\{/;
+const broadLegacyHeroFluidPattern = /(?:^|\n)\.home-page\s+\.hero-fluid\s*\{/;
+const siteFluidLayer = siteFluidStyles.match(/\.site-fluid\.site-fluid\s*\{([^}]*)\}/)?.[1] || '';
+
+if (!scopedLegacyHeroFluidPattern.test(homeStyles)) {
+  throw new Error('Home legacy Fluid styles must stay scoped to the pre-runtime sticky placeholder.');
+}
+
+if (broadLegacyHeroFluidPattern.test(homeStyles)) {
+  throw new Error('Home legacy Fluid styles must not match the fixed Site Fluid runtime layer.');
+}
+
+for (const declaration of ['position: fixed', 'z-index: 2', 'background: transparent']) {
+  if (!siteFluidLayer.includes(declaration)) {
+    throw new Error(`Site Fluid layer contract is missing: ${declaration}.`);
+  }
+}
+
 const styleFiles = (await readdir(resolve('src/styles'), { withFileTypes: true }))
   .filter((entry) => entry.isFile() && entry.name.endsWith('.css'));
 

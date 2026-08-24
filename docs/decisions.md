@@ -647,3 +647,15 @@
 - Decision: Site Fluid의 불투명 paper composite를 fixed paper base와 straight-alpha Ink overlay로 분리한다. Fine-pointer path는 interactive target 위에서도 계속 수집하고, activation impulse만 control 위에서 제외한다. 단일 union obstacle은 최대 6개의 soft quiet zone으로 대체한다.
 - Reason: 기존 z0 opaque Canvas는 section/card가 Fluid를 완전히 가렸고, project 전체 link 위에서는 pointermove를 버렸으며, Home의 큰 copy union이 viewport 중앙 대부분을 비워 renderer가 실행되어도 정지 화면처럼 보였다.
 - Impact: Dark structural surface에서도 Ink continuity가 보이되 핵심 copy·media·focus UI의 대비는 보호한다. Focus 이동과 Home deck transform은 quiet geometry를 즉시 다시 측정한다. Navigation/button/card/display text는 double-click selection을 막고 연락처·근거 링크·일반 본문과 Resume는 선택 가능하게 유지한다. 하나의 simulation, adaptive quality, native scroll, reduced/static fallback과 route entry 구조는 바꾸지 않는다.
+
+## 2026-08-24 — 로컬 개발 서버 주소 고정
+
+- Decision: `npm run dev`는 `127.0.0.1:5173`에만 바인딩하고 `strictPort`를 사용한다.
+- Reason: Windows에서 `localhost`의 IPv6 `[::1]:5173`과 IPv4 `127.0.0.1:5173`에 서로 다른 Vite 프로세스가 동시에 살아 있을 수 있어, 새 서버를 실행한 뒤에도 기존 탭이 오래된 프로세스를 계속 표시했다.
+- Impact: 개발 화면은 항상 `http://127.0.0.1:5173/`에서 확인한다. 같은 주소의 서버가 이미 실행 중이면 다른 포트로 조용히 이동하지 않고 명확한 오류를 내므로, 오래된 프로세스를 먼저 종료해야 한다. Production build와 Pages 배포 주소에는 영향이 없다.
+
+## 2026-08-24 — Production Home Fluid cascade 격리
+
+- Decision: Home의 이전 Hero fluid surface 규칙은 `.home-page .hero-story__sticky > .hero-fluid:not(.site-fluid)`에만 적용하고, body로 이동한 전역 Site Fluid wrapper에는 적용하지 않는다.
+- Reason: Vite 개발 모드는 `home.css` 다음에 `site-fluid.css`를 주입하지만 production은 공통 Fluid CSS를 먼저 추출한다. 기존 `.home-page .hero-fluid`와 `.site-fluid.site-fluid`의 specificity가 같아 production에서만 legacy `absolute / z-index: 0`가 fixed overlay를 덮었다.
+- Impact: Home도 CSS chunk 순서와 관계없이 viewport-fixed Ink layer와 `z-index: 2`를 유지한다. 초기 HTML의 pre-runtime placeholder, Intro handoff, reduced/static fallback, 다른 route와 단일 Fluid simulation 계약은 변경하지 않는다. Source verification은 broad legacy selector의 재도입을 거부한다.

@@ -65,6 +65,34 @@ const verifyPageBundleBoundary = (route, references) => {
   }
 };
 
+const verifyHomeFluidCascade = async (route, references) => {
+  if (route.kind !== 'home') return;
+
+  const cssTargets = references
+    .filter(({ target }) => target.endsWith('.css'))
+    .map(({ target }) => target);
+  const compiledCss = (await Promise.all(
+    cssTargets.map((target) => readFile(target, 'utf8'))
+  )).join('\n');
+  const scopedLegacySelector = '.home-page .hero-story__sticky>.hero-fluid:not(.site-fluid){';
+  const broadLegacySelectorPattern = /(?:^|})\.home-page \.hero-fluid\{/;
+  const siteFluidLayer = compiledCss.match(/\.site-fluid\.site-fluid\{([^}]*)\}/)?.[1] || '';
+
+  if (!compiledCss.includes(scopedLegacySelector)) {
+    throw new Error('Built Home CSS lost the scoped legacy Fluid selector.');
+  }
+
+  if (broadLegacySelectorPattern.test(compiledCss)) {
+    throw new Error('Built Home CSS can override the fixed Site Fluid runtime layer.');
+  }
+
+  for (const declaration of ['position:fixed', 'z-index:2']) {
+    if (!siteFluidLayer.includes(declaration)) {
+      throw new Error(`Built Site Fluid layer contract is missing: ${declaration}.`);
+    }
+  }
+};
+
 await Promise.all(
   EXPECTED_DEPLOYMENT_FILES.map((file) => access(resolve(distDirectory, file)))
 );
@@ -82,6 +110,7 @@ for (const route of SITE_ROUTES) {
 
   const references = resolveLocalReferences(html, htmlPath);
   verifyPageBundleBoundary(route, references);
+  await verifyHomeFluidCascade(route, references);
 
   for (const reference of references) {
     try {
