@@ -88,7 +88,7 @@
           document.body.removeAttribute('data-home-intro-busy');
         }
         document.querySelectorAll(
-          '.hero-identity__name, [data-hero-copy], [data-hero-fluid], [data-site-nav]'
+          '.hero-identity__name, [data-hero-copy], [data-hero-surface], [data-site-nav]'
         ).forEach((element) => element.style.removeProperty('opacity'));
         document.querySelector('[data-home-intro]')?.remove();
         window.dispatchEvent(new CustomEvent('portfolio:home-intro-timeout'));
@@ -118,9 +118,8 @@
     <main id="main-content" tabindex="-1">
       <section class="hero-story" aria-labelledby="hero-title" data-hero-story>
         <div class="hero-story__sticky" data-hero-sticky>
-          <div class="hero-fluid" data-hero-fluid aria-hidden="true">
-            <canvas class="hero-fluid__canvas" data-hero-fluid-canvas></canvas>
-            <span class="hero-fluid__paper-grain"></span>
+          <div class="hero-surface" data-hero-surface aria-hidden="true">
+            <span class="hero-surface__grain"></span>
           </div>
 
           <div class="hero-story__frame page-width">

@@ -659,3 +659,57 @@
 - Decision: Home의 이전 Hero fluid surface 규칙은 `.home-page .hero-story__sticky > .hero-fluid:not(.site-fluid)`에만 적용하고, body로 이동한 전역 Site Fluid wrapper에는 적용하지 않는다.
 - Reason: Vite 개발 모드는 `home.css` 다음에 `site-fluid.css`를 주입하지만 production은 공통 Fluid CSS를 먼저 추출한다. 기존 `.home-page .hero-fluid`와 `.site-fluid.site-fluid`의 specificity가 같아 production에서만 legacy `absolute / z-index: 0`가 fixed overlay를 덮었다.
 - Impact: Home도 CSS chunk 순서와 관계없이 viewport-fixed Ink layer와 `z-index: 2`를 유지한다. 초기 HTML의 pre-runtime placeholder, Intro handoff, reduced/static fallback, 다른 route와 단일 Fluid simulation 계약은 변경하지 않는다. Source verification은 broad legacy selector의 재도입을 거부한다.
+
+## 2026-08-24 — 정적인 미술관 표면과 절제된 가시 서체로 전환
+
+- Decision: 전 route의 Fluid/Pressure Ink, cursor follower, magnetic/name wave, pointer tilt와 별도 media scroll-kinetics를 제거한다. 배경은 CSS 기반의 고정 paper wash/grain으로 바꾸고, 보이는 서체는 Dongle/Gowun Dodum에서 `Asta Sans Variable + Geist Mono Variable`로 교체한다. Home의 12-path handwritten SVG는 Intro와 Hero의 작가 서명으로만 유지하며 page-level Lenis smooth scroll은 유지한다.
+- Reason: Fluid 궤적과 둥근 Dongle/Gowun 조합이 작품을 보는 미술관형 포트폴리오보다 playful interaction demo를 먼저 인식시키고, 제목·navigation의 진지한 편집 위계를 약하게 만들었다. 배경의 움직임을 걷어내고 서체 대비를 단단하게 만들어 콘텐츠와 작품 자체가 움직임의 주체가 되게 한다.
+- Impact: WebGL/Canvas와 관련 adaptive renderer·shader·obstacle code 및 테스트를 삭제하고 production bundle에서 재도입을 거부한다. Root 120%, warm-paper/charcoal palette, page 구조, Intro 서명 획순, Home/Work scroll story, reveal, page transition, keyboard focus와 native touch scroll은 유지한다. Project Deck은 pointer 좌표를 추적하지 않는 단발성 hover/focus catalogue gesture만 남긴다.
+
+## 2026-08-24 — GSAP을 전시 동선에 집중
+
+- Decision: ScrollTrigger를 Home Hero handoff, Work 여섯 chapter와 THING의 Demos·Prototype·Pipeline·Architecture에 route-scoped enhancement로 적용하고, 실제 GSAP core/ScrollTrigger runtime만 capability 통과 뒤 지연 로드한다. Home Intro, 공통 reveal/page curtain과 Project Deck은 Anime.js를 유지하고 GSAP Flip, SplitText, ScrollSmoother는 도입하지 않는다.
+- Reason: GSAP은 가역 scrub, 동적 start/end와 breakpoint lifecycle에서 가장 큰 이점이 있다. 반면 cursor/background나 단발 entrance까지 전면 이관하면 정적인 미술관 방향과 어긋나고, Project Deck에 Flip을 섞으면 Anime/ResizeObserver와 transform 소유권이 충돌한다.
+- Impact: Home은 Intro 완료 뒤에만 animation runtime을 요청하고, Work는 rotation/filter/큰 X 이동 대신 절제된 media handoff와 2px rail을 사용한다. 활성 Work는 background/pagehide 중 expanded geometry를 유지해 깊은 scroll position을 보호한다. THING owned section은 generic reveal과 그 prepaint heading tint에서 제외하고 native video는 직접 target하지 않는다. Build는 0.26 kB gzip loader facade를 관련 entry에 초기 공유하고, GSAP core 27.42 kB gzip + ScrollTrigger 17.54 kB gzip은 tablet/mobile/short/reduced 경로에서 요청하지 않는다.
+
+## 2026-08-24 — GSAP 변화가 읽히는 전시 handoff
+
+- Decision: 첫 구현이 실제 화면에서 거의 구분되지 않는다는 사용자 피드백에 따라 Home의 scroll travel과 순차 철수, Work의 mat entry/exit와 chapter label, THING의 sticky demo chapters와 Pipeline rail을 강화한다. 활성 최소 높이는 Home 620px, Work·THING 640px로 낮춘다.
+- Reason: Home은 900px 화면에서도 약 162px만 scrub했고 Work의 1–2% scale 차이는 기존 reveal과 구분되지 않았다. 일반 노트북에서는 700px height gate 때문에 GSAP이 전혀 시작되지 않는 경우도 있었다.
+- Impact: 배경·커서는 계속 정적이며 rotation/filter/snap/pin/input interception은 추가하지 않는다. Home은 55svh handoff와 2px progress hairline, Work는 `01 / 06`, THING은 `01 / 04`와 시스템 rail로 전환 상태를 명확히 보여준다. THING media transition은 video 바깥 decorative frame과 caption에만 적용해 native controls의 크기·위치·opacity를 유지한다. Static/reduced/touch fallback도 그대로 유지한다.
+
+## 2026-08-25 — Work를 수평 전시 레일로 재구성
+
+- Decision: Work desktop의 여섯 vertical sticky chapter를 하나의 pinned horizontal exhibition rail로 교체한다. 세로 스크롤은 GSAP ScrollTrigger가 작품 track의 X 진행으로 번역하며, card별 entrance는 같은 tween을 containerAnimation으로 읽는다. Home과 THING의 no-pin 규칙은 유지한다.
+- Reason: 기존 구현은 각 프로젝트 사이의 빈 세로 travel과 작은 scale/opacity 변화가 일반 목록과 크게 다르지 않아, GSAP을 사용한 프로젝트 showcase라는 인상이 약했다. 한 전시 벽 안에서 서로 다른 원본 비율의 작품이 연속해서 지나가면 Work 자체가 대표적인 인터랙션 샘플이 되면서도 정적인 미술관 재료와 충돌하지 않는다.
+- Impact: Work에만 `pin: true`와 큰 track X 이동을 허용하므로 2026-08-24 Work no-pin/large-X 금지 결정은 대체된다. 기존 GSAP/ScrollTrigger chunk를 재사용해 bundle dependency는 늘지 않는다. 여섯 semantic link, native vertical input, keyboard tab order, video 원본 비율과 961px/640px capability gate는 유지하며 tablet/mobile/reduced/short viewport는 완전한 세로 static list로 남는다.
+
+## 2026-08-25 — Work를 연속 타이포그래피 contents ribbon으로 전환
+
+- Decision: GSAP 공식 홈페이지 “That’s right, Anything” 구간의 `single pinned horizontal world + oversized type + independently moving objects` 원리를 Work에 적용한다. 기존 horizontal card rail의 visible 경계와 2-column 반복 구도를 없애고, project title·실제 media·metadata를 가변 폭 12-column scene 위에서 연속적으로 교차시킨다. Work에서만 SplitText를 capability gate 뒤 지연 로드한다.
+- Reason: 첫 수평 구현은 움직임 자체는 분명해졌지만 여전히 큰 카드 여섯 장을 옆으로 넘기는 구조라 레퍼런스의 한 문장처럼 이어지는 리듬과 글자 단위 조립이 느껴지지 않았다. 프로젝트의 실제 산출물을 장식 레이어로 사용하면 레퍼런스의 에너지는 가져오면서 미술관형 포트폴리오의 독자성과 정보 밀도를 유지할 수 있다.
+- Impact: 앞선 Work card width, border, small/no-rotation title reveal과 no-SplitText 결정은 대체된다. Work bundle에 `3.26 kB gzip` SplitText chunk가 하나 추가되지만 gate 밖의 Home·THING·tablet/mobile/reduced 경로에는 로드되지 않는다. 여섯 anchor와 DOM 순서, native input, focus scroll mapping, video 직접 비대상화, pin cleanup과 static vertical fallback은 유지한다.
+
+## 2026-08-25 — 보이는 서체를 Jua와 Signika로 교체
+
+- Decision: 한글은 `Jua` 400, Latin·숫자는 `Signika Variable` 300–700으로 전 route에서 교체한다. 두 폰트는 Fontsource package의 필요한 WOFF2만 self-host하고 `Signika → Jua → system Korean` 순서의 script fallback으로 사용한다. Home의 보이지 않는 서명 측정용 Manrope는 유지한다.
+- Reason: 기존 Asta/Geist 조합보다 사용자가 직접 선택한 한글·영문 인상을 일관되게 적용하면서, Jua가 Latin도 포함한다는 특성 때문에 영문까지 Jua가 되는 문제를 피해야 했다. 또한 Jua는 실제 400 한 굵기뿐이므로 synthetic bold 없이 크기와 spacing으로 정보 위계를 유지해야 한다.
+- Impact: Root 120%, 19.2px 본문, 최대 640px measure와 기존 페이지별 type scale은 유지한다. Signika 폭 변화로 넘치던 case heading 열은 desktop 최소 200px, 840px 이하 한 열로 보정하고 390px MRI metric만 작은 유동 크기를 사용한다. Asta Sans·Geist Mono dependency와 production font asset은 제거되며 Work SplitText는 `document.fonts.ready` 뒤 새 Signika geometry로 분할·refresh한다.
+
+## 2026-08-25 — Work title의 optical scale 통합
+
+- Decision: Enhanced Work의 여섯 title을 프로젝트별 네 가지 `vw` 크기 대신 일반 title과 featured THING 두 단계로 통합한다. 일반 scene 폭은 `102vw`로 조정하고 Work의 한글 설명 크기·행간을 줄이며 Hero는 840px 이하에서 한 열로 전환한다.
+- Reason: Signika 적용 뒤 THING 183px과 Prompt 86px이 2.1배 이상 벌어졌고, AQIS·Alkkagi는 108vw scene을 중심 정렬할 때 첫 글자와 metadata가 viewport 왼쪽으로 12–15px 잘렸다. 768px Hero 설명은 300px 열에 갇혀 390px보다 한 줄 더 늘어나는 반응형 역전도 있었다.
+- Impact: 1280px 기준 featured title은 약 133px, 나머지는 약 101px로 수렴하고 tracking/line-height는 Signika에 맞게 완화된다. Hero·rail summary는 약 18–19px와 1.58–1.62 leading을 사용한다. GSAP timing, SplitText char motion, semantic link, native input, metadata/CTA 크기와 reduced/static fallback은 변경하지 않는다.
+
+## 2026-08-25 — Home 전시 진입 label과 진행선 제거
+
+- Decision: Home Hero의 CSS pseudo label `SCROLL TO ENTER THE EXHIBITION · 01 / 06`과 하단 2px progress line, 이를 구동하던 `--hero-progress` tween을 제거한다.
+- Reason: 이전에는 GSAP 변화가 잘 보이지 않는다는 피드백을 보완하기 위해 추가했지만, 현재 중앙 Hero와 미술관형 표면에서는 안내 문구와 긴 선이 별도 UI처럼 떠서 시각적 의미가 중복된다.
+- Impact: Hero의 실제 scroll range, CTA·문장·서명 철수 timing, GSAP/ScrollTrigger loading, reverse/focus/reduced fallback은 유지된다. 장식용 progress custom property만 production CSS와 runtime에서 빠진다.
+
+## 2026-08-25 — Work motion을 독서 중심의 고정 beat로 통합
+
+- Decision: 여섯 Work scene을 동일한 1.0 normalized clock 위의 `artifact → title → placard → hold → handoff`로 통합한다. 활성 작품의 지속 counter-motion과 char index 기반 scatter를 제거하고 `.38–.70`을 정확한 identity hold로 만든다. Master/scene scrub은 `.62/.35`로 줄이고 readout은 rendered track progress를 따른다.
+- Reason: 기존 장면은 media가 중앙에서도 최대 58px 이동하고 entrance/exit가 ±140–150px였으며, `stagger.each` 때문에 긴 Prompt title의 exit가 scene 끝을 넘었다. 빠른 스크롤에서는 번호가 실제 레일보다 먼저 바뀌어 작품을 읽기보다 움직임과 상태 불일치를 추적하게 했다.
+- Impact: 첫 scene의 완성 시작과 마지막 scene의 완성 종료, 실제 media 비율, semantic anchor, focus-to-center mapping과 static fallback은 유지된다. Browse instruction은 시작 구간 뒤 사라지고 connector가 scene 정착을 표시한다. 새 dependency는 없으며 기존 GSAP core, ScrollTrigger와 Work 전용 SplitText chunk만 사용한다.

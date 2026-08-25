@@ -1,40 +1,3 @@
-[data-depth-root],
-[data-depth-card] {
-  --root-rx: 0deg;
-  --root-ry: 0deg;
-  --root-scale: 1;
-  transform: perspective(var(--root-perspective, 1100px)) rotateX(var(--root-rx)) rotateY(var(--root-ry)) scale(var(--root-scale));
-  transform-style: preserve-3d;
-}
-
-[data-depth-root].is-depth-active,
-[data-depth-card].is-depth-active {
-  will-change: transform;
-}
-
-[data-depth-layer],
-[data-inertia] {
-  --depth-x: 0px;
-  --depth-y: 0px;
-  --inertia-y: 0px;
-  transform: translate3d(var(--depth-x), calc(var(--depth-y) + var(--inertia-y)), 0);
-}
-
-html[data-depth="flat"] [data-depth-root],
-html[data-depth="flat"] [data-depth-card],
-html[data-depth="static"] [data-depth-root],
-html[data-depth="static"] [data-depth-card] {
-  --root-rx: 0deg !important;
-  --root-ry: 0deg !important;
-  --root-scale: 1 !important;
-}
-
-html[data-depth="flat"] [data-depth-layer],
-html[data-depth="static"] [data-depth-layer] {
-  --depth-x: 0px !important;
-  --depth-y: 0px !important;
-}
-
 html[data-motion="reduced"] {
   scroll-behavior: auto;
 }
@@ -49,10 +12,6 @@ html[data-motion="reduced"] [data-resume-reveal] {
   clip-path: none !important;
 }
 
-html[data-motion="reduced"] [data-inertia] {
-  --inertia-y: 0px !important;
-}
-
 html[data-motion="reduced"] .text-link::after,
 html[data-motion="reduced"] .source-link::after {
   transition: none;
@@ -62,27 +21,8 @@ html[data-motion="reduced"] .page-curtain {
   display: none;
 }
 
-@media (max-width: 720px) {
-  [data-depth-root],
-  [data-depth-card] {
-    --root-rx: 0deg !important;
-    --root-ry: 0deg !important;
-    --root-scale: 1 !important;
-  }
-
-  [data-depth-layer] {
-    --depth-x: 0px !important;
-    --depth-y: 0px !important;
-  }
-
-}
-
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="full"]) {
     scroll-behavior: auto;
-  }
-
-  html:not([data-motion="full"]) [data-inertia] {
-    --inertia-y: 0px !important;
   }
 }

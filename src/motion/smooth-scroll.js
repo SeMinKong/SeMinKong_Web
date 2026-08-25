@@ -82,6 +82,15 @@ export const initSmoothScroll = (environment) => {
     };
   };
 
+  const scrollTo = (target, { immediate = true } = {}) => {
+    if (!Number.isFinite(target) || destroyed) return;
+    if (lenis) {
+      lenis.scrollTo(target, { force: true, immediate });
+      return;
+    }
+    window.scrollTo({ top: target, behavior: immediate ? 'auto' : 'smooth' });
+  };
+
   window.addEventListener('portfolio:environment-change', reconcile);
   window.addEventListener('pagehide', stop);
   window.addEventListener('pageshow', reconcile);
@@ -91,6 +100,7 @@ export const initSmoothScroll = (environment) => {
 
   return {
     onScroll,
+    scrollTo,
     destroy() {
       if (destroyed) return;
       destroyed = true;

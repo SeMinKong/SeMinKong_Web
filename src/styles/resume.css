@@ -83,7 +83,7 @@
 }
 
 .resume-original__content h2 {
-  font-size: clamp(1.9rem, calc(1.55rem + 1.5vw), 2.4rem);
+  font-size: clamp(1.45rem, calc(1.32rem + 0.55vw), 1.8rem);
   font-weight: var(--weight-heading);
   line-height: 1.2;
   letter-spacing: -0.008em;
@@ -188,7 +188,7 @@
 
 .resume-summary > div h2 {
   max-width: 720px;
-  font-size: clamp(1.9rem, calc(1.55rem + 1.5vw), 2.4rem);
+  font-size: clamp(1.45rem, calc(1.32rem + 0.55vw), 1.8rem);
   line-height: 1.2;
   letter-spacing: -0.008em;
 }
@@ -229,7 +229,7 @@
 }
 
 .resume-item__head h3 {
-  font-size: clamp(1.25rem, calc(1.12rem + 0.54vw), 1.45rem);
+  font-size: clamp(1.02rem, calc(0.98rem + 0.18vw), 1.16rem);
   font-weight: var(--weight-heading);
   line-height: 1.25;
   letter-spacing: 0;

@@ -52,9 +52,7 @@ const settle = (element) => {
   element.style.opacity = '1';
   element.style.filter = 'none';
   element.style.clipPath = 'none';
-  if (!element.matches('[data-depth-root], [data-depth-card]')) {
-    element.style.transform = 'none';
-  }
+  element.style.transform = 'none';
 };
 
 const fontsReady = () => Promise.race([
@@ -201,7 +199,7 @@ export const initReveals = (environment, selector, options = {}) => {
 
       if (type === 'row') {
         const rowDetails = Array.from(element.children).filter(
-          (child) => !child.matches('[data-depth-card], .work-row__copy')
+          (child) => !child.matches('.work-row__copy')
         );
         const detailAnimation = animate(rowDetails, {
           opacity: [0, 1],

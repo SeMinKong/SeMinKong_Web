@@ -1,6 +1,4 @@
 import { initEnvironment } from '../motion/environment.js';
-import { initMagnetic } from '../motion/magnetic.js';
-import { initNameEmphasis } from '../motion/name-emphasis.js';
 import { initPageTransitions } from '../motion/page-transitions.js';
 import { initSmoothScroll } from '../motion/smooth-scroll.js';
 import { initNavigation } from '../ui/navigation.js';
@@ -74,8 +72,6 @@ export const createPageRuntime = () => {
 
     scheduleSmoothScroll(smoothScrollAfter);
     register(initNavigation(environment));
-    register(initMagnetic(environment));
-    register(initNameEmphasis(environment));
     register(initPageTransitions(environment));
     return smoothScrollController;
   };

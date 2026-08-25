@@ -792,3 +792,93 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - Fine-pointer 이동은 link, button, video와 project card 위에서도 Fluid에 계속 전달한다. Click/tap impulse만 실제 activation control에서 제외하며 링크 이동, video controls, keyboard focus와 native touch scroll은 그대로 유지한다.
 - Dark structural surface는 Ink를 가리지 않는다. 실제 image/video/document preview와 핵심 copy는 surface별 보호 수준으로 대비를 보존하고, 이름 SVG와 콘텐츠 DOM에는 transform, filter, warp를 적용하지 않는다.
 - Navigation, button, linked project surface와 display-motion text는 의도치 않은 double-click selection을 막는다. Case/About/Resume/Legal의 읽기 본문과 code-like evidence는 선택·복사가 가능해야 한다.
+
+## 2026-08-24 — Quiet Gallery surface and curatorial typography override
+
+이 항목은 `Dongle-led handwritten typography`, visible Gowun Dodum 역할과 `Paper Current / Pressure Ink / Site-wide Fluid / Fluid Ink overlay`의 화면 재료를 대체한다. Home Intro의 동일한 12-path 서명, route 구조, warm-paper/charcoal palette와 콘텐츠 순서는 유지한다.
+
+- 사이트의 기본 인상은 `정적인 전시 공간 + 움직이는 작품`이다. 전 route의 배경은 warm paper 또는 charcoal 위에 낮은 대비의 고정 wash와 미세 grain만 두며, Canvas·WebGL·포인터 궤적·반복 ambient animation을 사용하지 않는다.
+- 네이티브 커서를 유지한다. Cursor follower, magnetic 이동, 이름 wave, media tilt와 작품 이미지에 별도로 더해지던 scroll-kinetics는 제거하고 navigation·button은 색, underline, 화살표 같은 국소적 상태 변화만 사용한다. Full desktop의 page-level Lenis smooth scroll은 Work story 동선과 함께 유지한다.
+- 보이는 display, heading, body와 navigation은 `Asta Sans Variable`을 사용한다. 본문 450, 보조 문구와 metadata 500, UI 600, heading 640, display 680을 기준으로 하며 Dongle 보정을 위해 커졌던 display·UI 크기는 새 글자의 실제 optical size에 맞춰 낮춘다.
+- 날짜, section index, 기술 label과 짧은 metadata는 `Geist Mono Variable`을 사용한다. 한글 glyph는 Asta Sans로 fallback해 플랫폼별 고정폭 한글이 끼어들지 않게 한다.
+- Root `120%`와 19.2px 기본 body rhythm은 유지한다. `Manrope Variable`은 Home Intro와 Hero 서명의 투명 metric text 전용이며 사용자에게 보이는 일반 UI에는 사용하지 않는다.
+- Home의 handwritten SVG는 사이트 전체 글꼴 언어가 아니라 작가 서명 한 점으로 격리한다. Intro의 획순, 동일 노드 FLIP, `xMidYMid meet`, 12-path geometry와 reduced/static 결과는 유지하고 hover나 background motion으로 변형하지 않는다.
+- Entrance, Home Hero scroll handoff, Work의 scroll story, section reveal과 page transition은 전시 동선으로 유지한다. Home project deck은 hover/focus에서 한 번 펼쳐지는 catalogue gesture만 남기며 포인터 좌표를 계속 추적하지 않는다.
+
+## 2026-08-24 — Curatorial GSAP scroll choreography override
+
+이 항목은 Quiet Gallery의 `정적인 전시 공간 + 움직이는 작품` 원칙을 실제 스크롤 장면으로 구체화한다. 배경과 포인터는 계속 정적이며, GSAP은 작품을 읽는 순서가 분명해지는 구간에만 사용한다.
+
+- Home Hero는 Intro가 완전히 끝난 뒤 잠시 완성된 서명과 문장을 유지한다. 이후 짧은 sticky travel에서 이름·카피와 paper surface가 함께 옅어져 다음 전시 구간에 자리를 내준다. 별도 progress UI, pin, snap 또는 입력 가로채기는 사용하지 않는다.
+- Work는 여섯 프로젝트를 desktop full 환경에서 하나씩 읽는 chapter로 유지하되 rotation, saturation/brightness filter와 큰 좌우 이동을 제거한다. 미디어의 작은 `opacity / y / scale / clip` 변화와 제목 mask, 2px 상단 rail만 사용하고 모든 필수 copy는 항상 완전한 대비로 읽힌다.
+- THING은 Hero가 아니라 실제 증거 구간을 움직인다. 네 시연의 media wrapper와 caption, Prototype 사진, Pipeline 행, Architecture 목록이 문서 순서대로 조립되며 `video` 요소와 native controls 자체에는 transform 또는 opacity를 쓰지 않는다.
+- Anime.js는 Home Intro, 공통 entrance/reveal, page curtain과 Home Project Deck의 단발성 catalogue gesture를 계속 소유한다. GSAP과 Anime이 같은 요소의 transform/opacity를 동시에 소유하지 않는다.
+- Project Deck을 Flip으로 바꾸거나 ScrollSmoother·SplitText를 추가하지 않는다. 현재 정보 구조에서 이관 비용과 추가 plugin 무게보다 표현 이점이 작으며, GSAP은 scrubbed narrative라는 명확한 강점에 집중한다.
+- Home/Work/THING은 각각 961/961/1021px desktop story 경계와 620/640/640px 최소 높이 조건 아래에서만 GSAP을 지연 로드한다. Tablet, mobile, 짧은 desktop, lite/reduced motion은 동일 콘텐츠를 정적 layout과 native scroll로 즉시 제공한다.
+
+## 2026-08-24 — Perceptible exhibition choreography override
+
+이 항목은 바로 위 Curatorial GSAP의 활성 높이와 동작 강도를 대체한다. 사용자가 첫 화면과 일반 노트북에서 변경을 인지하지 못한 실제 피드백을 반영하되, 정적인 배경·네이티브 커서·작품 중심 원칙은 유지한다.
+
+- Home desktop story는 `155svh`로 늘려 약 `55svh`의 실제 handoff 구간을 확보한다. 첫 화면 하단에는 `SCROLL TO ENTER THE EXHIBITION · 01 / 06` wall label을 보여주고, 2px vermilion hairline이 스크롤 진행에 따라 왼쪽에서 오른쪽으로 채워진다.
+- Hero는 동일 paper surface 전체를 희미하게 만드는 대신 CTA → 두 문장 → 서명 순으로 철수한다. 서명은 반복하거나 회전하지 않고 작은 scale과 위쪽 이동으로 사라지며, 역스크롤에서는 정확히 원래 reading state로 돌아온다.
+- Work는 각 장면에 `01 / 06` wall label을 두고 작품 mat가 열리는 것처럼 media wrapper의 opacity, Y, scale과 정적인 이미지의 inset을 더 분명하게 사용한다. 첫 약 45% 안에 제목과 필수 copy가 완전한 대비에 도달하고 중간 reading beat에서는 정지한다. Rotation, filter와 큰 X 이동은 계속 금지한다.
+- THING Demos는 enhanced desktop에서 네 개의 108svh chapter와 sticky two-column artwork/caption 구성이 된다. `01 / 04` label, caption handoff와 video 바깥의 decorative frame으로 entry/hold/exit을 보여주며 실제 `video`와 controls는 target하거나 변형하지 않는다. Pipeline은 2px vertical rail과 네 단계 label 색으로 시스템 순서를 표현한다.
+- Browser chrome을 제외한 일반 노트북에서도 보이도록 최소 높이는 Home `620px`, Work·THING `640px`로 낮춘다. 기존 width, full/interactive capability, reduced motion, touch와 static cleanup 조건은 유지한다.
+
+## 2026-08-25 — Work horizontal exhibition rail override
+
+이 항목은 Work에 한해 앞선 vertical chapter, 큰 X 이동 금지와 no-pin 결정을 대체한다. Home과 THING의 동선, 정적인 배경·네이티브 커서·warm paper 재료는 바꾸지 않는다.
+
+- Work Hero는 `Projects` 제목, `Robotics · Computer Vision · AI Systems` 범위와 한 문장의 설명만 사용한다. 쇼케이스 위 mono wall header에는 기간, 세로 스크롤 안내와 현재 작품 번호를 두고 vermilion은 진행선·번호·CTA에만 제한한다.
+- 데스크톱 full/interactive 환경에서는 세로 스크롤을 하나의 고정된 전시 벽 안에서 수평 작품 레일로 번역한다. 카드 carousel이나 무한 loop가 아니라 왼쪽 첫 작품에서 오른쪽 마지막 작품까지 한 방향으로 읽는 유한한 전시 동선이다.
+- 각 작품은 한 화면 안에서 실제 media와 catalog placard를 함께 보여준다. THING portrait, dashboard 16:9, Alkkagi square, cover와 diagram의 원본 비율을 유지하며, 동일한 crop 또는 동일 크기 thumbnail로 평준화하지 않는다.
+- 레일 이동이 주효과다. 개별 작품은 viewport에 들어올 때 media matte의 작은 opacity/y/scale/clip과 title mask만 사용하고, rotation, filter, 3D tilt, ghost text, snap과 반복 ambient motion은 추가하지 않는다.
+- 모든 여섯 프로젝트는 기존 단일 semantic link와 DOM 순서를 유지한다. Keyboard focus가 화면 밖 카드로 이동하면 세로 진행 위치만 해당 카드로 맞추며 focus를 빼앗거나 tab order를 줄이지 않는다.
+- `960px` 이하, `640px` 미만 높이, coarse/touch, lite/reduced와 enhancement 실패에서는 pin과 수평 track 없이 같은 콘텐츠를 정상 세로 목록으로 제공한다. Native vertical pan과 브라우저 scrollbar를 가로채지 않는다.
+
+## 2026-08-25 — Work continuous typographic contents rail override
+
+이 항목은 바로 위 horizontal rail의 `분리된 작품 카드 + catalog placard` 표현과 개별 장면의 rotation/큰 X 이동 금지를 Work에 한해 대체한다. GSAP 공식 홈페이지의 “That’s right, Anything” 구간에서 원리를 참고하되 브랜드 색, 문구, SVG와 그래픽은 복제하지 않는다.
+
+- Enhanced desktop의 Work는 여섯 카드가 나열된 carousel이 아니라 프로젝트명이 하나의 긴 문장처럼 이어지는 약 7개 viewport 길이의 수평 contents ribbon이다. Article 경계선과 반복 placard frame을 제거하고 장면 사이에는 한 줄 connector만 남긴다.
+- 각 프로젝트 link는 12-column 전시 캔버스가 된다. 대형 project title을 주 레이어로, 실제 media·mono metadata·proof·tech label을 서로 다른 column/row와 겹침 깊이에 배치해 한 화면씩 교체되지 않고 앞뒤 장면이 동시에 교차하도록 한다.
+- THING portrait, AQIS dashboard, MRI result, Alkkagi square video, Briefit cover와 Prompt diagram을 장식 오브젝트 대신 그대로 사용한다. Warm paper, graphite와 제한된 vermilion palette는 유지하며 GSAP 홈페이지의 밝은 도형·카피·브랜드 외형을 가져오지 않는다.
+- 각 article에는 여전히 하나의 semantic project anchor만 존재한다. Skip target과 programmatic focus surface는 transform되는 max-content track이 아니라 pinned viewport wrapper가 소유한다.
+- `960px` 이하, `640px` 미만 높이, coarse/touch, lite/reduced와 enhancement 실패에서는 Split DOM, pin과 수평 geometry가 전혀 없는 기존 세로 프로젝트 목록을 제공한다.
+
+## 2026-08-25 — Jua / Signika typography override
+
+이 항목은 Quiet Gallery의 visible `Asta Sans Variable + Geist Mono Variable` 서체 결정을 대체한다. Home의 12-path 서명과 그 착지 계산에만 쓰는 투명 Manrope metric은 유지한다.
+
+- 모든 화면의 Latin·숫자·영문 기호는 `Signika Variable` 300–700을 먼저 사용하고, 한글 glyph는 `Jua` 400으로 fallback한다. Stack 순서를 바꾸면 Jua가 지원하는 Latin까지 Jua로 렌더링되므로 Signika가 항상 첫 번째다.
+- Jua는 한 가지 실제 굵기만 사용한다. `font-synthesis: none`을 유지하고 한글의 위계는 가짜 bold가 아니라 크기, 색, 행간과 여백으로 표현한다. Signika는 body 400부터 display 700까지 실제 variable weight를 사용한다.
+- Root `120%`, 기본 본문 `19.2px`, 최대 본문 measure `640px`와 기존 type scale은 유지한다. 장문은 `word-break: keep-all`을 사용하되 390px에서도 혼합 언어 문장이 자연스럽게 여러 줄로 흐르고 viewport를 벗어나지 않아야 한다.
+- Case study section 제목 열은 desktop에서 최소 200px을 확보하고 840px 이하에서 한 열로 전환한다. 600px 이하의 큰 MRI metric은 좁은 두 열 안에서 잘리지 않도록 별도 유동 크기를 사용한다.
+- Font 파일은 Fontsource package에서 production asset으로 self-host한다. 화면에 필요한 Signika Latin variable 한 파일과 Jua Korean 한 파일만 포함하며 원격 font 요청에 의존하지 않는다.
+
+## 2026-08-25 — Work optical typography correction
+
+이 항목은 Work continuous rail의 프로젝트별 과도한 title size 차이와 Jua 교체 직후의 본문 밀도를 보정한다. Pin, scene 순서, 실제 media와 SplitText choreography는 유지한다.
+
+- Enhanced project title은 일반 `clamp(4.75rem, 8vw, 7rem)`, featured THING `clamp(5.75rem, 10.5vw, 8.25rem)`의 두 단계만 사용한다. Brain MRI와 Prompt처럼 긴 이름도 별도 축소하지 않고 같은 optical size와 balanced wrapping을 사용한다.
+- Signika의 큰 x-height와 굵은 획에 맞춰 enhanced title line-height는 `0.9`, tracking은 `-0.032em`으로 사용한다. 프로젝트 이름에 따라 `14.5 / 9.6 / 7.3 / 6.8vw`가 섞이던 규칙은 사용하지 않는다.
+- 일반 enhanced scene은 약 `102vw` 폭으로 유지해 연속 rail의 앞뒤 장면 교차를 보존하면서 active AQIS·Alkkagi의 제목과 metadata가 viewport safe inset 안에 들어오게 한다.
+- Hero와 project의 Jua 설명은 약 18–19px, line-height 1.58–1.62 범위로 압축한다. Metadata 14–15px, CTA 15–16px와 44px hit area는 유지한다.
+- Work Hero는 840px 이하에서 한 열로 전환한다. 768px의 좁은 300px copy column 때문에 설명이 mobile보다 더 많은 줄로 감기는 역전이 없어야 한다.
+
+## 2026-08-25 — Home exhibition cue removal override
+
+- Home 첫 화면의 `SCROLL TO ENTER THE EXHIBITION · 01 / 06` pseudo label과 sticky 하단의 2px vermilion progress line을 제거한다.
+- Intro 뒤의 155svh Hero travel, CTA → 문장 → 서명 순서의 GSAP handoff와 reverse scroll은 유지한다. 별도 안내 문구나 진행 장식을 다시 추가하지 않는다.
+
+## 2026-08-25 — Work editorial reading rhythm override
+
+이 항목은 Work continuous choreography의 글자별 무작위 흩어짐, media counter-motion과 제목 길이에 따라 달라지던 scene timing을 대체한다. Pinned horizontal contents ribbon, 실제 media와 가변 12-column composition은 유지한다.
+
+- 모든 프로젝트는 `evidence → typeset → register → read → handoff`의 같은 문법을 사용한다. Artifact는 먼저 정착하고 title, metadata·summary, proof·stack, CTA 순으로 조립되며 `0.38–0.70` 구간에는 모든 읽기 요소가 정확한 identity로 멈춘다.
+- Title char는 한 방향의 짧은 baseline/rotateX 조판만 사용한다. 글자 수와 무관하게 stagger 총량을 고정하고 홀짝별 방향 전환, 무작위 rotation, 큰 X/Y scatter를 사용하지 않는다.
+- Media와 placard의 entrance·exit 진폭은 인접 작품이 동시에 보이는 정도로 제한한다. 실제 `img`와 `video`는 계속 target하지 않고 native-video stage에는 clip을 적용하지 않는다.
+- 첫 작품은 빈 프레임 없이 완성 상태로 시작하고 마지막 작품은 exit 없이 완성 상태로 끝난다. 중간 connector는 작품이 정착할 때 한 방향으로 그려져 장면 사이의 연속성을 표시한다.
+- Header의 진행선과 현재 번호는 실제로 렌더링된 horizontal tween과 동기화한다. `SCROLL TO BROWSE`는 최초 진행 6% 안에서 사라지며 역스크롤하면 다시 나타난다.
+- Production font가 준비된 뒤 SplitText를 생성한다. `960px` 이하, `640px` 미만 높이, coarse/touch, lite/reduced와 loader/font 실패의 세로 static fallback에는 enhanced class, split glyph와 inline motion style이 남지 않는다.

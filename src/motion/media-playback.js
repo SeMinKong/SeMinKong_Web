@@ -5,6 +5,7 @@ export const initMediaPlayback = (environment) => {
 
   const demoPlayHandlers = new Map();
   let observer = null;
+  let demoObserver = null;
 
   const pauseDemoVideos = (except = null) => {
     demoVideos.forEach((video) => {
@@ -26,9 +27,22 @@ export const initMediaPlayback = (environment) => {
   document.addEventListener('visibilitychange', pauseWhenHidden);
   window.addEventListener('pagehide', pauseOnPageHide);
 
+  if ('IntersectionObserver' in window && demoVideos.length) {
+    demoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || entry.intersectionRatio <= 0.05) {
+          entry.target.pause();
+        }
+      });
+    }, { threshold: [0, 0.05] });
+
+    demoVideos.forEach((video) => demoObserver.observe(video));
+  }
+
   if (!videos.length) {
     return {
       destroy() {
+        demoObserver?.disconnect();
         demoPlayHandlers.forEach((handler, video) => video.removeEventListener('play', handler));
         document.removeEventListener('visibilitychange', pauseWhenHidden);
         window.removeEventListener('pagehide', pauseOnPageHide);
@@ -70,6 +84,7 @@ export const initMediaPlayback = (environment) => {
   return {
     destroy() {
       observer?.disconnect();
+      demoObserver?.disconnect();
       demoPlayHandlers.forEach((handler, video) => video.removeEventListener('play', handler));
       document.removeEventListener('visibilitychange', pauseWhenHidden);
       document.removeEventListener('visibilitychange', syncAll);

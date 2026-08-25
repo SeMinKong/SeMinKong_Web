@@ -355,7 +355,7 @@ This interaction range replaces the earlier cube pointer limit of X `±8px` and 
 ## 2026-08-11 — THING manual demonstration lifecycle
 
 - `video[data-demo-video]`는 사용자 controls로만 재생하며 autoplay와 `data-depth-card`를 사용하지 않는다.
-- 한 시연이 재생되면 다른 THING 시연을 즉시 pause한다. 문서가 hidden 상태가 되거나 `pagehide`가 발생하면 모든 수동 시연을 pause한다.
+- 한 시연이 재생되면 다른 THING 시연을 즉시 pause한다. 시연이 viewport를 벗어나거나 문서가 hidden 상태가 되거나 `pagehide`가 발생하면 pause하고, viewport 재진입 때 자동 resume하지 않는다.
 - Hero와 gallery 영상은 `preload="none"`과 로컬 WebP poster를 사용해 화면에 보이기 전 원본 영상 다운로드를 시작하지 않는다.
 - gallery 전체에 reveal을 한 번만 적용하고 각 video·card에는 transform 소유권을 추가하지 않는다. touch와 native controls 동작은 그대로 유지한다.
 
@@ -735,3 +735,109 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Full Home은 Intro 완료 직후 seed가 quiet halo 바깥에서 명확히 보이고 계속 active다. Ambient route는 card/control 위 pointer path에도 wake한 뒤 안정되면 기존 delay와 lifecycle에 따라 idle로 돌아간다.
 - `focusin`/`focusout`과 Project Deck의 transform update는 obstacle 재측정을 rAF당 한 번 요청한다. Focus control은 최우선 rect로 보호하고, deck의 이동 중·완료 geometry가 stale rect를 남기지 않게 한다.
 - Reduced와 WebGL failure는 Canvas 없이 paper base와 정적 marbling을 표시한다. Hidden/pagehide/context-loss cleanup, adaptive quality와 Stable → Lite → Static fail-open 순서는 유지한다.
+
+## 2026-08-24 — Quiet Gallery motion override
+
+이 항목은 `Pressure Ink`, `Site Fluid`, transparent Ink composite와 전역 pointer-driven motion 규칙을 대체한다. Intro·page transition·section reveal·Home Hero story·Work Story의 서사적 timing은 유지한다.
+
+- 모든 route에서 Fluid Canvas, WebGL renderer, pointer splat, ambient wake, quiet obstacle과 quality tier를 제거한다. Background는 CSS fixed paper wash/grain이며 pointer event, observer, rAF 또는 runtime controller를 갖지 않는다.
+- 공통 runtime은 environment, navigation, page transition과 route controller를 소유하고 full desktop의 page-level Lenis smooth scroll을 계속 예약한다. Magnetic button, name emphasis, cursor follower, depth tilt와 별도 media `scroll-kinetics` controller를 등록하지 않는다.
+- Home Intro는 정적 `.hero-surface`를 paper reveal 대상으로 사용한다. 동일 12-path SVG 작성, 자연 완료, fail-open, focus/inert cleanup과 Intro 완료 뒤 smooth-scroll 시작 순서는 유지한다.
+- Home Hero Story는 CSS scroll progress와 Projects handoff만 갱신한다. Fluid event를 dispatch하지 않으며 name, copy와 CTA에는 pointer transform을 적용하지 않는다.
+- Project Deck은 `pointerover` 또는 `focusin`에서 catalogue를 한 번 펼치고 active card를 바꾸며, `pointerleave` 또는 focus가 deck 밖으로 이동할 때 접는다. `pointermove` 좌표 추적과 Fluid geometry notification은 사용하지 않는다.
+- Work Story의 pinned/scrubbed choreography, generic entrance/reveal, media playback과 page curtain은 유지한다. Work media와 case evidence에는 pointer tilt와 별도 `[data-inertia]` transform을 중첩하지 않는다.
+- Reduced motion은 Intro 생략, reveal 즉시 완료와 기존 native/static layout을 유지한다. Touch/coarse pointer는 추가 포인터 제스처 없이 native vertical scroll과 링크·video controls를 그대로 사용한다.
+
+## 2026-08-24 — Route-scoped GSAP curatorial choreography override
+
+이 항목은 Quiet Gallery motion의 Home Hero와 Work Story timing을 대체하고 THING evidence choreography를 추가한다. Anime.js의 Intro, one-shot reveal, page transition과 Project Deck 소유권은 유지한다.
+
+### Shared loading and lifecycle
+
+- 초기 entry에는 0.26 kB gzip loader facade가 포함된다. `loadGsap()`이 호출될 때만 core와 ScrollTrigger를 정적 import literal의 dynamic import로 한 번 요청하고 plugin을 등록한다. 실패한 Promise는 cache를 비워 다음 정상 page lifecycle에서 재시도할 수 있어야 한다.
+- 각 route controller는 capability 검사 뒤에만 loader를 호출한다. `setupVersion`, `pageActive`, `gsap.context()`와 route root scope로 stale import, pagehide, visibility, breakpoint 변경과 destroy를 정리한다. Background tab에서는 pending setup을 취소하고 새 runtime을 만들지 않는다. 이미 활성인 Home·Work·THING은 깊은 스크롤 위치가 clamp되지 않도록 expanded story geometry를 유지하고, visible 복귀 시 현재 capability를 다시 평가한다.
+- Context는 setup 전에 확보한다. Stop 순서는 pending refresh 취소 → Lenis 구독 해제 → context revert → active class 제거 → controller가 소유한 `opacity / visibility / transform / clip-path / pointer-events`와 route CSS custom property 제거다. Hidden/pagehide에서는 global refresh를 실행하지 않는다. 활성 context를 보존한 Home·Work·THING은 visible/pageshow의 capability 재평가 뒤 한 번 refresh하고, pending setup만 있던 route는 이를 취소한 뒤 다음 visible lifecycle에서 새로 setup한다.
+- ScrollTrigger는 CSS sticky layout을 진행 좌표로만 읽는다. `pin`, `snap`, ScrollSmoother와 touch input interception은 사용하지 않는다. Lenis가 즉시 생성되는 Work/case route는 `ScrollTrigger.update`를 route당 한 번 구독한다.
+
+### Home Hero
+
+- Home entry는 `homeIntro` Promise를 `ready`로 전달한다. Promise 해결 전에는 GSAP import, set 또는 timeline 생성이 없어야 하며 reduced/hash/BFCache로 Intro가 생략된 경로도 같은 Promise 계약으로 reconcile한다.
+- 활성 조건은 `full + interactive + min-width 961px + min-height 620px`이다. Trigger는 `[data-hero-story]`, range는 `top top → 155svh track - 100svh sticky`, scrub은 `0.4`다. CSS sticky가 layout을 소유하고 GSAP pin은 추가하지 않는다. Static/lite/import-failure에서는 track이 100svh에 머물고, 활성 context가 있는 hidden/pagehide 동안에는 복귀 scroll position을 위해 155svh geometry를 보존한다.
+- `--hero-progress 0→1`은 sticky bottom의 2px vermilion hairline을 채운다. 첫 화면의 mono wall label은 progress에 따라 조용히 사라진다.
+- CTA는 `0.14–0.34`에 `opacity 1→0 / y -18`로 철수하고 완전히 투명해진 뒤 pointer hit만 끈다. Keyboard tab order는 유지하며 focus-within은 pointer와 시각 상태를 함께 복구한다. 두 문장은 `0.24`부터 `0.06` stagger로 `autoAlpha 0 / y -26`에 도달하고, 서명은 `0.42–0.82`에 `scale .92 / y -64 / autoAlpha .08`로 철수한다. Paper surface는 같은 색 위에서 무의미하게 fade하지 않는다.
+- Intro가 넘긴 12-path SVG 자체를 분해하거나 다시 쓰지 않는다. Focus-within은 이름·문장·action을 즉시 완성 상태로 복구하며 reverse scroll은 모든 값을 원래 reading state로 되돌린다.
+
+### Work chapters
+
+- 활성 조건은 `full + interactive + min-width 961px + min-height 640px`이다. 각 `.work-row`는 `top 90% → bottom 10%`, scrub `0.8`로 실행하고 CSS row height는 `max(780px, 118svh)`다.
+- Composition은 `y 36 / scale .97 → identity`, stage는 `opacity .08 / y 44 / scale .94 → identity`로 들어온다. Static image stage만 10%/7% clip을 사용하고 native video stage에는 clip을 적용하지 않는다.
+- Title은 기존 mask 안에서 `opacity .25 / yPercent 120→1 / 0`, details는 `opacity .30 / y 18→1 / 0`, arrow는 `.30→.75`의 작은 대각 이동을 사용한다. 모두 첫 약 45% 안에 완성되고 중간 reading beat 동안 identity를 유지한다. Exit는 composition `y -36 / scale .97`, stage `opacity .18 / scale .96 / y -18`, arrow `.28`로 다음 chapter에 넘긴다.
+- Rotation, brightness/saturation filter와 viewport 기반 좌우 이동은 금지한다. List 전체에는 sticky 2px rail 하나를 두고 `--work-progress 0→1`을 scrub하며 각 sticky scene 좌상단에 `01 / 06` wall label을 표시한다.
+- 활성 Work를 hidden/pagehide에서 즉시 static layout으로 revert하지 않는다. `work-story-enabled`와 118svh geometry를 보존해 깊은 scroll position을 유지하고, visible/pageshow에서 breakpoint와 motion capability가 달라졌을 때만 정리하거나 refresh한다.
+
+### THING evidence
+
+- 공용 case entry 안에서 `.case-page--thing`이 있고 `full + interactive + min-width 1021px + min-height 640px`일 때만 활성화한다. 다른 다섯 case route는 loader를 호출하지 않는다.
+- Demos는 enhanced desktop에서 2열 gallery 대신 네 개의 최소 `108svh`, `760px` floor chapter와 sticky artwork/caption 2열 구성을 사용한다. 각 item은 `top 86% → bottom 14%`, scrub `.6`이며 `01 / 04` wall label을 표시한다. Video 바깥 decorative frame은 progress `0→1→.18`로 열리고, caption은 `.15 / y 28→identity→.35 / y -12`로 handoff한다. `video`와 native controls를 직접 또는 ancestor transform/opacity로 변형하지 않는다.
+- Prototype figure는 `top 84% → bottom 38%`에서 작은 opacity/y/scale stagger로, Architecture는 `top 78% → bottom 38%`에서 opacity/y stagger로 조립한다. Pipeline은 `top 72% → bottom 32%`, scrub `.5`에서 `--flow-progress`로 2px vertical rail을 채우고 네 행과 label을 순서대로 완성한다. 네 owned section은 `data-thing-story`로 표시하고 바깥 `data-reveal`을 두지 않아 Anime과 GSAP의 parent/child 이중 변형을 막는다. Generic reveal의 prepaint heading selector에서도 이 marker를 제외해 제목이 muted 상태에 남지 않게 한다.
+- Tablet/mobile/lite/reduced와 short viewport에서는 core/ScrollTrigger를 요청하지 않고 owned section을 완전한 static content로 사용한다. 나머지 case section만 generic reveal을 유지한다. Runtime full→static→full 왕복마다 모든 descendant inline motion style과 active class가 제거·재생성되어야 한다. 활성 document가 hidden/pagehide 된 동안에는 네 개의 expanded chapter geometry를 보존하고 visible 복귀 시 capability 평가와 refresh를 수행해 deep scroll clamp를 막는다.
+
+### Bundle boundary
+
+- 2026-08-24 production 기준 초기 loader facade는 `0.26 kB gzip`이며 Home, Work와 여섯 case entry가 공유한다. Capability 통과 뒤에만 GSAP core `27.42 kB gzip`와 ScrollTrigger `17.54 kB gzip` dynamic chunk를 요청하고 browser cache를 공유한다. THING controller code는 공용 case entry에 포함되지만 다른 다섯 case에서는 DOM guard에서 즉시 종료한다.
+- Flip은 source gzip 약 13.7 kB의 추가 plugin이며 Project Deck 전체 transform 소유권 이관 없이 혼용할 수 없으므로 포함하지 않는다. SplitText와 ScrollSmoother도 이번 narrative에 필요하지 않아 포함하지 않는다.
+
+## 2026-08-25 — Work pinned horizontal exhibition rail override
+
+이 항목은 `Shared loading and lifecycle`의 Work no-pin 예외, `Work chapters`의 118svh vertical sticky rows와 viewport X 이동 금지를 대체한다. Home Hero와 THING은 계속 CSS sticky/no-pin 계약을 사용한다.
+
+- 활성 조건은 기존과 같은 `full + interactive + min-width 961px + min-height 640px`이다. `[data-work-viewport]`는 `calc(100svh - var(--nav-height))` 높이이며, `[data-work-track]`은 max-content horizontal flex가 된다. 비활성 조건에서는 이 class와 geometry가 없어야 한다.
+- 하나의 master ScrollTrigger가 viewport를 `pin: true`, `pinSpacing: true`, `scrub: 0.7`로 고정한다. Start는 viewport top이 navigation bottom에 닿는 지점이고, end travel은 `track.scrollWidth - viewport.clientWidth`다. Track은 같은 거리만큼 `x` 음수 방향으로 `ease: none` 이동한다.
+- Pin은 Work route의 이 단일 showcase에만 허용한다. `snap`, ScrollSmoother, SplitText, Flip, wheel/touch listener와 `preventDefault()`는 사용하지 않으며 세로 입력을 직접 가로채지 않는다. 기존 GSAP core/ScrollTrigger dynamic chunk를 재사용해 새 dependency 또는 plugin chunk를 추가하지 않는다.
+- 각 project timeline은 master tween을 `containerAnimation`으로 읽어 `left 94% → right 6%`, scrub `0.5`로 실행한다. Static image stage는 `opacity .18 / y 30 / scale .94 / inset 9% 7%`에서 identity로 들어오고 native preview stage에는 clip을 적용하지 않는다. Title과 details는 짧은 opacity/y reveal 뒤 reading beat에서 identity를 유지한다. 첫 작품은 초기 identity, 마지막 작품은 exit fade가 없는 완성 상태다.
+- Wall header의 `--work-progress`와 `01 / 06` readout은 장식용이며 aria-live를 사용하지 않는다. Active chapter는 각 card center와 viewport center의 실제 offset 거리로 계산해 가변 폭 카드에서도 맞아야 한다.
+- 여섯 project link는 모두 tabbable 상태로 유지한다. Track `focusin`에서 offscreen card가 선택되면 그 card center를 master start/end에 매핑하고 smooth-scroll controller의 immediate `scrollTo`로 보이게 한 뒤 ScrollTrigger를 갱신한다. Lenis가 아직 없거나 실패한 경우는 native `window.scrollTo(... behavior: auto)`를 사용한다. `inert`, inactive `aria-hidden`, focus 강제 이동과 tab interception은 금지한다.
+- Stop은 focus/Lenis 구독 해제 → `gsap.context().revert()`로 pin spacer 복원 → enhanced class, active class, progress와 owned inline motion property 제거 순서다. 활성 document가 hidden/pagehide 되면 pin spacer와 horizontal geometry를 보존하고, visible/pageshow에서 capability를 재평가한 뒤 refresh한다.
+
+## 2026-08-25 — Work continuous contents choreography override
+
+이 항목은 바로 위 rail의 card 폭, `scrub 0.7`, 작은 title mask reveal과 no-SplitText 결정을 Work에 한해 대체한다. Home과 THING의 loader·motion 계약은 바꾸지 않는다.
+
+- Master viewport pin과 동적 `track.scrollWidth - viewport.clientWidth` travel은 유지한다. Borderless scene은 `104–122vw` 범위의 가변 폭으로 이어지고 master X tween은 `ease: none`, `scrub: 0.9`로 약 0.8–1.1초의 따라오는 감각을 만든다.
+- 각 project는 master tween을 `containerAnimation`으로 읽는 `left 96% → right 4%`, `scrub 0.65` timeline을 가진다. Title char, real-media stage, metadata, proof/stack과 arrow가 서로 다른 X/Y/scale/opacity timing으로 교차하고, media는 main track과 반대 방향으로 일부 counter-translate되어 잠시 독립적으로 떠 있는 인상을 준다.
+- Work capability gate를 통과한 뒤에만 `SplitText`를 별도 dynamic import한다. Semantic title 하나를 `words,chars`로 split하고 `aria: auto`로 원래 문장을 부모의 accessible name에 보존한다. 글자는 `rotateX / rotation / x / yPercent / opacity`로 조립되고 exit에서 약하게 흩어지며, split된 시각 glyph는 assistive technology에서 중복되지 않는다.
+- 실제 `img`와 `video`는 target하지 않는다. `[data-work-artifact]` wrapper만 움직이고 native-video stage에는 clip-path를 적용하지 않는다. Metadata와 설명 같은 semantic copy는 `visibility`를 바꾸는 autoAlpha 대신 opacity만 사용한다.
+- Focus-in은 기존 card-center → master scroll mapping을 유지한다. `:focus-within`은 모든 title char, artifact와 placard를 opacity 1 / transform none / clip inset 0으로 복구하며 project anchor 하나에만 2px outline을 표시한다.
+- Stop은 context revert 뒤 모든 SplitText instance를 `revert()`하고 data hook의 owned inline style, aria split state, enhanced class와 progress를 제거한다. Hidden/pagehide의 활성 pin 보존, generation guard, fonts-ready refresh와 native scroll fail-open은 이전 계약을 유지한다.
+- 2026-08-25 production build에서 Work에만 추가되는 SplitText chunk는 `7.06 kB raw / 3.26 kB gzip`이다. GSAP core `27.42 kB gzip`와 ScrollTrigger `17.54 kB gzip`은 기존 shared dynamic chunks를 재사용하며 Home·THING은 SplitText를 요청하지 않는다.
+
+### Typography geometry compatibility
+
+- Visible Latin은 Signika Variable, 한글은 Jua로 교체되지만 motion timing과 target ownership은 바꾸지 않는다. Home handwritten SVG와 투명 Manrope metric text는 동일 geometry를 유지한다.
+- Work enhanced rail은 `document.fonts.ready`가 해결된 뒤 title을 SplitText로 분할하고 ScrollTrigger를 refresh한다. 따라서 fallback font 폭으로 계산한 pin travel이나 글자 위치가 production font load 뒤 남아서는 안 된다.
+- Font load 실패, tablet/mobile, reduced와 capability gate 밖에서는 SplitText를 만들지 않고 semantic title과 static vertical layout을 그대로 사용한다.
+
+## 2026-08-25 — Work optical title geometry override
+
+이 항목은 Work continuous choreography의 scene별 title size와 일반 row 폭을 대체한다. Master pin, scroll travel 계산, SplitText timing과 cleanup 순서는 유지한다.
+
+- 일반 enhanced title은 `clamp(4.75rem, 8vw, 7rem)`, featured THING은 `clamp(5.75rem, 10.5vw, 8.25rem)`이다. Brain MRI와 Prompt에 별도 작은 size를 적용하지 않으며 title mask는 balanced wrapping을 허용한다.
+- 일반 row flex basis는 `clamp(1000px, 102vw, 1420px)`다. First, Brain/Prompt의 기존 가변 폭은 유지하되 active focus settlement에서 모든 semantic copy가 viewport safe inset 안에 있어야 한다.
+- Title char의 `rotateX / rotation / x / yPercent / opacity` timing은 바꾸지 않는다. 새 geometry는 fonts-ready 뒤 SplitText와 ScrollTrigger refresh가 계산하며 focus-in은 동일하게 완성 상태를 복구한다.
+
+## 2026-08-25 — Home cue-free handoff override
+
+- Home enhanced story는 더 이상 `--hero-progress`를 만들거나 tween하지 않는다. Sticky bottom progress line과 frame의 exhibition label도 없다.
+- Timeline은 `0.14`의 CTA 철수부터 시작하며 기존 CTA, 두 문장, 서명 timing과 155svh geometry를 그대로 사용한다. Reverse scroll과 focus-within 복구 동작도 유지한다.
+
+## 2026-08-25 — Work fixed reading-beat choreography override
+
+이 항목은 Work continuous contents의 `scrub 0.9 / 0.65`, counter-translate, 무작위 char scatter와 fonts-ready refresh-only 계약을 대체한다.
+
+- Master X tween은 `ease: none`, `scrub: 0.62`이며 scene timeline은 `left 96% → right 4%`, `scrub: 0.35`다. Progress rail과 active chapter는 ScrollTrigger raw progress가 아니라 master tween의 실제 rendered `progress()`로 갱신한다. Focus mapping은 해당 progress를 즉시 적용한 뒤 native/Lenis scroll과 ScrollTrigger를 동기화한다.
+- 각 scene은 0–1의 고정 clock을 가진다. Artifact `0–.22`, title `.08–.32`, context `.16–.34`, evidence `.22–.38`, CTA·arrow `.28–.38`, exact identity hold `.38–.70`, handoff `.70–.94` 순서다. 첫 scene은 entry를 생략하고 마지막 scene은 exit을 생략한다.
+- Artifact는 `opacity .28 / scale .94 / x ≤72 / y 16–24 / inset 8% 6%`에서 identity로 들어오고 `opacity .42 / scale .965 / x ≤64 / y 14–20 / inset 6% 4%`로 나간다. Native-video stage에는 두 inset을 모두 적용하지 않는다.
+- Title char는 `opacity .22 / yPercent 44 / rotateX -28 / x 10`에서 들어와 duration `.16`, stagger `amount .08` 안에 완성된다. Exit는 `opacity .38 / yPercent -18 / rotateX 14 / x -18`, duration `.16`, reverse stagger `amount .06`이다. Character index 기반 rotation·거리와 `stagger.each`는 사용하지 않는다.
+- Placard는 역할별로 context, evidence, action을 분리하되 같은 작은 X/Y vector로 이동한다. Connector custom property는 scene 정착 중 `.12 → 1`로 그려지고 initial browse instruction은 rendered progress `.06`까지 opacity/Y로 퇴장한다.
+- `loadGsapWithSplitText()`와 `document.fonts.ready`가 모두 해결된 뒤에만 enhanced class와 SplitText를 만든다. Stop은 label tween을 kill하고 context/split을 revert한 뒤 progress, connector, clip/opacity/transform과 GSAP의 `translate / rotate / scale / visibility` inline property를 제거한다.
+- Enhanced `:focus-within`은 artifact, title char, placard, arrow와 chapter를 즉시 identity로 만들고 transition을 제거한다. Semantic project anchor, tab order, native video와 wheel/touch input은 motion target이나 interception 대상이 아니다.

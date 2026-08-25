@@ -1,7 +1,6 @@
 import { animate, set } from 'animejs';
 
 const CLOSED_ROTATIONS = [-1.35, 0.65, 1.15];
-const FLUID_OBSTACLE_EVENT = 'portfolio:fluid-obstacle-change';
 
 export const initProjectDeck = (environment) => {
   const root = document.querySelector('[data-project-deck]');
@@ -17,10 +16,6 @@ export const initProjectDeck = (environment) => {
   let inView = true;
   let closeTimer = 0;
   let activeAnimation = null;
-
-  const notifyObstacleChange = () => {
-    window.dispatchEvent(new CustomEvent(FLUID_OBSTACLE_EVENT));
-  };
 
   const shouldEnable = () => environment.motion === 'full' && environment.depth === 'interactive';
 
@@ -64,7 +59,6 @@ export const initProjectDeck = (environment) => {
 
     if (immediate || document.hidden || !inView) {
       set(cards, properties);
-      notifyObstacleChange();
       return;
     }
 
@@ -75,12 +69,10 @@ export const initProjectDeck = (environment) => {
       delay: (_, index) => expanded ? index * 54 : (cards.length - 1 - index) * 30,
       ease: expanded ? 'out(4)' : 'inOut(3)',
       composition: 'replace',
-      onUpdate: notifyObstacleChange,
       onComplete: () => {
         if (activeAnimation !== animation) return;
         activeAnimation = null;
         root.classList.remove('is-animating');
-        notifyObstacleChange();
       }
     });
 
@@ -96,7 +88,16 @@ export const initProjectDeck = (environment) => {
     if (!activeCard || !root.contains(activeCard)) return;
     clearActiveCard();
     activeCard.classList.add('is-active');
-    notifyObstacleChange();
+  };
+
+  const restoreInputState = () => {
+    pointerInside = root.matches(':hover');
+    const focusTarget = root.contains(document.activeElement) ? document.activeElement : null;
+    const hoverTarget = pointerInside ? cards.find((card) => card.matches(':hover')) : null;
+    const activeTarget = focusTarget || hoverTarget;
+
+    if (activeTarget) activateCard(activeTarget);
+    if (pointerInside || focusTarget) applyState(true, true);
   };
 
   const enable = () => {
@@ -106,18 +107,19 @@ export const initProjectDeck = (environment) => {
     root.classList.add('is-deck-mode');
     applyState(false, true);
     root.classList.add('is-ready');
+    restoreInputState();
   };
 
   const disable = () => {
     if (!enabled) return;
     enabled = false;
     expanded = false;
+    pointerInside = false;
     clearCloseTimer();
     cancelAnimation();
     clearActiveCard();
     cards.forEach((card) => card.style.removeProperty('transform'));
     root.classList.remove('is-deck-mode', 'is-ready', 'is-expanded');
-    notifyObstacleChange();
   };
 
   const syncEnvironment = () => {
@@ -131,15 +133,11 @@ export const initProjectDeck = (environment) => {
     if (!activeCard || !root.contains(activeCard)) return;
     pointerInside = true;
     clearCloseTimer();
+    activateCard(event.target);
 
     if (!expanded) {
-      clearActiveCard();
       applyState(true);
-      return;
     }
-
-    if (activeAnimation) return;
-    activateCard(event.target);
   };
 
   const onPointerLeave = () => {
@@ -151,11 +149,6 @@ export const initProjectDeck = (environment) => {
       clearActiveCard();
       applyState(false);
     }, 110);
-  };
-
-  const onPointerMove = (event) => {
-    if (!enabled || !expanded || activeAnimation) return;
-    activateCard(event.target);
   };
 
   const onFocusIn = (event) => {
@@ -194,7 +187,6 @@ export const initProjectDeck = (environment) => {
   visibilityObserver?.observe(root);
 
   root.addEventListener('pointerover', onPointerOver);
-  root.addEventListener('pointermove', onPointerMove);
   root.addEventListener('pointerleave', onPointerLeave);
   root.addEventListener('focusin', onFocusIn);
   root.addEventListener('focusout', onFocusOut);
@@ -207,7 +199,6 @@ export const initProjectDeck = (environment) => {
   return {
     destroy() {
       root.removeEventListener('pointerover', onPointerOver);
-      root.removeEventListener('pointermove', onPointerMove);
       root.removeEventListener('pointerleave', onPointerLeave);
       root.removeEventListener('focusin', onFocusIn);
       root.removeEventListener('focusout', onFocusOut);

@@ -1,0 +1,70 @@
+body {
+  position: relative;
+  isolation: isolate;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--text) 2.4%, transparent) 0,
+      color-mix(in srgb, var(--text) 2.4%, transparent) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    radial-gradient(ellipse 44% 40% at -8% 74%, color-mix(in srgb, var(--text) 7%, transparent), transparent 72%),
+    radial-gradient(ellipse 34% 30% at 104% 24%, color-mix(in srgb, var(--text) 5%, transparent), transparent 70%),
+    radial-gradient(ellipse 22% 18% at 78% 104%, color-mix(in srgb, var(--signal) 8%, transparent), transparent 68%),
+    linear-gradient(180deg, var(--bg-raised), var(--bg));
+  opacity: 0.72;
+}
+
+body > main {
+  position: relative;
+  z-index: 1;
+}
+
+body > .site-footer,
+body > .resume-footer {
+  position: relative;
+  z-index: 3;
+}
+
+button,
+[role="button"],
+.site-nav,
+.button,
+.hero-story,
+.work-index__hero h1,
+.about-hero h1,
+.resume-hero h1,
+.legal-hero h1,
+.case-hero h1,
+.project-card,
+.work-row__composition,
+.case-next,
+.resume-original__actions,
+.resume-document > a,
+.about-next nav,
+.site-footer__links,
+[data-no-text-select] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (max-width: 720px) {
+  body::before {
+    opacity: 0.54;
+  }
+}
+
+@media (prefers-contrast: more) {
+  body::before {
+    opacity: 0.38;
+  }
+}

@@ -446,6 +446,8 @@ This section supersedes the current-behavior interpretation of earlier checked i
 
 ## 2026-08-21 Progress cleanup and Work chapter verification
 
+> Historical snapshot. The current progress, chapter-label, and THING sticky-demo contract is superseded by `2026-08-24 Perceptible exhibition choreography verification` below.
+
 - [x] Home, Work, THING, and About contain no top page-progress bar, side signal thread, Hero progress line, scene readout, or pinned Focus/Demos class at 1280px, 768px, and 390px.
 - [x] Home Focus renders only `Vision`, `Robotics`, and `Systems` in a static three-column desktop index and compact one-column tablet/mobile rows; no subtitle, overlap, raw counter, or horizontal overflow remains.
 - [x] THING Demos uses the base two-column desktop and one-column mobile gallery, small metadata badges, native controls, and no auto chapter pin. The Repository aside no longer competes with a viewport-fixed demo stage.
@@ -457,6 +459,8 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] Browser warning/error logs are empty for Home, Work, THING, and About. `npm.cmd run verify` verifies all 16 deployment entries, and `git diff --check` reports no whitespace errors.
 
 ## 2026-08-21 Final visual polish verification
+
+> Historical snapshot. Later 2026-08-24 choreography deliberately replaces the no-counter/no-progress and two-column THING demo results recorded here.
 
 - [x] Work at 1280×900 shows THING at 340×604, UI evidence at uncropped 16:9, and Alkkagi at 1:1. Briefit's left title and all dashboard/diagram edges remain visible.
 - [x] Work at 1280×720 keeps the complete 275×490 THING frame between the fixed navigation and viewport bottom with zero horizontal overflow. All project copy resolves to opacity 1 throughout the scrub.
@@ -471,6 +475,8 @@ This section supersedes the current-behavior interpretation of earlier checked i
 
 ## 2026-08-21 Stacked project scenes and About tool-color verification
 
+> Historical snapshot. The current Work height gate is 640px and enhanced scenes now include a 2px rail plus chapter labels.
+
 - [x] Home Projects and Focus, all six Work rows, all four THING demo cards, and all four About tool groups contain no decorative ordinal labels. Dates, durations, versions, and measured results remain intact.
 - [x] Work at 1280×720 uses one sticky composition per project: media, title, metadata, description, stack, and CTA enter and recede together. There is no progress indicator, snap, wheel interception, or media-only trailing effect.
 - [x] Every Work composition remains exactly one semantic project link. Its media and copy resolve to the same hit target, and keyboard focus exposes the complete scene with visible 2px link and row outlines.
@@ -481,6 +487,8 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify` builds 103 modules and verifies all 16 deployment entries; `git diff --check` reports no whitespace errors.
 
 ## 2026-08-21 Native-ratio video and separate-caption verification
+
+> Historical snapshot. Native video ratios and controls remain valid; enhanced THING desktop layout is now the later sticky chapter sequence.
 
 - [x] Every source MP4 has explicit intrinsic dimensions in HTML: THING 720×1280, AQIS 1280×720, Alkkagi 1276×1270, and Brain MRI 1320×1032.
 - [x] Work THING and Alkkagi previews have transparent, borderless, overflow-visible media wrappers. Their rendered aspect ratios follow the source or poster within sub-pixel rounding, and their evidence captions occupy separate rows below the video.
@@ -734,3 +742,106 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] Production CSS에서 scoped legacy selector와 fixed Site Fluid contract를 직접 검증한다. broad `.home-page .hero-fluid` root selector의 재도입은 source와 dist verification에서 모두 실패한다.
 - [x] 1280×720 Home 첫 화면을 육안으로 확인해 graphite/vermilion Ink가 Hero copy 주변에 보이고 navigation, 서명과 CTA가 가려지지 않는 것을 확인했다.
 - [ ] 실제 touch 기기와 강제 WebGL context loss는 CSS selector 범위만 바꾼 이번 수정에서 다시 주입하지 않았다. 관련 passive input, fallback과 lifecycle 코드는 변경하지 않았다.
+
+## 2026-08-24 Quiet Gallery surface and typography verification
+
+- [x] Source와 production bundle에 Site Fluid, Pressure Ink, Hero Fluid, cursor follower, magnetic, name wave, depth tilt와 별도 media scroll-kinetics runtime이 남지 않는다. Full desktop의 page-level Lenis smooth scroll은 유지한다.
+- [x] Asta Sans는 visible display/body/navigation에, Geist Mono는 영문 metadata/technical label에 적용되고 Dongle/Gowun Dodum dependency와 font token은 남지 않는다.
+- [x] Home Intro는 정적 hero surface 위에서 자연 완료되고 reduced 진입은 완성된 동일 12-path 서명을 즉시 표시한다.
+- [x] Home project deck은 실제 hover와 keyboard focus에서 펼쳐지고, 서로 다른 pointer 좌표에서도 card transform이 동일하며 focus/leave 뒤 정상적으로 접힌다.
+- [x] Home, Work, About, Resume, Copyright와 THING·Prompt case를 390px, 768px, 1280px 실제 브라우저에서 확인했다. 21개 조합 모두 title/text viewport 이탈과 horizontal overflow가 0이고, Work focus와 THING native video controls가 안정적이다.
+- [x] `npm.cmd run verify`, `git diff --check`와 browser warning/error 검사가 통과한다.
+- [ ] 실제 touch hardware의 vertical pan은 이번 세션에서 재검사하지 않았다. 390px static-depth 환경에는 Fluid/touch listener와 deck pointer mode가 없고 case video는 native controls를 유지한다.
+
+## 2026-08-24 Curatorial GSAP choreography verification
+
+- [x] Home 1280×900 full에서 Intro 완료 전에는 story가 비활성이고, 완료 뒤 `data-scroll-story-active`가 생긴다. Hero 중간값과 최종값, reverse scroll의 `opacity 1 / transform identity` 복귀를 실제 브라우저에서 확인했다.
+- [x] Work 1280×900 full에서 six chapter와 list progress rail이 활성화된다. AQIS reading beat에서 필수 copy opacity는 모두 1이고 rotation/filter 없이 stage와 title이 identity에 정착한다.
+- [x] Work 1280×630과 768×1024는 static list로 전환되고 active class, `--work-progress`와 descendant inline style이 모두 제거된다. 768→1280 왕복 뒤 story가 한 번 다시 활성화된다.
+- [x] THING 1280×900 full에서 네 Demo, 두 Prototype figure, 네 Pipeline 행과 네 Architecture item이 순서대로 scrub된다. 네 `video`는 inline transform/opacity 없이 native `controls`를 유지한다. 실제 video focus에서 item `:focus-within`이 media/caption을 opacity 1, transform none으로 복구하고 바깥 section도 clip/transform none이다.
+- [x] THING 1280→768→1280 왕복에서 `thing-story-enabled`, active class와 모든 owned target inline style이 완전히 정리·재생성된다. 처음 발견한 `gsap.set()` 잔여 style은 explicit owned-property cleanup으로 수정하고 inline 0개를 재확인했다.
+- [x] 1280×900에서 Work→THING→Back→Forward history 복원을 실행했다. 복귀 Work는 story와 active chapter가 한 번 활성화되고, THING은 story 한 번·video inline style 0개를 유지하며 두 route 모두 overflow가 0이다.
+- [x] Home, Work, THING을 390×844, 768×1024, 1280×900에서 검사했다. Document horizontal overflow는 모두 0이며 reduced에서는 GSAP active class와 owned inline style이 0이다.
+- [x] Contract test는 Intro-ready gate, route 등록, no pin/snap, Work rotation/filter 제거, THING의 video 비대상화와 loader retry를 고정한다. Source verification과 production build가 통과했다.
+- [x] Contract test는 THING owned section 제목이 generic prepaint tint에서 제외되는지와, hidden Work가 이미 활성인 context의 expanded geometry를 보존하는지도 고정한다.
+- [ ] 실제 touch hardware의 native vertical pan과 HMR 도중 pending dynamic import 실패 주입은 이번 세션에서 실행하지 않았다. Source의 generation guard, native controls와 static cleanup은 확인했다.
+
+## 2026-08-24 Perceptible exhibition choreography verification
+
+이 항목은 위의 Curatorial GSAP 결과 중 짧은 scrub, no-label/no-progress, 700px height gate와 2열 THING demo 결과를 대체한다.
+
+- [x] Home 1280×900 첫 화면에서 `SCROLL TO ENTER THE EXHIBITION · 01 / 06` label과 2px vermilion hairline이 보인다. 495px handoff 중간에서 CTA → 두 문장 → 서명이 서로 다른 opacity/Y 상태로 철수하고, reverse scroll은 progress 0, CTA opacity 1과 pointer auto로 복귀한다.
+- [x] Home 1280×650에서도 story가 활성화되고 358px travel을 확보한다. 종료 지점의 투명 CTA는 pointer none이며, 실제 keyboard focus를 주면 focus-within으로 opacity 1, pointer auto와 solid focus outline이 즉시 복구된다.
+- [x] Home 768×1024와 390×844은 각각 정확히 100svh의 static Hero이고 active attribute, story inline style, cue와 dead travel이 없다. 1280×900 `?motion=reduced`도 reduced/flat, 100svh, visible CTA, zero overflow다.
+- [x] Work 1280×900과 1280×650에서 2px progress rail, `01 / 06`–`06 / 06` wall label과 강화된 mat entry/exit가 활성화된다. 1280×630, 768×1024와 390×844은 story class/progress/descendant inline style 없이 static이며 모든 크기에서 horizontal overflow가 0이다.
+- [x] THING 1280×650과 경계 폭 1024×640에서 sticky demo, `01 / 04` label과 video 바깥 decorative frame이 보인다. 1024×640의 첫 demo card는 598×540px 안에 있고 portrait video는 268×477px로 native controls까지 viewport 안에 남는다.
+- [x] THING demo media wrapper의 computed transform은 none, opacity는 1이고 inline style은 `--demo-frame-progress`만 가진다. 모든 native video는 inline style 없이 controls를 유지하며 768×1024·390×844 fallback에서는 chapter label과 모든 owned inline style이 제거되고 overflow가 0이다.
+- [x] Home·Work·THING controller는 활성 document가 hidden/pagehide 될 때 expanded geometry를 보존하고 visible 복귀 시 capability 평가와 refresh를 수행하도록 source와 독립 review에서 확인했다. 수동 demo video는 viewport 이탈·hidden·pagehide 때 pause하고 자동 resume하지 않는다.
+- [x] 최신 `npm.cmd run verify`는 contract test 4개, route source 11개, production module 105개와 deployment entry 16개를 통과했다. 실제 브라우저 log는 Vite debug/HMR 외 warning·error가 없다.
+- [ ] 실제 touch hardware의 native vertical pan과 HMR 중 pending dynamic import 실패 주입은 실행하지 않았다. Static/coarse capability gate, generation guard와 cleanup은 source contract로 검증했다.
+
+## 2026-08-25 Work horizontal exhibition rail verification
+
+이 항목은 Work에 관한 위의 vertical sticky chapter 결과를 대체한다. Home과 THING 검증은 그대로 유효하다.
+
+- [x] 1280×900 full/interactive에서 `[data-work-viewport]` pin spacer가 정확히 하나이고 6329px track이 5064px travel 동안 왼쪽으로 진행한다. Showroom header는 navigation 아래 고정되고 2px progress와 `01 / 06`–`06 / 06` readout이 실제 card center에 맞춰 갱신된다.
+- [x] 첫 THING 장면, AQIS reading beat와 마지막 Prompt Generator 장면을 실제 화면으로 확인했다. AQIS media stage와 title은 중앙에서 opacity 1, transform identity, clip inset 0에 정착하며 마지막 card 뒤에는 pin이 풀리고 Contact/Footer가 정상 문서 흐름으로 이어진다.
+- [x] 마지막 Prompt link와 첫 THING link를 keyboard focus 대상으로 직접 왕복했다. Smooth-scroll immediate settlement 뒤 두 card는 viewport 안에 완전히 들어오고 readout은 각각 06/01, title opacity 1과 단일 2px vermilion focus outline을 유지한다.
+- [x] 768×1024, 390×844, 1280×630과 1280×900 `?motion=reduced`는 pin spacer, enhanced class와 owned inline style이 0인 세로 static list다. 모든 화면에서 document horizontal overflow가 0이며 390px navigation, Hero copy와 showcase header가 viewport 안에 남는다.
+- [x] 1280×630→900→630→900 live resize에서 pin spacer 수가 `0→1→0→1`, owned inline target 수가 `0→43→0→43`으로 정리·재생성되고 중복 pin과 overflow가 없다. About 왕복 뒤에도 pin과 active row는 각각 하나다.
+- [x] Browser warning/error log가 비어 있고 `npm.cmd run verify`가 contract test 4개, route source 11개, production module 105개와 deployment entry 16개를 통과했다.
+- [ ] 실제 touch hardware의 vertical pan은 이번 세션에서 실행하지 않았다. 390px/coarse 환경은 GSAP loader 전에 static gate를 통과하고 Work controller에는 wheel/touch listener와 preventDefault가 없다.
+
+## 2026-08-25 Work continuous typographic contents rail verification
+
+이 항목은 바로 위 Work card-rail의 폭, 작은 title reveal과 no-SplitText 결과를 대체한다.
+
+- [x] 1280×720 full/interactive 실제 브라우저에서 pinned viewport와 pin spacer가 각각 하나다. Continuous track은 8718px, 실제 travel은 7453px이고 여섯 borderless scene이 `01 / 06`부터 `06 / 06`까지 끊김 없이 진행하며 document horizontal overflow는 0이다.
+- [x] THING, AQIS, Brain Tumor MRI, Alkkagi.io, Briefit와 Project Prompt Generator의 중앙 reading beat를 육안으로 확인했다. 대형 title·실제 media·mono placard가 각기 다른 위치에서 앞뒤 장면과 교차하며, 반복 card border와 2-column placard 구도는 보이지 않는다.
+- [x] Transition 중 title char는 서로 다른 `rotateX / rotation / x / yPercent / opacity` 값을 가지며 중앙에서는 identity로 조립된다. AQIS·Brain·Alkkagi·Briefit·Prompt의 title과 필수 copy가 잘리지 않고 실제 media 비율이 유지된다.
+- [x] 마지막 Prompt link와 첫 THING link를 실제 keyboard focus 대상으로 왕복했다. Immediate focus settlement 뒤 readout은 06/01로 바뀌고 모든 split char는 `opacity 1 / transform none`, media와 placard는 완성 상태, project anchor 하나만 2px vermilion outline을 가진다.
+- [x] 두 Work preview `video`에는 inline style이 없고 artifact wrapper만 움직인다. 마지막 scene 뒤 progress 1에서 pin이 풀리고 Contact와 Footer가 정상 문서 흐름으로 이어진다.
+- [x] 1280×720 `?motion=reduced`는 pin spacer, enhanced class, SplitText char와 owned inline style이 모두 0인 세로 static list이며 horizontal overflow도 0이다.
+- [x] Browser warning/error log는 비어 있고 최신 `npm.cmd run verify`가 contract test 4개, route source 11개, production module 106개와 deployment entry 16개를 통과한다. SplitText는 Work용 별도 `7.06 kB raw / 3.26 kB gzip` chunk다.
+- [ ] 390px, 768px과 1280×630 actual viewport는 이번 브라우저 세션에서 다시 만들 수 없어 재실행하지 않았다. Enhanced selector는 runtime class 아래에만 있고 기존 961px/640px gate와 static DOM/CSS는 유지되며 source/build contract가 이를 확인한다. 바로 위 horizontal rail QA의 해당 viewport 결과는 변경 전 fallback에 대해 유효하다.
+- [ ] 실제 touch hardware의 native vertical pan과 HMR 중 pending SplitText import 실패 주입은 실행하지 않았다. Controller에는 wheel/touch listener와 preventDefault가 없고 loader retry, generation guard와 SplitText revert는 source contract로 확인했다.
+
+## 2026-08-25 Jua / Signika typography verification
+
+- [x] Home, Work, About, Resume, Copyright와 여섯 case study, 총 11개 route를 390px, 768px, 1280px 실제 브라우저에서 확인했다. 모든 route에서 `document.fonts.status=loaded`, Signika/Jua font check가 true이고 document horizontal overflow와 browser warning/error가 0이다.
+- [x] Visible CSS의 font-family 선언 79곳이 `Signika Variable → Jua → Korean system fallback` token으로 수렴한다. Asta Sans·Geist Mono·Dongle·Gowun Dodum은 source token, dependency와 production font asset에 남지 않는다.
+- [x] Root 120% 기준 기본 body 19.2px, 본문 최대 640px measure를 유지했다. Home statement, About의 긴 혼합 언어 질문, Resume의 긴 project title/body, Legal 장문과 case copy가 390/768/1280px에서 자연스럽게 감기고 잘리거나 겹치지 않는다.
+- [x] Signika 폭으로 넘치던 AQIS `Integration`, Briefit `Contribution`·`Product Integration`, THING `Prototype`·`Architecture`는 desktop 최소 200px heading 열과 840px 이하 1열 전환으로 해소했다. 390px MRI `92.7%`도 자체 150px 영역 안에 맞는다.
+- [x] Jua는 실제 400 한 굵기로 렌더링되고 `font-synthesis: none`을 유지한다. 한글 heading/body 위계는 크기, 색, line-height와 spacing으로 구분되며 가짜 bold를 만들지 않는다.
+- [x] Work 1280×720 enhanced rail은 Signika font-ready 뒤 61개 title char를 SplitText로 다시 계산하고 8718px track, 첫/마지막 focus 완성 상태와 horizontal overflow 0을 유지한다. Reduced/static 경로에는 split char와 pin이 없다.
+- [x] `npm.cmd run verify`가 contract test 4개, 11개 route source boundary, 106-module production build와 16개 deployment entry를 통과했다. Production에는 Manrope 24.83kB, Signika 42.24kB, Jua 368.17kB WOFF2만 포함된다.
+- [ ] 실제 touch hardware의 native vertical pan은 폰트 교체 범위에서 다시 실행하지 않았다. 390px/coarse static fallback과 touch scroll 비가로채기 계약은 실제 viewport와 source에서 확인했다.
+
+## 2026-08-25 Work optical typography correction verification
+
+- [x] 1280×720 enhanced rail에서 THING은 약 133px, 나머지 다섯 title은 약 101px로 수렴한다. 기존 THING 183px·Prompt 86px의 2.1배 격차가 약 1.31배의 featured hierarchy로 줄었다.
+- [x] 여섯 project link를 keyboard focus로 순서대로 정착시켰다. AQIS title/meta의 왼쪽은 37px, Alkkagi는 36px이고 모든 title, meta, summary와 focus outline이 viewport 안에 있다. Prompt title도 101px 한 줄로 fit하고 document horizontal overflow는 0이다.
+- [x] 390×844과 768×1024 static fallback에서 Work story class, pin과 SplitText char가 없다. 768px Hero 설명은 기존 4행에서 2행, 390px은 3행에서 2행으로 줄고 두 폭 모두 local/document overflow가 없다.
+- [x] Static featured summary는 약 18px/29px, 일반 summary는 약 17–17.5px/27–28px다. 390px Prompt만 자연스러운 2행이고 768px project title과 summary는 모두 1행이다.
+- [x] 1280×720 `?motion=reduced`는 pin spacer·SplitText char가 0이고 기존 semantic title/static list를 유지한다. Browser log는 Vite 연결 debug 외 warning/error가 없다.
+- [x] `npm.cmd run verify`가 contract test 4개, 11개 route source boundary, 106-module production build와 16개 deployment entry를 통과했다.
+- [ ] 실제 touch hardware의 native vertical pan은 typography/scene 폭 수정 후 다시 실행하지 않았다. Static/coarse gate와 preventDefault 없는 Work controller는 유지된다.
+
+## 2026-08-25 Home exhibition cue removal verification
+
+- [x] 1280×720 full/interactive Home에서 Intro 완료 뒤 story는 활성화되지만 frame/sticky `::after` content가 모두 `none`이고 `--hero-progress` inline/custom property가 없다. 안내 문구와 하단 2px line이 보이지 않는다.
+- [x] Hero 중간 scroll에서 CTA, 문장과 서명 opacity/transform handoff가 기존 순서대로 진행되고 document horizontal overflow는 0이다.
+- [x] `?motion=reduced`에서도 cue text, progress property와 story active state가 모두 없고 정적 Hero가 정상 표시된다.
+- [x] Browser log는 Vite 연결 debug 외 warning/error가 없고 `npm.cmd run verify`가 test 4개, source 11 route, production 106 modules와 deployment entry 16개를 통과한다.
+
+## 2026-08-25 Work editorial reading rhythm verification
+
+- [x] 1280×720 full/interactive에서 8490px track과 7225px travel, pin spacer 하나를 확인했다. 여섯 project center에서 stage는 `x/y 0 · scale 1 · opacity 1`, title/detail은 `transform identity · opacity 1`이며 중심 오차는 최대 3px다.
+- [x] 첫 THING endpoint는 progress 0/current 01과 완성 상태, 마지막 Prompt endpoint는 progress 1/current 06과 완성 상태다. 마지막 pin 이후 Contact와 Footer는 viewport에 정상 진입하고 document horizontal overflow는 0이다.
+- [x] 장면 경계에서 퇴장 stage는 실측 `x -55.44px / y -16.1px / scale .969 / opacity .492`, 다음 entrance preset은 `x 70.84px / y 22.3px / scale .94 / opacity .28` 범위다. 기존 ±140–150px scatter와 중앙 counter-motion 없이 두 작품이 끊기지 않고 인계된다.
+- [x] 빠른 scroll jump 중 rendered track `.43126`, CSS progress `.4313`, current/active `03`으로 일치했다. 별도 root 측정에서도 transition 초기에 rendered/CSS가 `.5523/.5523`, 정착 후 `.75/.75`로 동일해 raw scroll 선행 시 번호가 먼저 바뀌지 않는다.
+- [x] Browse instruction은 progress 0에서 visible/opacity 1이고 6% 뒤 hidden/opacity 0이며 역스크롤에서 복구된다. Scene connector는 정착 시 scale 1이고 first/last endpoint에 blank frame이 없다.
+- [x] Enhanced AQIS keyboard focus 직후 stage/title/copy/arrow가 identity로 복구되고 anchor outline은 2px/offset -8px, row outline none, current 02와 scrollX 0이다. Arrow는 즉시와 1초 뒤 모두 transform/translate/rotate/scale none이다.
+- [x] 390px, 768px과 1280px reduced에서 enhanced/pin/SplitText/owned inline style은 0, semantic link는 6/6이고 local/document overflow는 0이다. THING·Alkkagi native video의 원본 비율, clip none, inner transform none과 visible-play/offscreen-pause 또는 reduced-pause 계약도 유지된다.
+- [x] App-origin browser warning/error는 0이며 `node --check`, `git diff --check`와 `npm.cmd run verify`가 통과했다. Verify는 test 4개, source 11 route, production 106 modules와 deployment entry 16개를 확인했고 기존 GSAP/ScrollTrigger/SplitText chunk 외 dependency 증가는 없다.
+- [ ] 실제 touch hardware의 native vertical pan과 의도적인 GSAP/SplitText/font load failure 주입은 이번 세션에서 실행하지 않았다. Coarse/static gate, wheel/touch listener·preventDefault 부재, Promise generation guard와 fail-open cleanup은 source contract로 검증했다.

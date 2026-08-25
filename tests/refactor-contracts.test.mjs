@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import {
   EXPECTED_DEPLOYMENT_FILES,
@@ -8,27 +9,6 @@ import {
   DISPLAY_NAME,
   INTRO_WORDMARK_STROKES
 } from '../src/motion/home-intro-wordmark.js';
-import {
-  getPressureInkTargetSize,
-  hasPressureInkTargetSize
-} from '../src/motion/pressure-ink-size.js';
-import {
-  DISPLAY_SHADER,
-  VELOCITY_SPLAT_SHADER
-} from '../src/motion/pressure-ink-shaders.js';
-import {
-  DYE_SHORT_SIDE,
-  getNextPressureInkQuality,
-  MAX_QUIET_RECTS,
-  MAX_SPLATS,
-  PRESSURE_INK_QUALITY,
-  PRESSURE_ITERATIONS,
-  selectPressureInkQuality,
-  shouldDowngradePressureInkQuality,
-  SIMULATION_SHORT_SIDE
-} from '../src/motion/pressure-ink-config.js';
-import { packFluidObstacles } from '../src/motion/site-fluid-obstacles.js';
-import { SITE_FLUID_PROFILES } from '../src/motion/site-fluid-profiles.js';
 
 test('route manifest keeps unique build inputs and outputs', () => {
   assert.equal(SITE_ROUTES.length, 11);
@@ -53,117 +33,178 @@ test('handwritten wordmark preserves its public name and stroke order', () => {
   assert.ok(strokes.every(({ d, weight }) => d.startsWith('M') && weight > 0));
 });
 
-test('Pressure Ink quality profiles keep their adaptive resolution contract', () => {
-  assert.deepEqual(
-    { MAX_QUIET_RECTS, MAX_SPLATS, PRESSURE_ITERATIONS, SIMULATION_SHORT_SIDE, DYE_SHORT_SIDE },
-    {
-      MAX_QUIET_RECTS: 6,
-      MAX_SPLATS: 12,
-      PRESSURE_ITERATIONS: 14,
-      SIMULATION_SHORT_SIDE: 256,
-      DYE_SHORT_SIDE: 768
-    }
-  );
-  assert.deepEqual(
-    Object.fromEntries(Object.entries(PRESSURE_INK_QUALITY).map(([name, value]) => [name, [
-      value.simulationShortSide,
-      value.dyeShortSide,
-      value.maximumTextureDimension
-    ]])),
-    {
-      high: [256, 768, 1536],
-      balanced: [224, 640, 1536],
-      baseline: [192, 512, 1536]
-    }
-  );
-  assert.equal(selectPressureInkQuality({ viewportWidth: 1280 }).name, 'high');
-  assert.equal(selectPressureInkQuality({ viewportWidth: 1100 }).name, 'balanced');
-  assert.equal(selectPressureInkQuality({ viewportWidth: 1600, deviceMemory: 4 }).name, 'baseline');
-  assert.equal(getNextPressureInkQuality('high').name, 'balanced');
-  assert.equal(getNextPressureInkQuality('balanced').name, 'baseline');
-  assert.equal(getNextPressureInkQuality('baseline').name, 'baseline');
-  assert.equal(shouldDowngradePressureInkQuality(Array(60).fill(16.7)), false);
-  assert.equal(shouldDowngradePressureInkQuality(Array(60).fill(33.3)), false);
-  assert.equal(shouldDowngradePressureInkQuality([
-    ...Array(52).fill(16.7),
-    ...Array(8).fill(120)
-  ]), false);
-  assert.equal(shouldDowngradePressureInkQuality(Array(60).fill(45)), true);
-  assert.equal(shouldDowngradePressureInkQuality(Array(60).fill(120)), true);
-});
-
-test('Pressure Ink target sizing preserves viewport aspect while capping both axes', () => {
-  const cases = [
-    [390, 844, 'high', [256, 560], [704, 1536]],
-    [390, 844, 'balanced', [224, 480], [640, 1392]],
-    [390, 844, 'baseline', [192, 416], [512, 1104]],
-    [768, 1024, 'high', [256, 336], [768, 1024]],
-    [768, 1024, 'balanced', [224, 304], [640, 848]],
-    [768, 1024, 'baseline', [192, 256], [512, 688]],
-    [1280, 900, 'high', [368, 256], [1088, 768]],
-    [1280, 900, 'balanced', [320, 224], [912, 640]],
-    [1280, 900, 'baseline', [272, 192], [736, 512]]
-  ];
-
-  for (const [width, height, qualityName, simulation, dye] of cases) {
-    const quality = PRESSURE_INK_QUALITY[qualityName];
-    const options = { maximum: quality.maximumTextureDimension };
-    assert.deepEqual(
-      Object.values(getPressureInkTargetSize(quality.simulationShortSide, width, height, options)),
-      simulation
-    );
-    assert.deepEqual(
-      Object.values(getPressureInkTargetSize(quality.dyeShortSide, width, height, options)),
-      dye
-    );
-  }
-
-  const target = { width: 368, height: 256 };
-  assert.equal(hasPressureInkTargetSize(target, { width: 368, height: 256 }), true);
-  assert.equal(hasPressureInkTargetSize(target, { width: 352, height: 256 }), false);
-  assert.equal(hasPressureInkTargetSize(null, { width: 368, height: 256 }), false);
-  assert.match(VELOCITY_SPLAT_SHADER, /uniform vec4 uSplatData\[12\]/);
-  assert.match(VELOCITY_SPLAT_SHADER, /uniform vec4 uQuietRects\[6\]/);
-  assert.match(DISPLAY_SHADER, /outColor = alpha > 0\.0001 \? vec4\(color, alpha\) : vec4\(0\.0\)/);
-});
-
-test('Site Fluid packs six independent viewport obstacles without a giant union', () => {
-  const rects = [
-    { left: 100, right: 200, top: 100, bottom: 200, width: 100, height: 100, priority: 5 },
-    ...Array.from({ length: 7 }, (_, index) => ({
-      left: 260 + (index * 50),
-      right: 300 + (index * 50),
-      top: 220,
-      bottom: 260,
-      width: 40,
-      height: 40,
-      priority: 1
-    })),
-    { left: -200, right: -100, top: 20, bottom: 80, width: 100, height: 60, priority: 10 }
-  ];
-  const packed = packFluidObstacles(rects, { viewportWidth: 1000, viewportHeight: 500 });
-
-  assert.equal(packed.count, 6);
-  assert.equal(packed.data.length, MAX_QUIET_RECTS * 4);
-  assert.ok(Math.abs(packed.data[0] - 0.15) < 1e-6);
-  assert.ok(Math.abs(packed.data[1] - 0.7) < 1e-6);
-  assert.ok(packed.data[2] < 0.08);
-  assert.ok(packed.data[3] < 0.13);
-});
-
-test('Site Fluid profiles keep Home dominant and dark case studies palette-aware', () => {
-  assert.deepEqual(Object.keys(SITE_FLUID_PROFILES), [
-    'home', 'work', 'about', 'resume', 'legal', 'case-study'
+test('gallery direction keeps static surfaces and restrained typography', async () => {
+  const [homeHtml, galleryStyles, tokenStyles, deckSource] = await Promise.all([
+    readFile(new URL('../index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../src/styles/gallery-surface.css', import.meta.url), 'utf8'),
+    readFile(new URL('../src/styles/tokens.css', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/project-deck.js', import.meta.url), 'utf8')
   ]);
-  assert.equal(SITE_FLUID_PROFILES.home.intensity, 1);
-  assert.equal(SITE_FLUID_PROFILES.home.continuousAmbient, true);
-  assert.equal(SITE_FLUID_PROFILES['case-study'].theme, 'dark');
-  assert.ok(SITE_FLUID_PROFILES.work.intensity > SITE_FLUID_PROFILES.about.intensity);
-  assert.ok(SITE_FLUID_PROFILES.about.intensity > SITE_FLUID_PROFILES.resume.intensity);
-  assert.ok(SITE_FLUID_PROFILES.resume.intensity > SITE_FLUID_PROFILES.legal.intensity);
-  assert.match(SITE_FLUID_PROFILES.work.protectSelector, /\.work-row \.work-row__media/);
-  assert.doesNotMatch(SITE_FLUID_PROFILES.work.protectSelector, /is-work-active/);
-  assert.match(SITE_FLUID_PROFILES.resume.protectSelector, /\.resume-original__actions/);
-  assert.match(SITE_FLUID_PROFILES['case-study'].protectSelector, /\.thing-evidence-media/);
-  assert.match(SITE_FLUID_PROFILES.home.quietSelector, /\.home-contact \.site-footer/);
+
+  assert.match(homeHtml, /data-hero-surface/);
+  assert.doesNotMatch(homeHtml, /data-hero-fluid|<canvas\b/i);
+  assert.match(galleryStyles, /body::before/);
+  assert.match(galleryStyles, /repeating-linear-gradient/);
+  assert.match(tokenStyles, /Signika Variable/);
+  assert.match(tokenStyles, /font-weight: 300 700/);
+  assert.match(tokenStyles, /Jua/);
+  assert.match(tokenStyles, /jua-korean-400-normal\.woff2/);
+  assert.doesNotMatch(tokenStyles, /Asta Sans Variable|Geist Mono Variable|Dongle|Gowun Dodum/);
+  assert.match(deckSource, /pointerover/);
+  assert.match(deckSource, /focusin/);
+  assert.match(deckSource, /restoreInputState/);
+  assert.match(deckSource, /pointerInside = false/);
+  assert.doesNotMatch(deckSource, /pointermove|FLUID_OBSTACLE_EVENT/);
+});
+
+test('GSAP choreography stays route-scoped and keeps static fallbacks', async () => {
+  const [homeEntry, caseEntry, thingHtml, workHtml, homeStyles, workStyles, caseStyles, heroStory, workStory, thingStory, gsapLoader, mediaPlayback, smoothScroll] = await Promise.all([
+    readFile(new URL('../src/entries/home.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/entries/case-study.js', import.meta.url), 'utf8'),
+    readFile(new URL('../work/thing/index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../work/index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../src/styles/home.css', import.meta.url), 'utf8'),
+    readFile(new URL('../src/styles/work.css', import.meta.url), 'utf8'),
+    readFile(new URL('../src/styles/case-study.css', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/hero-story.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/work-story.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/thing-story.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/gsap-loader.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/media-playback.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/smooth-scroll.js', import.meta.url), 'utf8')
+  ]);
+
+  assert.match(homeEntry, /initHeroStory\(environment, \{ ready: homeIntro \}\)/);
+  assert.match(caseEntry, /initThingStory\(environment, \{ smoothScroll \}\)/);
+  assert.match(heroStory, /await loadGsap\(\)/);
+  assert.match(heroStory, /readySettled\s*&&\s*pageActive/);
+  assert.match(heroStory, /Promise\.resolve\(ready\)/);
+  assert.match(heroStory, /data-scroll-story-active/);
+  assert.match(heroStory, /min-width: 961px/);
+  assert.match(heroStory, /min-height: 620px/);
+  assert.match(homeStyles, /height: 155svh/);
+  assert.doesNotMatch(homeStyles, /SCROLL TO ENTER THE EXHIBITION/);
+  assert.doesNotMatch(heroStory, /\.to\(actions,\s*\{\s*autoAlpha:\s*0/s);
+  assert.match(heroStory, /\.set\(actions, \{\s*pointerEvents: 'none'/s);
+  assert.match(heroStory, /removeProperty\('pointer-events'\)/);
+  assert.match(homeStyles, /focus-within \[data-hero-actions\][\s\S]*?pointer-events: auto !important/);
+  assert.match(homeStyles, /\.home-page \.hero-story \{[\s\S]*?height: 100svh/);
+  assert.match(homeStyles, /\.home-page \.hero-story\[data-scroll-story-active\] \{[\s\S]*?height: 155svh/);
+  assert.doesNotMatch(homeStyles, /data-scroll-story-active\] \.hero-story__sticky::after/);
+  assert.match(heroStory, /removeAttribute\('data-scroll-story-active'\)/);
+  assert.doesNotMatch(heroStory, /--hero-progress/);
+  assert.match(workHtml, /data-work-showcase/);
+  assert.match(workHtml, /data-work-viewport/);
+  assert.match(workHtml, /data-work-track/);
+  assert.equal(workHtml.match(/class="work-row__chapter"/g)?.length, 6);
+  assert.equal(workHtml.match(/data-work-beat/g)?.length, 6);
+  assert.equal(workHtml.match(/data-work-artifact/g)?.length, 6);
+  assert.equal(workHtml.match(/data-work-title/g)?.length, 6);
+  assert.equal(workHtml.match(/data-work-placard/g)?.length, 6);
+  assert.match(workHtml, /id="work-list" tabindex="-1" data-work-viewport/);
+  assert.match(workStory, /min-width: 961px/);
+  assert.match(workStory, /min-height: 640px/);
+  assert.match(workStory, /Promise\.all\(\[[\s\S]*?loadGsapWithSplitText\(\),[\s\S]*?document\.fonts\?\.ready/);
+  assert.match(workStory, /SplitText\.create\(title/);
+  assert.match(workStory, /split\.revert\(\)/);
+  assert.match(workStory, /const RAIL_SCRUB = 0\.62/);
+  assert.match(workStory, /const SCENE_SCRUB = 0\.35/);
+  assert.match(workStory, /hold: 0\.38/);
+  assert.match(workStory, /handoff: 0\.7/);
+  assert.match(workStory, /x: \(\) => -getTravel\(\)/);
+  assert.match(workStory, /pin: true/);
+  assert.match(workStory, /pinSpacing: true/);
+  assert.match(workStory, /containerAnimation: horizontalTween/);
+  assert.match(workStory, /updateStoryProgress\(this\.progress\(\)\)/);
+  assert.match(workStory, /horizontalTween\?\.progress\(progress\)/);
+  assert.match(workStory, /timeline\.to\(sceneClock, \{ duration: 1, ease: 'none', progress: 1 \}, 0\)/);
+  assert.match(workStory, /list\.addEventListener\('focusin', handleFocusIn\)/);
+  assert.match(workStory, /list\.removeEventListener\('focusin', handleFocusIn\)/);
+  assert.match(workStory, /smoothScroll\.scrollTo\(targetScroll, \{ immediate: true \}\)/);
+  assert.match(workStory, /window\.scrollTo\(\{ top: targetScroll, behavior: 'auto' \}\)/);
+  assert.match(smoothScroll, /lenis\.scrollTo\(target, \{ force: true, immediate \}\)/);
+  assert.match(smoothScroll, /window\.scrollTo\(\{ top: target, behavior: immediate \? 'auto' : 'smooth' \}\)/);
+  assert.match(workStory, /stageFrom\.clipPath = 'inset\(8% 6% round 2px\)'/);
+  assert.match(workStory, /stageExit\.clipPath = 'inset\(6% 4% round 2px\)'/);
+  assert.match(workStory, /rotateX:/);
+  assert.match(workStory, /stagger: \{ amount: 0\.08, from: 'start' \}/);
+  assert.doesNotMatch(workStory, /stagger: \{ each:/);
+  assert.doesNotMatch(workStory, /-92|\b82\b|\* 2\.4/);
+  assert.match(workStory, /querySelector\('\[data-work-artifact\]'\)/);
+  assert.doesNotMatch(workStory, /querySelector(?:All)?\([^)]*(?:video|img)/);
+  assert.match(workStyles, /\.work-showcase\.work-story-enabled \.work-showcase__viewport \{[\s\S]*?height: calc\(100svh - var\(--nav-height\)\);[\s\S]*?overflow: clip/);
+  assert.match(workStyles, /\.work-list\.work-story-enabled \{[\s\S]*?width: max-content;[\s\S]*?display: flex/);
+  assert.match(workStyles, /\.work-showcase__header::after \{[\s\S]*?height: 2px;[\s\S]*?scaleX\(var\(--work-progress, 0\)\)/);
+  assert.match(workStyles, /\.work-row__composition::after \{[\s\S]*?scaleX\(var\(--work-connector-progress, 0\.12\)\)/);
+  assert.match(workStyles, /\.work-row:focus-within[\s\S]*?translate: none !important;[\s\S]*?rotate: none !important;[\s\S]*?scale: none !important;[\s\S]*?transition: none !important/);
+  assert.match(workStyles, /flex: 0 0 clamp\(1000px, 102vw, 1420px\)/);
+  assert.match(workStyles, /\.work-list\.work-story-enabled \.work-row__copy \{\s*display: contents/);
+  assert.match(workStyles, /--work-title-size: clamp\(4\.75rem, 8vw, 7rem\)/);
+  assert.match(workStyles, /--work-title-featured-size: clamp\(5\.75rem, 10\.5vw, 8\.25rem\)/);
+  assert.match(workStyles, /@media \(max-width: 840px\) \{[\s\S]*?\.work-index__hero \{[\s\S]*?grid-template-columns: minmax\(0, 1fr\)/);
+  assert.doesNotMatch(workStyles, /14\.5vw|9\.6vw|7\.3vw|6\.8vw/);
+  assert.doesNotMatch(workStyles, /border-right: 1px solid var\(--line-strong\)/);
+  assert.match(workStory, /removeProperty\('--work-progress'\)/);
+  assert.match(workStory, /removeProperty\('--work-connector-progress'\)/);
+  assert.match(workStory, /removeProperty\('translate'\)/);
+  assert.match(workStory, /refreshApiAfterStop\.refresh\(\)/);
+  assert.match(workStory, /classList\.remove\('work-story-enabled'\)/);
+  assert.match(workStory, /if \(!pageActive\) \{\s*if \(!context\) stop\(\);\s*return;/s);
+  assert.doesNotMatch(workStory, /filter: 'brightness|preventDefault\(|snap:/);
+  assert.match(thingStory, /\.thing-demo-card__media/);
+  assert.match(thingStory, /\.thing-evidence-media/);
+  assert.match(thingStory, /min-width: 1021px/);
+  assert.match(thingStory, /min-height: 640px/);
+  assert.match(thingStory, /--flow-progress/);
+  assert.match(caseStyles, /min-height: max\(760px, 108svh\)/);
+  assert.match(caseStyles, /\.case-section \{[\s\S]*?grid-template-columns: minmax\(200px, 0\.48fr\) minmax\(0, 1\.52fr\)/);
+  assert.match(caseStyles, /@media \(max-width: 840px\) \{[\s\S]*?\.case-section,[\s\S]*?grid-template-columns: minmax\(0, 1fr\)/);
+  assert.match(caseStyles, /\.case-metrics strong \{\s*font-size: clamp\(2\.35rem, 12\.5vw, 2\.8rem\)/);
+  assert.match(caseStyles, /\.thing-story-enabled \.thing-demo-card \{[\s\S]*?position: sticky/);
+  assert.match(caseStyles, /\.thing-story-enabled \.thing-demo-card__chapter \{[\s\S]*?display: block/);
+  assert.match(caseStyles, /\.thing-story-enabled \.thing-demo-card__media::before \{[\s\S]*?var\(--demo-frame-progress\)/);
+  assert.match(caseStyles, /\.thing-story-enabled \.thing-demo-card__media video \{[\s\S]*?max-height: calc\(100svh - var\(--nav-height\) - 90px\)/);
+  assert.match(caseStyles, /\.thing-story-enabled #system-path \.case-flow::before \{[\s\S]*?width: 2px;[\s\S]*?scaleY\(var\(--flow-progress, 0\)\)/);
+  assert.equal(thingHtml.match(/thing-demo-card__chapter/g)?.length, 4);
+  for (const chapter of ['01 / 04', '02 / 04', '03 / 04', '04 / 04']) {
+    assert.match(thingHtml, new RegExp(chapter.replace('/', '\\/')));
+  }
+  assert.match(thingStory, /\.fromTo\(media, \{ '--demo-frame-progress': 0 \}/);
+  assert.doesNotMatch(thingStory, /\.fromTo\(media,\s*\{[^}]*\b(?:autoAlpha|opacity|scale|y)\b/s);
+  assert.doesNotMatch(thingStory, /\.to\(media,\s*\{[^}]*\b(?:autoAlpha|opacity|scale|y)\b/s);
+  assert.doesNotMatch(thingStory, /\bvideo\b/i);
+  assert.match(mediaPlayback, /demoObserver = new IntersectionObserver/);
+  assert.match(mediaPlayback, /entry\.target\.pause\(\)/);
+  assert.match(thingStory, /removeProperty\('visibility'\)/);
+  assert.match(thingStory, /removeProperty\('--demo-frame-progress'\)/);
+  assert.match(thingStory, /removeProperty\('--flow-progress'\)/);
+  assert.match(thingStory, /classList\.remove\('thing-story-enabled'\)/);
+  assert.match(workStory, /removeProperty\('clip-path'\)/);
+  for (const source of [heroStory, thingStory]) {
+    assert.doesNotMatch(source, /pin:/);
+    assert.doesNotMatch(source, /SplitText/);
+  }
+  for (const source of [heroStory, workStory, thingStory]) {
+    assert.doesNotMatch(source, /snap:|ScrollSmoother|\bFlip\b/);
+    assert.match(source, /addEventListener\('visibilitychange', onVisibilityChange\)/);
+    assert.match(source, /removeEventListener\('visibilitychange', onVisibilityChange\)/);
+    assert.match(source, /if \(!pageActive\) \{\s*if \(!context\) stop\(\);\s*return;/s);
+  }
+  for (const story of ['demos', 'prototype', 'pipeline', 'architecture']) {
+    const section = thingHtml.match(
+      new RegExp(`<section\\b(?=[^>]*data-thing-story=["']${story}["'])[^>]*>`, 'i')
+    )?.[0];
+    assert.ok(section);
+    assert.doesNotMatch(section, /data-reveal/i);
+  }
+  assert.match(
+    caseStyles,
+    /html\.js \.case-section:not\(\.is-revealed\):not\(\[data-thing-story\]\) h2/
+  );
+  assert.match(gsapLoader, /promise = null;/);
+  assert.match(gsapLoader, /\.catch\(\(error\) =>\s*\{\s*promise = null;/s);
+  assert.match(gsapLoader, /import\('gsap\/SplitText\.js'\)/);
+  assert.match(gsapLoader, /splitTextPromise = null;/);
+  assert.match(gsapLoader, /\.catch\(\(error\) =>\s*\{\s*splitTextPromise = null;/s);
+  assert.doesNotMatch(gsapLoader, /Flip|ScrollSmoother/);
 });

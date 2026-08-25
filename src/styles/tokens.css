@@ -1,63 +1,26 @@
 @font-face {
+  font-family: "Signika Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url("../../node_modules/@fontsource-variable/signika/files/signika-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Jua";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../../node_modules/@fontsource/jua/files/jua-korean-400-normal.woff2") format("woff2");
+}
+
+@font-face {
   font-family: "Manrope Variable";
   font-style: normal;
   font-display: swap;
   font-weight: 200 800;
   src: url("../../node_modules/@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Dongle";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400;
-  src: url("../../node_modules/@fontsource/dongle/files/dongle-korean-400-normal.woff2") format("woff2");
-  unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3, U+A960-A97F, U+D7B0-D7FF;
-}
-
-@font-face {
-  font-family: "Dongle";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400;
-  src: url("../../node_modules/@fontsource/dongle/files/dongle-latin-400-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Dongle";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 700;
-  src: url("../../node_modules/@fontsource/dongle/files/dongle-korean-700-normal.woff2") format("woff2");
-  unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3, U+A960-A97F, U+D7B0-D7FF;
-}
-
-@font-face {
-  font-family: "Dongle";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 700;
-  src: url("../../node_modules/@fontsource/dongle/files/dongle-latin-700-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Gowun Dodum";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400;
-  src: url("../../node_modules/@fontsource/gowun-dodum/files/gowun-dodum-korean-400-normal.woff2") format("woff2");
-  unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3, U+A960-A97F, U+D7B0-D7FF;
-}
-
-@font-face {
-  font-family: "Gowun Dodum";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400;
-  src: url("../../node_modules/@fontsource/gowun-dodum/files/gowun-dodum-latin-400-normal.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -82,26 +45,26 @@
   --paper-muted: #6e6960;
   --paper-line: rgba(23, 21, 18, 0.18);
   --paper-line-strong: rgba(23, 21, 18, 0.34);
-  --font-display: "Dongle", "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  --font-body: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  --font-mono: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "Signika Variable", "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-body: "Signika Variable", "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "Signika Variable", "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-signature-metric: "Manrope Variable", sans-serif;
   --weight-body: 400;
-  --weight-support: 400;
-  --weight-meta: 400;
-  --weight-ui: 700;
-  --weight-heading: 700;
+  --weight-support: 500;
+  --weight-meta: 500;
+  --weight-ui: 600;
+  --weight-heading: 650;
   --weight-display: 700;
-  --type-meta: clamp(0.82rem, calc(0.8rem + 0.12vw), 0.9rem);
-  --type-label: clamp(0.875rem, calc(0.84rem + 0.1vw), 0.92rem);
-  --type-body-sm: clamp(0.95rem, calc(0.92rem + 0.12vw), 1rem);
+  --type-meta: clamp(0.75rem, calc(0.73rem + 0.08vw), 0.82rem);
+  --type-label: clamp(0.8rem, calc(0.78rem + 0.08vw), 0.86rem);
+  --type-body-sm: clamp(0.92rem, calc(0.9rem + 0.08vw), 0.98rem);
   --type-body: 1rem;
-  --type-body-lg: clamp(1.05rem, calc(1rem + 0.22vw), 1.16rem);
-  --type-lead: clamp(1.1rem, calc(1.02rem + 0.35vw), 1.25rem);
+  --type-body-lg: clamp(1rem, calc(0.97rem + 0.16vw), 1.1rem);
+  --type-lead: clamp(1.06rem, calc(1rem + 0.26vw), 1.18rem);
   --type-hero-name: clamp(3.6rem, 8.4vw, 5.8rem);
-  --type-page: clamp(3.1rem, calc(2.35rem + 3.24vw), 4.75rem);
-  --type-section: clamp(2.2rem, calc(1.8rem + 2.04vw), 3rem);
-  --type-project: clamp(1.55rem, 2.64vw, 2.1rem);
+  --type-page: clamp(2.65rem, calc(2.15rem + 2.2vw), 4.2rem);
+  --type-section: clamp(1.9rem, calc(1.65rem + 1.2vw), 2.65rem);
+  --type-project: clamp(1.4rem, calc(1.28rem + 0.55vw), 1.85rem);
   --page-max: 1280px;
   --measure: 640px;
   --nav-height: 64px;

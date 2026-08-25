@@ -55,7 +55,7 @@
             </div>
             </section>
 
-            <section class="thing-demo-section" id="thing-scenes" data-reveal>
+            <section class="thing-demo-section" id="thing-scenes" data-thing-story="demos">
               <div class="thing-demo-section__head">
                 <h2>Demos</h2>
                 <a class="text-link thing-demo-section__source" href="https://github.com/SeMinKong/THING#%EC%8B%9C%EC%97%B0" rel="noreferrer">GitHub의 전체 시연 목록 <span aria-hidden="true">↗</span></a>
@@ -64,6 +64,7 @@
               <ul class="thing-demo-list">
                 <li>
                   <figure class="thing-demo-card">
+                    <span class="thing-demo-card__chapter" aria-hidden="true">01 / 04</span>
                     <div class="thing-demo-card__media">
                       <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" controls playsinline preload="none" data-demo-video aria-label="THING 로봇 핸드가 손가락을 펴고 접고 벌리는 짧은 시연"></video>
                     </div>
@@ -76,6 +77,7 @@
                 </li>
                 <li>
                   <figure class="thing-demo-card">
+                    <span class="thing-demo-card__chapter" aria-hidden="true">02 / 04</span>
                     <div class="thing-demo-card__media">
                       <video src="/src/assets/projects/thing/demos/finger-wave.mp4" poster="/src/assets/projects/thing/demos/finger-wave-poster.webp" width="720" height="1280" controls playsinline preload="none" data-demo-video aria-label="THING 로봇 핸드의 손가락이 차례로 움직이는 웨이브 시연"></video>
                     </div>
@@ -88,6 +90,7 @@
                 </li>
                 <li>
                   <figure class="thing-demo-card">
+                    <span class="thing-demo-card__chapter" aria-hidden="true">03 / 04</span>
                     <div class="thing-demo-card__media">
                       <video src="/src/assets/projects/thing/demos/can-grasp.mp4" poster="/src/assets/projects/thing/demos/can-grasp-poster.webp" width="720" height="1280" controls playsinline preload="none" data-demo-video aria-label="THING 로봇 핸드가 원통형 캔을 감싸 쥐는 시연"></video>
                     </div>
@@ -100,6 +103,7 @@
                 </li>
                 <li>
                   <figure class="thing-demo-card">
+                    <span class="thing-demo-card__chapter" aria-hidden="true">04 / 04</span>
                     <div class="thing-demo-card__media">
                       <video src="/src/assets/projects/thing/demos/soft-grasp.mp4" poster="/src/assets/projects/thing/demos/soft-grasp-poster.webp" width="720" height="1280" controls playsinline preload="none" data-demo-video aria-label="THING 로봇 핸드가 말랑한 물체의 모양에 맞춰 쥐는 시연"></video>
                     </div>
@@ -114,7 +118,7 @@
               <p class="thing-demo-section__license" lang="en">Source media: © 2026 C103 Team · <a href="https://github.com/SeMinKong/THING" rel="noreferrer">THING repository</a> · <a href="https://github.com/SeMinKong/THING/blob/main/LICENSE" rel="noreferrer">Repository license notice</a></p>
             </section>
 
-            <section class="case-section" data-reveal>
+            <section class="case-section" data-thing-story="prototype">
               <h2>Prototype</h2>
               <div class="case-section__copy">
                 <p>공개 저장소의 제작 기록과 시험 사진을 통해 실제 텐던 라우팅, 손가락 구조, Jetson 기반 landmark 인식 환경을 확인할 수 있습니다.</p>
@@ -131,7 +135,7 @@
               </div>
             </section>
 
-            <section class="case-section case-section--dark" id="system-path" data-reveal>
+            <section class="case-section case-section--dark" id="system-path" data-thing-story="pipeline">
               <h2>Pipeline</h2>
               <div class="case-section__copy case-flow">
                 <div><strong>Perception</strong><p>Jetson에서 MediaPipe Hands가 21개 landmark를 검출하고 손 자세를 추정합니다.</p></div>
@@ -141,7 +145,7 @@
               </div>
             </section>
 
-            <section class="case-section" id="system-design" data-reveal>
+            <section class="case-section" id="system-design" data-thing-story="architecture">
               <h2>Architecture</h2>
               <div class="case-section__copy">
                 <ul class="case-list">

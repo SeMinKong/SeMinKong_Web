@@ -36,8 +36,8 @@
 
 .about-hero h1 {
   margin-top: 12px;
-  font-size: clamp(5rem, calc(3rem + 8.64vw), 8.7rem);
-  line-height: 0.9;
+  font-size: clamp(3.8rem, calc(2.7rem + 5vw), 6.8rem);
+  line-height: 0.96;
   letter-spacing: -0.012em;
   font-weight: var(--weight-display);
 }
@@ -50,7 +50,7 @@
 
 .about-hero__statement p {
   font-family: var(--font-display);
-  font-size: clamp(1.65rem, calc(1.1rem + 2.16vw), 2.55rem);
+  font-size: clamp(1.3rem, calc(1.08rem + 1vw), 1.7rem);
   font-weight: var(--weight-ui);
   line-height: 1.28;
   letter-spacing: -0.004em;
@@ -174,7 +174,7 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
 
 .about-questions__list h3 {
   max-width: 690px;
-  font-size: clamp(1.35rem, 2.4vw, 1.65rem);
+  font-size: clamp(1.12rem, calc(1.05rem + 0.25vw), 1.32rem);
   font-weight: var(--weight-heading);
   line-height: 1.42;
   letter-spacing: 0;

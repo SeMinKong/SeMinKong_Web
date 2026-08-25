@@ -43,7 +43,7 @@ export const initHomeIntro = (environment) => {
   const veil = intro.querySelector('[data-home-intro-veil]');
   const brand = intro.querySelector('[data-home-intro-brand]');
   const heroCopy = document.querySelector('[data-hero-copy]');
-  const heroFluid = document.querySelector('[data-hero-fluid]');
+  const heroSurface = document.querySelector('[data-hero-surface]');
   const navigation = document.querySelector('[data-site-nav]');
   const shouldPlay = environment.motion !== 'reduced'
     && !window.location.hash
@@ -129,7 +129,7 @@ export const initHomeIntro = (environment) => {
   const cleanupStyles = () => {
     heroName?.style.removeProperty('opacity');
     heroCopy?.style.removeProperty('opacity');
-    heroFluid?.style.removeProperty('opacity');
+    heroSurface?.style.removeProperty('opacity');
     navigation?.style.removeProperty('opacity');
   };
 
@@ -213,7 +213,7 @@ export const initHomeIntro = (environment) => {
   intro.hidden = false;
   heroName.style.opacity = '0';
   if (heroCopy) heroCopy.style.opacity = '0';
-  if (heroFluid) heroFluid.style.opacity = '0';
+  if (heroSurface) heroSurface.style.opacity = '0';
   if (navigation) navigation.style.opacity = '0';
   root.classList.add('home-intro-active');
   lockPage();
@@ -347,8 +347,8 @@ export const initHomeIntro = (environment) => {
       }, assemblyStart);
     }
 
-    if (heroFluid) {
-      timeline.add(heroFluid, {
+    if (heroSurface) {
+      timeline.add(heroSurface, {
         opacity: [0, 1],
         duration: timelineEnd - assemblyStart,
         ease: 'out(3)'
