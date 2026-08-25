@@ -841,3 +841,16 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Placard는 역할별로 context, evidence, action을 분리하되 같은 작은 X/Y vector로 이동한다. Connector custom property는 scene 정착 중 `.12 → 1`로 그려지고 initial browse instruction은 rendered progress `.06`까지 opacity/Y로 퇴장한다.
 - `loadGsapWithSplitText()`와 `document.fonts.ready`가 모두 해결된 뒤에만 enhanced class와 SplitText를 만든다. Stop은 label tween을 kill하고 context/split을 revert한 뒤 progress, connector, clip/opacity/transform과 GSAP의 `translate / rotate / scale / visibility` inline property를 제거한다.
 - Enhanced `:focus-within`은 artifact, title char, placard, arrow와 chapter를 즉시 identity로 만들고 transition을 제거한다. Semantic project anchor, tab order, native video와 wheel/touch input은 motion target이나 interception 대상이 아니다.
+
+## 2026-08-25 — Work hidden-entry crossfade override
+
+이 항목은 Work fixed reading beat의 non-zero preview, `.35` scene scrub, `.38–.70` hold와 `.70` handoff를 대체한다. Master rail의 `scrub: 0.62`, pin, SplitText와 static fallback은 유지한다.
+
+- Non-first scene은 trigger 전 stage `autoAlpha 0`, title char·summary·CTA `opacity 0`으로 prepaint한다. 다음 프로젝트가 보인 채 기다리는 상태를 허용하지 않는다.
+- Scene range는 `left 102% → right 4%`이고 scene ScrollTrigger는 `scrub: true`로 master rail의 이미 완화된 rendered progress를 직접 따른다. 별도의 time-based scrub 지연을 중첩하지 않는다.
+- Stage는 `0–.20`, title은 `.02–.26`, summary는 `.08–.24`, CTA는 `.14–.28`에 들어와 `.30–.52`에 identity로 머문다. 이전 scene은 `.52`부터 완전히 투명한 exit를 시작해 다음 scene의 entry와 같은 경계에서 교차한다.
+- Exit 완료 상태는 stage `autoAlpha 0`, title·summary·CTA `opacity 0`이다. 실제 `img`·`video`는 target하지 않고 native video stage에는 clip-path를 적용하지 않는다.
+- 번호, progress rail, browse instruction, connector, chapter label과 별도 arrow가 사라져 관련 tween과 custom property도 만들지 않는다. Active class는 focus mapping과 제한적인 `will-change` 소유권에만 사용한다.
+- Focus settlement는 stage, title, summary와 CTA를 즉시 identity로 복구한다. 첫 scene entry 생략, 마지막 scene exit 생략, semantic link·tab order·native input과 reduced/static cleanup 계약은 유지한다.
+- Enhanced track의 양쪽 padding은 동일한 safe inset을 사용하고 마지막 scene은 `100vw` basis로 끝난다. Master progress 1에서 마지막 title·summary·CTA와 stage가 모두 viewport 안에 있어야 한다.
+- Focus mapping은 현재 active 여부와 관계없이 실행한다. Immediate scroll 뒤 numeric scrub tween을 목표 progress로 완료하고, native focus scroll이 발생한 다음 두 animation frame에도 같은 위치를 재적용한다. Tab을 막거나 focus를 옮기지는 않는다.

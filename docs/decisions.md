@@ -713,3 +713,9 @@
 - Decision: 여섯 Work scene을 동일한 1.0 normalized clock 위의 `artifact → title → placard → hold → handoff`로 통합한다. 활성 작품의 지속 counter-motion과 char index 기반 scatter를 제거하고 `.38–.70`을 정확한 identity hold로 만든다. Master/scene scrub은 `.62/.35`로 줄이고 readout은 rendered track progress를 따른다.
 - Reason: 기존 장면은 media가 중앙에서도 최대 58px 이동하고 entrance/exit가 ±140–150px였으며, `stagger.each` 때문에 긴 Prompt title의 exit가 scene 끝을 넘었다. 빠른 스크롤에서는 번호가 실제 레일보다 먼저 바뀌어 작품을 읽기보다 움직임과 상태 불일치를 추적하게 했다.
 - Impact: 첫 scene의 완성 시작과 마지막 scene의 완성 종료, 실제 media 비율, semantic anchor, focus-to-center mapping과 static fallback은 유지된다. Browse instruction은 시작 구간 뒤 사라지고 connector가 scene 정착을 표시한다. 새 dependency는 없으며 기존 GSAP core, ScrollTrigger와 Work 전용 SplitText chunk만 사용한다.
+
+## 2026-08-25 — Work 정보를 한 문장으로 축소하고 전환 위상을 맞춤
+
+- Decision: Work index에서 wall header·번호·메타·통계·기술 tag·media caption·중복 화살표를 제거하고 각 프로젝트를 `실제 미디어 + 제목 + 한 줄 소개 + 상세 보기`로 제한한다. Non-first scene은 완전 투명 상태로 준비하고 scene scrub 지연을 제거하며, 이전 exit와 다음 entry를 normalized clock `.52`에서 시작한다.
+- Reason: 기존 `.22–.42` 초기 opacity와 늦은 beat 때문에 다음 프로젝트가 먼저 보인 뒤 움직여 전환이 끊겼다. 또한 상세 페이지에 이미 있는 역할·기술·수치를 인덱스에서도 반복해 프로젝트 자체보다 UI와 설명이 먼저 읽혔다.
+- Impact: Master pin과 rail scrub, SplitText, 여섯 semantic link, 원본 미디어 비율, focus-to-center, native input과 static/reduced fallback은 유지한다. 마지막 scene은 viewport basis와 대칭 safe inset으로 끝점 clipping을 막고, focus settlement는 브라우저 기본 focus scroll 다음 두 frame까지 재동기화한다. Work index는 어떤 프로젝트인지 빠르게 훑고 상세 페이지에서 근거를 읽는 역할로 분리된다.

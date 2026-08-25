@@ -882,3 +882,12 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 첫 작품은 빈 프레임 없이 완성 상태로 시작하고 마지막 작품은 exit 없이 완성 상태로 끝난다. 중간 connector는 작품이 정착할 때 한 방향으로 그려져 장면 사이의 연속성을 표시한다.
 - Header의 진행선과 현재 번호는 실제로 렌더링된 horizontal tween과 동기화한다. `SCROLL TO BROWSE`는 최초 진행 6% 안에서 사라지며 역스크롤하면 다시 나타난다.
 - Production font가 준비된 뒤 SplitText를 생성한다. `960px` 이하, `640px` 미만 높이, coarse/touch, lite/reduced와 loader/font 실패의 세로 static fallback에는 enhanced class, split glyph와 inline motion style이 남지 않는다.
+
+## 2026-08-25 — Work minimal project index override
+
+이 항목은 바로 위 Work의 wall header, 번호, metadata·proof·stack과 connector 표현을 대체한다. Pinned horizontal rail, 실제 미디어, 대형 제목과 상세 페이지 연결은 유지한다.
+
+- Work Hero는 `Projects`와 상세 페이지로 이어진다는 한 문장만 남긴다. 분야 나열, 연도, scroll instruction, 전체 개수와 현재 번호는 표시하지 않는다.
+- 각 프로젝트는 실제 미디어, 프로젝트명, 무엇을 만든 것인지 설명하는 한국어 한 문장, `상세 보기`만 제공한다. 역할, 기간, 수치, 기술 스택과 구현 근거는 각 상세 페이지에서 설명한다.
+- Media caption, chapter badge, proof grid, 기술 tag와 중복 우상단 화살표를 제거한다. Work index는 요약과 탐색에 집중하고 상세 근거를 반복하지 않는다.
+- 여섯 개의 전체-project semantic link, 제목 heading, 원본 미디어 비율, skip target과 keyboard focus 동선은 유지한다.

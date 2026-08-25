@@ -845,3 +845,15 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 390px, 768px과 1280px reduced에서 enhanced/pin/SplitText/owned inline style은 0, semantic link는 6/6이고 local/document overflow는 0이다. THING·Alkkagi native video의 원본 비율, clip none, inner transform none과 visible-play/offscreen-pause 또는 reduced-pause 계약도 유지된다.
 - [x] App-origin browser warning/error는 0이며 `node --check`, `git diff --check`와 `npm.cmd run verify`가 통과했다. Verify는 test 4개, source 11 route, production 106 modules와 deployment entry 16개를 확인했고 기존 GSAP/ScrollTrigger/SplitText chunk 외 dependency 증가는 없다.
 - [ ] 실제 touch hardware의 native vertical pan과 의도적인 GSAP/SplitText/font load failure 주입은 이번 세션에서 실행하지 않았다. Coarse/static gate, wheel/touch listener·preventDefault 부재, Promise generation guard와 fail-open cleanup은 source contract로 검증했다.
+
+## 2026-08-25 Work minimal content and hidden-entry transition verification
+
+- [x] Work Hero의 분야 strap과 추상 소개, wall header, scroll instruction, 전체/현재 번호가 없다. 여섯 scene은 각각 미디어·제목·고유한 한국어 한 줄 소개·`상세 보기`만 제공하고 전체 composition link와 상세 route를 유지한다.
+- [x] 1280×720 enhanced 초기 상태에서 첫 scene만 완성 상태다. 두 번째부터 여섯 번째 stage는 `opacity 0 / visibility hidden`, 모든 SplitText char와 summary는 `opacity 0`으로 대기해 trigger 전 사전 노출이 없다.
+- [x] 첫→두 번째 전환 직전 row 2가 viewport 밖 `x=1296.87px`일 때 stage opacity는 `.0669`, title·summary는 `0`이다. viewport edge 진입 시 stage/title은 이미 진행 중이며 이전 scene도 같은 구간에서 퇴장해 visible preset 뒤의 늦은 animation start가 없다.
+- [x] 전환 중 두 scene의 stage, title과 summary가 연속 opacity로 교차하고, 새 scene이 정착하면 identity가 된다. Briefit keyboard focus settlement에서 row가 viewport 안에 들어오고 stage `opacity 1 / transform none`, title char `opacity 1`, 단일 focus outline을 유지한다.
+- [x] 768×1024과 390×844은 enhanced class, pin spacer와 split char가 0이고 semantic link는 6/6이다. 768px에서 여섯 summary가 한 줄, 390px에서 한두 줄로 자연스럽게 감기며 document horizontal overflow가 없다.
+- [x] 1280×720 reduced도 pin/split/enhanced 없이 6개 링크를 유지한다. 실제 브라우저 warning/error는 0이고 `npm.cmd run verify`가 test 4개, source route 11개, production module 106개와 deployment entry 16개를 통과한다.
+- [x] 자연 scroll 마지막 endpoint에서 마지막 row는 `-39.82..1225.18px`, title `99.11..1086.24px`, summary `99.11..480.30px`, CTA `99.11..181.51px`, stage `402.08..1086.24px`로 모두 viewport 안에 있고 opacity 1이다.
+- [x] Prompt focus 250ms와 1.8s 후 row left·track transform이 각각 `0.18px / -6719px`로 동일하고, Briefit도 `-12.62px / -5441.5px`에서 drift 0이다. 두 경우 active link, identity content와 focus outline을 유지한다.
+- [ ] 실제 touch hardware의 native vertical pan과 의도적인 GSAP/SplitText/font failure 주입은 실행하지 않았다. 기존 coarse/static gate, native input 비가로채기와 fail-open cleanup 계약은 유지한다.
