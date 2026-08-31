@@ -162,7 +162,11 @@ for (const contract of [
   "from 'pixi.js'",
   "from 'matter-js'",
   "preference: 'webgl'",
-  'Engine.update(engine, FIXED_STEP)',
+  'Engine.update(engine, PHYSICS_SUBSTEP)',
+  "canvas.style.touchAction = 'pan-y pinch-zoom'",
+  'handwritten-wordmark__letter',
+  'getTextFragmentRects',
+  "stage.dataset.kineticLight = 'fixed-upper-left'",
   'new ResizeObserver',
   'webglcontextlost',
   'webglcontextrestored'

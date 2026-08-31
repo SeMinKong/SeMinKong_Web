@@ -891,3 +891,14 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Fine pointer는 오브제를 직접 잡고 최근 약 90ms의 이동 속도로 던진다. Touch는 `touch-action: pan-y pinch-zoom`, passive pointer listener와 `pointercancel` 정리를 유지하며 pointer capture나 `preventDefault()`를 사용하지 않는다. 짧은 tap은 작은 impulse만 준다.
 - Hero intersection 8% 미만, hidden, pagehide에서는 ticker를 즉시 멈추고 accumulator를 비운다. Visible/pageshow 복귀에서만 start하며 ResizeObserver는 renderer, viewport wall과 중앙 콘텐츠 collision body를 다시 계산한다. Sleeping 상태에서는 ticker가 자동 정지하고 다음 interaction이 다시 깨운다.
 - Reduced motion과 forced colors에서는 runtime module, WebGL context와 ticker를 만들지 않는다. Canvas는 `aria-hidden`, `tabindex=-1`이고 모든 navigation·copy·CTA는 별도 DOM 레이어가 소유한다.
+
+## 2026-08-31 — Home Kinetic 정밀도와 조명 override
+
+이 항목은 위 Home Kinetic runtime의 fixed-step 렌더링, 중앙 콘텐츠 collision과 재질 조명을 구체화한다.
+
+- World clock은 바깥쪽 `60Hz` fixed step과 그 안의 `2 × 8.33ms` substep을 사용한다. 한 frame의 catch-up은 3 step, frame delta는 50ms로 제한한다. Renderer는 마지막 두 simulation pose를 accumulator 비율로 보간하며 start, stop, resize와 lifecycle 복귀 때 pose history를 현재 body 값으로 다시 맞춘다.
+- Drag target은 substep 시간 기준 exponential response로 따라간다. Release velocity는 최근 100ms 표본의 실제 시간 간격과 recency를 반영하고 이전 body velocity와 혼합한 뒤 전체 magnitude를 최대 `14.5`로 제한한다. 대각선 입력도 축별 cap으로 더 빠르게 만들지 않는다.
+- 이름 collision은 `.handwritten-wordmark__letter`의 실제 보이는 group별 rect, 인사말은 비공백 word Range별 rect, 행동 영역은 각 `.button` rect를 사용한다. 측정은 mount, font ready와 resize에서만 다시 만들고 frame loop에서는 DOM layout을 읽지 않는다. 낮은 content restitution은 stone, signal, glass 등 각 오브제의 고유 restitution을 덮지 않는다.
+- Glass ring은 12개의 chamfered compound segment로 구성해 중앙 구멍이 실제 hit-test와 충돌에서 열린다. Pointer hit-test도 parent bounds가 아니라 compound part vertices를 사용한다.
+- 고정 점광원은 viewport 기준 `(-0.12w, -0.18h, 0.72 × diagonal)`에 둔다. Highlight, shade와 두 단계 그림자는 보간된 world pose에서 계산하며 광원 방향은 오브제 회전에 종속되지 않는다. 모든 그림자는 하나의 하단 shadow layer, 표면은 상단 object layer에 배치해 뒤에 생성된 그림자가 다른 오브제를 덮지 않는다.
+- 광원은 render-only다. Matter force, restitution과 drag에는 영향을 주지 않는다. CSS static fallback도 같은 좌상단 광원과 material별 lower-right shadow를 사용하고, reduced motion에서는 정지 조명을 유지하되 forced colors에서는 제거한다.

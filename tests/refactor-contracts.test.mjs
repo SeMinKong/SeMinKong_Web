@@ -93,9 +93,17 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(kineticRuntime, /from 'matter-js'/);
   assert.match(kineticRuntime, /preference: 'webgl'/);
   assert.match(kineticRuntime, /autoStart: false/);
-  assert.match(kineticRuntime, /Engine\.update\(engine, FIXED_STEP\)/);
+  assert.match(kineticRuntime, /const PHYSICS_SUBSTEPS = 2/);
+  assert.match(kineticRuntime, /Engine\.update\(engine, PHYSICS_SUBSTEP\)/);
+  assert.match(kineticRuntime, /interpolatePose\(state\.previous, state\.current, alpha\)/);
+  assert.match(kineticRuntime, /handwritten-wordmark__letter/);
+  assert.match(kineticRuntime, /getTextFragmentRects/);
+  assert.match(kineticRuntime, /hero-story__actions \.button/);
+  assert.match(kineticRuntime, /const shadowLayer = new Container/);
+  assert.match(kineticRuntime, /getWorldLight\(pose, viewport/);
   assert.match(kineticRuntime, /enableSleeping: true/);
   assert.match(kineticRuntime, /new ResizeObserver/);
+  assert.match(kineticRuntime, /canvas\.style\.touchAction = 'pan-y pinch-zoom'/);
   assert.match(kineticRuntime, /webglcontextlost/);
   assert.match(kineticRuntime, /webglcontextrestored/);
   assert.doesNotMatch(kineticRuntime, /setPointerCapture|requestAnimationFrame/);

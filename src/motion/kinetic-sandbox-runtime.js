@@ -1,115 +1,271 @@
-import { Application, Graphics, Rectangle } from 'pixi.js';
+import { Application, Container, Graphics, Rectangle } from 'pixi.js';
 import Matter from 'matter-js';
+import {
+  clamp,
+  getWorldLight,
+  interpolatePose,
+  smoothThrowVelocity,
+  toStageCollisionRects
+} from './kinetic-math.js';
 
 const {
   Body,
   Bodies,
+  Bounds,
   Composite,
   Constraint,
   Engine,
-  Query,
   Sleeping,
-  Vector
+  Vector,
+  Vertices
 } = Matter;
 
 const FIXED_STEP = 1000 / 60;
+const PHYSICS_SUBSTEPS = 2;
+const PHYSICS_SUBSTEP = FIXED_STEP / PHYSICS_SUBSTEPS;
 const MAX_CATCH_UP = FIXED_STEP * 3;
+const MAX_FRAME_DELTA = 50;
 const WALL_THICKNESS = 160;
-const MAX_THROW_SPEED = 18;
+const MAX_THROW_SPEED = 14.5;
+const SETTLE_DURATION = 760;
 const PAPER = 0xf1eee6;
 const INK = 0x24211d;
 const SIGNAL = 0xa73524;
+const SHADOW = 0x171512;
 
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+const MATERIAL_SPECS = {
+  stone: { elevation: 8, shadowAlpha: 0.17, specularAlpha: 0.09, shadeAlpha: 0.16 },
+  signal: { elevation: 10, shadowAlpha: 0.17, specularAlpha: 0.2, shadeAlpha: 0.12 },
+  glass: { elevation: 13, shadowAlpha: 0.1, specularAlpha: 0.72, shadeAlpha: 0.16 },
+  paper: { elevation: 5, shadowAlpha: 0.12, edgeAlpha: 0.28, shadeAlpha: 0.08 },
+  bar: { elevation: 7, shadowAlpha: 0.15, edgeAlpha: 0.14, shadeAlpha: 0.18 },
+  capsule: { elevation: 10, shadowAlpha: 0.16, edgeAlpha: 0.26, specularAlpha: 0.16, shadeAlpha: 0.12 },
+  tile: { elevation: 8, shadowAlpha: 0.15, edgeAlpha: 0.24, shadeAlpha: 0.14 }
+};
 
 const OBJECT_SPECS = [
   {
     id: 'stone', kind: 'circle', x: 0.1, y: 0.24, width: 94, height: 94,
     color: INK, stroke: 0xf1eee6, strokeAlpha: 0.34,
     velocity: { x: 2.4, y: 0.4 }, angularVelocity: 0.018,
-    density: 0.0042, restitution: 0.56
+    density: 0.0042, restitution: 0.44, friction: 0.18, frictionAir: 0.014
   },
   {
     id: 'signal', kind: 'circle', x: 0.84, y: 0.67, width: 80, height: 80,
     color: SIGNAL, stroke: 0xfff8ed, strokeAlpha: 0.38,
     velocity: { x: -2.8, y: -1.8 }, angularVelocity: -0.026,
-    density: 0.0024, restitution: 0.76
+    density: 0.0024, restitution: 0.6, friction: 0.16, frictionAir: 0.015
   },
   {
     id: 'glass', kind: 'ring', x: 0.78, y: 0.23, width: 114, height: 114,
     color: 0xffffff, stroke: 0x8f8a82, strokeAlpha: 0.48,
     velocity: { x: -1.8, y: 1.1 }, angularVelocity: 0.014,
-    density: 0.0018, restitution: 0.62
+    density: 0.0018, restitution: 0.52, friction: 0.08, frictionAir: 0.012
   },
   {
     id: 'paper', kind: 'paper', x: 0.15, y: 0.7, width: 116, height: 82,
     color: 0xfffaf0, stroke: INK, strokeAlpha: 0.2,
     angle: -0.2, velocity: { x: 1.6, y: -1.2 }, angularVelocity: -0.018,
-    density: 0.0012, restitution: 0.52
+    density: 0.0012, restitution: 0.38, friction: 0.24, frictionAir: 0.026
   },
   {
     id: 'bar', kind: 'bar', x: 0.91, y: 0.34, width: 136, height: 34,
     color: 0x4d4943, stroke: 0xf1eee6, strokeAlpha: 0.18,
     angle: 1.2, velocity: { x: -1.4, y: 2 }, angularVelocity: 0.032,
-    density: 0.0038, restitution: 0.48, mobile: false
+    density: 0.0038, restitution: 0.4, friction: 0.18, frictionAir: 0.013, mobile: false
   },
   {
     id: 'capsule', kind: 'capsule', x: 0.61, y: 0.79, width: 118, height: 46,
     color: 0xd8b46b, stroke: INK, strokeAlpha: 0.26,
     angle: 0.24, velocity: { x: 1.1, y: -2.2 }, angularVelocity: -0.024,
-    density: 0.0022, restitution: 0.66
+    density: 0.0022, restitution: 0.5, friction: 0.14, frictionAir: 0.016
   },
   {
     id: 'tile', kind: 'tile', x: 0.05, y: 0.43, width: 70, height: 70,
     color: 0x779386, stroke: INK, strokeAlpha: 0.24,
     angle: 0.78, velocity: { x: 2.1, y: 1.4 }, angularVelocity: 0.038,
-    density: 0.0028, restitution: 0.7, mobile: false
+    density: 0.0028, restitution: 0.54, friction: 0.14, frictionAir: 0.015, mobile: false
   }
 ];
 
 const getScale = (width) => clamp(width / 1280, 0.7, 1.06);
 
-const drawRoundedShape = (graphics, x, y, width, height, radius, fill, alpha = 1) => {
-  graphics.roundRect(x - width / 2, y - height / 2, width, height, radius).fill({ color: fill, alpha });
+const getRadius = (spec, height) => spec.kind === 'capsule'
+  ? height / 2
+  : spec.kind === 'paper'
+    ? 6
+    : 4;
+
+const drawShapeFill = (graphics, spec, width, height, color, alpha = 1) => {
+  if (spec.kind === 'circle') {
+    graphics.circle(0, 0, width / 2).fill({ color, alpha });
+  } else if (spec.kind === 'ring') {
+    graphics
+      .circle(0, 0, width / 2)
+      .fill({ color, alpha })
+      .circle(0, 0, width * 0.28)
+      .cut();
+  } else if (spec.kind === 'tile') {
+    graphics.roundRect(-width / 2, -height / 2, width, height, 6).fill({ color, alpha });
+  } else {
+    graphics
+      .roundRect(-width / 2, -height / 2, width, height, getRadius(spec, height))
+      .fill({ color, alpha });
+  }
+  return graphics;
+};
+
+const createSurface = (spec, width, height) => {
+  const graphics = drawShapeFill(
+    new Graphics(),
+    spec,
+    width,
+    height,
+    spec.color,
+    spec.kind === 'ring' ? 0.26 : 1
+  );
+
+  if (spec.kind === 'circle' || spec.kind === 'ring') {
+    graphics.circle(0, 0, width / 2).stroke({ color: spec.stroke, alpha: spec.strokeAlpha, width: 2 });
+    if (spec.kind === 'ring') {
+      graphics.circle(0, 0, width * 0.28).stroke({ color: 0xffffff, alpha: 0.56, width: 1.5 });
+    }
+  } else if (spec.kind === 'tile') {
+    graphics
+      .roundRect(-width / 2, -height / 2, width, height, 6)
+      .stroke({ color: spec.stroke, alpha: spec.strokeAlpha, width: 2 });
+  } else {
+    graphics
+      .roundRect(-width / 2, -height / 2, width, height, getRadius(spec, height))
+      .stroke({ color: spec.stroke, alpha: spec.strokeAlpha, width: 1.5 });
+  }
+  return graphics;
+};
+
+const getEdgePoints = (width, height) => [
+  { x: -width / 2, y: -height / 2 },
+  { x: width / 2, y: -height / 2 },
+  { x: width / 2, y: height / 2 },
+  { x: -width / 2, y: height / 2 }
+];
+
+const createEdgeLighting = (layer, width, height) => {
+  const points = getEdgePoints(width, height);
+  return points.map((start, index) => {
+    const end = points[(index + 1) % points.length];
+    const deltaX = end.x - start.x;
+    const deltaY = end.y - start.y;
+    const length = Math.max(1, Math.hypot(deltaX, deltaY));
+    const normal = { x: deltaY / length, y: -deltaX / length };
+    const dark = new Graphics()
+      .moveTo(start.x, start.y)
+      .lineTo(end.x, end.y)
+      .stroke({ color: SHADOW, alpha: 1, width: 1.8 });
+    const light = new Graphics()
+      .moveTo(start.x, start.y)
+      .lineTo(end.x, end.y)
+      .stroke({ color: 0xffffff, alpha: 1, width: 1.6 });
+    dark.alpha = 0;
+    light.alpha = 0;
+    layer.addChild(dark, light);
+    return { dark, light, normal };
+  });
 };
 
 const createView = (spec, width, height) => {
-  const graphics = new Graphics();
-  const shadow = 0x171512;
+  const material = MATERIAL_SPECS[spec.id] ?? MATERIAL_SPECS.stone;
+  const root = new Container();
+  const farShadow = drawShapeFill(new Graphics(), spec, width, height, SHADOW);
+  const nearShadow = drawShapeFill(new Graphics(), spec, width, height, SHADOW);
+  const surface = createSurface(spec, width, height);
+  const lighting = new Container();
+  const edgeLighting = (spec.kind === 'circle' || spec.kind === 'ring' || spec.kind === 'capsule')
+    ? []
+    : createEdgeLighting(lighting, width, height);
+  let highlight = null;
+  let shade = null;
+
+  farShadow.scale.set(1.05);
+  farShadow.alpha = 0;
+  nearShadow.alpha = 0;
 
   if (spec.kind === 'circle') {
-    graphics.circle(5, 9, width / 2).fill({ color: shadow, alpha: 0.15 });
-    graphics
-      .circle(0, 0, width / 2)
-      .fill({ color: spec.color })
-      .stroke({ color: spec.stroke, alpha: spec.strokeAlpha, width: 2 });
+    highlight = new Graphics()
+      .ellipse(0, 0, width * 0.16, height * 0.09).fill({ color: 0xffffff, alpha: 0.48 })
+      .ellipse(-width * 0.025, -height * 0.015, width * 0.095, height * 0.052).fill({ color: 0xffffff, alpha: 0.52 });
+    shade = new Graphics().ellipse(0, 0, width * 0.21, height * 0.11).fill({ color: SHADOW, alpha: 0.78 });
   } else if (spec.kind === 'ring') {
-    graphics.circle(5, 9, width / 2).fill({ color: shadow, alpha: 0.12 });
-    graphics
-      .circle(0, 0, width / 2)
-      .fill({ color: spec.color, alpha: 0.32 })
-      .stroke({ color: spec.stroke, alpha: spec.strokeAlpha, width: 2 })
-      .circle(0, 0, width * 0.28)
-      .cut();
-    graphics.circle(0, 0, width * 0.28).stroke({ color: 0xffffff, alpha: 0.7, width: 2 });
-  } else if (spec.kind === 'tile') {
-    const points = [0, -height / 2, width / 2, 0, 0, height / 2, -width / 2, 0];
-    graphics.poly(points.map((value, index) => value + (index % 2 === 0 ? 5 : 9)), true).fill({ color: shadow, alpha: 0.14 });
-    graphics
-      .poly(points, true)
-      .fill({ color: spec.color })
-      .stroke({ color: spec.stroke, alpha: spec.strokeAlpha, width: 2 });
-  } else {
-    const radius = spec.kind === 'capsule' ? height / 2 : spec.kind === 'paper' ? 6 : 4;
-    drawRoundedShape(graphics, 5, 9, width, height, radius, shadow, 0.14);
-    graphics
-      .roundRect(-width / 2, -height / 2, width, height, radius)
-      .fill({ color: spec.color })
-      .stroke({ color: spec.stroke, alpha: spec.strokeAlpha, width: 1.5 });
+    highlight = new Graphics().arc(0, 0, width * 0.39, -0.72, 0.72).stroke({ color: 0xffffff, alpha: 1, width: Math.max(2, width * 0.045) });
+    shade = new Graphics().arc(0, 0, width * 0.39, Math.PI - 0.58, Math.PI + 0.58).stroke({ color: SHADOW, alpha: 1, width: Math.max(2, width * 0.05) });
+  } else if (spec.kind === 'capsule') {
+    highlight = new Graphics()
+      .ellipse(0, 0, width * 0.15, height * 0.12).fill({ color: 0xffffff, alpha: 0.5 })
+      .ellipse(-width * 0.018, -height * 0.012, width * 0.09, height * 0.07).fill({ color: 0xffffff, alpha: 0.5 });
+    shade = new Graphics().ellipse(0, 0, width * 0.19, height * 0.14).fill({ color: SHADOW, alpha: 0.58 });
   }
 
-  graphics.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
-  return graphics;
+  if (shade) {
+    shade.alpha = 0;
+    lighting.addChild(shade);
+  }
+  if (highlight) {
+    highlight.alpha = 0;
+    lighting.addChild(highlight);
+  }
+
+  root.addChild(surface, lighting);
+  root.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
+
+  return {
+    edgeLighting,
+    farShadow,
+    height,
+    highlight,
+    lighting,
+    material,
+    nearShadow,
+    root,
+    shade,
+    spec,
+    surface,
+    width
+  };
+};
+
+const updateViewLighting = (view, pose, viewport) => {
+  const light = getWorldLight(pose, viewport, view.material.elevation);
+  const localLight = Vector.rotate(light.toward, -pose.angle);
+  const lightAngle = Math.atan2(localLight.y, localLight.x);
+
+  view.farShadow.position.set(pose.x + light.farShadow.x, pose.y + light.farShadow.y);
+  view.nearShadow.position.set(pose.x + light.nearShadow.x, pose.y + light.nearShadow.y);
+  view.farShadow.rotation = pose.angle;
+  view.nearShadow.rotation = pose.angle;
+  view.farShadow.alpha = view.material.shadowAlpha * 0.34 * light.intensity;
+  view.nearShadow.alpha = view.material.shadowAlpha * 0.72 * light.intensity;
+  view.surface.rotation = pose.angle;
+  view.lighting.rotation = pose.angle;
+
+  if (view.highlight) {
+    const offset = view.spec.kind === 'ring' ? 0 : Math.min(view.width, view.height) * 0.17;
+    view.highlight.position.set(localLight.x * offset, localLight.y * offset);
+    view.highlight.rotation = lightAngle + (view.spec.kind === 'ring' ? 0 : Math.PI / 4);
+    view.highlight.alpha = (view.material.specularAlpha ?? 0) * light.intensity;
+  }
+
+  if (view.shade) {
+    const isRing = view.spec.kind === 'ring';
+    const offset = isRing ? 0 : Math.min(view.width, view.height) * 0.18;
+    view.shade.position.set(-localLight.x * offset, -localLight.y * offset);
+    view.shade.rotation = isRing ? lightAngle : lightAngle + Math.PI / 4;
+    view.shade.alpha = (view.material.shadeAlpha ?? 0) * light.intensity;
+  }
+
+  for (const edge of view.edgeLighting) {
+    const facing = edge.normal.x * localLight.x + edge.normal.y * localLight.y;
+    edge.light.alpha = Math.max(0, facing) * (view.material.edgeAlpha ?? 0) * light.intensity;
+    edge.dark.alpha = Math.max(0, -facing) * (view.material.shadeAlpha ?? 0) * light.intensity;
+  }
 };
 
 const createBody = (spec, x, y, width, height) => {
@@ -117,15 +273,39 @@ const createBody = (spec, x, y, width, height) => {
     label: `kinetic:${spec.id}`,
     angle: spec.angle ?? 0,
     density: spec.density,
-    friction: 0.16,
-    frictionAir: 0.016,
-    frictionStatic: 0.22,
+    friction: spec.friction ?? 0.14,
+    frictionAir: spec.frictionAir ?? 0.014,
+    frictionStatic: (spec.friction ?? 0.14) + 0.06,
     restitution: spec.restitution,
-    sleepThreshold: 50
+    sleepThreshold: 96,
+    slop: 0.035
   };
 
-  if (spec.kind === 'circle' || spec.kind === 'ring') {
+  if (spec.kind === 'circle') {
     return Bodies.circle(x, y, width / 2, common);
+  }
+
+  if (spec.kind === 'ring') {
+    const segmentCount = 12;
+    const middleRadius = width * 0.39;
+    const thickness = width * 0.21;
+    const segmentLength = (Math.PI * 2 * middleRadius / segmentCount) * 1.08;
+    const parts = Array.from({ length: segmentCount }, (_, index) => {
+      const angle = index / segmentCount * Math.PI * 2;
+      return Bodies.rectangle(
+        x + Math.cos(angle) * middleRadius,
+        y + Math.sin(angle) * middleRadius,
+        segmentLength,
+        thickness,
+        {
+          ...common,
+          angle: angle + Math.PI / 2,
+          label: `${common.label}:segment`,
+          chamfer: { radius: thickness * 0.42 }
+        }
+      );
+    });
+    return Body.create({ ...common, parts });
   }
 
   if (spec.kind === 'tile') {
@@ -139,6 +319,32 @@ const createBody = (spec, x, y, width, height) => {
       : { radius: 3 };
 
   return Bodies.rectangle(x, y, width, height, { ...common, chamfer });
+};
+
+const getElementRects = (elements) => [...elements]
+  .map((element) => element.getBoundingClientRect())
+  .filter((rect) => rect.width >= 0.01 && rect.height >= 2);
+
+const getTextFragmentRects = (element) => {
+  if (!element) return [];
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  const range = document.createRange();
+  const rects = [];
+  let node = walker.nextNode();
+
+  while (node) {
+    const text = node.nodeValue ?? '';
+    for (const match of text.matchAll(/\S+/gu)) {
+      const start = match.index ?? 0;
+      range.setStart(node, start);
+      range.setEnd(node, start + match[0].length);
+      rects.push(...range.getClientRects());
+    }
+    node = walker.nextNode();
+  }
+
+  range.detach?.();
+  return rects.filter((rect) => rect.width >= 2 && rect.height >= 2);
 };
 
 export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = {}) => {
@@ -166,21 +372,30 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     sharedTicker: false,
     clearBeforeRender: true
   });
+  // Pixi's event system applies `touch-action: none` inline during init.
+  // Restore the native vertical gesture contract owned by the canvas CSS.
+  canvas.style.touchAction = 'pan-y pinch-zoom';
 
-  const engine = Engine.create({ enableSleeping: true });
+  const engine = Engine.create({
+    enableSleeping: true,
+    positionIterations: 8,
+    velocityIterations: 6,
+    constraintIterations: 4
+  });
   engine.gravity.x = 0;
   engine.gravity.y = 0;
   engine.gravity.scale = 0;
 
   const bodyToView = new Map();
   const dynamicBodies = [];
+  const poseStates = new Map();
   let accumulator = 0;
   let activePointer = null;
   let contentBodies = [];
   let destroyed = false;
   let height = initialRect.height;
   let running = false;
-  let sleepingFrames = 0;
+  let settledDuration = 0;
   let walls = [];
   let width = initialRect.width;
 
@@ -190,14 +405,17 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     pointB: { x: 0, y: 0 },
     bodyB: null,
     length: 0,
-    stiffness: 0.2,
-    damping: 0.14
+    stiffness: 0.18,
+    damping: 0.24
   });
   Composite.add(engine.world, dragConstraint);
 
   const specs = OBJECT_SPECS.filter((spec) => !coarsePointer || spec.mobile !== false);
   const scale = getScale(width);
   const inset = coarsePointer ? 16 : width <= 1000 ? 24 : 32;
+  const shadowLayer = new Container();
+  const objectLayer = new Container();
+  app.stage.addChild(shadowLayer, objectLayer);
 
   for (const spec of specs) {
     const bodyWidth = spec.width * scale;
@@ -211,7 +429,12 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     Body.setAngularVelocity(body, spec.angularVelocity);
     dynamicBodies.push(body);
     bodyToView.set(body, view);
-    app.stage.addChild(view);
+    poseStates.set(body, {
+      previous: { x: body.position.x, y: body.position.y, angle: body.angle },
+      current: { x: body.position.x, y: body.position.y, angle: body.angle }
+    });
+    shadowLayer.addChild(view.farShadow, view.nearShadow);
+    objectLayer.addChild(view.root);
   }
 
   Composite.add(engine.world, dynamicBodies);
@@ -219,30 +442,47 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   const rebuildContentBodies = () => {
     for (const body of contentBodies) Composite.remove(engine.world, body);
     const stageRect = stage.getBoundingClientRect();
-    const obstacles = [
-      { element: document.querySelector('.hero-identity__name'), padding: 16 },
-      { element: document.querySelector('.hero-identity__statement'), padding: 14 },
-      { element: document.querySelector('.hero-story__actions'), padding: 12 }
+    const nameElement = document.querySelector('.hero-identity__name');
+    const nameGlyphRects = getElementRects(document.querySelectorAll('.handwritten-wordmark__letter'));
+    const groups = [
+      {
+        label: 'kinetic:text:name',
+        padding: 4,
+        rects: nameGlyphRects.length
+          ? nameGlyphRects
+          : getElementRects(nameElement ? [nameElement] : [])
+      },
+      {
+        label: 'kinetic:text:statement',
+        padding: 5,
+        rects: getTextFragmentRects(document.querySelector('.hero-identity__statement'))
+      },
+      {
+        label: 'kinetic:text:action',
+        padding: 7,
+        rects: getElementRects(document.querySelectorAll('.hero-story__actions .button'))
+      }
     ];
 
-    contentBodies = obstacles.flatMap(({ element, padding }) => {
-      if (!element) return [];
-      const rect = element.getBoundingClientRect();
-      if (rect.width < 2 || rect.height < 2) return [];
-      return [Bodies.rectangle(
-        rect.left - stageRect.left + rect.width / 2,
-        rect.top - stageRect.top + rect.height / 2,
-        rect.width + padding * 2,
-        rect.height + padding * 2,
+    contentBodies = groups.flatMap(({ label, padding, rects }) => (
+      toStageCollisionRects(rects, stageRect, padding).map((rect) => Bodies.rectangle(
+        rect.x,
+        rect.y,
+        rect.width,
+        rect.height,
         {
           isStatic: true,
-          label: 'kinetic:content-boundary',
-          friction: 0.08,
-          restitution: 0.72
+          label,
+          friction: 0.22,
+          frictionStatic: 0.28,
+          restitution: 0.08,
+          slop: 0.025,
+          chamfer: { radius: clamp(Math.min(rect.width, rect.height) * 0.22, 2, 10) }
         }
-      )];
-    });
+      ))
+    ));
     Composite.add(engine.world, contentBodies);
+    stage.dataset.kineticObstacles = String(contentBodies.length);
   };
 
   const rebuildWalls = () => {
@@ -262,10 +502,52 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     Composite.add(engine.world, walls);
   };
 
-  const syncViews = () => {
+  const resetPoseStates = () => {
+    for (const body of dynamicBodies) {
+      const state = poseStates.get(body);
+      if (!state) continue;
+      state.previous.x = body.position.x;
+      state.previous.y = body.position.y;
+      state.previous.angle = body.angle;
+      state.current.x = body.position.x;
+      state.current.y = body.position.y;
+      state.current.angle = body.angle;
+    }
+  };
+
+  const advancePhysics = () => {
+    for (const state of poseStates.values()) {
+      state.previous.x = state.current.x;
+      state.previous.y = state.current.y;
+      state.previous.angle = state.current.angle;
+    }
+
+    for (let index = 0; index < PHYSICS_SUBSTEPS; index += 1) {
+      if (activePointer) {
+        const response = 1 - Math.exp(-42 * (PHYSICS_SUBSTEP / 1000));
+        dragConstraint.pointA.x += (activePointer.target.x - dragConstraint.pointA.x) * response;
+        dragConstraint.pointA.y += (activePointer.target.y - dragConstraint.pointA.y) * response;
+      }
+      Engine.update(engine, PHYSICS_SUBSTEP);
+    }
+
+    for (const body of dynamicBodies) {
+      const state = poseStates.get(body);
+      if (!state) continue;
+      state.current.x = body.position.x;
+      state.current.y = body.position.y;
+      state.current.angle = body.angle;
+    }
+  };
+
+  const syncViews = (alpha = 1) => {
     for (const [body, view] of bodyToView) {
-      view.position.set(body.position.x, body.position.y);
-      view.rotation = body.angle;
+      const state = poseStates.get(body);
+      const pose = state
+        ? interpolatePose(state.previous, state.current, alpha)
+        : { x: body.position.x, y: body.position.y, angle: body.angle };
+      view.root.position.set(pose.x, pose.y);
+      updateViewLighting(view, pose, { width, height });
     }
   };
 
@@ -278,6 +560,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     running = false;
     app.stop();
     accumulator = 0;
+    settledDuration = 0;
+    resetPoseStates();
+    syncViews(1);
     setStageState(dynamicBodies.every((body) => body.isSleeping) ? 'sleeping' : 'paused');
   };
 
@@ -285,23 +570,26 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     if (destroyed || running) return;
     running = true;
     accumulator = 0;
-    sleepingFrames = 0;
+    settledDuration = 0;
+    resetPoseStates();
+    syncViews(1);
     setStageState('running');
     app.start();
   };
 
   const handleTick = (ticker) => {
     try {
-      accumulator = Math.min(accumulator + ticker.deltaMS, MAX_CATCH_UP);
+      const frameDelta = clamp(ticker.deltaMS, 0, MAX_FRAME_DELTA);
+      accumulator = Math.min(accumulator + frameDelta, MAX_CATCH_UP);
       while (accumulator >= FIXED_STEP) {
-        Engine.update(engine, FIXED_STEP);
+        advancePhysics();
         accumulator -= FIXED_STEP;
       }
-      syncViews();
+      syncViews(accumulator / FIXED_STEP);
 
       const settled = !activePointer && dynamicBodies.every((body) => body.isSleeping || (body.speed < 0.035 && Math.abs(body.angularSpeed) < 0.012));
-      sleepingFrames = settled ? sleepingFrames + 1 : 0;
-      if (sleepingFrames > 48) {
+      settledDuration = settled ? settledDuration + frameDelta : 0;
+      if (settledDuration >= SETTLE_DURATION) {
         dynamicBodies.forEach((body) => Sleeping.set(body, true));
         stop();
       }
@@ -314,9 +602,10 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   app.ticker.add(handleTick);
   rebuildWalls();
   rebuildContentBodies();
-  syncViews();
+  syncViews(1);
   app.stage.hitArea = new Rectangle(0, 0, width, height);
   app.render();
+  stage.dataset.kineticLight = 'fixed-upper-left';
   setStageState('ready');
 
   const toWorldPoint = (clientX, clientY) => {
@@ -327,7 +616,10 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     };
   };
 
-  const findBody = (point) => Query.point(dynamicBodies, point)[0] ?? null;
+  const findBody = (point) => dynamicBodies.find((body) => {
+    const parts = body.parts.length > 1 ? body.parts.slice(1) : [body];
+    return parts.some((part) => Bounds.contains(part.bounds, point) && Vertices.contains(part.vertices, point));
+  }) ?? null;
 
   const releasePointer = (event, applyThrow = true) => {
     if (!activePointer || event.pointerId !== activePointer.id) return;
@@ -335,27 +627,27 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     const point = toWorldPoint(event.clientX, event.clientY);
     activePointer.samples.push({ ...point, time: performance.now() });
     const samples = activePointer.samples;
-    const newest = samples.at(-1);
-    const oldest = samples.find((sample) => newest.time - sample.time <= 90) ?? samples[0];
-    const elapsed = Math.max(16, newest.time - oldest.time);
-    const travel = Math.hypot(newest.x - activePointer.start.x, newest.y - activePointer.start.y);
+    const travel = Math.hypot(point.x - activePointer.start.x, point.y - activePointer.start.y);
 
     dragConstraint.bodyB = null;
     dragConstraint.pointB = { x: 0, y: 0 };
 
     if (applyThrow && travel >= 7) {
-      const velocity = {
-        x: clamp(((newest.x - oldest.x) / elapsed) * FIXED_STEP, -MAX_THROW_SPEED, MAX_THROW_SPEED),
-        y: clamp(((newest.y - oldest.y) / elapsed) * FIXED_STEP, -MAX_THROW_SPEED, MAX_THROW_SPEED)
-      };
+      const velocity = smoothThrowVelocity(samples, body.velocity, {
+        fixedStep: FIXED_STEP,
+        maxSpeed: MAX_THROW_SPEED,
+        windowMs: 100,
+        pointerWeight: 0.84
+      });
       Body.setVelocity(body, velocity);
-      Body.setAngularVelocity(body, clamp(velocity.x * 0.012 + activePointer.localPoint.y * 0.0007, -0.24, 0.24));
+      const releaseTorque = activePointer.localPoint.x * velocity.y - activePointer.localPoint.y * velocity.x;
+      Body.setAngularVelocity(body, clamp(releaseTorque * 0.00085 + body.angularVelocity * 0.18, -0.18, 0.18));
     } else if (applyThrow && activePointer.pointerType === 'touch') {
       Body.setVelocity(body, {
-        x: point.x < width / 2 ? 4.8 : -4.8,
-        y: -6.2
+        x: point.x < width / 2 ? 3.2 : -3.2,
+        y: -4.2
       });
-      Body.setAngularVelocity(body, point.x < width / 2 ? 0.06 : -0.06);
+      Body.setAngularVelocity(body, point.x < width / 2 ? 0.045 : -0.045);
     }
 
     Sleeping.set(body, false);
@@ -373,7 +665,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     const offset = Vector.sub(point, body.position);
     const localPoint = Vector.rotate(offset, -body.angle);
     Sleeping.set(body, false);
-    Body.setVelocity(body, { x: body.velocity.x * 0.35, y: body.velocity.y * 0.35 });
+    Body.setVelocity(body, { x: body.velocity.x * 0.5, y: body.velocity.y * 0.5 });
     dragConstraint.bodyB = body;
     dragConstraint.angleB = body.angle;
     dragConstraint.pointA = { ...point };
@@ -384,7 +676,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       localPoint,
       pointerType: event.pointerType,
       samples: [{ ...point, time: performance.now() }],
-      start: point
+      start: point,
+      target: { ...point }
     };
     canvas.style.cursor = 'grabbing';
     start();
@@ -398,11 +691,11 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
     if (event.pointerId !== activePointer.id) return;
 
-    dragConstraint.pointA.x = point.x;
-    dragConstraint.pointA.y = point.y;
+    activePointer.target.x = point.x;
+    activePointer.target.y = point.y;
     const now = performance.now();
     activePointer.samples.push({ ...point, time: now });
-    activePointer.samples = activePointer.samples.filter((sample) => now - sample.time <= 110).slice(-6);
+    activePointer.samples = activePointer.samples.filter((sample) => now - sample.time <= 120).slice(-24);
   };
 
   const handlePointerUp = (event) => releasePointer(event, true);
@@ -439,7 +732,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
         y: clamp(body.position.y, halfHeight, height - halfHeight)
       });
     }
-    syncViews();
+    resetPoseStates();
+    syncViews(1);
     app.render();
   };
 
@@ -479,10 +773,10 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     const safeDirection = Number.isFinite(direction.x) ? direction : { x: 0.7, y: -0.7 };
     Sleeping.set(body, false);
     Body.setVelocity(body, {
-      x: clamp(safeDirection.x * 7 + (point.x < width / 2 ? 2 : -2), -9, 9),
-      y: clamp(safeDirection.y * 7 - 2.5, -9, 9)
+      x: clamp(safeDirection.x * 4.6 + (point.x < width / 2 ? 1.4 : -1.4), -6.2, 6.2),
+      y: clamp(safeDirection.y * 4.6 - 1.6, -6.2, 6.2)
     });
-    Body.setAngularVelocity(body, point.x < body.position.x ? 0.08 : -0.08);
+    Body.setAngularVelocity(body, point.x < body.position.x ? 0.055 : -0.055);
     start();
   };
 
@@ -508,9 +802,13 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       Composite.clear(engine.world, false, true);
       Engine.clear(engine);
       bodyToView.clear();
+      poseStates.clear();
       dynamicBodies.length = 0;
       app.destroy({ removeView: false }, { children: true });
       canvas.style.removeProperty('cursor');
+      canvas.style.removeProperty('touch-action');
+      delete stage.dataset.kineticLight;
+      delete stage.dataset.kineticObstacles;
       stage.dataset.kineticState = 'static';
     }
   };

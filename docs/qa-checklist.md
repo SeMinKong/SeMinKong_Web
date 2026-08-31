@@ -910,3 +910,16 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify`가 contract test 7개, source route 11개·stylesheet 12개, production module 764개와 deployment entry 15개를 통과했다. Production preview 1280×720도 canvas 1개, Hero 720px, overflow 0, warning/error 0이다. `git diff --check` whitespace error는 0이고 기존 Windows line-ending 안내만 있다.
 - [ ] 실제 touch hardware의 수평 flick/세로 pan 경쟁, background tab hide/restore, BFCache, WebGL context loss/restore와 의도적 dynamic-import failure는 이번 브라우저 세션에서 직접 주입하지 않았다. Passive touch contract, observer/page lifecycle, 1회 recover와 static fail-open은 source test로 검증한다.
 - [ ] Production publish는 수행하지 않았다. Commit/push/deploy는 사용자의 명시적 요청이 필요하다.
+
+## 2026-08-31 Kinetic interpolation, text collision, and fixed-light verification
+
+- [x] 1280×720, 768×1024, 390×844 실제 브라우저에서 Hero 높이는 각각 viewport와 같은 `720 / 1024 / 844px`이고 `scrollWidth === clientWidth`다. 세 폭 모두 canvas opacity 1, `data-kinetic-light="fixed-upper-left"`, warning/error 0을 유지한다.
+- [x] 이름의 아홉 SVG letter, 인사말의 여덟 non-whitespace word와 CTA 두 개가 총 19개의 독립 정적 body로 측정된다. 폭이 약 `0.05px`인 Signika `i` stroke도 padding을 포함한 collision body를 가지며 보이지 않는 단어 사이 공백은 하나의 큰 사각형으로 막지 않는다.
+- [x] 1280px에서 오브제를 CTA 방향으로 직접 drag·throw한 뒤 state가 `running`으로 복귀하고 scroll/focus를 탈취하지 않으며 console warning/error가 없다. Runtime은 content restitution보다 오브제별 restitution을 유지해 문자에서 재질별로 튕긴다.
+- [x] 60Hz outer step, 두 번의 8.33ms substep, 이전·현재 pose 보간, frame/catch-up cap과 최근 입력 시간 가중 throw를 source 및 unit contract로 확인했다. 대각선 throw는 축별이 아니라 전체 magnitude `14.5`에서 제한된다.
+- [x] 모든 재질의 highlight/shade와 그림자가 viewport 좌상단 바깥 하나의 point light를 사용한다. 그림자는 global shadow layer에 있고 object surface보다 항상 아래에서 합성되며, light vector는 body 회전과 독립적이다.
+- [x] Pixi init이 넣는 inline `touch-action:none`을 즉시 `pan-y pinch-zoom`으로 복구한다. 실제 세 viewport computed style과 source contract 모두 동일하고 pointer listener는 passive, pointer capture와 gesture `preventDefault()`는 없다.
+- [x] 390×844 `?motion=reduced`는 state static, canvas `display:none / 300×150`, CSS fallback opacity 1이고 WebGL light·collision dataset을 만들지 않는다. 정적 fallback의 재질 조명은 같은 좌상단 방향을 유지한다.
+- [x] `npm.cmd run verify`가 11개 test, source route 11개·stylesheet 12개, production module 765개와 deployment entry 15개를 통과했다. Kinetic runtime은 `202.59 kB raw / 59.57 kB gzip`이고 `git diff --check` whitespace error는 0이다.
+- [ ] 실제 touch hardware의 빠른 flick/세로 pan 경쟁, 120Hz 물리 pose의 육안 비교, background tab·BFCache와 WebGL context loss/restore는 이번 세션에서 직접 주입하지 않았다. 관련 magnitude, interpolation, passive input, lifecycle과 static recovery 계약은 source/test로 확인했다.
+- [ ] Production publish는 수행하지 않았다. 이번 요청은 local 구현과 검증 범위이며 commit/push/deploy는 별도 명시 요청이 필요하다.
