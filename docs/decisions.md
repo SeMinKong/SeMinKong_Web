@@ -719,3 +719,40 @@
 - Decision: Work index에서 wall header·번호·메타·통계·기술 tag·media caption·중복 화살표를 제거하고 각 프로젝트를 `실제 미디어 + 제목 + 한 줄 소개 + 상세 보기`로 제한한다. Non-first scene은 완전 투명 상태로 준비하고 scene scrub 지연을 제거하며, 이전 exit와 다음 entry를 normalized clock `.52`에서 시작한다.
 - Reason: 기존 `.22–.42` 초기 opacity와 늦은 beat 때문에 다음 프로젝트가 먼저 보인 뒤 움직여 전환이 끊겼다. 또한 상세 페이지에 이미 있는 역할·기술·수치를 인덱스에서도 반복해 프로젝트 자체보다 UI와 설명이 먼저 읽혔다.
 - Impact: Master pin과 rail scrub, SplitText, 여섯 semantic link, 원본 미디어 비율, focus-to-center, native input과 static/reduced fallback은 유지한다. 마지막 scene은 viewport basis와 대칭 safe inset으로 끝점 clipping을 막고, focus settlement는 브라우저 기본 focus scroll 다음 두 frame까지 재동기화한다. Work index는 어떤 프로젝트인지 빠르게 훑고 상세 페이지에서 근거를 읽는 역할로 분리된다.
+
+## 2026-08-31 — Evidence-first Home과 비차단 서명 모션
+
+- Decision: Home의 첫 화면을 `역할 → 제공 가치 → 대표 근거 → 다음 행동` 순서로 재구성하고, THING 실제 산출물을 첫 viewport의 시각적 근거로 사용한다. 기존 Home Intro는 화면·입력·접근성 트리를 잠그는 gate가 아니라 780ms 이내의 SVG 서명 enhancement로 축소하며, 최초 wheel·pointer·touch·keyboard 입력은 소비하지 않고 애니메이션만 즉시 완료한다.
+- Reason: 방문자가 인터랙션을 통과해야 정체성과 대표 작업을 알 수 있는 구조는 채용 담당자와 터치 사용자의 탐색 속도를 낮췄다. Apple식 완성도는 장식의 양보다 명확한 정보 위계, 실제 제품 근거, 사용자가 통제권을 잃지 않는 모션에서 나온다.
+- Impact: 2026-08-18의 greeting-only, 역할 비노출 결정과 과거 blocking Intro 검증은 이 결정으로 대체된다. Anime.js는 서명·entrance·page-transition 기본 라이브러리로 남고, GSAP은 기존 Home scroll handoff·Work rail·THING에만 route-scoped로 유지한다. Home story는 1001px/620px 이상에서만 138svh로 활성화되며 1000px 이하, reduced motion, hash/BFCache 복귀, touch/coarse pointer는 즉시 정적 완성 상태를 사용한다.
+
+## 2026-08-31 — 빠른 탐색, Case 맥락, HTML-first Resume
+
+- Decision: Work 상단에 여섯 프로젝트로 바로 이동하는 Fast track을 두고, 960px 이하에서는 프로젝트 설명을 미디어보다 먼저 읽히게 하며 자동 preview는 poster 상태로 둔다. 모든 controls video는 동일한 offscreen/hidden/pagehide pause lifecycle을 사용한다. 여섯 Case에는 한 문장 lede와 sticky local navigation을 제공한다. Resume는 공개 HTML Profile을 원본으로 삼고, 전화번호·생년월일이 포함된 PDF·DOCX·미리보기 PNG는 `.private/resume/`에 보관해 배포 manifest에서 제외한다.
+- Reason: 대표 작업을 발견하고 근거를 확인하는 경로를 줄이는 동시에, 작은 화면에서 시각 자료 때문에 핵심 설명이 밀리는 문제를 없애야 했다. 다운로드 원본은 공개 링크만 숨겨도 직접 URL에 남으므로 공개 범위 자체를 줄이는 편이 안전하다.
+- Impact: 2026-07-14와 2026-08-18의 개인정보 포함 원본 Resume 공개 결정은 대체된다. 요청 시 이메일로 정제된 파일을 전달할 수 있지만, 현재 public/dist에는 원본 세 파일이 포함되지 않는다. Production build는 이전 `dist`를 비우고 Resume directory의 승인되지 않은 추가 파일을 검증 단계에서 거부한다. Case의 기존 사실·팀 기여 범위·MRI 내부 평가 한정 문구는 유지한다.
+
+## 2026-08-31 — Progressive platform layer와 공유 품질
+
+- Decision: 11개 route에 canonical, robots, Open Graph, Twitter Card를 정적으로 제공하고 sitemap과 1200×630 공용 소셜 이미지를 배포한다. Home/Work의 명시적 project link만 moderate prefetch하고 prerender는 사용하지 않는다. Cross-document View Transition은 desktop fine-pointer와 no-preference 조건에서만 활성화하며 미지원 브라우저는 기존 Anime transition으로 fail-open한다.
+- Reason: 검색·공유 진입점도 제품 경험의 일부이며, speculative navigation과 전환 효과는 정확한 대상과 capability gate 안에서만 체감 속도를 높인다. 전역 prerender나 강제 전환은 데이터·배터리·접근성 비용을 키울 수 있다.
+- Impact: 새 runtime dependency나 Three.js를 추가하지 않는다. 본문은 OS 한글 시스템 글꼴로 읽기 밀도를 높이고 display의 Signika/Jua 정체성은 유지한다. `prefers-contrast: more`, forced colors, 명시적 media geometry, `pagehide/pageshow` media 정리를 source contract로 검증한다.
+
+## 2026-08-31 — Work 타이포 앵커, 안정적 첫 페인트와 Home Signal Lab
+
+- Decision: Work 한 줄 설명과 CTA를 모노 메타가 아닌 본문용 system stack으로 전환하고, `500/600` weight, 약 `19–20px`, `1.6` leading과 얇은 signal rule로 하나의 읽기 단위로 묶는다. Enhanced title은 desktop에서 일반 약 `96px`, THING 약 `104px`를 상한으로 둔다. Home의 `Flagship system` 표시는 native radio 기반의 세 단계 `THING Signal Lab`으로 교체한다.
+- Reason: 기존 Work는 1280px에서 설명이 약 17.9px SFMono/Consolas로 렌더링되고 제목·설명·CTA가 서로 먼 grid row에 흩어져, 실제 콘텐츠보다 임시 metadata처럼 보였다. Home의 정적 flagship label은 시스템의 핵심인 `21 landmarks → ROS 2 → 7-axis tendon` 흐름을 직접 탐색할 기회를 제공하지 못했다.
+- Impact: Home Signal Lab은 HTML radio와 CSS sibling selector만으로 완전하게 작동하고 `:has()`와 typed `@property`는 시각적 enhancement로만 사용한다. 새 JavaScript와 runtime dependency는 없다. Work는 initial HTML이 완전한 static fallback이며, eligible desktop에서만 inline prepaint가 showcase를 최대 1500ms 가린다. GSAP/SplitText와 Signika title face가 그 안에 준비되면 첫 refresh 뒤 한 번에 공개하고, timeout·loader·font 실패 시에는 그 navigation 동안 늦게 horizontal layout으로 재전환하지 않는다.
+
+## 2026-08-31 — Home greeting copy 원복
+
+- Decision: Home Hero의 보이는 역할 라벨과 evidence-first support 문장을 제거하고 `안녕하세요! / 새로운 것을 배우고 직접 만드는 일이 즐겁습니다.`를 복원한다. CTA는 `프로젝트 → / Contact →`로 되돌린다.
+- Reason: 첫 화면의 Kinetic 오브제 방향과 일반적인 개인 소개 사이에서 THING 한 프로젝트의 설명이 개인 정체성 전체를 대신하지 않게 하고, 기존의 더 자연스럽고 개인적인 첫 문장을 유지한다.
+- Impact: 역할 라벨은 Hero story의 선택 요소가 되며, 없더라도 greeting·CTA·근거 영역의 static 및 enhanced 동작은 유지된다. 프로젝트 전문성은 바로 다음 Projects와 각 case study에서 증명한다.
+
+## 2026-08-31 — Home 전용 GPU Kinetic sandbox
+
+- Decision: Home 첫 viewport의 138svh GSAP story와 THING Signal Lab을 제거하고, 중앙 semantic 소개 뒤에 route-local Kinetic sandbox를 둔다. PixiJS 8 WebGL은 GPU 렌더링, Matter.js 0.20은 일곱 오브제의 충돌·drag·throw·sleeping을 담당한다. WebGPU·Three.js·Worker는 이번 범위에 포함하지 않는다.
+- Reason: 첫 화면을 특정 프로젝트 설명으로 고정하기보다 방문자가 즉시 만져 볼 수 있는 개인적 공간으로 만들되, 중앙 문구와 이동 링크의 명료함은 잃지 않아야 했다. Pixi Graphics와 단순 convex body 일곱 개는 이미지 asset 없이 충분한 물성을 제공하고, full 3D stack이나 experimental WebGPU보다 호환성과 복구 경로가 명확하다.
+- Impact: `Progressive platform layer`와 `Work 타이포 앵커…Signal Lab`의 “새 runtime dependency 없음” 결정은 Home sandbox에 한해 대체된다. PixiJS·Matter.js는 Home 초기 entry에 포함되지 않고 capability/intro/visibility 통과 뒤 `kinetic-sandbox-runtime` 한 청크로만 요청된다. 2026-08-31 최종 build 기준 청크는 `195.70 kB raw / 57.12 kB gzip`이다. Reduced/forced-colors/import/WebGL 실패는 초기 CSS 오브제를 유지하며, 다른 10개 route에는 canvas와 Kinetic runtime entry가 없다.
+- Impact: 보이는 조작 UI를 두지 않는 대신 자율 motion은 초기 settle 뒤 sleeping으로 끝난다. 화면 이탈·hidden·pagehide에서 ticker가 정지하고 native touch scroll을 보존한다. 중앙 이름·문장·CTA와 navigation은 정적 collision boundary이자 별도 DOM layer라서 오브제가 콘텐츠를 가리거나 tab order에 들어가지 않는다.

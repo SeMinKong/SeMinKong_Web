@@ -2,6 +2,7 @@ node_modules/
 dist/
 .pnpm-store/
 .vite/
+.private/
 
 .env
 .env.*

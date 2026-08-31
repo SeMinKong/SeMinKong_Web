@@ -8,6 +8,7 @@ const rootDirectory = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   base: './',
   build: {
+    emptyOutDir: true,
     rollupOptions: {
       input: Object.fromEntries(
         SITE_ROUTES.map(({ name, source }) => [name, resolve(rootDirectory, source)])

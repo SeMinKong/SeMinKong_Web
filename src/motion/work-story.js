@@ -13,13 +13,22 @@ const SCENE_BEATS = Object.freeze({
 });
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+const waitForTitleFont = () => (
+  typeof document.fonts?.load === 'function'
+    ? document.fonts.load('700 1em "Signika Variable"', 'THING')
+    : Promise.resolve()
+);
 
 export const initWorkStory = (environment, { smoothScroll } = {}) => {
+  const root = document.documentElement;
   const showcase = document.querySelector('[data-work-showcase]');
   const viewport = showcase?.querySelector('[data-work-viewport]');
   const list = showcase?.querySelector('[data-work-track]');
   const chapters = list ? Array.from(list.querySelectorAll('.work-row')) : [];
-  if (!showcase || !viewport || !list || chapters.length < 2) return;
+  if (!showcase || !viewport || !list || chapters.length < 2) {
+    root.classList.remove('work-story-pending');
+    return;
+  }
 
   // The horizontal story owns the project entrance. Static fallbacks keep every
   // row in normal document flow and use the generic one-shot reveal instead.
@@ -33,6 +42,7 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
   let focusConnected = false;
   let focusFrame = 0;
   let refreshFrame = 0;
+  let revealFrame = 0;
   let setupVersion = 0;
   let activeIndex = -1;
   let splitInstances = [];
@@ -44,6 +54,11 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
     && environment.motion === 'full'
     && environment.depth === 'interactive'
     && STORY_VIEWPORT.matches
+    && !root.hasAttribute('data-work-story-expired')
+    && (
+      root.classList.contains('work-story-pending')
+      || root.hasAttribute('data-work-story-ready')
+    )
   );
 
   const getTravel = () => Math.max(1, list.scrollWidth - viewport.clientWidth);
@@ -141,11 +156,15 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
   };
 
   const stop = () => {
+    const focusedElement = list.contains(document.activeElement) ? document.activeElement : null;
+    const focusedHref = focusedElement?.getAttribute?.('href') ?? null;
     setupVersion += 1;
     if (focusFrame) window.cancelAnimationFrame(focusFrame);
     focusFrame = 0;
     if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
     refreshFrame = 0;
+    if (revealFrame) window.cancelAnimationFrame(revealFrame);
+    revealFrame = 0;
     disconnectFocus();
     disconnectSmoothScroll?.();
     disconnectSmoothScroll = null;
@@ -166,6 +185,7 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
     });
     showcase.classList.remove('work-story-enabled');
     list.classList.remove('work-story-enabled');
+    root.classList.remove('work-story-pending');
     list.style.removeProperty('transform');
     list.querySelectorAll('[data-work-artifact], [data-work-title], [data-work-placard] > *, .work-row__title-char').forEach((element) => {
       element.style.removeProperty('clip-path');
@@ -179,6 +199,15 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
     });
     if (!showcase.style.cssText) showcase.removeAttribute('style');
     if (!list.style.cssText) list.removeAttribute('style');
+
+    if (focusedElement) {
+      const restoredFocus = focusedElement.isConnected
+        ? focusedElement
+        : Array.from(list.querySelectorAll('a[href]'))
+          .find((link) => link.getAttribute('href') === focusedHref);
+      restoredFocus?.focus({ preventScroll: true });
+    }
+
     if (refreshApiAfterStop && pageActive) {
       refreshFrame = window.requestAnimationFrame(() => {
         refreshFrame = 0;
@@ -206,7 +235,7 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
     try {
       const [{ gsap, ScrollTrigger, SplitText }] = await Promise.all([
         loadGsapWithSplitText(),
-        document.fonts?.ready ?? Promise.resolve()
+        waitForTitleFont()
       ]);
       if (destroyed || version !== setupVersion || !shouldEnhance() || context) return;
 
@@ -420,9 +449,17 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
       list.addEventListener('focusin', handleFocusIn);
       focusConnected = true;
       setActiveChapter(0);
+      root.dataset.workStoryReady = '';
       queueRefresh();
+      revealFrame = window.requestAnimationFrame(() => {
+        revealFrame = 0;
+        if (!destroyed && version === setupVersion && context) {
+          root.classList.remove('work-story-pending');
+        }
+      });
     } catch (error) {
       if (destroyed || version !== setupVersion) return;
+      root.dataset.workStoryExpired = '';
       stop();
       console.warn('Work showcase choreography is unavailable; the static project list remains active.', error);
     }
@@ -473,6 +510,8 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
       document.removeEventListener('visibilitychange', onVisibilityChange);
       STORY_VIEWPORT.removeEventListener('change', reconcile);
       stop();
+      root.removeAttribute('data-work-story-ready');
+      root.removeAttribute('data-work-story-expired');
     }
   };
 };

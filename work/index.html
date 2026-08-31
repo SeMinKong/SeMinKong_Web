@@ -1,15 +1,62 @@
 <!doctype html>
-<html lang="ko">
+<html class="theme-light" lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Se Min Kong의 로보틱스, Computer Vision, real-time software, AI 프로젝트입니다." />
+    <link rel="canonical" href="https://seminkong.github.io/SeMinKong_Web/work/" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:site_name" content="Se Min Kong Portfolio" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Work — Se Min Kong" />
+    <meta property="og:description" content="Se Min Kong의 로보틱스, Computer Vision, real-time software, AI 프로젝트입니다." />
+    <meta property="og:url" content="https://seminkong.github.io/SeMinKong_Web/work/" />
+    <meta property="og:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Work — Se Min Kong" />
+    <meta name="twitter:description" content="로보틱스, Computer Vision, real-time software, AI 프로젝트 모음입니다." />
+    <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
     <meta name="theme-color" content="#f1eee6" />
     <meta name="color-scheme" content="light" />
     <link rel="icon" href="/favicon.svg?v=20260818-2" type="image/svg+xml" sizes="any" />
-    <script>document.documentElement.classList.add('js');</script>
+    <script>
+      (() => {
+        const root = document.documentElement;
+        root.classList.add('js');
+
+        const localMotionOverride = ['localhost', '127.0.0.1'].includes(location.hostname)
+          && new URLSearchParams(location.search).get('motion') === 'full';
+        const storyViewport = matchMedia('(min-width: 961px) and (min-height: 640px) and (hover: hover) and (pointer: fine)').matches;
+        const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reducedMotion || (!localMotionOverride && !storyViewport)) return;
+
+        root.classList.add('work-story-pending');
+        window.setTimeout(() => {
+          if (!root.classList.contains('work-story-pending')) return;
+          if (root.hasAttribute('data-work-story-ready')) return;
+          root.dataset.workStoryExpired = '';
+          root.classList.remove('work-story-pending');
+        }, 1500);
+      })();
+    </script>
+    <style>
+      html.work-story-pending .work-showcase__viewport {
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
     <title>Work — Se Min Kong</title>
+    <script type="speculationrules">
+      {"prefetch":[{"source":"document","where":{"selector_matches":".work-fast-path a[href^='./'], .work-row__composition"},"eagerness":"moderate"}]}
+    </script>
   </head>
   <body class="work-index-page">
     <a class="skip-link" href="#work-list">프로젝트 목록으로 바로가기</a>
@@ -26,10 +73,18 @@
     <main class="work-index">
       <header class="work-index__hero page-width">
         <div class="work-index__title">
-          <h1 data-intro lang="en">Projects</h1>
+          <h1 lang="en">Projects</h1>
         </div>
         <p>프로젝트를 선택하면 만든 과정과 결과를 자세히 볼 수 있습니다.</p>
       </header>
+
+      <nav class="work-fast-path page-width" aria-label="대표 프로젝트 빠른 탐색">
+        <span class="work-fast-path__label">Fast track</span>
+        <a href="./thing/"><span>Robotics</span><strong>THING</strong><i aria-hidden="true">↗</i></a>
+        <a href="./aqis/"><span>Smart Factory</span><strong>AQIS</strong><i aria-hidden="true">↗</i></a>
+        <a href="./brain-tumor-mri/"><span>Computer Vision</span><strong>Brain MRI</strong><i aria-hidden="true">↗</i></a>
+        <a class="work-fast-path__all" href="#work-list"><span>Explore</span><strong>6 projects</strong><i aria-hidden="true">↓</i></a>
+      </nav>
 
       <section class="work-showcase" data-work-showcase aria-label="프로젝트 쇼케이스">
         <div class="work-showcase__viewport" id="work-list" tabindex="-1" data-work-viewport>
@@ -39,7 +94,7 @@
                 <a class="work-row__composition" href="./thing/" aria-label="THING 프로젝트 상세 보기">
                   <div class="work-row__media-stage work-row__media-stage--portrait work-row__media-stage--native" data-work-artifact>
                     <div class="work-row__media work-row__media--thing work-row__media--native-video" aria-hidden="true">
-                      <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" muted loop playsinline preload="none" data-auto-video></video>
+                      <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" muted loop playsinline preload="none" data-auto-video aria-hidden="true"></video>
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
@@ -56,7 +111,7 @@
                 <a class="work-row__composition" href="./aqis/" aria-label="AQIS 프로젝트 상세 보기">
                   <div class="work-row__media-stage" data-work-artifact>
                     <div class="work-row__media work-row__media--window work-row__media--aqis" aria-hidden="true">
-                      <img src="/src/assets/projects/aqis/real-ops.png" alt="" loading="lazy" decoding="async" />
+                      <img src="/src/assets/projects/aqis/real-ops.png" width="960" height="540" alt="" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
@@ -73,7 +128,7 @@
                 <a class="work-row__composition" href="./brain-tumor-mri/" aria-label="Brain Tumor MRI 프로젝트 상세 보기">
                   <div class="work-row__media-stage" data-work-artifact>
                     <div class="work-row__media work-row__media--window work-row__media--mri" aria-hidden="true">
-                      <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="" loading="lazy" decoding="async" />
+                      <img src="/src/assets/projects/brain-mri/classification-demo.png" width="2700" height="1500" alt="" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
@@ -90,7 +145,7 @@
                 <a class="work-row__composition" href="./alkkagi/" aria-label="Alkkagi.io 프로젝트 상세 보기">
                   <div class="work-row__media-stage work-row__media-stage--native" data-work-artifact>
                     <div class="work-row__media work-row__media--alkkagi work-row__media--native-video" aria-hidden="true">
-                      <video src="/src/assets/projects/alkkagi/demo.mp4" poster="/src/assets/projects/alkkagi/demo-poster.png" width="1276" height="1270" muted loop playsinline preload="none" data-auto-video></video>
+                      <video src="/src/assets/projects/alkkagi/demo.mp4" poster="/src/assets/projects/alkkagi/demo-poster.png" width="1276" height="1270" muted loop playsinline preload="none" data-auto-video aria-hidden="true"></video>
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
@@ -107,7 +162,7 @@
                 <a class="work-row__composition" href="./briefit/" aria-label="Briefit 프로젝트 상세 보기">
                   <div class="work-row__media-stage" data-work-artifact>
                     <div class="work-row__media work-row__media--window work-row__media--briefit" aria-hidden="true">
-                      <img src="/src/assets/projects/briefit/cover.webp" alt="" loading="lazy" decoding="async" />
+                      <img src="/src/assets/projects/briefit/cover.webp" width="2400" height="1350" alt="" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
@@ -124,7 +179,7 @@
                 <a class="work-row__composition" href="./project-prompt-generator/" aria-label="Project Prompt Generator 프로젝트 상세 보기">
                   <div class="work-row__media-stage" data-work-artifact>
                     <div class="work-row__media work-row__media--window work-row__media--prompt" aria-hidden="true">
-                      <img src="/src/assets/projects/prompt-generator/flow.png" alt="" loading="lazy" decoding="async" />
+                      <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>

@@ -4,6 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="YOLO11을 활용한 뇌 MRI 종양 분류 및 영역 분할 프로젝트." />
+    <link rel="canonical" href="https://seminkong.github.io/SeMinKong_Web/work/brain-tumor-mri/" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:site_name" content="Se Min Kong Portfolio" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Brain Tumor MRI — Se Min Kong" />
+    <meta property="og:description" content="YOLO11을 활용한 뇌 MRI 종양 분류 및 영역 분할 프로젝트." />
+    <meta property="og:url" content="https://seminkong.github.io/SeMinKong_Web/work/brain-tumor-mri/" />
+    <meta property="og:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Brain Tumor MRI — Se Min Kong" />
+    <meta name="twitter:description" content="YOLO11 기반 4-class 분류와 종양 영역 분할을 연결한 프로젝트입니다." />
+    <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
     <meta name="theme-color" content="#11100e" />
     <meta name="color-scheme" content="dark" />
@@ -25,7 +43,11 @@
         <header class="case-hero page-width">
           <p class="case-hero__meta" data-intro>Computer Vision · Personal · 2026</p>
           <h1 data-intro lang="en">Brain Tumor <br /> MRI</h1>
-          <dl class="case-facts" data-intro>
+          <div class="case-hero__summary" data-intro>
+            <p class="case-hero__lede">뇌 MRI의 4-class 분류와 종양 영역 분할을 하나의 학습 파이프라인과 웹 데모로 구현했습니다.</p>
+            <div class="case-hero__actions"><a class="button button--primary button--small" href="#mri-demo">웹 데모 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <dl class="case-facts" data-intro aria-label="Brain Tumor MRI 프로젝트 역할 및 핵심 근거">
             <div><dt>Role</dt><dd>Model training<br />Data pipeline · Web demo</dd></div>
             <div><dt>Period</dt><dd>Feb — Apr 2026</dd></div>
             <div><dt>Tasks</dt><dd>Classification<br />Instance segmentation</dd></div>
@@ -33,13 +55,17 @@
           </dl>
         </header>
 
-        <figure class="case-media case-media--image page-width" data-reveal="media">
-          <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="실제 웹 데모에서 출력한 10개 뇌 MRI 분류 결과" />
+        <nav class="case-local-nav" aria-label="Brain Tumor MRI 페이지 안에서 이동">
+          <div class="page-width"><a href="#mri-evidence">Evidence</a><a href="#mri-overview">Model / Data</a><a href="#mri-demo">Demo</a><a href="#mri-validation">Validation</a></div>
+        </nav>
+
+        <figure class="case-media case-media--image page-width" id="mri-evidence" data-reveal="media">
+          <img src="/src/assets/projects/brain-mri/classification-demo.png" width="2700" height="1500" alt="실제 웹 데모에서 출력한 10개 뇌 MRI 분류 결과" />
           <figcaption>Classification demo · 10 samples</figcaption>
         </figure>
 
         <div class="case-body page-width">
-          <section class="case-section" data-reveal>
+          <section class="case-section" id="mri-overview" data-reveal>
             <h2>Model / Data</h2>
             <div class="case-section__copy">
               <p>YOLO11 분류 모델로 glioma, meningioma, pituitary, healthy 네 클래스를 판별하고, 분할 모델로 종양 경계를 찾았습니다.</p>
@@ -59,12 +85,12 @@
             </div>
           </section>
 
-          <figure class="case-video case-video--native">
-            <video src="/src/assets/projects/brain-mri/demo.mp4" width="1320" height="1032" controls playsinline preload="metadata" data-reveal="video" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
+          <figure class="case-video case-video--native" id="mri-demo">
+            <video src="/src/assets/projects/brain-mri/demo.mp4" poster="/src/assets/projects/brain-mri/classification-demo.png" width="1320" height="1032" controls playsinline preload="none" data-demo-video data-reveal="video" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
             <figcaption data-reveal="text" lang="en">Classification + segmentation web demo</figcaption>
           </figure>
 
-          <section class="case-section" data-reveal>
+          <section class="case-section" id="mri-validation" data-reveal>
             <h2>Validation</h2>
             <div class="case-section__copy">
               <p>수치는 프로젝트 내부 평가 결과입니다. 데이터 분할과 재현 절차는 문서화 중이며, 외부 검증이나 임상 성능을 의미하지 않습니다.</p>
@@ -81,7 +107,7 @@
     </main>
     <footer class="page-width site-footer site-footer--light">
       <span>© 2026 Se Min Kong</span>
-      <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../">All work ↑</a></nav>
+      <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../../#contact">Contact ↗</a></nav>
     </footer>
     <script type="module" src="/src/entries/case-study.js"></script>
   </body>

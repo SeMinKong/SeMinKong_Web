@@ -57,9 +57,12 @@
 .project-card__copy p,
 .work-row__copy > p {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--type-meta);
-  font-weight: var(--weight-meta);
+  font-family: var(--font-body);
+  font-size: clamp(0.94rem, calc(0.91rem + 0.1vw), 1rem);
+  font-weight: var(--weight-support);
+  line-height: 1.62;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
 }
 
 .project-card__copy h3 a,
@@ -89,10 +92,12 @@
   gap: 12px;
   margin-top: 4px;
   color: var(--signal);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.82rem;
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--weight-ui);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 .project-card__cta i,

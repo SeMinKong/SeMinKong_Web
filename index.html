@@ -1,107 +1,44 @@
 <!doctype html>
-<html lang="ko">
+<html class="theme-light" lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Computer Vision, software, robot control을 연결해 실제로 작동하는 시스템을 만드는 Se Min Kong의 포트폴리오입니다." />
+    <link rel="canonical" href="https://seminkong.github.io/SeMinKong_Web/" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:site_name" content="Se Min Kong Portfolio" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Se Min Kong — Software Developer Portfolio" />
+    <meta property="og:description" content="Computer Vision, software, robot control을 연결해 실제로 작동하는 시스템을 만드는 Se Min Kong의 포트폴리오입니다." />
+    <meta property="og:url" content="https://seminkong.github.io/SeMinKong_Web/" />
+    <meta property="og:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Se Min Kong — Software Developer Portfolio" />
+    <meta name="twitter:description" content="Computer Vision, software, robot control을 연결해 실제로 작동하는 시스템을 만드는 포트폴리오입니다." />
+    <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
     <meta name="theme-color" content="#f1eee6" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light" />
     <link rel="icon" href="/favicon.svg?v=20260818-2" type="image/svg+xml" sizes="any" />
-    <style>
-      html.home-intro-pending {
-        background: #f1eee6;
-        scrollbar-gutter: stable;
-      }
-
-      html.home-intro-pending body {
-        overflow: hidden;
-      }
-
-      html.home-intro-pending:not(.home-intro-active) body::before {
-        content: "";
-        position: fixed;
-        z-index: 949;
-        inset: 0;
-        background: #f1eee6;
-      }
-    </style>
     <script>
-      const navigationType = performance.getEntriesByType?.('navigation')?.[0]?.type;
-      const introEligible = !location.hash
-        && !document.hidden
-        && !matchMedia('(prefers-reduced-motion: reduce)').matches
-        && navigationType !== 'back_forward';
-      const introBlockedKeys = new Set([
-        'Tab', 'Escape', 'Enter', ' ', 'Backspace',
-        'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight',
-        'PageDown', 'PageUp', 'Home', 'End'
-      ]);
-      const introScrollPosition = { x: window.scrollX, y: window.scrollY };
-      const blockIntroInput = (event) => {
-        if (event.type === 'keydown') {
-          if (event.metaKey || event.ctrlKey || event.altKey || !introBlockedKeys.has(event.key)) return;
-        }
-        if (event.cancelable) event.preventDefault();
-        event.stopImmediatePropagation();
-      };
-      const holdIntroScroll = (event) => {
-        event.stopImmediatePropagation();
-        window.scrollTo(introScrollPosition.x, introScrollPosition.y);
-      };
-      const introGateEvents = ['wheel', 'pointerdown', 'touchstart', 'touchmove', 'click'];
-      const introGate = {
-        active: introEligible,
-        fallback: 0,
-        unlock() {
-          if (!this.active) return;
-          this.active = false;
-          introGateEvents.forEach((type) => window.removeEventListener(type, blockIntroInput, true));
-          window.removeEventListener('keydown', blockIntroInput, true);
-          window.removeEventListener('scroll', holdIntroScroll, true);
-        },
-        cancelFallback() {
-          if (this.fallback) window.clearTimeout(this.fallback);
-          this.fallback = 0;
-        }
-      };
-
-      window.__homeIntroGate = introGate;
-      if (introEligible) {
-        introGateEvents.forEach((type) => window.addEventListener(type, blockIntroInput, { capture: true, passive: false }));
-        window.addEventListener('keydown', blockIntroInput, true);
-        window.addEventListener('scroll', holdIntroScroll, { capture: true, passive: true });
-      }
-
-      document.documentElement.classList.add('js', 'hero-pending');
-      if (introEligible) document.documentElement.classList.add('home-intro-pending');
-      introGate.fallback = window.setTimeout(() => {
-        window.__homeIntroTimedOut = true;
-        document.documentElement.classList.remove('hero-pending', 'home-intro-pending', 'home-intro-active', 'home-intro-locked');
-        introGate.unlock();
-        document.querySelectorAll('[data-home-intro-inert]').forEach((element) => {
-          element.removeAttribute('inert');
-          element.removeAttribute('data-home-intro-inert');
-        });
-        if (document.body?.hasAttribute('data-home-intro-busy')) {
-          document.body.removeAttribute('aria-busy');
-          document.body.removeAttribute('data-home-intro-busy');
-        }
-        document.querySelectorAll(
-          '.hero-identity__name, [data-hero-copy], [data-hero-surface], [data-site-nav]'
-        ).forEach((element) => element.style.removeProperty('opacity'));
-        document.querySelector('[data-home-intro]')?.remove();
-        window.dispatchEvent(new CustomEvent('portfolio:home-intro-timeout'));
-      }, 4000);
+      document.documentElement.classList.add('js');
     </script>
     <title>Se Min Kong — Software Developer Portfolio</title>
+    <script type="speculationrules">
+      {"prefetch":[{"source":"document","where":{"selector_matches":".hero-story__actions a[href^='./work/'], .project-card a[href^='./work/']"},"eagerness":"moderate"}]}
+    </script>
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Person","name":"Se Min Kong","url":"https://seminkong.github.io/SeMinKong_Web/","sameAs":["https://github.com/SeMinKong"],"jobTitle":"Software Developer","knowsAbout":["Computer Vision","Robotics","ROS 2","Physical AI","Software Systems"]}
+    </script>
   </head>
   <body class="home-page">
     <a class="skip-link" href="#main-content">본문으로 바로가기</a>
-    <div class="home-intro" data-home-intro role="status" aria-live="polite" aria-label="Se Min Kong 포트폴리오를 여는 중" hidden>
-      <span class="home-intro__veil" data-home-intro-veil></span>
-      <span class="home-intro__brand" data-home-intro-brand lang="en">Se Min Kong</span>
-    </div>
     <div class="page-curtain" data-page-curtain aria-hidden="true"></div>
 
     <header class="site-nav" data-site-nav>
@@ -120,6 +57,19 @@
         <div class="hero-story__sticky" data-hero-sticky>
           <div class="hero-surface" data-hero-surface aria-hidden="true">
             <span class="hero-surface__grain"></span>
+          </div>
+
+          <div class="kinetic-stage" data-kinetic-stage data-kinetic-state="static" aria-hidden="true">
+            <div class="kinetic-stage__fallback">
+              <span class="kinetic-object kinetic-object--stone"></span>
+              <span class="kinetic-object kinetic-object--signal"></span>
+              <span class="kinetic-object kinetic-object--glass"></span>
+              <span class="kinetic-object kinetic-object--paper"></span>
+              <span class="kinetic-object kinetic-object--bar"></span>
+              <span class="kinetic-object kinetic-object--capsule"></span>
+              <span class="kinetic-object kinetic-object--tile"></span>
+            </div>
+            <canvas class="kinetic-stage__canvas" data-kinetic-canvas aria-hidden="true" tabindex="-1"></canvas>
           </div>
 
           <div class="hero-story__frame page-width">
@@ -168,7 +118,7 @@
                   <span class="project-card__edge" aria-hidden="true">THING</span>
                   <div class="project-card__topline"><span>2026.07—08</span></div>
                   <div class="project-card__media project-card__media--thing" aria-hidden="true">
-                    <img src="/src/assets/projects/thing/final-demo-poster.webp" alt="" loading="lazy" decoding="async" />
+                    <img src="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" alt="" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
                     <p>Team · Robotics &amp; Edge AI</p>
@@ -188,7 +138,7 @@
                   <span class="project-card__edge" aria-hidden="true">AQIS</span>
                   <div class="project-card__topline"><span>2026</span></div>
                   <div class="project-card__media project-card__media--window project-card__media--aqis" aria-hidden="true">
-                    <img src="/src/assets/projects/aqis/real-ops.png" alt="" loading="lazy" decoding="async" />
+                    <img src="/src/assets/projects/aqis/real-ops.png" width="960" height="540" alt="" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
                     <p>Team Lead · AI Inspection &amp; Robotics</p>
@@ -208,7 +158,7 @@
                   <span class="project-card__edge" aria-hidden="true">MRI</span>
                   <div class="project-card__topline"><span>2026</span></div>
                   <div class="project-card__media project-card__media--window" aria-hidden="true">
-                    <img src="/src/assets/projects/brain-mri/classification-demo.png" alt="" loading="lazy" decoding="async" />
+                    <img src="/src/assets/projects/brain-mri/classification-demo.png" width="2700" height="1500" alt="" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
                     <p>Personal · Computer Vision</p>

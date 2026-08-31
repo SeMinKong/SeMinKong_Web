@@ -1,17 +1,19 @@
 import { loadGsap } from './gsap-loader.js';
 
-const STORY_VIEWPORT = window.matchMedia('(min-width: 961px) and (min-height: 620px)');
+const STORY_VIEWPORT = window.matchMedia('(min-width: 1001px) and (min-height: 620px)');
 
 export const initHeroStory = (environment, { ready } = {}) => {
   const track = document.querySelector('[data-hero-story]');
   const sticky = track?.querySelector('[data-hero-sticky]');
   const identity = track?.querySelector('.hero-identity');
+  const role = track?.querySelector('[data-hero-role]');
   const name = track?.querySelector('.hero-identity__name');
   const lines = Array.from(track?.querySelectorAll('[data-hero-line]') ?? []);
   const actions = track?.querySelector('[data-hero-actions]');
+  const proof = track?.querySelector('[data-hero-proof]');
   const surface = track?.querySelector('[data-hero-surface]');
 
-  if (!track || !sticky || !identity || !name || !lines.length || !actions || !surface) {
+  if (!track || !sticky || !identity || !name || !lines.length || !actions || !proof || !surface) {
     document.documentElement.classList.remove('hero-pending');
     return;
   }
@@ -40,7 +42,7 @@ export const initHeroStory = (environment, { ready } = {}) => {
     context = null;
     scrollTriggerApi = null;
     track.removeAttribute('data-scroll-story-active');
-    [track, identity, name, ...lines, actions, surface].forEach((element) => {
+    [track, identity, role, name, ...lines, actions, proof, surface].filter(Boolean).forEach((element) => {
       element.style.removeProperty('opacity');
       element.style.removeProperty('pointer-events');
       element.style.removeProperty('transform');
@@ -96,6 +98,23 @@ export const initHeroStory = (environment, { ready } = {}) => {
           .set(actions, {
             pointerEvents: 'none'
           }, 0.34)
+          .to(proof, {
+            autoAlpha: 0,
+            duration: 0.32,
+            scale: 0.98,
+            transformOrigin: 'center center',
+            y: -28
+          }, 0.2);
+
+        if (role) {
+          timeline.to(role, {
+            autoAlpha: 0,
+            duration: 0.2,
+            y: -18
+          }, 0.24);
+        }
+
+        timeline
           .to(lines, {
             autoAlpha: 0,
             duration: 0.28,

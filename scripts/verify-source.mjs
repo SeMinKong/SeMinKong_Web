@@ -5,7 +5,7 @@ import { SITE_ROUTES } from '../config/site-routes.js';
 const entryStyleContracts = {
   'about.js': ['tokens.css', 'base.css', 'about.css', 'gallery-surface.css', 'motion.css'],
   'case-study.js': ['tokens.css', 'base.css', 'case-study.css', 'gallery-surface.css', 'motion.css'],
-  'home.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'home.css', 'gallery-surface.css', 'motion.css'],
+  'home.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'home.css', 'kinetic-home.css', 'gallery-surface.css', 'motion.css'],
   'legal.js': ['tokens.css', 'base.css', 'legal.css', 'gallery-surface.css', 'motion.css'],
   'resume.js': ['tokens.css', 'base.css', 'resume.css', 'gallery-surface.css', 'motion.css'],
   'work.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'work.css', 'gallery-surface.css', 'motion.css']
@@ -14,10 +14,10 @@ const entryStyleContracts = {
 const entryRuntimeContracts = {
   'about.js': ['initIntro', 'initReveals'],
   'case-study.js': ['initThingStory', 'initIntro', 'initReveals', 'initMediaPlayback'],
-  'home.js': ['initHomeIntro', 'initHeroStory', 'initReveals', 'initProjectDeck'],
+  'home.js': ['initHomeIntro', 'initKineticSandbox', 'initReveals', 'initProjectDeck'],
   'legal.js': ['initIntro', 'initReveals'],
   'resume.js': ['initIntro', 'initReveals'],
-  'work.js': ['initWorkStory', 'initIntro', 'initReveals', 'initMediaPlayback']
+  'work.js': ['initWorkStory', 'initReveals', 'initMediaPlayback']
 };
 
 const retiredSourceFiles = [
@@ -65,6 +65,10 @@ for (const route of SITE_ROUTES) {
   if (retiredPointerMarkup) {
     throw new Error(`${route.source} restored retired pointer markup: ${retiredPointerMarkup[0]}.`);
   }
+
+  if (route.kind !== 'home' && /<canvas\b/i.test(html)) {
+    throw new Error(`${route.source} must not ship a route-level canvas.`);
+  }
 }
 
 for (const [entryName, expectedStyles] of Object.entries(entryStyleContracts)) {
@@ -104,6 +108,9 @@ if (!pageRuntimeSource.includes('scheduleSmoothScroll(smoothScrollAfter)')) {
 const homeHtml = await readFile(resolve('index.html'), 'utf8');
 const thingHtml = await readFile(resolve('work/thing/index.html'), 'utf8');
 const homeStyles = await readFile(resolve('src/styles/home.css'), 'utf8');
+const kineticStyles = await readFile(resolve('src/styles/kinetic-home.css'), 'utf8');
+const kineticFacade = await readFile(resolve('src/motion/kinetic-sandbox.js'), 'utf8');
+const kineticRuntime = await readFile(resolve('src/motion/kinetic-sandbox-runtime.js'), 'utf8');
 const gallerySurfaceStyles = await readFile(resolve('src/styles/gallery-surface.css'), 'utf8');
 const typographyTokens = await readFile(resolve('src/styles/tokens.css'), 'utf8');
 const heroSurfaceLayer = homeStyles.match(
@@ -115,8 +122,54 @@ if (!homeHtml.includes('data-hero-surface')) {
   throw new Error('Home must keep a static hero surface for the intro reveal.');
 }
 
-if (/data-hero-fluid|<canvas\b/i.test(homeHtml)) {
-  throw new Error('Home must not restore the Fluid canvas layer.');
+if (/data-hero-fluid/i.test(homeHtml)) {
+  throw new Error('Home must not restore the retired Fluid canvas layer.');
+}
+
+const homeCanvases = homeHtml.match(/<canvas\b[^>]*>/gi) ?? [];
+if (
+  homeCanvases.length !== 1
+  || !/data-kinetic-canvas/.test(homeCanvases[0])
+  || !/aria-hidden="true"/.test(homeCanvases[0])
+  || !/tabindex="-1"/.test(homeCanvases[0])
+) {
+  throw new Error('Home must keep one inaccessible, hero-local Kinetic canvas.');
+}
+
+const heroSection = homeHtml.match(/<section class="hero-story"[\s\S]*?<\/section>/)?.[0] || '';
+if (/THING|signal-lab|data-hero-proof|<fieldset|<input|<button/i.test(heroSection)) {
+  throw new Error('Home Kinetic hero must remain project-neutral and control-free.');
+}
+
+if (!/position: absolute/.test(kineticStyles) || /position: fixed/.test(kineticStyles)) {
+  throw new Error('Home Kinetic field must be absolutely scoped to the hero, never fixed globally.');
+}
+
+for (const contract of [
+  "import('./kinetic-sandbox-runtime.js')",
+  "environment.motion !== 'reduced'",
+  'new IntersectionObserver',
+  "addEventListener('visibilitychange'",
+  "addEventListener('pagehide'",
+  "addEventListener('pageshow'"
+]) {
+  if (!kineticFacade.includes(contract)) {
+    throw new Error(`Home Kinetic facade contract is missing: ${contract}.`);
+  }
+}
+
+for (const contract of [
+  "from 'pixi.js'",
+  "from 'matter-js'",
+  "preference: 'webgl'",
+  'Engine.update(engine, FIXED_STEP)',
+  'new ResizeObserver',
+  'webglcontextlost',
+  'webglcontextrestored'
+]) {
+  if (!kineticRuntime.includes(contract)) {
+    throw new Error(`Home Kinetic runtime contract is missing: ${contract}.`);
+  }
 }
 
 for (const declaration of ['position: absolute', 'pointer-events: none']) {

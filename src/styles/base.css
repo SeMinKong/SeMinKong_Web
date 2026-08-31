@@ -577,3 +577,47 @@ ol {
   }
 
 }
+
+@media (prefers-contrast: more) {
+  :focus-visible {
+    outline-width: 3px;
+    outline-offset: 4px;
+  }
+
+  .button,
+  .nav-resume,
+  .resume-back {
+    border-color: currentColor;
+  }
+
+  .text-link,
+  .source-link {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+}
+
+@media (forced-colors: active) {
+  .page-curtain,
+  .hero-surface,
+  .hero-surface__grain {
+    display: none !important;
+  }
+
+  .button,
+  .nav-resume,
+  .resume-back,
+  .wordmark__signal,
+  .hero-proof,
+  .case-media,
+  .case-video {
+    border: 1px solid CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  :focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 4px;
+  }
+}

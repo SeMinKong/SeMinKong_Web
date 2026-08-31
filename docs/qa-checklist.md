@@ -857,3 +857,56 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 자연 scroll 마지막 endpoint에서 마지막 row는 `-39.82..1225.18px`, title `99.11..1086.24px`, summary `99.11..480.30px`, CTA `99.11..181.51px`, stage `402.08..1086.24px`로 모두 viewport 안에 있고 opacity 1이다.
 - [x] Prompt focus 250ms와 1.8s 후 row left·track transform이 각각 `0.18px / -6719px`로 동일하고, Briefit도 `-12.62px / -5441.5px`에서 drift 0이다. 두 경우 active link, identity content와 focus outline을 유지한다.
 - [ ] 실제 touch hardware의 native vertical pan과 의도적인 GSAP/SplitText/font failure 주입은 실행하지 않았다. 기존 coarse/static gate, native input 비가로채기와 fail-open cleanup 계약은 유지한다.
+
+## 2026-08-31 Evidence-first portfolio release verification
+
+이 항목은 2026-07-14·2026-08-18의 개인정보 포함 원본 Resume 공개와 greeting-only/역할 비노출 Home 결과를 대체한다.
+
+- [x] Home 첫 화면은 `AI & Robotics Software Developer` 역할, 제공 가치, 두 개의 다음 행동과 실제 THING 근거 이미지를 함께 노출한다. 서명 모션은 화면·입력·접근성 트리를 잠그지 않으며 첫 wheel·pointer·touch·keyboard 입력을 소비하지 않고 즉시 완료한다.
+- [x] 1280×720 full, 390×844 lite와 `?motion=reduced`에서 Home copy·CTA·대표 근거가 보이고 document horizontal overflow는 0이다. Reduced route는 story/curtain/input lock 없이 정적 완성 상태다.
+- [x] 980×720·1000×720 full/interactive에서도 Home은 relative 1열 static flow, active story 0과 visible proof를 유지한다. 1001×720부터만 138svh/sticky story가 활성화되어 CSS 1000px breakpoint와 JS capability gate 사이의 1px scroll collapse가 없다.
+- [x] Work는 여섯 프로젝트 Fast track을 제공한다. 390×844·768×900에서는 설명이 media보다 먼저 읽히고 static native flow를 사용하며, 1280×720에서는 기존 GSAP/SplitText horizontal story만 활성화된다.
+- [x] Enhanced Work에서 프로젝트 링크에 focus한 뒤 1280px→390px live resize로 story를 정리해도 같은 링크가 `preventScroll` focus를 유지한다. Contract test가 cleanup 후 focus 복원과 mobile copy-first 순서를 함께 고정한다.
+- [x] 여섯 Case는 Hero 한 문장 lede, 증거/구현/회고로 이동하는 sticky local navigation, 명시적 media geometry와 `preload="none"` demo를 제공한다. THING·AQIS desktop/mobile과 나머지 네 Case mobile에서 anchor, one-column fallback과 overflow를 확인했다.
+- [x] 390×844 Work의 두 auto preview는 lite mode에서 `paused=true`, `readyState=0`으로 대용량 video를 요청하지 않고 poster를 유지한다. 모든 controls video는 `data-demo-video` 계약으로 한 번에 하나만 재생하고 offscreen/hidden/pagehide에서 pause한다.
+- [x] Resume는 HTML Profile이 먼저이며 PDF·DOCX·preview PNG 공개 링크와 배포 항목이 없다. 개인정보 포함 원본 세 파일은 ignored `.private/resume/`에 보관했고 production `dist/resume/`에는 `index.html` 하나만 있다. Build는 `emptyOutDir`를 명시하고 dist verifier가 Resume의 추가 파일을 거부한다.
+- [x] 11개 route에 고유 canonical, robots, Open Graph와 Twitter metadata가 있고, 1200×630 social preview와 11개 URL sitemap이 production manifest에 포함된다. Home에는 Person JSON-LD가 있다.
+- [x] `prefers-contrast: more`와 forced-colors fallback, fine-pointer desktop 전용 cross-document View Transition, Home/Work moderate prefetch-only 규칙, `pagehide/pageshow` media cleanup을 source contract로 확인했다. 새 runtime dependency와 Three.js는 추가하지 않았다.
+- [x] 실제 브라우저에서 11개 route × 390×844·768×900·1280×720 총 33개 조합을 전수 확인했다. 모두 local font loaded, H1/main 각 1개, horizontal overflow 0이며 console에는 Vite 연결 debug 외 warning/error가 없다.
+- [x] `npm.cmd run verify`가 contract test 7개, source route/style boundary 11개, production module 105개와 deployment entry 15개를 통과했고 `git diff --check`에 whitespace error가 없다.
+- [ ] 실제 touch hardware의 native vertical pan, background-tab hide/restore timing과 native cross-document View Transition 지원 브라우저는 이번 세션에서 직접 관찰하지 않았다. Coarse/reduced capability gate, input 비가로채기, BFCache lifecycle과 Anime fallback은 source 및 현재 브라우저 fallback 경로로 검증했다.
+- [ ] Production publish는 수행하지 않았다. Repository 지침상 commit/push는 사용자의 명시적 요청이 필요하며, 현재 결과는 검증된 local working tree와 `dist/`에 있다.
+
+## 2026-08-31 Work typography, stable transition, and Signal Lab verification
+
+- [x] 1280×720 enhanced Work에서 THING title `101.2px`, summary system body stack `19.889px / 500 / 31.822px`를 실측했다. Title·summary의 x는 `393.56px`, CTA는 signal inset에 맞춘 `412px`이며 CTA까지의 빈 row가 사라졌다.
+- [x] 390×844·768×900 static Work는 story/pending/SplitText 0, semantic project link 6/6, `scrollWidth <= innerWidth`다. Summary는 각각 `19.2px / 2줄`, `19.53px / 1줄`이고 copy-first → CTA → media native flow와 44px CTA를 유지한다.
+- [x] Production Home→Work navigation은 blocking extracted CSS와 inline prepaint를 사용하고 destination은 styled 상태, `work-story-ready=true`, `pending=false`, `expired=false`로 한 번에 정착했다. Production HTML에서 prepaint script/style이 module 및 stylesheet link보다 앞에 있고 runtime은 first refresh 뒤 pending을 제거한다.
+- [x] Home 390×844·768×900·1280×720에서 `Flagship` 문구 0, radio/panel 3/3, active panel 1, 단계별 trace `0.12 / 0.52 / 1`, 44px 선택 영역과 horizontal overflow 0을 확인했다. Browser accessibility snapshot은 fieldset group, 세 native radio의 label/checked state와 active region만 노출한다.
+- [x] Reduced Home은 story 0, panel animation `none`, trace transition `0s`이면서 radio 선택과 panel/trace 상태를 즉시 갱신한다. Reduced Work는 story/pending/split 0, project link 6/6이다.
+- [x] `npm.cmd run verify`가 contract test 7개, source route/style boundary 11개, production module 106개와 deployment entry 15개를 통과했다. Production preview에서 self-hosted font와 THING image가 loaded이고 1280px Home/Work 모두 horizontal overflow가 없다. `git diff --check`는 whitespace error가 없다.
+- [ ] 실제 network throttling으로 1500ms watchdog을 만료시키거나 GSAP/SplitText/font failure를 주입하지 않았다. Timeout 뒤 `data-work-story-expired`가 late upgrade를 차단하는 동작은 inline/runtime/source contract test로 검증했다.
+- [ ] 실제 touch hardware의 native vertical pan과 physical keyboard의 Tab/Space/arrow radio 전환은 실행하지 않았다. Native radio group, visible label focus rule, 44px target, coarse/reduced static gate와 pointer-event 비가로채기는 accessibility snapshot과 source contract로 확인했다.
+- [ ] Production publish는 수행하지 않았다. Repository 지침상 commit/push는 사용자의 명시적 요청이 필요하며, 현재 결과는 검증된 local working tree와 `dist/`에 있다.
+
+## 2026-08-31 Home greeting copy restoration verification
+
+- [x] Home Hero의 보이는 역할 라벨과 support 문장이 없고 `안녕하세요! / 새로운 것을 배우고 직접 만드는 일이 즐겁습니다.`가 정확히 복원됐다. `즐겁습니다.`만 강조된다.
+- [x] Primary CTA는 `프로젝트 →`로 `/work/`, secondary CTA는 `Contact →`로 Home `#contact`에 연결된다.
+- [x] 역할 라벨이 없어도 1280×720 full 환경에서 Home story가 활성화되고 `hero-pending`이 남지 않는다. 390×844과 768×1024는 정적 flow를 사용한다.
+- [x] 390×844, 768×1024, 1280×720에서 두 greeting line과 CTA가 보이고 document horizontal overflow는 0이다.
+- [x] 1280×720 `?motion=reduced`에서 story가 비활성화되고 greeting과 CTA는 완성 상태로 보인다. Console warning/error는 0이다.
+- [x] `npm.cmd run verify`가 contract test 7개, source route/style boundary 11개, production module 106개와 deployment entry 15개를 통과했다. `git diff --check` whitespace error는 0이다.
+
+## 2026-08-31 Centered Kinetic field verification
+
+- [x] Home Hero에는 canvas 1개와 추상 오브제 7개만 있고 THING, Signal Lab, fieldset/radio, `GRAB / THROW`, reset·pause·scatter control이 없다. Canvas는 `aria-hidden=true`, `tabindex=-1`이며 accessibility snapshot의 navigation → H1 → greeting → 프로젝트/Contact 순서에 나타나지 않는다.
+- [x] 1280×720, 768×1024, 390×844 실제 브라우저에서 Hero 높이가 각각 viewport와 같은 `720 / 1024 / 844px`이고 document horizontal overflow는 0이다. 이름·인사·CTA는 중앙에 보이며 Projects가 바로 다음 문서 흐름을 소유한다.
+- [x] 1280×720에서 돌 오브제를 실제 pointer drag 후 throw했다. 오브제가 release velocity로 이동하고 다른 오브제·viewport·navigation·이름·문장·CTA collision boundary에서 튕기며 Kinetic state가 running으로 복귀한다.
+- [x] 390×844에서 native-style vertical scroll로 Hero를 지나 Projects 아래까지 이동했고 scroll position이 증가했다. Canvas CSS는 `touch-action: pan-y pinch-zoom`, pointer listener는 passive이며 pointer capture와 pointer gesture `preventDefault()`가 없다.
+- [x] 1280px backing buffer는 `1898×1080`으로 약 2.05MP, DPR cap 1.5 안에 있고 390px은 `375×844`, DPR 1이다. 초기 움직임은 air friction/sleeping으로 끝나고 state가 sleeping이 되면 Pixi ticker가 정지한다.
+- [x] Local `?motion=reduced`에서 state는 static, canvas는 초기 `300×150` 그대로이며 `display:none`, CSS fallback opacity 1이다. Runtime capability gate가 reduced와 forced colors를 WebGL import 전에 거부한다.
+- [x] 실제 drag·resize·scroll·reduced 왕복 동안 console warning/error는 0이고 Vite 연결 debug만 존재한다.
+- [x] `npm.cmd run verify`가 contract test 7개, source route 11개·stylesheet 12개, production module 764개와 deployment entry 15개를 통과했다. Production preview 1280×720도 canvas 1개, Hero 720px, overflow 0, warning/error 0이다. `git diff --check` whitespace error는 0이고 기존 Windows line-ending 안내만 있다.
+- [ ] 실제 touch hardware의 수평 flick/세로 pan 경쟁, background tab hide/restore, BFCache, WebGL context loss/restore와 의도적 dynamic-import failure는 이번 브라우저 세션에서 직접 주입하지 않았다. Passive touch contract, observer/page lifecycle, 1회 recover와 static fail-open은 source test로 검증한다.
+- [ ] Production publish는 수행하지 않았다. Commit/push/deploy는 사용자의 명시적 요청이 필요하다.

@@ -92,8 +92,22 @@ const verifyGallerySurface = async (route, html, references) => {
     throw new Error('Built Home lost its static hero gallery surface.');
   }
 
-  if (/data-hero-fluid|<canvas\b/i.test(html)) {
-    throw new Error('Built Home restored the Fluid canvas layer.');
+  if (/data-hero-fluid/i.test(html)) {
+    throw new Error('Built Home restored the retired Fluid canvas layer.');
+  }
+
+  const canvases = html.match(/<canvas\b[^>]*>/gi) ?? [];
+  if (
+    canvases.length !== 1
+    || !/data-kinetic-canvas/.test(canvases[0])
+    || !/aria-hidden="true"/.test(canvases[0])
+    || !/tabindex="-1"/.test(canvases[0])
+  ) {
+    throw new Error('Built Home must contain one inaccessible Kinetic canvas.');
+  }
+
+  if (!/\.kinetic-stage\{[^}]*position:absolute/.test(compiledCss) || /\.kinetic-stage\{[^}]*position:fixed/.test(compiledCss)) {
+    throw new Error('Built Kinetic field must remain absolutely scoped to Home.');
   }
 
   for (const declaration of ['position:fixed', 'pointer-events:none', 'z-index:0']) {
@@ -106,6 +120,17 @@ const verifyGallerySurface = async (route, html, references) => {
 await Promise.all(
   EXPECTED_DEPLOYMENT_FILES.map((file) => access(resolve(distDirectory, file)))
 );
+
+const resumeDeploymentEntries = await readdir(resolve(distDirectory, 'resume'), { withFileTypes: true });
+const unexpectedResumeFiles = resumeDeploymentEntries
+  .filter((entry) => entry.name !== 'index.html')
+  .map((entry) => entry.name);
+
+if (unexpectedResumeFiles.length) {
+  throw new Error(
+    `Production Resume directory contains private or unapproved files: ${unexpectedResumeFiles.join(', ')}`
+  );
+}
 
 const distAssetEntries = await readdir(distAssetDirectory, { withFileTypes: true });
 const compiledAssetEntries = distAssetEntries
@@ -124,6 +149,7 @@ const gsapCoreAssets = compiledAssetNames.filter((name) => /^gsap-(?!loader).*\.
 const scrollTriggerAssets = compiledAssetNames.filter((name) => /^ScrollTrigger-.*\.js$/i.test(name));
 const gsapLoaderAssets = compiledAssetNames.filter((name) => /^gsap-loader-.*\.js$/i.test(name));
 const splitTextAssets = compiledAssetNames.filter((name) => /^SplitText-.*\.js$/i.test(name));
+const kineticRuntimeAssets = compiledAssetNames.filter((name) => /^kinetic-sandbox-runtime-.*\.js$/i.test(name));
 
 if (
   gsapCoreAssets.length !== 1
@@ -134,6 +160,14 @@ if (
   throw new Error(
     'Production must keep one shared GSAP core, ScrollTrigger, loader, and Work-only SplitText asset.'
   );
+}
+
+if (kineticRuntimeAssets.length !== 1) {
+  throw new Error('Production must keep one route-lazy Kinetic runtime asset.');
+}
+
+if (compiledAssetNames.some((name) => /^three-.*\.js$/i.test(name))) {
+  throw new Error('Production must not add a full Three.js runtime for the Home sandbox.');
 }
 
 const optionalGsapAssets = compiledAssetNames.filter(
@@ -167,6 +201,10 @@ const missingReferences = [];
 for (const route of SITE_ROUTES) {
   const htmlPath = resolve(distDirectory, route.output);
   const html = await readFile(htmlPath, 'utf8');
+
+  if (route.kind !== 'home' && /<canvas\b/i.test(html)) {
+    throw new Error(`${route.output} unexpectedly contains a canvas.`);
+  }
 
   if (/(?:href|src)=["'][^"']*(?:gsap-(?!loader)|ScrollTrigger-|SplitText-)[^"']*\.js/i.test(html)) {
     throw new Error(`${route.output} eagerly references the GSAP animation runtime.`);

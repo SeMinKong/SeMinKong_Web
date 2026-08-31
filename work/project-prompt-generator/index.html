@@ -4,6 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="LangGraph와 WebSocket으로 프로젝트 설계 대화를 병렬 처리하는 Project Prompt Generator." />
+    <link rel="canonical" href="https://seminkong.github.io/SeMinKong_Web/work/project-prompt-generator/" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:site_name" content="Se Min Kong Portfolio" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Project Prompt Generator — Se Min Kong" />
+    <meta property="og:description" content="LangGraph와 WebSocket으로 프로젝트 설계 대화를 병렬 처리하는 Project Prompt Generator." />
+    <meta property="og:url" content="https://seminkong.github.io/SeMinKong_Web/work/project-prompt-generator/" />
+    <meta property="og:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Project Prompt Generator — Se Min Kong" />
+    <meta name="twitter:description" content="여섯 설계 대화를 상태로 관리해 하나의 구현 문서로 합치는 LangGraph 도구입니다." />
+    <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
     <meta name="theme-color" content="#11100e" />
     <meta name="color-scheme" content="dark" />
@@ -25,7 +43,11 @@
         <header class="case-hero page-width">
           <p class="case-hero__meta" data-intro>LangGraph · Personal · 2026</p>
           <h1 data-intro lang="en">Project Prompt <br /> Generator</h1>
-          <dl class="case-facts" data-intro>
+          <div class="case-hero__summary" data-intro>
+            <p class="case-hero__lede">여섯 설계 대화를 LangGraph 상태로 병렬 관리하고 결과를 하나의 구현 문서로 합치는 웹 도구를 만들었습니다.</p>
+            <div class="case-hero__actions"><a class="button button--primary button--small" href="#prompt-flow">Workflow 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <dl class="case-facts" data-intro aria-label="Project Prompt Generator 프로젝트 역할 및 핵심 근거">
             <div><dt>Role</dt><dd>Agent workflow <br /> Backend · Web UI</dd></div>
             <div><dt>Period</dt><dd>2026</dd></div>
             <div><dt>Runtime</dt><dd>LangGraph <br /> WebSocket</dd></div>
@@ -33,13 +55,17 @@
           </dl>
         </header>
 
-        <figure class="case-media case-media--prompt page-width" data-reveal="media">
-          <img src="/src/assets/projects/prompt-generator/flow.png" alt="프로젝트 입력을 여섯 설계 영역으로 나눈 뒤 최종 문서로 모으는 LangGraph 흐름도" decoding="async" />
+        <nav class="case-local-nav" aria-label="Project Prompt Generator 페이지 안에서 이동">
+          <div class="page-width"><a href="#prompt-flow">Workflow</a><a href="#prompt-overview">Overview</a><a href="#prompt-state">State model</a><a href="#prompt-output">Output</a></div>
+        </nav>
+
+        <figure class="case-media case-media--prompt page-width" id="prompt-flow" data-reveal="media">
+          <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="프로젝트 입력을 여섯 설계 영역으로 나눈 뒤 최종 문서로 모으는 LangGraph 흐름도" decoding="async" />
           <figcaption>LangGraph Workflow</figcaption>
         </figure>
 
         <div class="case-body page-width">
-          <section class="case-section" data-reveal>
+          <section class="case-section" id="prompt-overview" data-reveal>
             <h2>Workflow</h2>
             <div class="case-section__copy">
               <p>사용자가 프로젝트 아이디어를 입력하면 UI/UX, API, 데이터베이스, 시스템 구조, 테스트, 배포 영역을 각각 독립된 대화로 시작합니다.</p>
@@ -47,7 +73,7 @@
             </div>
           </section>
 
-          <section class="case-section case-section--violet" data-reveal>
+          <section class="case-section case-section--violet" id="prompt-state" data-reveal>
             <h2>State Model</h2>
             <div class="case-section__copy">
               <ul class="case-list">
@@ -59,7 +85,7 @@
             </div>
           </section>
 
-          <section class="case-section" data-reveal>
+          <section class="case-section" id="prompt-output" data-reveal>
             <h2>Document Output</h2>
             <div class="case-section__copy source-links">
               <p>여섯 설계 대화가 각자 상태를 유지하면서 진행되고, 완료된 결과를 하나의 구현 문서로 합치는 흐름을 웹에서 끝까지 사용할 수 있게 구현했습니다.</p>

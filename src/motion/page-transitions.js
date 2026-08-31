@@ -14,6 +14,20 @@ export const initPageTransitions = (environment) => {
     curtain.style.transform = 'scale(1.012)';
   };
 
+  // Chromium's Level 2 rule exposes cross-document transitions. When it is
+  // available, CSS owns the progressive enhancement and native navigation,
+  // focus, history, and BFCache behavior remain untouched.
+  if ('CSSViewTransitionRule' in window) {
+    window.addEventListener('pageshow', reset);
+    reset();
+    return {
+      destroy() {
+        window.removeEventListener('pageshow', reset);
+        reset();
+      }
+    };
+  }
+
   const shouldHandle = (event, link, url) => {
     if (environment.motion !== 'full' || event.defaultPrevented || event.button !== 0) return false;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;

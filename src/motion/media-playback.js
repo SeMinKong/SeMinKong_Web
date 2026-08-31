@@ -13,6 +13,8 @@ export const initMediaPlayback = (environment) => {
     });
   };
 
+  const pauseAutoVideos = () => videos.forEach((video) => video.pause());
+
   demoVideos.forEach((video) => {
     const onPlay = () => pauseDemoVideos(video);
     demoPlayHandlers.set(video, onPlay);
@@ -22,7 +24,10 @@ export const initMediaPlayback = (environment) => {
   const pauseWhenHidden = () => {
     if (document.hidden) pauseDemoVideos();
   };
-  const pauseOnPageHide = () => pauseDemoVideos();
+  const pauseOnPageHide = () => {
+    pauseAutoVideos();
+    pauseDemoVideos();
+  };
 
   document.addEventListener('visibilitychange', pauseWhenHidden);
   window.addEventListener('pagehide', pauseOnPageHide);
@@ -54,7 +59,7 @@ export const initMediaPlayback = (environment) => {
   const visible = new Map(videos.map((video) => [video, false]));
 
   const sync = (video) => {
-    const mayPlay = environment.motion !== 'reduced' && !document.hidden && visible.get(video);
+    const mayPlay = environment.motion === 'full' && !document.hidden && visible.get(video);
     if (mayPlay) {
       video.play().catch(() => {});
     } else {
@@ -63,6 +68,9 @@ export const initMediaPlayback = (environment) => {
   };
 
   const syncAll = () => videos.forEach(sync);
+  const syncOnPageShow = () => {
+    if (!document.hidden) syncAll();
+  };
 
   if ('IntersectionObserver' in window) {
     observer = new IntersectionObserver((entries) => {
@@ -79,6 +87,7 @@ export const initMediaPlayback = (environment) => {
   }
 
   document.addEventListener('visibilitychange', syncAll);
+  window.addEventListener('pageshow', syncOnPageShow);
   window.addEventListener('portfolio:environment-change', syncAll);
 
   return {
@@ -89,6 +98,7 @@ export const initMediaPlayback = (environment) => {
       document.removeEventListener('visibilitychange', pauseWhenHidden);
       document.removeEventListener('visibilitychange', syncAll);
       window.removeEventListener('pagehide', pauseOnPageHide);
+      window.removeEventListener('pageshow', syncOnPageShow);
       window.removeEventListener('portfolio:environment-change', syncAll);
       videos.forEach((video) => video.pause());
       pauseDemoVideos();

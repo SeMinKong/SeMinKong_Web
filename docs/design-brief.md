@@ -891,3 +891,43 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 각 프로젝트는 실제 미디어, 프로젝트명, 무엇을 만든 것인지 설명하는 한국어 한 문장, `상세 보기`만 제공한다. 역할, 기간, 수치, 기술 스택과 구현 근거는 각 상세 페이지에서 설명한다.
 - Media caption, chapter badge, proof grid, 기술 tag와 중복 우상단 화살표를 제거한다. Work index는 요약과 탐색에 집중하고 상세 근거를 반복하지 않는다.
 - 여섯 개의 전체-project semantic link, 제목 heading, 원본 미디어 비율, skip target과 keyboard focus 동선은 유지한다.
+
+## 2026-08-31 — Evidence-first product clarity and privacy override
+
+이 항목은 Home의 greeting-only/역할 비노출, mandatory blocking Intro, 155svh travel, 960px 이하 Work media-first와 개인정보 포함 원본 Resume 공개 결정을 대체한다.
+
+- Home 첫 화면은 `AI & Robotics Software Developer` 역할, “AI가 인식한 것을 실제 시스템의 움직임으로 연결합니다”라는 가치, 짧은 근거 문장, THING/전체 프로젝트 CTA와 실제 THING evidence card를 한 장면에 둔다. 인터랙션을 통과해야 정체성과 대표 작업을 알 수 있는 구조를 사용하지 않는다.
+- 12-path 서명은 같은 geometry와 Anime.js 획순을 유지하되 780ms 이내의 비차단 signature enhancement다. 별도 full-screen overlay, `inert`, `aria-busy`, focus 이동 또는 입력 취소를 만들지 않으며, 사용자의 첫 입력이 있으면 그 입력을 그대로 통과시키고 서명만 완성한다.
+- Home scroll story는 `full + interactive + min-width 1001px + min-height 620px`에서만 활성화하고 track은 `138svh`다. 1000px 이하에서는 role/copy/CTA/evidence가 한 열의 정적 native flow로 즉시 보이며 sticky geometry를 만들지 않는다.
+- Work Hero 다음에 THING, AQIS, Brain MRI와 전체 여섯 프로젝트로 이동하는 Fast track을 둔다. 960px 이하의 각 프로젝트는 semantic DOM과 visual grid 모두 copy-first/media-second이며, lite·coarse 환경의 자동 preview는 poster로 정지한다.
+- 여섯 Case Hero는 검증 가능한 한 문장 lede와 CTA를 제공하고, Hero 아래 sticky local navigation으로 증거·구현·회고 구간을 native anchor scroll로 연결한다. Sticky nav는 mobile에서 가로 스크롤을 허용하되 세로 스크롤을 가로채지 않는다.
+- Resume는 공개 HTML Profile을 source of truth로 사용한다. 전화번호·생년월일을 포함한 기존 PDF·DOCX·PNG는 public과 production에서 제외하고 ignored `.private/resume/`에만 보관한다. 정제된 다운로드 파일이 필요하면 Contact 이메일로 요청하도록 안내한다.
+- 모든 route는 정적 canonical/robots/Open Graph/Twitter metadata를 제공하고, sitemap과 1200×630 social preview를 배포한다. 본문은 읽기 우선의 OS Korean system stack을 사용하며 Signika/Jua는 display identity에 유지한다. Forced colors와 increased contrast에서도 구조와 focus를 보존한다.
+
+## 2026-08-31 — Work 설명 타이포와 interactive proof override
+
+이 항목은 Work 설명을 작은 mono metadata로 취급한 규칙과 Home의 정적 `Flagship system` proof를 대체한다.
+
+- Work project title은 Signika display identity를 유지하되 enhanced desktop 상한을 일반 `5rem`, featured `5.42rem`로 낮춘다. 제목은 작품명, 설명은 사람이 빠르게 읽는 문장, CTA는 다음 행동이라는 세 단계 위계를 분명히 한다.
+- Work summary는 body stack, `font-weight 500`, `clamp(0.98rem…1.07rem)`, `line-height 1.6–1.62`, 미세한 negative tracking을 사용한다. 왼쪽 2px signal rule과 14–19px inset을 두고 CTA를 같은 시작선 바로 아래에 놓는다. 긴 줄은 약 32rem 안에서 감고 `text-wrap: pretty`를 사용한다.
+- Home proof는 `Trace the signal`이라는 실제 시스템 탐색 도구다. 인식, 전달, 구동 세 개의 44px 이상 선택 영역이 각각 `21 landmarks`, `ROS 2 message`, `7-axis tendon` 근거와 photo overlay trace를 갱신한다. 기본 선택과 모든 설명은 JavaScript 없이 보이며 키보드 radio semantics를 유지한다.
+- `:has()`에 따른 accent 변화와 `@property --trace-progress`의 부드러운 trace는 progressive enhancement다. 지원하지 않는 브라우저도 native radio, active label, 올바른 panel과 단계별 line 위치를 유지한다. 720px 이하는 한 열 카드, 1000px 이하는 static Home flow이며 native vertical scroll을 막지 않는다.
+
+## 2026-08-31 — Home greeting copy restoration override
+
+이 항목은 `Evidence-first product clarity and privacy override`의 Home 역할 라벨, 가치·support 문장과 THING 중심 CTA 문구만 대체한다. 대표 근거와 나머지 route 결정은 유지한다.
+
+- Home Hero에서 보이는 역할 라벨과 별도 support 문장을 제거한다.
+- Hero 문장은 `안녕하세요!`와 `새로운 것을 배우고 직접 만드는 일이 즐겁습니다.` 두 줄로 복원하고 `즐겁습니다.`만 강조한다.
+- Primary action은 `프로젝트`로 `/work/`에 연결하고, secondary action은 `Contact`로 Home의 Contact 구간에 연결한다.
+- 이 문구는 이후 Kinetic 첫 화면을 구현하더라도 실제 semantic HTML로 유지하며, 오브제 상호작용을 통과해야 읽히는 상태로 만들지 않는다.
+
+## 2026-08-31 — Centered Kinetic field override
+
+이 항목은 Home 첫 화면에 한해 `Evidence-first product clarity`, `Work 설명 타이포와 interactive proof`의 THING Signal Lab, 138svh scroll story와 2열 proof 구성을 대체한다. 바로 다음 Projects 이하의 프로젝트 근거와 각 상세 페이지는 유지한다.
+
+- Home 첫 화면은 정확히 `100svh`인 하나의 Kinetic 공간이다. `Se Min Kong`, 복원된 두 줄 인사와 `프로젝트 / Contact` 행동은 중앙에 실제 semantic HTML로 두고, 캔버스 준비 여부와 무관하게 즉시 읽히고 조작 가능해야 한다.
+- 첫 화면 오브제는 특정 프로젝트·로봇을 설명하지 않는 일곱 개의 추상 재료다. 돌, 신호색 원판, 유리 링, 종이 타일, 흑연 막대, 캡슐과 작은 타일을 비대칭으로 배치해 개인 작업실 같은 물성을 만들며, 별도 제목·설명·튜토리얼·상태표시·reset/pause 버튼을 추가하지 않는다.
+- 오브제는 viewport와 상단 navigation, 이름·문장·CTA의 보이지 않는 충돌면 안에서 자유롭게 이동한다. 중앙 콘텐츠를 처음부터 덮지 않으면서 사용자가 던진 결과는 자연스러운 충돌로 설명되도록 한다.
+- 정적 HTML/CSS 오브제 구성이 source of truth인 폴백이다. GPU 장면은 첫 유효 프레임 뒤에만 같은 자리를 교체하고 실패·저동작·forced-colors 환경에서는 폴백을 유지한다. Canvas는 장식으로 accessibility tree와 tab order에 들어가지 않는다.
+- 1000px 이하에서는 같은 중앙 구성을 유지하고 720px 이하의 정적 폴백은 다섯 개 오브제로 밀도를 낮춘다. Touch 환경은 native vertical pan을 우선하며, 상호작용을 위해 페이지 스크롤을 가두지 않는다.

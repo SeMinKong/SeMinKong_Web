@@ -4,6 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="뉴스 수집, 유사 기사 grouping, KoBART 요약을 담당한 Briefit 팀 프로젝트." />
+    <link rel="canonical" href="https://seminkong.github.io/SeMinKong_Web/work/briefit/" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:site_name" content="Se Min Kong Portfolio" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Briefit — Se Min Kong" />
+    <meta property="og:description" content="뉴스 수집, 유사 기사 grouping, KoBART 요약을 담당한 Briefit 팀 프로젝트." />
+    <meta property="og:url" content="https://seminkong.github.io/SeMinKong_Web/work/briefit/" />
+    <meta property="og:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Briefit — Se Min Kong" />
+    <meta name="twitter:description" content="비동기 뉴스 수집부터 grouping과 KoBART 요약까지 구현한 AI 데이터 파이프라인입니다." />
+    <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
+    <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
     <meta name="theme-color" content="#11100e" />
     <meta name="color-scheme" content="dark" />
@@ -25,7 +43,11 @@
         <header class="case-hero page-width">
           <p class="case-hero__meta" data-intro>NLP · Team · 2025</p>
           <h1 data-intro lang="en">Briefit</h1>
-          <dl class="case-facts" data-intro>
+          <div class="case-hero__summary" data-intro>
+            <p class="case-hero__lede">비동기 뉴스 수집부터 유사 기사 grouping과 KoBART 요약까지 팀 제품의 AI 데이터 파이프라인을 담당했습니다.</p>
+            <div class="case-hero__actions"><a class="button button--primary button--small" href="#briefit-product">제품 근거 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/capstone-btd/Briefit_AI" rel="noreferrer">Pipeline GitHub <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <dl class="case-facts" data-intro aria-label="Briefit 프로젝트 역할 및 핵심 근거">
             <div><dt>Role</dt><dd>Team AI Engineer</dd></div>
             <div><dt>Period</dt><dd>May — Sep 2025</dd></div>
             <div><dt>Scope</dt><dd>Collection · Grouping<br />Summarization</dd></div>
@@ -33,13 +55,17 @@
           </dl>
         </header>
 
-        <figure class="case-media case-media--image page-width" data-reveal="media">
-          <img src="/src/assets/projects/briefit/cover.webp" alt="Briefit 뉴스 목록과 기사 요약 화면으로 구성된 공식 팀 제품 이미지" />
+        <nav class="case-local-nav" aria-label="Briefit 페이지 안에서 이동">
+          <div class="page-width"><a href="#briefit-product">Product</a><a href="#briefit-contribution">Contribution</a><a href="#briefit-pipeline">Pipeline</a><a href="#briefit-integration">Integration</a></div>
+        </nav>
+
+        <figure class="case-media case-media--image page-width" id="briefit-product" data-reveal="media">
+          <img src="/src/assets/projects/briefit/cover.webp" width="2400" height="1350" alt="Briefit 뉴스 목록과 기사 요약 화면으로 구성된 공식 팀 제품 이미지" />
           <figcaption>Briefit Product</figcaption>
         </figure>
 
         <div class="case-body page-width">
-          <section class="case-section" data-reveal>
+          <section class="case-section" id="briefit-contribution" data-reveal>
             <h2>Contribution</h2>
             <div class="case-section__copy">
               <p>Briefit은 여러 매체의 기사를 한곳에 모으고, 같은 이슈를 다루는 기사를 묶어 읽을 수 있게 만든 뉴스 큐레이션 서비스입니다.</p>
@@ -47,7 +73,7 @@
             </div>
           </section>
 
-          <section class="case-section case-section--violet" data-reveal>
+          <section class="case-section case-section--violet" id="briefit-pipeline" data-reveal>
             <h2>Pipeline</h2>
             <div class="case-section__copy">
               <ul class="case-list">
@@ -59,7 +85,7 @@
             </div>
           </section>
 
-          <section class="case-section" data-reveal>
+          <section class="case-section" id="briefit-integration" data-reveal>
             <h2>Product Integration</h2>
             <div class="case-section__copy source-links">
               <p>수집·전처리·grouping·요약 단계를 하나의 비동기 파이프라인으로 연결해 팀 제품이 기사 묶음별 요약을 제공할 수 있도록 구현했습니다.</p>
@@ -77,7 +103,7 @@
     </main>
     <footer class="page-width site-footer site-footer--light">
       <span>© 2026 Se Min Kong</span>
-      <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../">All work ↑</a></nav>
+      <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../../#contact">Contact ↗</a></nav>
     </footer>
     <script type="module" src="/src/entries/case-study.js"></script>
   </body>

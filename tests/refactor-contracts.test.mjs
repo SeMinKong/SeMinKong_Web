@@ -16,7 +16,7 @@ test('route manifest keeps unique build inputs and outputs', () => {
   assert.equal(new Set(SITE_ROUTES.map(({ source }) => source)).size, SITE_ROUTES.length);
   assert.equal(new Set(SITE_ROUTES.map(({ output }) => output)).size, SITE_ROUTES.length);
   assert.equal(SITE_ROUTES.filter(({ kind }) => kind === 'case-study').length, 6);
-  assert.equal(EXPECTED_DEPLOYMENT_FILES.length, 16);
+  assert.equal(EXPECTED_DEPLOYMENT_FILES.length, SITE_ROUTES.length + 4);
 });
 
 test('handwritten wordmark preserves its public name and stroke order', () => {
@@ -42,7 +42,9 @@ test('gallery direction keeps static surfaces and restrained typography', async 
   ]);
 
   assert.match(homeHtml, /data-hero-surface/);
-  assert.doesNotMatch(homeHtml, /data-hero-fluid|<canvas\b/i);
+  assert.doesNotMatch(homeHtml, /data-hero-fluid/i);
+  assert.equal(homeHtml.match(/<canvas\b/g)?.length, 1);
+  assert.match(homeHtml, /<canvas\b(?=[^>]*data-kinetic-canvas)(?=[^>]*aria-hidden="true")(?=[^>]*tabindex="-1")[^>]*>/i);
   assert.match(galleryStyles, /body::before/);
   assert.match(galleryStyles, /repeating-linear-gradient/);
   assert.match(tokenStyles, /Signika Variable/);
@@ -57,16 +59,18 @@ test('gallery direction keeps static surfaces and restrained typography', async 
   assert.doesNotMatch(deckSource, /pointermove|FLUID_OBSTACLE_EVENT/);
 });
 
-test('GSAP choreography stays route-scoped and keeps static fallbacks', async () => {
-  const [homeEntry, caseEntry, thingHtml, workHtml, homeStyles, workStyles, caseStyles, heroStory, workStory, thingStory, gsapLoader, mediaPlayback, smoothScroll] = await Promise.all([
+test('motion runtimes stay route-scoped and keep static fallbacks', async () => {
+  const [homeEntry, caseEntry, thingHtml, workHtml, homeStyles, kineticStyles, workStyles, caseStyles, kineticFacade, kineticRuntime, workStory, thingStory, gsapLoader, mediaPlayback, smoothScroll] = await Promise.all([
     readFile(new URL('../src/entries/home.js', import.meta.url), 'utf8'),
     readFile(new URL('../src/entries/case-study.js', import.meta.url), 'utf8'),
     readFile(new URL('../work/thing/index.html', import.meta.url), 'utf8'),
     readFile(new URL('../work/index.html', import.meta.url), 'utf8'),
     readFile(new URL('../src/styles/home.css', import.meta.url), 'utf8'),
+    readFile(new URL('../src/styles/kinetic-home.css', import.meta.url), 'utf8'),
     readFile(new URL('../src/styles/work.css', import.meta.url), 'utf8'),
     readFile(new URL('../src/styles/case-study.css', import.meta.url), 'utf8'),
-    readFile(new URL('../src/motion/hero-story.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/kinetic-sandbox.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/motion/kinetic-sandbox-runtime.js', import.meta.url), 'utf8'),
     readFile(new URL('../src/motion/work-story.js', import.meta.url), 'utf8'),
     readFile(new URL('../src/motion/thing-story.js', import.meta.url), 'utf8'),
     readFile(new URL('../src/motion/gsap-loader.js', import.meta.url), 'utf8'),
@@ -74,25 +78,34 @@ test('GSAP choreography stays route-scoped and keeps static fallbacks', async ()
     readFile(new URL('../src/motion/smooth-scroll.js', import.meta.url), 'utf8')
   ]);
 
-  assert.match(homeEntry, /initHeroStory\(environment, \{ ready: homeIntro \}\)/);
+  assert.match(homeEntry, /initKineticSandbox\(environment, \{ ready: homeIntro \}\)/);
+  assert.doesNotMatch(homeEntry, /initHeroStory|gsap-loader/);
   assert.match(caseEntry, /initThingStory\(environment, \{ smoothScroll \}\)/);
-  assert.match(heroStory, /await loadGsap\(\)/);
-  assert.match(heroStory, /readySettled\s*&&\s*pageActive/);
-  assert.match(heroStory, /Promise\.resolve\(ready\)/);
-  assert.match(heroStory, /data-scroll-story-active/);
-  assert.match(heroStory, /min-width: 961px/);
-  assert.match(heroStory, /min-height: 620px/);
-  assert.match(homeStyles, /height: 155svh/);
+  assert.match(kineticFacade, /import\('\.\/kinetic-sandbox-runtime\.js'\)/);
+  assert.match(kineticFacade, /environment\.motion !== 'reduced'/);
+  assert.match(kineticFacade, /forced-colors: active/);
+  assert.match(kineticFacade, /new IntersectionObserver/);
+  assert.match(kineticFacade, /addEventListener\('visibilitychange'/);
+  assert.match(kineticFacade, /addEventListener\('pagehide'/);
+  assert.match(kineticFacade, /addEventListener\('pageshow'/);
+  assert.match(kineticFacade, /queuedIntent/);
+  assert.match(kineticRuntime, /from 'pixi\.js'/);
+  assert.match(kineticRuntime, /from 'matter-js'/);
+  assert.match(kineticRuntime, /preference: 'webgl'/);
+  assert.match(kineticRuntime, /autoStart: false/);
+  assert.match(kineticRuntime, /Engine\.update\(engine, FIXED_STEP\)/);
+  assert.match(kineticRuntime, /enableSleeping: true/);
+  assert.match(kineticRuntime, /new ResizeObserver/);
+  assert.match(kineticRuntime, /webglcontextlost/);
+  assert.match(kineticRuntime, /webglcontextrestored/);
+  assert.doesNotMatch(kineticRuntime, /setPointerCapture|requestAnimationFrame/);
+  assert.doesNotMatch(kineticRuntime, /handlePointer(?:Down|Move|Up|Cancel)[\s\S]{0,700}preventDefault\(/);
+  assert.match(kineticStyles, /height: 100svh/);
+  assert.match(kineticStyles, /touch-action: pan-y pinch-zoom/);
+  assert.match(kineticStyles, /html\[data-motion="reduced"\] \.kinetic-stage__canvas/);
+  assert.doesNotMatch(kineticStyles, /position: fixed|138svh|155svh/);
+  assert.doesNotMatch(homeEntry + kineticFacade + kineticRuntime, /loadGsap|ScrollTrigger|SplitText/);
   assert.doesNotMatch(homeStyles, /SCROLL TO ENTER THE EXHIBITION/);
-  assert.doesNotMatch(heroStory, /\.to\(actions,\s*\{\s*autoAlpha:\s*0/s);
-  assert.match(heroStory, /\.set\(actions, \{\s*pointerEvents: 'none'/s);
-  assert.match(heroStory, /removeProperty\('pointer-events'\)/);
-  assert.match(homeStyles, /focus-within \[data-hero-actions\][\s\S]*?pointer-events: auto !important/);
-  assert.match(homeStyles, /\.home-page \.hero-story \{[\s\S]*?height: 100svh/);
-  assert.match(homeStyles, /\.home-page \.hero-story\[data-scroll-story-active\] \{[\s\S]*?height: 155svh/);
-  assert.doesNotMatch(homeStyles, /data-scroll-story-active\] \.hero-story__sticky::after/);
-  assert.match(heroStory, /removeAttribute\('data-scroll-story-active'\)/);
-  assert.doesNotMatch(heroStory, /--hero-progress/);
   assert.match(workHtml, /data-work-showcase/);
   assert.match(workHtml, /data-work-viewport/);
   assert.match(workHtml, /data-work-track/);
@@ -108,7 +121,9 @@ test('GSAP choreography stays route-scoped and keeps static fallbacks', async ()
   assert.match(workHtml, /id="work-list" tabindex="-1" data-work-viewport/);
   assert.match(workStory, /min-width: 961px/);
   assert.match(workStory, /min-height: 640px/);
-  assert.match(workStory, /Promise\.all\(\[[\s\S]*?loadGsapWithSplitText\(\),[\s\S]*?document\.fonts\?\.ready/);
+  assert.match(workStory, /Promise\.all\(\[[\s\S]*?loadGsapWithSplitText\(\),[\s\S]*?waitForTitleFont\(\)/);
+  assert.match(workStory, /document\.fonts\.load\('700 1em "Signika Variable"', 'THING'\)/);
+  assert.doesNotMatch(workStory, /document\.fonts\?\.ready/);
   assert.match(workStory, /SplitText\.create\(title/);
   assert.match(workStory, /split\.revert\(\)/);
   assert.match(workStory, /const RAIL_SCRUB = 0\.62/);
@@ -129,6 +144,7 @@ test('GSAP choreography stays route-scoped and keeps static fallbacks', async ()
   assert.match(workStory, /timeline\.to\(sceneClock, \{ duration: 1, ease: 'none', progress: 1 \}, 0\)/);
   assert.match(workStory, /list\.addEventListener\('focusin', handleFocusIn\)/);
   assert.match(workStory, /list\.removeEventListener\('focusin', handleFocusIn\)/);
+  assert.match(workStory, /focus\(\{ preventScroll: true \}\)/);
   assert.match(workStory, /smoothScroll\.scrollTo\(targetScroll, \{ immediate: true \}\)/);
   assert.match(workStory, /window\.scrollTo\(\{ top: targetScroll, behavior: 'auto' \}\)/);
   assert.match(smoothScroll, /lenis\.scrollTo\(target, \{ force: true, immediate \}\)/);
@@ -153,9 +169,15 @@ test('GSAP choreography stays route-scoped and keeps static fallbacks', async ()
   assert.match(workStyles, /\.work-list\.work-story-enabled \.work-row:last-child \{\s*flex-basis: clamp\(1000px, 100vw, 1420px\)/);
   assert.match(workStyles, /padding-inline: max\(40px, calc\(\(100vw - var\(--page-max\)\) \/ 2\)\);/);
   assert.match(workStyles, /\.work-list\.work-story-enabled \.work-row__copy \{\s*display: contents/);
-  assert.match(workStyles, /--work-title-size: clamp\(4\.75rem, 8vw, 7rem\)/);
-  assert.match(workStyles, /--work-title-featured-size: clamp\(5\.75rem, 10\.5vw, 8\.25rem\)/);
+  assert.match(workStyles, /--work-title-size: clamp\(3\.75rem, 6\.6vw, 5rem\)/);
+  assert.match(workStyles, /--work-title-featured-size: clamp\(4\.25rem, 8vw, 5\.42rem\)/);
   assert.match(workStyles, /\.work-list\.work-story-enabled \.work-row__summary \{[\s\S]*?grid-column: 8 \/ 12/);
+  assert.match(workStyles, /\.work-list\.work-story-enabled \.work-row__cta \{[\s\S]*?grid-row: 4 \/ 5/);
+  assert.match(workStyles, /\.work-row__summary \{[\s\S]*?font-family: var\(--font-body\);[\s\S]*?font-weight: var\(--weight-support\)/);
+  assert.match(workHtml, /work-story-pending/);
+  assert.match(workHtml, /workStoryExpired/);
+  assert.match(workStory, /data-work-story-expired/);
+  assert.match(workStory, /data-work-story-ready/);
   assert.match(workStyles, /@media \(max-width: 840px\) \{[\s\S]*?\.work-index__hero \{[\s\S]*?grid-template-columns: minmax\(0, 1fr\)/);
   assert.doesNotMatch(workStyles, /14\.5vw|9\.6vw|7\.3vw|6\.8vw/);
   assert.doesNotMatch(workStyles, /border-right: 1px solid var\(--line-strong\)/);
@@ -194,11 +216,11 @@ test('GSAP choreography stays route-scoped and keeps static fallbacks', async ()
   assert.match(thingStory, /removeProperty\('--flow-progress'\)/);
   assert.match(thingStory, /classList\.remove\('thing-story-enabled'\)/);
   assert.match(workStory, /removeProperty\('clip-path'\)/);
-  for (const source of [heroStory, thingStory]) {
+  for (const source of [thingStory]) {
     assert.doesNotMatch(source, /pin:/);
     assert.doesNotMatch(source, /SplitText/);
   }
-  for (const source of [heroStory, workStory, thingStory]) {
+  for (const source of [workStory, thingStory]) {
     assert.doesNotMatch(source, /snap:|ScrollSmoother|\bFlip\b/);
     assert.match(source, /addEventListener\('visibilitychange', onVisibilityChange\)/);
     assert.match(source, /removeEventListener\('visibilitychange', onVisibilityChange\)/);

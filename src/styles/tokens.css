@@ -46,8 +46,8 @@
   --paper-line: rgba(23, 21, 18, 0.18);
   --paper-line-strong: rgba(23, 21, 18, 0.34);
   --font-display: "Signika Variable", "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  --font-body: "Signika Variable", "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  --font-mono: "Signika Variable", "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", "Roboto Mono", monospace;
   --font-signature-metric: "Manrope Variable", sans-serif;
   --weight-body: 400;
   --weight-support: 500;
@@ -74,4 +74,8 @@
   --radius-sm: 2px;
   --radius-md: 4px;
   --radius-pill: 2px;
+}
+
+html.theme-light {
+  color-scheme: light;
 }

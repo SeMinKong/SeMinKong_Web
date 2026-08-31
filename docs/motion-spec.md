@@ -854,3 +854,40 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Focus settlement는 stage, title, summary와 CTA를 즉시 identity로 복구한다. 첫 scene entry 생략, 마지막 scene exit 생략, semantic link·tab order·native input과 reduced/static cleanup 계약은 유지한다.
 - Enhanced track의 양쪽 padding은 동일한 safe inset을 사용하고 마지막 scene은 `100vw` basis로 끝난다. Master progress 1에서 마지막 title·summary·CTA와 stage가 모두 viewport 안에 있어야 한다.
 - Focus mapping은 현재 active 여부와 관계없이 실행한다. Immediate scroll 뒤 numeric scrub tween을 목표 progress로 완료하고, native focus scroll이 발생한 다음 두 animation frame에도 같은 위치를 재적용한다. Tab을 막거나 focus를 옮기지는 않는다.
+
+## 2026-08-31 — Non-blocking signature and evidence Hero override
+
+이 항목은 mandatory Home Intro completion, Home의 961px/155svh 조건과 자동 preview의 lite 재생 계약을 대체한다. Work 961px/640px과 THING 1021px/640px story gate는 유지한다.
+
+- Home top-entry는 별도 overlay를 만들지 않는다. 기존 Hero의 12-path SVG에 Anime.js drawable을 780ms desktop / 560ms compact 안에서 실행하고 `ready` Promise만 Home story에 전달한다. Reduced motion, hash entry, BFCache/static entry는 즉시 완성 상태다.
+- Wheel, pointer, touchstart와 keyboard listener는 passive/capture 또는 비취소 listener이며 `preventDefault`, `stopPropagation`, focus 이동, `inert`, `aria-busy`를 사용하지 않는다. 첫 입력은 원래 navigation/scroll/activation을 그대로 수행하면서 animation finish만 호출한다.
+- Home story capability는 `full + interactive + min-width 1001px + min-height 620px`이다. Track은 `138svh`, sticky는 `100svh`이고 GSAP pin은 사용하지 않는다. Role, name, value/support lines, CTA와 evidence card가 같은 reversible handoff에 참여하며 focus-within은 모든 action/role을 완성 상태로 복구한다.
+- 1000px 이하, lite/reduced와 loader failure에서는 story class와 owned inline style을 제거하고 한 열의 static layout을 유지한다. Hidden/pagehide 시 아직 시작하지 않은 setup은 정리하되 이미 활성인 story context와 확장 geometry는 깊은 scroll 복원을 위해 보존하고 pageshow에서 refresh한다. Work가 capability resize로 SplitText story를 종료할 때는 cleanup/revert 뒤 현재 project link에 `preventScroll` focus를 복구한다.
+- `data-auto-video`는 full motion에서만 viewport visibility에 따라 재생한다. Lite/coarse/reduced에서는 poster 상태를 유지한다. 모든 native controls video는 `data-demo-video`이며 하나를 재생하면 나머지를 멈추고, offscreen/hidden/pagehide에서는 pause한다. Pageshow는 auto preview만 재동기화하고 사용자가 시작한 demo는 자동 재생하지 않는다.
+- Cross-document View Transition은 no-preference, desktop fine-pointer 조건에서만 짧은 root fade/scale로 활성화한다. Level 2를 지원하지 않는 브라우저는 기존 Anime page curtain으로 이동하고, Home/Work project link의 Speculation Rules는 `moderate` prefetch만 허용한다.
+
+## 2026-08-31 — Work first-paint readiness와 Signal Lab motion override
+
+이 항목은 Work가 모든 document font를 기다린 뒤 visible static list를 horizontal story로 바꾸던 계약을 대체한다. GSAP rail timing과 961px/640px gate 자체는 유지한다.
+
+- Work head는 `full candidate + fine pointer + min-width 961px + min-height 640px + no-reduce`에서만 `work-story-pending`을 prepaint한다. Showcase는 보이지 않지만 document flow의 static fallback은 유지하며, 1500ms watchdog이 만료되면 즉시 static list를 공개하고 `data-work-story-expired`로 그 navigation의 late upgrade를 금지한다.
+- Runtime은 전체 `document.fonts.ready`가 아니라 SplitText geometry에 필요한 `700 1em "Signika Variable"` face만 기다린다. GSAP/SplitText setup, class 적용과 ScrollTrigger refresh가 완료된 다음 animation frame에 pending을 제거한다. Above-fold Work H1에는 JS after-paint hide를 적용하지 않는다.
+- Loader/font/setup 실패는 expired static fallback으로 settle한다. Capability가 setup 중 사라지거나 destroy되면 pending, scheduled refresh/reveal과 owned inline style을 정리한다. 성공한 story는 `data-work-story-ready`를 가져 viewport resize 뒤에만 기존 reconcile 동작을 허용한다.
+- Signal Lab의 radio change는 trace path와 6px 이하 panel entrance만 움직인다. Fine pointer hover는 label을 최대 2px 올리고, touch에는 hover transform을 적용하지 않는다. `prefers-reduced-motion: reduce` 또는 runtime reduced에서는 path, node, label transition과 panel entrance를 모두 제거하되 현재 단계의 상태 차이는 즉시 표시한다.
+
+## 2026-08-31 — Home greeting motion compatibility override
+
+- Home Hero story는 보이는 역할 라벨이 없는 복원된 greeting 구성을 지원해야 한다. `[data-hero-role]`은 enhancement의 필수 조건이 아니다.
+- `안녕하세요!`, 두 번째 greeting line, `프로젝트`와 `Contact`는 기존 reversible handoff에 참여하되 static·reduced·loader failure에서는 처음부터 완성 상태로 표시한다.
+- 역할 라벨 제거 때문에 전체 Hero choreography가 비활성화되거나 `hero-pending` 상태가 남아서는 안 된다.
+
+## 2026-08-31 — Home Kinetic runtime override
+
+이 항목은 Home의 GSAP 138svh reversible handoff와 Signal Lab motion을 대체한다. Work rail과 THING case choreography의 GSAP 사용은 변경하지 않는다.
+
+- Home entry는 작은 `initKineticSandbox` facade만 동기 로드한다. Signature `ready`, 첫 viewport intersection과 idle budget이 모두 준비된 뒤에만 PixiJS·Matter.js runtime을 dynamic import한다. Signature 중 발생한 첫 pointer intent는 좌표를 보존하고 mount 뒤 가장 가까운 오브제의 짧은 impulse로 재생한다.
+- PixiJS 8은 운영 기본 WebGL renderer다. DPR은 fine/full 최대 `1.5`, lite/coarse 최대 `1`이고 기존 canvas에 첫 유효 frame을 렌더한 뒤에만 CSS 폴백을 교체한다. WebGL/context/import/setup 실패는 정적 오브제로 fail-open한다.
+- Matter.js world는 중력 0의 2D 자유 공간, 60Hz fixed step과 최대 세 번의 catch-up을 사용한다. 별도 Runner·Render·GSAP·Anime timeline을 물리 loop와 혼용하지 않는다. Air friction과 sleeping으로 초기 이동이 스스로 끝나며 반복 ambient force는 없다.
+- Fine pointer는 오브제를 직접 잡고 최근 약 90ms의 이동 속도로 던진다. Touch는 `touch-action: pan-y pinch-zoom`, passive pointer listener와 `pointercancel` 정리를 유지하며 pointer capture나 `preventDefault()`를 사용하지 않는다. 짧은 tap은 작은 impulse만 준다.
+- Hero intersection 8% 미만, hidden, pagehide에서는 ticker를 즉시 멈추고 accumulator를 비운다. Visible/pageshow 복귀에서만 start하며 ResizeObserver는 renderer, viewport wall과 중앙 콘텐츠 collision body를 다시 계산한다. Sleeping 상태에서는 ticker가 자동 정지하고 다음 interaction이 다시 깨운다.
+- Reduced motion과 forced colors에서는 runtime module, WebGL context와 ticker를 만들지 않는다. Canvas는 `aria-hidden`, `tabindex=-1`이고 모든 navigation·copy·CTA는 별도 DOM 레이어가 소유한다.
