@@ -2,6 +2,7 @@ import { createDrawable, createTimeline } from 'animejs';
 import { mountHeroWordmark } from './home-intro-wordmark.js';
 
 const INTENT_EVENTS = ['wheel', 'pointerdown', 'touchstart', 'keydown'];
+const SIGNATURE_DURATION = 1500;
 
 const getNavigationType = () => performance.getEntriesByType?.('navigation')?.[0]?.type;
 
@@ -89,7 +90,7 @@ export const initHomeIntro = (environment) => {
   window.addEventListener('portfolio:environment-change', handleEnvironmentChange);
 
   const full = environment.motion === 'full';
-  const totalDuration = full ? 780 : 560;
+  const totalDuration = SIGNATURE_DURATION;
   const entryDelay = full ? 45 : 25;
   const writingDuration = totalDuration - entryDelay;
   const drawablePaths = createDrawable(paths);

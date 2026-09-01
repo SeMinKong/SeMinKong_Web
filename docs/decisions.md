@@ -762,3 +762,9 @@
 - Decision: Home sandbox의 60Hz world step 안에서 8.33ms 물리 substep 두 번을 수행하고, 이전·현재 pose를 Pixi frame 사이에서 보간한다. 이름은 보이는 SVG letter별, 인사말은 공백을 제외한 word별, CTA는 button별 정적 body로 측정한다. 모든 재질은 화면 좌상단 바깥의 하나의 고정 점광원을 공유하고 그림자는 전역 shadow layer에서 합성한다.
 - Reason: 고주사율 화면에서 Matter pose를 그대로 복사하면 같은 위치가 반복되어 미세한 끊김이 보였고, 큰 문장 사각형은 보이지 않는 공백까지 막았다. 오브제와 함께 회전하는 고정 offset 그림자는 각 물체가 서로 다른 광원을 가진 것처럼 보여 공간의 현실감을 약하게 만들었다.
 - Impact: 던지기는 최근 입력 표본을 시간 가중 평균하고 전체 벡터 크기를 제한한다. 글자와 충돌하면 오브제별 탄성을 유지한 채 튕기지만 글자 사이 공간은 통과할 수 있다. 유리 ring은 compound segment로 실제 구멍을 가지며, 광원은 렌더링에만 관여하고 물리 결과는 바꾸지 않는다. WebGL fallback, reduced/forced-colors, native touch scroll, offscreen·hidden pause와 sleeping 계약은 유지한다.
+
+## 2026-09-01 — Home 손글씨 서명 1.5초 호흡
+
+- Decision: Home의 12-path `Se Min Kong` 필기 duration을 desktop과 compact 모두 총 `1500ms`로 늘린다. 기존 path 길이 비례 배분, 획순과 Anime.js easing은 유지한다.
+- Reason: 기존 `780ms / 560ms`는 완성 속도가 빨라 실제로 이름을 쓰는 장면보다 짧은 reveal처럼 읽혔다. 약 1.5초의 호흡은 각 획을 인지할 시간을 주면서도 첫 화면을 오래 막지 않는다.
+- Impact: 첫 wheel, pointer, touch와 keyboard 입력은 계속 이벤트를 소비하지 않고 서명만 즉시 완료한다. Reduced motion, hash/BFCache·복원 진입은 정적 완성 상태이며, Kinetic runtime은 자연 완료 또는 조기 완료 뒤에 기존대로 시작한다.

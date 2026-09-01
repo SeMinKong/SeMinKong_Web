@@ -168,6 +168,8 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.doesNotMatch(homeHtml, /data-home-intro|__homeIntroGate|aria-busy/);
   assert.doesNotMatch(homeIntro, /preventDefault|stopImmediatePropagation|setAttribute\('inert'/);
   assert.match(homeIntro, /passive: true/);
+  assert.match(homeIntro, /const SIGNATURE_DURATION = 1500;/);
+  assert.match(homeIntro, /const totalDuration = SIGNATURE_DURATION;/);
 
   for (const html of [homeHtml, workHtml]) {
     const script = exactlyOne(

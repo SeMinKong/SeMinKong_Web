@@ -902,3 +902,12 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Glass ring은 12개의 chamfered compound segment로 구성해 중앙 구멍이 실제 hit-test와 충돌에서 열린다. Pointer hit-test도 parent bounds가 아니라 compound part vertices를 사용한다.
 - 고정 점광원은 viewport 기준 `(-0.12w, -0.18h, 0.72 × diagonal)`에 둔다. Highlight, shade와 두 단계 그림자는 보간된 world pose에서 계산하며 광원 방향은 오브제 회전에 종속되지 않는다. 모든 그림자는 하나의 하단 shadow layer, 표면은 상단 object layer에 배치해 뒤에 생성된 그림자가 다른 오브제를 덮지 않는다.
 - 광원은 render-only다. Matter force, restitution과 drag에는 영향을 주지 않는다. CSS static fallback도 같은 좌상단 광원과 material별 lower-right shadow를 사용하고, reduced motion에서는 정지 조명을 유지하되 forced colors에서는 제거한다.
+
+## 2026-09-01 — Home handwritten signature timing override
+
+이 항목은 `Non-blocking signature and evidence Hero override`의 `780ms desktop / 560ms compact` timing만 대체한다.
+
+- Full과 compact 모두 12개 path의 전체 timeline을 `1500ms`로 사용한다. 기존 `45ms / 25ms` entry delay를 제외한 시간이 path 실제 길이 비율로 분배되므로 보이는 필기는 약 `1.46초`다.
+- 획순, `inOut(2)` drawable easing, 이름의 짧은 opacity/Y settle과 동일 SVG geometry는 변경하지 않는다.
+- 첫 wheel, pointerdown, touchstart와 keydown은 passive/capture listener에서 원래 입력을 통과시키면서 서명만 즉시 완료한다. Reduced motion, hash, hidden, nonzero scroll과 BFCache 진입은 계속 정적 완성 상태다.
+- Kinetic sandbox의 `ready` gate는 자연 완료 약 1.5초 또는 조기 입력 완료 중 먼저 발생한 시점에 해제한다. Watchdog은 timeline 뒤 `700ms` fail-open 여유를 유지한다.

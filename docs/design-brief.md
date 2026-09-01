@@ -931,3 +931,11 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 오브제는 viewport와 상단 navigation, 이름·문장·CTA의 보이지 않는 충돌면 안에서 자유롭게 이동한다. 중앙 콘텐츠를 처음부터 덮지 않으면서 사용자가 던진 결과는 자연스러운 충돌로 설명되도록 한다.
 - 정적 HTML/CSS 오브제 구성이 source of truth인 폴백이다. GPU 장면은 첫 유효 프레임 뒤에만 같은 자리를 교체하고 실패·저동작·forced-colors 환경에서는 폴백을 유지한다. Canvas는 장식으로 accessibility tree와 tab order에 들어가지 않는다.
 - 1000px 이하에서는 같은 중앙 구성을 유지하고 720px 이하의 정적 폴백은 다섯 개 오브제로 밀도를 낮춘다. Touch 환경은 native vertical pan을 우선하며, 상호작용을 위해 페이지 스크롤을 가두지 않는다.
+
+## 2026-09-01 — Home handwritten signature pacing override
+
+이 항목은 `Evidence-first product clarity and privacy override`의 780ms 이내 서명 timing만 대체한다.
+
+- 첫 화면의 `Se Min Kong` 12-path 서명은 desktop과 compact 모두 약 1.5초에 걸쳐 실제 획순으로 완성한다. 별도 overlay, progress UI나 필기 뒤 추가 entrance는 만들지 않는다.
+- 사용자가 첫 wheel, pointer, touch 또는 keyboard 입력을 하면 해당 입력은 그대로 실행되고 서명만 즉시 완성된다. Reduced motion, hash·복원·BFCache 진입은 완성된 정적 서명을 바로 보여 준다.
+- Kinetic 오브제 공간은 자연 필기 완료 또는 조기 완료 뒤 활성화되며 중앙 semantic 이름·인사·CTA는 animation gate와 무관하게 계속 읽을 수 있어야 한다.

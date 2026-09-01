@@ -108,6 +108,7 @@ if (!pageRuntimeSource.includes('scheduleSmoothScroll(smoothScrollAfter)')) {
 const homeHtml = await readFile(resolve('index.html'), 'utf8');
 const thingHtml = await readFile(resolve('work/thing/index.html'), 'utf8');
 const homeStyles = await readFile(resolve('src/styles/home.css'), 'utf8');
+const homeIntroRuntime = await readFile(resolve('src/motion/home-intro.js'), 'utf8');
 const kineticStyles = await readFile(resolve('src/styles/kinetic-home.css'), 'utf8');
 const kineticFacade = await readFile(resolve('src/motion/kinetic-sandbox.js'), 'utf8');
 const kineticRuntime = await readFile(resolve('src/motion/kinetic-sandbox-runtime.js'), 'utf8');
@@ -120,6 +121,10 @@ const gallerySurfaceLayer = gallerySurfaceStyles.match(/body::before\s*\{([^}]*)
 
 if (!homeHtml.includes('data-hero-surface')) {
   throw new Error('Home must keep a static hero surface for the intro reveal.');
+}
+
+if (!homeIntroRuntime.includes('const SIGNATURE_DURATION = 1500;')) {
+  throw new Error('Home handwritten signature must retain its 1.5-second writing duration.');
 }
 
 if (/data-hero-fluid/i.test(homeHtml)) {

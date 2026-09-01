@@ -923,3 +923,11 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify`가 11개 test, source route 11개·stylesheet 12개, production module 765개와 deployment entry 15개를 통과했다. Kinetic runtime은 `202.59 kB raw / 59.57 kB gzip`이고 `git diff --check` whitespace error는 0이다.
 - [ ] 실제 touch hardware의 빠른 flick/세로 pan 경쟁, 120Hz 물리 pose의 육안 비교, background tab·BFCache와 WebGL context loss/restore는 이번 세션에서 직접 주입하지 않았다. 관련 magnitude, interpolation, passive input, lifecycle과 static recovery 계약은 source/test로 확인했다.
 - [ ] Production publish는 수행하지 않았다. 이번 요청은 local 구현과 검증 범위이며 commit/push/deploy는 별도 명시 요청이 필요하다.
+
+## 2026-09-01 Home handwritten signature pacing verification
+
+- [x] Home Intro는 `SIGNATURE_DURATION = 1500`을 단일 source of truth로 사용한다. 기존 entry delay 뒤 12개 path에 실제 길이 비율로 분배되는 필기 시간은 full 약 `1455ms`, compact 약 `1475ms`다.
+- [x] 이름의 12-path 획순, `inOut(2)` drawable easing, 짧은 opacity/Y settle과 semantic H1 geometry는 변경하지 않았다.
+- [x] Wheel, pointerdown, touchstart와 keydown은 passive/capture listener에서 원래 입력을 소비하지 않고 `finish()`만 호출한다. Reduced motion, hash, hidden, scroll restoration과 BFCache의 즉시 완성 조건도 유지한다.
+- [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 15개를 통과했고 `git diff --check` whitespace error는 0이다.
+- [ ] 이번 timing 수정은 브라우저 stopwatch로 별도 재측정하지 않았다. 1.5초 상수, path 길이 비례 합계와 조기완료 동작은 source/test contract로 검증했다.
