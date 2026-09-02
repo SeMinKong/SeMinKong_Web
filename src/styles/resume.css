@@ -55,24 +55,38 @@
 
 .resume-contact {
   display: grid;
-  gap: 7px;
+  gap: 0;
   color: var(--text-soft);
   font-family: var(--font-mono);
   font-size: var(--type-label);
   font-weight: var(--weight-support);
-  line-height: 1.5;
+  line-height: 1.35;
+}
+
+.resume-contact > a,
+.resume-contact > span {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  overflow-wrap: anywhere;
 }
 
 .resume-contact a {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
+  width: fit-content;
   transition: color 220ms ease;
 }
 
 .resume-contact a:hover,
 .resume-contact a:focus-visible {
   color: var(--signal);
+}
+
+@media (pointer: coarse) {
+  .resume-contact a {
+    min-height: 44px;
+  }
 }
 
 .resume-original__content > header {

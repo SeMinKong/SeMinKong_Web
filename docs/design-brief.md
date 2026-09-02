@@ -948,3 +948,9 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 미리보기는 같은 PDF를 새 탭에서 열고, 별도 행동으로 PDF 다운로드·새 탭 보기·DOCX 원본 다운로드를 제공한다. 세 행동은 44px 이상의 키보드·터치 목표와 명확한 focus 상태를 유지한다.
 - 사용자는 전화번호와 생년월일이 포함된 기존 원본 세 파일의 공개 재배포를 명시적으로 승인했다. 공개 파일명은 `SeMinKong-Resume-page-1.png`, `SeMinKong-Resume.pdf`, `SeMinKong-Resume.docx`로 한정하며 추가 Resume 파일은 배포하지 않는다.
 - 기존 반응형 HTML Profile은 미리보기 다음에 그대로 제공하고, 600px 이하에서는 파일 행동을 한 열로 배치해 가로 overflow 없이 읽고 내려받을 수 있어야 한다.
+
+## 2026-09-02 — Resume contact rhythm override
+
+- Resume Hero의 이메일, GitHub와 위치는 별도 섹션처럼 벌어지지 않고 하나의 연락처 cluster로 읽혀야 한다.
+- Fine pointer에서는 세 항목을 gap 없는 `36px` 행으로 맞춘다. Coarse pointer에서는 링크의 `44px` touch target을 유지하되 위치를 포함한 행 정렬과 자연스러운 줄바꿈은 보존한다.
+- 글자 크기, weight, mono font와 signal hover 색은 변경하지 않는다.

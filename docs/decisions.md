@@ -774,3 +774,9 @@
 - Decision: 사용자의 명시적 승인에 따라 전화번호와 생년월일이 포함된 기존 1-page Resume PNG, PDF와 DOCX를 원본 그대로 다시 공개한다. `/resume/` Hero 바로 다음에 원본 미리보기와 PDF 다운로드·새 탭 보기·DOCX 다운로드 행동을 복원한다.
 - Reason: Resume 페이지에서 원본 문서의 실제 구성과 다운로드 경로를 즉시 확인할 수 있던 기존 경험을 되살려 달라는 요청을 반영한다.
 - Impact: 이 결정은 2026-08-31 `HTML-first Resume`의 세 원본 파일 비공개 범위만 대체한다. 배포 manifest와 검증기는 승인된 세 파일명만 추가로 허용하고 다른 Resume 파일은 계속 거부한다. 반응형 HTML Resume, 연락 경로와 원본의 비공개 보관 사본은 유지한다.
+
+## 2026-09-02 — Resume Hero 연락처의 균일한 행 리듬
+
+- Decision: Resume Hero의 이메일·GitHub·위치를 desktop/fine pointer에서 `36px`의 동일한 세 행으로 묶고 행 사이 추가 gap을 제거한다. Coarse pointer에서는 두 링크만 `44px` 터치 목표를 유지한다.
+- Reason: 링크에만 적용된 `44px` 최소 높이와 `7px` gap 때문에 첫 두 행은 약 `51px`, 위치 앞은 약 `41px`로 벌어져 연락처가 하나의 묶음으로 읽히지 않았다.
+- Impact: 폰트 크기·굵기·색과 semantic 순서는 유지한다. 좁은 화면과 확대 환경에서 이메일·GitHub·위치가 컨테이너 밖으로 넘치지 않도록 각 행은 `overflow-wrap: anywhere`를 사용한다.

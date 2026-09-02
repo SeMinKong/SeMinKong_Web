@@ -940,3 +940,10 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
 - [x] GitHub Pages 배포 뒤 Resume HTML, 432186-byte PNG, 75264-byte PDF와 11779-byte DOCX가 모두 HTTP 200이다. MIME type은 각각 `text/html`, `image/png`, `application/pdf`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`로 제공된다.
 - [ ] Sites 지침상 별도 요청 없는 브라우저 시각 QA는 실행하지 않았다. 390px·768px·1280px의 프리뷰 레이아웃은 기존 동일 UI의 검증 기록과 이번 source 반응형 계약을 사용한다.
+
+## 2026-09-02 Resume Hero contact rhythm verification
+
+- [x] Fine pointer에서 email·GitHub·location 세 행은 추가 gap 없이 동일한 `36px` 높이를 사용하고 line-height는 `1.35`다.
+- [x] Coarse pointer에서 두 링크는 `44px` target을 유지하며 세 항목은 `overflow-wrap: anywhere`로 좁은 폭의 overflow를 방지한다.
+- [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
+- [ ] GitHub Pages 재배포 뒤 공개 Resume CSS에 새 contact rhythm이 반영된다.

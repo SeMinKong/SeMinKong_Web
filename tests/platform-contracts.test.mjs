@@ -107,7 +107,10 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
     }
   }
 
-  const resume = await readFile(sourceUrl('resume/index.html'), 'utf8');
+  const [resume, resumeStyles] = await Promise.all([
+    readFile(sourceUrl('resume/index.html'), 'utf8'),
+    readFile(sourceUrl('src/styles/resume.css'), 'utf8')
+  ]);
   assert.match(resume, /\.\/SeMinKong-Resume\.pdf/);
   assert.match(resume, /\.\/SeMinKong-Resume\.docx/);
   assert.match(resume, /\.\/SeMinKong-Resume-page-1\.png/);
@@ -117,6 +120,9 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
   assert.match(resume, /aria-label="원본 이력서 PDF를 새 탭에서 열기"/);
   assert.match(resume, /width="1241" height="1754" loading="lazy" decoding="async"/);
   assert.doesNotMatch(resume, /개인정보를 최소화/);
+  assert.match(resumeStyles, /\.resume-contact\s*\{[^}]*gap:\s*0;[^}]*line-height:\s*1\.35;/s);
+  assert.match(resumeStyles, /\.resume-contact\s*>\s*a,[^{]*\.resume-contact\s*>\s*span\s*\{[^}]*min-height:\s*36px;[^}]*overflow-wrap:\s*anywhere;/s);
+  assert.match(resumeStyles, /@media\s*\(pointer:\s*coarse\)\s*\{\s*\.resume-contact a\s*\{[^}]*min-height:\s*44px;/s);
   for (const file of [
     'public/resume/SeMinKong-Resume.pdf',
     'public/resume/SeMinKong-Resume.docx',
