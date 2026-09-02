@@ -939,3 +939,12 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 첫 화면의 `Se Min Kong` 12-path 서명은 desktop과 compact 모두 약 1.5초에 걸쳐 실제 획순으로 완성한다. 별도 overlay, progress UI나 필기 뒤 추가 entrance는 만들지 않는다.
 - 사용자가 첫 wheel, pointer, touch 또는 keyboard 입력을 하면 해당 입력은 그대로 실행되고 서명만 즉시 완성된다. Reduced motion, hash·복원·BFCache 진입은 완성된 정적 서명을 바로 보여 준다.
 - Kinetic 오브제 공간은 자연 필기 완료 또는 조기 완료 뒤 활성화되며 중앙 semantic 이름·인사·CTA는 animation gate와 무관하게 계속 읽을 수 있어야 한다.
+
+## 2026-09-02 — Original Resume preview republication override
+
+이 항목은 `Evidence-first product clarity and privacy override`의 기존 Resume PDF·DOCX·PNG 비공개 결정만 대체한다.
+
+- `/resume/` Hero 바로 다음에 `원본 이력서` 구간을 두고 1241×1754 PNG 한 페이지를 원래 비율로 표시한다. 이미지는 지연 로드하되 intrinsic geometry를 예약해 문서가 내려앉지 않게 한다.
+- 미리보기는 같은 PDF를 새 탭에서 열고, 별도 행동으로 PDF 다운로드·새 탭 보기·DOCX 원본 다운로드를 제공한다. 세 행동은 44px 이상의 키보드·터치 목표와 명확한 focus 상태를 유지한다.
+- 사용자는 전화번호와 생년월일이 포함된 기존 원본 세 파일의 공개 재배포를 명시적으로 승인했다. 공개 파일명은 `SeMinKong-Resume-page-1.png`, `SeMinKong-Resume.pdf`, `SeMinKong-Resume.docx`로 한정하며 추가 Resume 파일은 배포하지 않는다.
+- 기존 반응형 HTML Profile은 미리보기 다음에 그대로 제공하고, 600px 이하에서는 파일 행동을 한 열로 배치해 가로 overflow 없이 읽고 내려받을 수 있어야 한다.

@@ -768,3 +768,9 @@
 - Decision: Home의 12-path `Se Min Kong` 필기 duration을 desktop과 compact 모두 총 `1500ms`로 늘린다. 기존 path 길이 비례 배분, 획순과 Anime.js easing은 유지한다.
 - Reason: 기존 `780ms / 560ms`는 완성 속도가 빨라 실제로 이름을 쓰는 장면보다 짧은 reveal처럼 읽혔다. 약 1.5초의 호흡은 각 획을 인지할 시간을 주면서도 첫 화면을 오래 막지 않는다.
 - Impact: 첫 wheel, pointer, touch와 keyboard 입력은 계속 이벤트를 소비하지 않고 서명만 즉시 완료한다. Reduced motion, hash/BFCache·복원 진입은 정적 완성 상태이며, Kinetic runtime은 자연 완료 또는 조기 완료 뒤에 기존대로 시작한다.
+
+## 2026-09-02 — 기존 원본 Resume 프리뷰 재공개
+
+- Decision: 사용자의 명시적 승인에 따라 전화번호와 생년월일이 포함된 기존 1-page Resume PNG, PDF와 DOCX를 원본 그대로 다시 공개한다. `/resume/` Hero 바로 다음에 원본 미리보기와 PDF 다운로드·새 탭 보기·DOCX 다운로드 행동을 복원한다.
+- Reason: Resume 페이지에서 원본 문서의 실제 구성과 다운로드 경로를 즉시 확인할 수 있던 기존 경험을 되살려 달라는 요청을 반영한다.
+- Impact: 이 결정은 2026-08-31 `HTML-first Resume`의 세 원본 파일 비공개 범위만 대체한다. 배포 manifest와 검증기는 승인된 세 파일명만 추가로 허용하고 다른 Resume 파일은 계속 거부한다. 반응형 HTML Resume, 연락 경로와 원본의 비공개 보관 사본은 유지한다.

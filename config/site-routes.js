@@ -80,6 +80,9 @@ export const SITE_ROUTES = Object.freeze([
 
 export const STATIC_DEPLOYMENT_FILES = Object.freeze([
   'favicon.svg',
+  'resume/SeMinKong-Resume-page-1.png',
+  'resume/SeMinKong-Resume.docx',
+  'resume/SeMinKong-Resume.pdf',
   'server/index.js',
   'social/portfolio-1200x630.jpg',
   'sitemap.xml'

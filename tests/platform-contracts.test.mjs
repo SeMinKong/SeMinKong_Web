@@ -80,7 +80,7 @@ test('every route ships one canonical and complete share metadata', async () => 
   await access(sourceUrl('public/social/portfolio-1200x630.jpg'));
 });
 
-test('media geometry, loading, and public-resume privacy stay explicit', async () => {
+test('media geometry, loading, and approved public Resume files stay explicit', async () => {
   for (const route of SITE_ROUTES) {
     const html = await readFile(sourceUrl(route.source), 'utf8');
 
@@ -108,14 +108,21 @@ test('media geometry, loading, and public-resume privacy stay explicit', async (
   }
 
   const resume = await readFile(sourceUrl('resume/index.html'), 'utf8');
-  assert.doesNotMatch(resume, /SeMinKong-Resume\.(?:pdf|docx)|SeMinKong-Resume-page-1\.png/);
-  assert.match(resume, /개인정보를 최소화/);
+  assert.match(resume, /\.\/SeMinKong-Resume\.pdf/);
+  assert.match(resume, /\.\/SeMinKong-Resume\.docx/);
+  assert.match(resume, /\.\/SeMinKong-Resume-page-1\.png/);
+  assert.match(resume, /href="\.\/SeMinKong-Resume\.pdf" download="Se-Min-Kong-Resume\.pdf"/);
+  assert.match(resume, /href="\.\/SeMinKong-Resume\.docx" download="Se-Min-Kong-Resume\.docx"/);
+  assert.match(resume, /href="\.\/SeMinKong-Resume\.pdf" target="_blank" rel="noreferrer"/);
+  assert.match(resume, /aria-label="원본 이력서 PDF를 새 탭에서 열기"/);
+  assert.match(resume, /width="1241" height="1754" loading="lazy" decoding="async"/);
+  assert.doesNotMatch(resume, /개인정보를 최소화/);
   for (const file of [
     'public/resume/SeMinKong-Resume.pdf',
     'public/resume/SeMinKong-Resume.docx',
     'public/resume/SeMinKong-Resume-page-1.png'
   ]) {
-    await assert.rejects(access(sourceUrl(file)));
+    await access(sourceUrl(file));
   }
 
   const [viteConfig, distVerifier] = await Promise.all([

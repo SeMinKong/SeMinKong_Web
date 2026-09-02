@@ -931,3 +931,12 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] Wheel, pointerdown, touchstart와 keydown은 passive/capture listener에서 원래 입력을 소비하지 않고 `finish()`만 호출한다. Reduced motion, hash, hidden, scroll restoration과 BFCache의 즉시 완성 조건도 유지한다.
 - [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 15개를 통과했고 `git diff --check` whitespace error는 0이다.
 - [ ] 이번 timing 수정은 브라우저 stopwatch로 별도 재측정하지 않았다. 1.5초 상수, path 길이 비례 합계와 조기완료 동작은 source/test contract로 검증했다.
+
+## 2026-09-02 Original Resume preview republication verification
+
+- [x] `/resume/` source에서 1241×1754 원본 PNG 프리뷰가 HTML Profile 앞에 있고 PDF 새 탭 보기, PDF 다운로드와 DOCX 다운로드 링크가 모두 승인된 세 파일을 가리킨다.
+- [x] 600px 이하에서 세 파일 행동을 한 열로 만드는 CSS, 이미지 intrinsic ratio, 명시적 focus 상태와 44px touch target을 source contract로 확인했다.
+- [x] Production `dist/resume/`에는 `index.html`과 승인된 PNG·PDF·DOCX만 있으며 세 asset의 SHA-256이 보관 원본과 일치한다. 다른 Resume 파일은 allowlist 검증이 거부한다.
+- [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
+- [ ] GitHub Pages 배포 뒤 Resume HTML과 PNG·PDF·DOCX가 모두 HTTP 200 및 올바른 MIME type으로 제공된다.
+- [ ] Sites 지침상 별도 요청 없는 브라우저 시각 QA는 실행하지 않았다. 390px·768px·1280px의 프리뷰 레이아웃은 기존 동일 UI의 검증 기록과 이번 source 반응형 계약을 사용한다.

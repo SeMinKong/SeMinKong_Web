@@ -10,6 +10,11 @@ const distAssetDirectory = resolve(distDirectory, 'assets');
 const rootAbsoluteAssetPattern = /(?:href|src|poster)=["']\/(?!\/)/gi;
 const referencePattern = /(?:href|src|poster)=["']([^"']+)["']/gi;
 const externalReferencePattern = /^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i;
+const APPROVED_RESUME_FILES = new Set(
+  EXPECTED_DEPLOYMENT_FILES
+    .filter((file) => file.startsWith('resume/'))
+    .map((file) => file.slice('resume/'.length))
+);
 const retiredPointerTokens = [
   'site-fluid',
   'hero-fluid',
@@ -123,7 +128,7 @@ await Promise.all(
 
 const resumeDeploymentEntries = await readdir(resolve(distDirectory, 'resume'), { withFileTypes: true });
 const unexpectedResumeFiles = resumeDeploymentEntries
-  .filter((entry) => entry.name !== 'index.html')
+  .filter((entry) => !entry.isFile() || !APPROVED_RESUME_FILES.has(entry.name))
   .map((entry) => entry.name);
 
 if (unexpectedResumeFiles.length) {

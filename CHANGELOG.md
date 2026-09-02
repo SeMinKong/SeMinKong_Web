@@ -4,6 +4,10 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Changed
+
+- Restored the original one-page Resume preview together with its PDF and DOCX actions after the owner explicitly approved republishing the original files.
+
 ## [2.0.1] - 2026-08-24
 
 ### Fixed
