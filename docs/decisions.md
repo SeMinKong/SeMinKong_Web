@@ -780,3 +780,9 @@
 - Decision: Resume Hero의 이메일·GitHub·위치를 desktop/fine pointer에서 `36px`의 동일한 세 행으로 묶고 행 사이 추가 gap을 제거한다. Coarse pointer에서는 두 링크만 `44px` 터치 목표를 유지한다.
 - Reason: 링크에만 적용된 `44px` 최소 높이와 `7px` gap 때문에 첫 두 행은 약 `51px`, 위치 앞은 약 `41px`로 벌어져 연락처가 하나의 묶음으로 읽히지 않았다.
 - Impact: 폰트 크기·굵기·색과 semantic 순서는 유지한다. 좁은 화면과 확대 환경에서 이메일·GitHub·위치가 컨테이너 밖으로 넘치지 않도록 각 행은 `overflow-wrap: anywhere`를 사용한다.
+
+## 2026-09-02 — 원본 Resume 프리뷰의 페이지 기준 중앙 정렬
+
+- Decision: `원본 이력서` 라벨은 section 시작점에 유지하되, 파일 행동과 1-page 프리뷰를 담은 `.resume-original__content`는 두 grid column 전체를 가로질러 최대 `808px` 폭으로 페이지 중앙에 배치한다.
+- Reason: 공통 Resume block의 `150px 라벨 + 82px gap + 808px 본문` 구조를 그대로 사용하면 문서 중심이 1040px 본문 중심보다 `116px` 오른쪽으로 밀렸다.
+- Impact: 데스크톱의 기존 문서 크기, intrinsic ratio, 파일 행동, focus와 hover는 유지한다. 808px보다 좁은 화면에서는 content가 가용 폭 100%로 줄어들어 768px과 390px에서도 같은 중앙축과 native vertical flow를 사용한다.

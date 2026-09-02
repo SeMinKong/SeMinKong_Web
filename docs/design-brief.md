@@ -954,3 +954,9 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - Resume Hero의 이메일, GitHub와 위치는 별도 섹션처럼 벌어지지 않고 하나의 연락처 cluster로 읽혀야 한다.
 - Fine pointer에서는 세 항목을 gap 없는 `36px` 행으로 맞춘다. Coarse pointer에서는 링크의 `44px` touch target을 유지하되 위치를 포함한 행 정렬과 자연스러운 줄바꿈은 보존한다.
 - 글자 크기, weight, mono font와 signal hover 색은 변경하지 않는다.
+
+## 2026-09-02 — Original Resume optical centering override
+
+- `원본 이력서` label은 기존 Resume section hierarchy를 위해 왼쪽 시작점에 남긴다.
+- Preview와 PDF/DOCX actions는 label column에 밀리지 않고 전체 Resume 본문 중앙을 기준으로 정렬한다. Desktop 최대 폭은 현재 보이던 `808px`을 유지한다.
+- 808px보다 좁은 layout에서는 가용 폭 100%로 축소하며, 이미지 비율·44px actions·모바일 한 열 행동과 focus outline을 유지한다.

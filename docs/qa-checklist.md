@@ -947,3 +947,10 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] Coarse pointer에서 두 링크는 `44px` target을 유지하며 세 항목은 `overflow-wrap: anywhere`로 좁은 폭의 overflow를 방지한다.
 - [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
 - [x] GitHub Pages 재배포 뒤 공개 `resume-BFH3i-0V.css`에서 `gap: 0`, `line-height: 1.35`, 세 행 `36px`와 coarse-pointer 링크 `44px` 규칙을 확인했다.
+
+## 2026-09-02 Original Resume optical centering verification
+
+- [x] `.resume-original__content`는 두 grid column 전체를 사용하고 최대 `808px` 폭으로 중앙 정렬되며 label은 별도 첫 행에 남는다.
+- [x] 808px보다 좁은 layout에서는 content가 가용 폭 100%를 사용하고 이미지 비율·44px file actions·600px 이하 한 열 행동을 유지한다.
+- [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
+- [ ] GitHub Pages 재배포 뒤 공개 Resume CSS에 중앙 정렬 계약이 반영된다.

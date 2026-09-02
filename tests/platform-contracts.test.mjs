@@ -123,6 +123,8 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
   assert.match(resumeStyles, /\.resume-contact\s*\{[^}]*gap:\s*0;[^}]*line-height:\s*1\.35;/s);
   assert.match(resumeStyles, /\.resume-contact\s*>\s*a,[^{]*\.resume-contact\s*>\s*span\s*\{[^}]*min-height:\s*36px;[^}]*overflow-wrap:\s*anywhere;/s);
   assert.match(resumeStyles, /@media\s*\(pointer:\s*coarse\)\s*\{\s*\.resume-contact a\s*\{[^}]*min-height:\s*44px;/s);
+  assert.match(resumeStyles, /\.resume-block\.resume-original\s*\{[^}]*row-gap:\s*24px;/s);
+  assert.match(resumeStyles, /\.resume-original__content\s*\{[^}]*grid-column:\s*1\s*\/\s*-1;[^}]*width:\s*min\(100%,\s*808px\);[^}]*justify-self:\s*center;/s);
   for (const file of [
     'public/resume/SeMinKong-Resume.pdf',
     'public/resume/SeMinKong-Resume.docx',

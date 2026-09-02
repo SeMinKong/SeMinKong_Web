@@ -499,3 +499,13 @@
     width: min(calc(100% - 32px), 1040px);
   }
 }
+
+.resume-block.resume-original {
+  row-gap: 24px;
+}
+
+.resume-original__content {
+  grid-column: 1 / -1;
+  width: min(100%, 808px);
+  justify-self: center;
+}
