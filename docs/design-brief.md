@@ -968,3 +968,11 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 두 줄 인사말 전체는 `프로젝트` CTA와 동일한 display font를 사용한다.
 - `즐겁습니다.`는 별도 색, 굵기 또는 emphasis element 없이 앞 문장과 같은 스타일로 읽힌다.
 - 기존 문구, 줄 구분, 중앙 정렬, responsive type scale과 Kinetic 동작은 유지한다.
+
+## 2026-09-03 — Resume Awards 증빙 모달 override
+
+- `/resume/` Awards는 제공된 Google Drive 증서를 source of truth로 삼아 SSAFY 공통 프로젝트 우수상, IT 프로젝트 프로리그 장려상, 숭실 캡스톤디자인 경진대회 장려상과 IT대학 소프트웨어 공모전 금상의 공식 명칭·등급·날짜를 표시한다.
+- 증서가 있는 네 항목에는 실제 `button`인 `증빙 보기`를 두고 하나의 native modal dialog를 재사용한다. 제목, 이미지 대체텍스트와 날짜 설명은 선택한 수상에 맞게 함께 바뀌어야 한다.
+- 증빙 이미지는 왜곡하거나 자르지 않은 세로 비율로 표시하고 390px, 768px, 1280px에서 viewport 안에 들어와야 한다. 모달 내부만 필요할 때 스크롤하며 배경 페이지는 열려 있는 동안 움직이지 않는다.
+- 공개 증빙은 공세민 본인의 이름, 수상 정보, 발급일과 발급기관을 유지하되 다른 팀원의 이름과 모든 학번은 불투명하게 가린 WebP만 배포한다. 원본 PDF와 편집 중간 파일은 production에 포함하지 않는다.
+- 닫기 버튼, Escape와 백드롭으로 닫을 수 있고, 닫힌 뒤에는 정확히 모달을 연 버튼으로 포커스를 돌려준다. 단일 focus target에서도 Tab이 dialog 밖으로 빠지지 않아야 한다.

@@ -792,3 +792,9 @@
 - Decision: Home Hero의 `안녕하세요! / 새로운 것을 배우고 직접 만드는 일이 즐겁습니다.` 전체를 `프로젝트` CTA와 같은 display font로 표시하고, `즐겁습니다.`의 별도 강조 markup·색·굵기를 제거한다.
 - Reason: 첫 문장과 CTA가 서로 다른 글꼴 언어로 분리되고 문장 끝만 signal color로 강조되어, 사용자가 요청한 하나의 일관된 인사말보다 두 개의 시각적 메시지처럼 보였다.
 - Impact: 문구, 두 줄 semantic 구조, 크기·행간, CTA와 Kinetic motion은 유지한다. 강조 제거 뒤에도 text contrast와 responsive fit은 기존 기준을 따른다.
+
+## 2026-09-03 — 검증 가능한 Resume Awards와 개인정보 최소화 증빙
+
+- Decision: 제공된 Drive의 네 수상 증서를 확인해 HTML Resume와 1-page DOCX/PDF/PNG를 동기화하고, Awards마다 공개용 세로 WebP를 여는 native modal 버튼을 제공한다. 공개 이미지는 공세민의 이름과 증명에 필요한 수상 사실을 남기되 다른 팀원의 이름과 모든 학번을 불투명하게 가린다.
+- Reason: 수상 이력을 정확한 공식 명칭·등급·날짜로 갱신하면서 방문자가 같은 화면에서 근거를 확인할 수 있어야 하고, 팀 증서에 포함된 제3자의 개인정보는 공개 목적에 필요하지 않다.
+- Impact: `public/resume/` allowlist는 업데이트한 Resume 세 파일과 네 개의 명시된 WebP만 추가 허용한다. 원본 Drive PDF는 저장소와 배포물에 포함하지 않는다. 하나의 native dialog가 네 버튼을 재사용하며 scroll lock, focus trap/복귀, Escape와 실제 백드롭 닫기, reduced-motion 정적 표시를 계약으로 검증한다.

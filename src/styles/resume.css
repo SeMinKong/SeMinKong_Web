@@ -347,6 +347,167 @@
   padding-block: 18px;
 }
 
+.award-proof {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-soft);
+  font-family: var(--font-display);
+  font-size: var(--type-label);
+  font-weight: 400;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: color 220ms ease, border-color 220ms ease, background-color 220ms ease;
+}
+
+.award-proof:hover,
+.award-proof:focus-visible {
+  border-color: var(--signal);
+  background: color-mix(in srgb, var(--signal) 8%, transparent);
+  color: var(--signal);
+}
+
+html.award-dialog-open,
+html.award-dialog-open body {
+  overflow: hidden;
+}
+
+.award-dialog {
+  width: min(calc(100vw - 32px), 620px);
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper-raised);
+  color: var(--paper-ink);
+  box-shadow: 0 28px 80px rgba(21, 20, 15, 0.32);
+  animation: award-dialog-enter 220ms var(--ease-out) both;
+}
+
+.award-dialog::backdrop {
+  background: rgba(17, 16, 14, 0.72);
+  backdrop-filter: blur(6px);
+  animation: award-backdrop-enter 180ms ease-out both;
+}
+
+.award-dialog__panel {
+  max-height: inherit;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.award-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 15px 16px 14px 18px;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.award-dialog__header p {
+  color: var(--paper-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-meta);
+  font-weight: var(--weight-meta);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.award-dialog__header h2 {
+  margin-top: 4px;
+  font-size: clamp(1.18rem, calc(1.08rem + 0.45vw), 1.45rem);
+  font-weight: 400;
+  line-height: 1.22;
+}
+
+.award-dialog__close {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--paper-line-strong);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--paper-ink);
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.award-dialog__close:hover,
+.award-dialog__close:focus-visible {
+  border-color: var(--signal-on-light);
+  background: color-mix(in srgb, var(--signal-on-light) 8%, transparent);
+  color: var(--signal-on-light);
+}
+
+.award-dialog__figure {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.award-dialog__media {
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 18px;
+  background: #1a1916;
+}
+
+.award-dialog__image {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: max(180px, calc(100dvh - 210px));
+  margin-inline: auto;
+  object-fit: contain;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.award-dialog__figure figcaption {
+  padding: 13px 18px 16px;
+  color: var(--paper-muted);
+  font-size: var(--type-meta);
+  font-weight: var(--weight-support);
+  line-height: 1.55;
+}
+
+@keyframes award-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes award-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .resume-cta {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -497,6 +658,48 @@
 
   .resume-footer {
     width: min(calc(100% - 32px), 1040px);
+  }
+
+  .award-dialog {
+    width: min(calc(100vw - 20px), 620px);
+    max-height: calc(100dvh - 20px);
+  }
+
+  .award-dialog__header {
+    padding-inline: 14px 12px;
+  }
+
+  .award-dialog__media {
+    padding: 12px;
+  }
+
+  .award-dialog__figure figcaption {
+    padding-inline: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .award-dialog,
+  .award-dialog::backdrop {
+    animation: none;
+  }
+}
+
+html[data-motion="reduced"] .award-dialog,
+html[data-motion="reduced"] .award-dialog::backdrop {
+  animation: none;
+}
+
+@media (forced-colors: active) {
+  .award-proof,
+  .award-dialog,
+  .award-dialog__close {
+    border-color: ButtonText;
+  }
+
+  .award-dialog::backdrop {
+    background: CanvasText;
+    backdrop-filter: none;
   }
 }
 

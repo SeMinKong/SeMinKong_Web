@@ -963,3 +963,13 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 390×844 reduced 환경에서 canvas는 숨겨지고 정적 fallback이 유지된다. 키보드로 `프로젝트` CTA에 도달했을 때 2px solid vermilion outline과 4px offset이 보인다.
 - [x] 세 viewport의 browser warning/error log는 비어 있다. `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
 - [x] GitHub Pages run `33724181411`이 commit `a527491`에서 성공했다. 공개 URL은 HTTP 200으로 평문 인사말과 `portfolio-CPalX13I.css`를 제공하며, 실제 1280×720 브라우저에서 인사말·`프로젝트`의 font stack 일치, `em` 0개, horizontal overflow 0, warning/error 0을 확인했다.
+
+## 2026-09-03 Resume Awards evidence modal verification
+
+- [x] 제공된 Drive의 네 PDF와 같은 byte size의 로컬 원본을 직접 렌더링해 공식 수상명, 등급, 발급기관과 날짜를 대조했다. HTML과 DOCX/PDF/PNG에는 SSAFY 공통 프로젝트 우수상(2026-08-10), IT 프로젝트 프로리그 장려상(2025-11-22), IT대학 소프트웨어 공모전 금상(2025-08-18), 제15회 숭실 캡스톤디자인 경진대회 장려상(2025-10-01)이 동기화됐다.
+- [x] 공개 WebP 네 장은 `1240×1755`, `1240×1755`, `1239×1758`, `1240×1755`의 실제 portrait geometry다. 다른 팀원의 이름과 모든 학번은 불투명하게 가렸고 원본 PDF·중간 렌더는 production allowlist에 없다.
+- [x] 업데이트한 PDF는 A4 portrait, rotation 0의 1 page이며 150dpi PNG 프리뷰는 `1241×1754`다. DOCX와 PDF의 정규화한 본문 3,258자는 완전히 일치하고 공개/비공개 보관 사본의 세 파일은 각각 byte-identical이다.
+- [x] 실제 브라우저 390×844, 768×1024, 1280×900에서 dialog와 이미지의 렌더 높이가 폭보다 크고 모든 모서리가 viewport 안에 있다. 각 root의 `scrollWidth <= clientWidth`로 horizontal overflow가 없다.
+- [x] 열 때 닫기 버튼으로 focus가 이동하며 단일 focus target의 Tab이 modal 안에서 순환한다. PageDown 중 배경 `scrollY`는 고정되고, Escape와 실제 backdrop 클릭은 정확한 opener로 focus를 복귀시킨다. 이미지 내부 클릭은 닫히지 않으며 다른 수상 재개방 시 title/src/alt가 함께 교체된다.
+- [x] `?motion=reduced`에서 dialog, panel과 backdrop의 computed animation은 모두 `none / 0s`다. 직접 Resume 페이지의 warning/error console log는 비어 있다.
+- [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 766개와 deployment entry 22개를 통과했고 `git diff --check` whitespace error는 0이다.

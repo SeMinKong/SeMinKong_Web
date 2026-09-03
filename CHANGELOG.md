@@ -4,8 +4,13 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Added
+
+- Added privacy-redacted portrait evidence images and accessible `증빙 보기` modal controls for four verified Resume awards.
+
 ### Changed
 
+- Synchronized the HTML, DOCX, PDF, and PNG Resume award records with the supplied certificates, including the 2026 SSAFY Common Project Excellence Award.
 - Matched the Home greeting to the `프로젝트` action's display typeface and removed the separate `즐겁습니다.` color and weight emphasis.
 - Restored the original one-page Resume preview together with its PDF and DOCX actions after the owner explicitly approved republishing the original files.
 - Tightened the Resume Hero contact cluster into three consistent rows while preserving larger link targets on touch devices.

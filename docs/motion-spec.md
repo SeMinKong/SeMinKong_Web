@@ -911,3 +911,9 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - 획순, `inOut(2)` drawable easing, 이름의 짧은 opacity/Y settle과 동일 SVG geometry는 변경하지 않는다.
 - 첫 wheel, pointerdown, touchstart와 keydown은 passive/capture listener에서 원래 입력을 통과시키면서 서명만 즉시 완료한다. Reduced motion, hash, hidden, nonzero scroll과 BFCache 진입은 계속 정적 완성 상태다.
 - Kinetic sandbox의 `ready` gate는 자연 완료 약 1.5초 또는 조기 입력 완료 중 먼저 발생한 시점에 해제한다. Watchdog은 timeline 뒤 `700ms` fail-open 여유를 유지한다.
+
+## 2026-09-03 — Resume Awards 증빙 모달 motion
+
+- Native dialog와 dimmed backdrop은 각각 `220ms`, `180ms`의 짧은 opacity/최대 8px entrance만 사용한다. 증서 자체에는 pan, zoom, parallax나 반복 animation을 적용하지 않는다.
+- `prefers-reduced-motion: reduce` 또는 `html[data-motion="reduced"]`에서는 dialog, panel과 backdrop을 즉시 최종 상태로 표시하고 모든 modal animation을 `none`으로 만든다.
+- Modal open/close는 motion 완료에 의존하지 않는다. 열리자마자 닫기 버튼이 focus를 받고, Escape·백드롭·pagehide 정리는 animation 여부와 무관하게 동작한다.

@@ -21,6 +21,38 @@ const canonicalFor = ({ output }) => {
   return `${ORIGIN}${BASE_PATH}${routePath}`;
 };
 
+const readWebpDimensions = async (file) => {
+  const buffer = await readFile(sourceUrl(file));
+  assert.equal(buffer.toString('ascii', 0, 4), 'RIFF', `${file} must be RIFF`);
+  assert.equal(buffer.toString('ascii', 8, 12), 'WEBP', `${file} must be WebP`);
+
+  let offset = 12;
+  while (offset + 8 <= buffer.length) {
+    const type = buffer.toString('ascii', offset, offset + 4);
+    const size = buffer.readUInt32LE(offset + 4);
+    const dataOffset = offset + 8;
+
+    if (type === 'VP8 ') {
+      assert.equal(buffer.toString('hex', dataOffset + 3, dataOffset + 6), '9d012a');
+      return {
+        width: buffer.readUInt16LE(dataOffset + 6) & 0x3fff,
+        height: buffer.readUInt16LE(dataOffset + 8) & 0x3fff
+      };
+    }
+
+    if (type === 'VP8X') {
+      return {
+        width: buffer.readUIntLE(dataOffset + 4, 3) + 1,
+        height: buffer.readUIntLE(dataOffset + 7, 3) + 1
+      };
+    }
+
+    offset = dataOffset + size + (size % 2);
+  }
+
+  assert.fail(`${file} has no supported WebP dimensions chunk`);
+};
+
 test('every route ships one canonical and complete share metadata', async () => {
   const canonicals = new Set();
 
@@ -107,9 +139,11 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
     }
   }
 
-  const [resume, resumeStyles] = await Promise.all([
+  const [resume, resumeStyles, resumeEntry, awardDialogSource] = await Promise.all([
     readFile(sourceUrl('resume/index.html'), 'utf8'),
-    readFile(sourceUrl('src/styles/resume.css'), 'utf8')
+    readFile(sourceUrl('src/styles/resume.css'), 'utf8'),
+    readFile(sourceUrl('src/entries/resume.js'), 'utf8'),
+    readFile(sourceUrl('src/ui/award-proof-dialog.js'), 'utf8')
   ]);
   assert.match(resume, /\.\/SeMinKong-Resume\.pdf/);
   assert.match(resume, /\.\/SeMinKong-Resume\.docx/);
@@ -125,10 +159,51 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
   assert.match(resumeStyles, /@media\s*\(pointer:\s*coarse\)\s*\{\s*\.resume-contact a\s*\{[^}]*min-height:\s*44px;/s);
   assert.match(resumeStyles, /\.resume-block\.resume-original\s*\{[^}]*row-gap:\s*24px;/s);
   assert.match(resumeStyles, /\.resume-original__content\s*\{[^}]*grid-column:\s*1\s*\/\s*-1;[^}]*width:\s*min\(100%,\s*808px\);[^}]*justify-self:\s*center;/s);
+  assert.equal(resume.match(/<dialog\b/g)?.length, 1);
+  assert.match(resume, /<dialog class="award-dialog"[^>]*data-award-dialog[^>]*data-lenis-prevent[^>]*aria-labelledby="award-dialog-title"[^>]*aria-describedby="award-dialog-caption"/);
+  assert.match(resume, /data-award-dialog-image width="1240" height="1755"/);
+  assert.match(resumeEntry, /runtime\.register\(initAwardProofDialog\(\)\)/);
+  assert.match(awardDialogSource, /typeof dialog\.showModal !== 'function'/);
+  assert.match(awardDialogSource, /closeButton\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(awardDialogSource, /triggerToRestore\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(awardDialogSource, /!panel\.contains\(event\.target\)/);
+  assert.match(awardDialogSource, /document\.addEventListener\('pointerdown', onPointerDown, true\)/);
+  assert.match(awardDialogSource, /event\.key !== 'Tab'/);
+  assert.match(awardDialogSource, /event\.preventDefault\(\)/);
+  assert.match(resumeStyles, /\.award-dialog__image\s*\{[^}]*width:\s*auto;[^}]*height:\s*auto;[^}]*object-fit:\s*contain;/s);
+  assert.match(resumeStyles, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.award-dialog::backdrop\s*\{[^}]*animation:\s*none;/);
+
+  const proofButtons = resume.match(/<button\b[^>]*data-award-proof[^>]*>/g) ?? [];
+  assert.equal(proofButtons.length, 4);
+  for (const button of proofButtons) {
+    assert.match(button, /type="button"/);
+    assert.match(button, /aria-haspopup="dialog"/);
+    assert.match(button, /aria-controls="award-proof-dialog"/);
+    assert.match(button, /data-proof-title="[^"]+"/);
+    assert.match(button, /data-proof-caption="[^"]+"/);
+  }
+
+  const awardFiles = [
+    ['award-ssafy-common-project.webp', 1240, 1755],
+    ['award-it-project-pro-league.webp', 1240, 1755],
+    ['award-capstone-design.webp', 1239, 1758],
+    ['award-software-competition.webp', 1240, 1755]
+  ];
+  for (const [filename, expectedWidth, expectedHeight] of awardFiles) {
+    const reference = proofButtons.find((button) => button.includes(`data-proof-src="./${filename}"`));
+    assert.ok(reference, `${filename} needs one proof trigger`);
+    assert.match(reference, new RegExp(`data-proof-width="${expectedWidth}"`));
+    assert.match(reference, new RegExp(`data-proof-height="${expectedHeight}"`));
+    const dimensions = await readWebpDimensions(`public/resume/${filename}`);
+    assert.deepEqual(dimensions, { width: expectedWidth, height: expectedHeight });
+    assert.ok(dimensions.height > dimensions.width, `${filename} must be portrait`);
+  }
+
   for (const file of [
     'public/resume/SeMinKong-Resume.pdf',
     'public/resume/SeMinKong-Resume.docx',
-    'public/resume/SeMinKong-Resume-page-1.png'
+    'public/resume/SeMinKong-Resume-page-1.png',
+    ...awardFiles.map(([filename]) => `public/resume/${filename}`)
   ]) {
     await access(sourceUrl(file));
   }

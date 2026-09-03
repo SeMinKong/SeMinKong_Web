@@ -16,7 +16,7 @@ const entryRuntimeContracts = {
   'case-study.js': ['initThingStory', 'initIntro', 'initReveals', 'initMediaPlayback'],
   'home.js': ['initHomeIntro', 'initKineticSandbox', 'initReveals', 'initProjectDeck'],
   'legal.js': ['initIntro', 'initReveals'],
-  'resume.js': ['initIntro', 'initReveals'],
+  'resume.js': ['initAwardProofDialog', 'initIntro', 'initReveals'],
   'work.js': ['initWorkStory', 'initReveals', 'initMediaPlayback']
 };
 

@@ -83,6 +83,10 @@ export const STATIC_DEPLOYMENT_FILES = Object.freeze([
   'resume/SeMinKong-Resume-page-1.png',
   'resume/SeMinKong-Resume.docx',
   'resume/SeMinKong-Resume.pdf',
+  'resume/award-capstone-design.webp',
+  'resume/award-it-project-pro-league.webp',
+  'resume/award-software-competition.webp',
+  'resume/award-ssafy-common-project.webp',
   'server/index.js',
   'social/portfolio-1200x630.jpg',
   'sitemap.xml'
