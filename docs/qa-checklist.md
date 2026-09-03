@@ -962,4 +962,4 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 실제 production preview의 390×844, 768×1024, 1280×720에서 인사말과 CTA가 모두 보이고 horizontal overflow는 0이다. 390px forced-reduced는 static, 768px 기본 환경은 lite/sleeping, 1280px 기본 환경은 full/sleeping Kinetic 상태를 유지한다.
 - [x] 390×844 reduced 환경에서 canvas는 숨겨지고 정적 fallback이 유지된다. 키보드로 `프로젝트` CTA에 도달했을 때 2px solid vermilion outline과 4px offset이 보인다.
 - [x] 세 viewport의 browser warning/error log는 비어 있다. `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
-- [ ] GitHub Pages 배포와 공개 URL의 새 markup·hashed CSS 확인은 아직 수행하지 않았다.
+- [x] GitHub Pages run `33724181411`이 commit `a527491`에서 성공했다. 공개 URL은 HTTP 200으로 평문 인사말과 `portfolio-CPalX13I.css`를 제공하며, 실제 1280×720 브라우저에서 인사말·`프로젝트`의 font stack 일치, `em` 0개, horizontal overflow 0, warning/error 0을 확인했다.
