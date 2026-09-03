@@ -954,3 +954,12 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 808px보다 좁은 layout에서는 content가 가용 폭 100%를 사용하고 이미지 비율·44px file actions·600px 이하 한 열 행동을 유지한다.
 - [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
 - [x] GitHub Pages 재배포 뒤 공개 `resume-H_tnEH7l.css`에서 full-span grid, 최대 `808px`, `justify-self: center`와 `24px` row gap을 확인했다.
+
+## 2026-09-03 Home greeting typography verification
+
+- [x] Home Hero의 두 줄 인사말은 `프로젝트` CTA와 동일한 `Signika Variable, Jua, ...` display stack을 사용하고, `즐겁습니다.`를 포함한 전체 두 번째 줄은 동일한 색과 굵기로 렌더링된다.
+- [x] Hero markup과 Home stylesheet에 인사말용 `em` element·selector가 남아 있지 않으며, 두 개의 `data-hero-line`, 기존 문구와 CTA 경로는 유지된다.
+- [x] 실제 production preview의 390×844, 768×1024, 1280×720에서 인사말과 CTA가 모두 보이고 horizontal overflow는 0이다. 390px forced-reduced는 static, 768px 기본 환경은 lite/sleeping, 1280px 기본 환경은 full/sleeping Kinetic 상태를 유지한다.
+- [x] 390×844 reduced 환경에서 canvas는 숨겨지고 정적 fallback이 유지된다. 키보드로 `프로젝트` CTA에 도달했을 때 2px solid vermilion outline과 4px offset이 보인다.
+- [x] 세 viewport의 browser warning/error log는 비어 있다. `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 765개와 deployment entry 18개를 통과했고 `git diff --check` whitespace error는 0이다.
+- [ ] GitHub Pages 배포와 공개 URL의 새 markup·hashed CSS 확인은 아직 수행하지 않았다.

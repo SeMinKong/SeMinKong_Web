@@ -163,7 +163,11 @@ test('progressive navigation and motion remain optional and non-blocking', async
 
   assert.doesNotMatch(homeHtml, /AI &amp; Robotics Software Developer/);
   assert.match(homeHtml, /<span data-hero-line>안녕하세요!<\/span>/);
-  assert.match(homeHtml, /<span data-hero-line>새로운 것을 배우고 직접 만드는 일이 <em>즐겁습니다\.<\/em><\/span>/);
+  assert.match(homeHtml, /<span data-hero-line>새로운 것을 배우고 직접 만드는 일이 즐겁습니다\.<\/span>/);
+  assert.doesNotMatch(heroSection, /<em>/);
+  assert.match(kineticStyles, /\.home-page \.hero-identity__statement \{[\s\S]*?font-family: var\(--font-display\)/);
+  assert.doesNotMatch(homeStyles, /\.hero-identity__statement em/);
+  assert.doesNotMatch(kineticStyles, /\.home-page \.hero-identity__statement em/);
   assert.match(homeHtml, /href="\.\/work\/" aria-label="프로젝트 목록 보기">프로젝트/);
   assert.match(homeHtml, /href="#contact" aria-label="연락처 바로가기">Contact/);
   assert.doesNotMatch(homeHtml, /hero-identity__support/);

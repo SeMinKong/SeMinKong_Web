@@ -960,3 +960,11 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - `원본 이력서` label은 기존 Resume section hierarchy를 위해 왼쪽 시작점에 남긴다.
 - Preview와 PDF/DOCX actions는 label column에 밀리지 않고 전체 Resume 본문 중앙을 기준으로 정렬한다. Desktop 최대 폭은 현재 보이던 `808px`을 유지한다.
 - 808px보다 좁은 layout에서는 가용 폭 100%로 축소하며, 이미지 비율·44px actions·모바일 한 열 행동과 focus outline을 유지한다.
+
+## 2026-09-03 — Home greeting typography override
+
+이 항목은 `Home greeting copy restoration override`의 `즐겁습니다.` 단독 강조 규칙만 대체한다.
+
+- 두 줄 인사말 전체는 `프로젝트` CTA와 동일한 display font를 사용한다.
+- `즐겁습니다.`는 별도 색, 굵기 또는 emphasis element 없이 앞 문장과 같은 스타일로 읽힌다.
+- 기존 문구, 줄 구분, 중앙 정렬, responsive type scale과 Kinetic 동작은 유지한다.

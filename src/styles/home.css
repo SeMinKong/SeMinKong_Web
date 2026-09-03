@@ -207,11 +207,6 @@ html.home-intro-active .home-intro {
   text-wrap: balance;
 }
 
-.hero-identity__statement em {
-  color: var(--text);
-  font-style: normal;
-}
-
 @media (min-width: 901px) {
   .hero-identity__statement {
     max-width: 620px;
@@ -724,17 +719,6 @@ html.hero-pending:not([data-motion="reduced"]) [data-hero-actions],
 .home-page .hero-identity__name {
   font-weight: var(--weight-display);
 }
-
-.home-page .hero-identity__statement em {
-  background: none;
-  color: var(--text);
-  -webkit-text-fill-color: currentColor;
-}
-
-
-
-
-
 
 .work-showcase {
   --signal: var(--signal-on-light);

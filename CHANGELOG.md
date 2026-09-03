@@ -6,6 +6,7 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Matched the Home greeting to the `프로젝트` action's display typeface and removed the separate `즐겁습니다.` color and weight emphasis.
 - Restored the original one-page Resume preview together with its PDF and DOCX actions after the owner explicitly approved republishing the original files.
 - Tightened the Resume Hero contact cluster into three consistent rows while preserving larger link targets on touch devices.
 - Centered the original Resume preview and its file actions independently of the left-hand section label column.

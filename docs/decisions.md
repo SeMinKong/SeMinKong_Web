@@ -786,3 +786,9 @@
 - Decision: `원본 이력서` 라벨은 section 시작점에 유지하되, 파일 행동과 1-page 프리뷰를 담은 `.resume-original__content`는 두 grid column 전체를 가로질러 최대 `808px` 폭으로 페이지 중앙에 배치한다.
 - Reason: 공통 Resume block의 `150px 라벨 + 82px gap + 808px 본문` 구조를 그대로 사용하면 문서 중심이 1040px 본문 중심보다 `116px` 오른쪽으로 밀렸다.
 - Impact: 데스크톱의 기존 문서 크기, intrinsic ratio, 파일 행동, focus와 hover는 유지한다. 808px보다 좁은 화면에서는 content가 가용 폭 100%로 줄어들어 768px과 390px에서도 같은 중앙축과 native vertical flow를 사용한다.
+
+## 2026-09-03 — Home 인사말 타이포 통일
+
+- Decision: Home Hero의 `안녕하세요! / 새로운 것을 배우고 직접 만드는 일이 즐겁습니다.` 전체를 `프로젝트` CTA와 같은 display font로 표시하고, `즐겁습니다.`의 별도 강조 markup·색·굵기를 제거한다.
+- Reason: 첫 문장과 CTA가 서로 다른 글꼴 언어로 분리되고 문장 끝만 signal color로 강조되어, 사용자가 요청한 하나의 일관된 인사말보다 두 개의 시각적 메시지처럼 보였다.
+- Impact: 문구, 두 줄 semantic 구조, 크기·행간, CTA와 Kinetic motion은 유지한다. 강조 제거 뒤에도 text contrast와 responsive fit은 기존 기준을 따른다.
