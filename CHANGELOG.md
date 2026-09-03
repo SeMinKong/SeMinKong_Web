@@ -8,6 +8,10 @@ All notable changes to this project are recorded here. The project follows Seman
 
 - Added privacy-redacted portrait evidence images and accessible `증빙 보기` modal controls for four verified Resume awards.
 
+### Fixed
+
+- Extended the Capstone and Software Competition evidence masks so no other recipient-name glyph remains visible, while preserving Se Min Kong and permitted issuer names.
+
 ### Changed
 
 - Synchronized the HTML, DOCX, PDF, and PNG Resume award records with the supplied certificates, including the 2026 SSAFY Common Project Excellence Award.

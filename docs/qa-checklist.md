@@ -967,7 +967,8 @@ This section supersedes the current-behavior interpretation of earlier checked i
 ## 2026-09-03 Resume Awards evidence modal verification
 
 - [x] 제공된 Drive의 네 PDF와 같은 byte size의 로컬 원본을 직접 렌더링해 공식 수상명, 등급, 발급기관과 날짜를 대조했다. HTML과 DOCX/PDF/PNG에는 SSAFY 공통 프로젝트 우수상(2026-08-10), IT 프로젝트 프로리그 장려상(2025-11-22), IT대학 소프트웨어 공모전 금상(2025-08-18), 제15회 숭실 캡스톤디자인 경진대회 장려상(2025-10-01)이 동기화됐다.
-- [x] 공개 WebP 네 장은 `1240×1755`, `1240×1755`, `1239×1758`, `1240×1755`의 실제 portrait geometry다. 다른 팀원의 이름과 모든 학번은 불투명하게 가렸고 원본 PDF·중간 렌더는 production allowlist에 없다.
+- [x] 공개 WebP 네 장은 `1240×1755`, `1240×1755`, `1239×1758`, `1240×1755`의 실제 portrait geometry다. 후속 확대 검수에서 발견한 캡스톤의 `재, 권나래,`와 소프트웨어 공모전의 `민,` 잔여 글자를 추가 마스킹해 수상자 중 `공세민`만 보인다. 발급자명과 증서번호는 허용 기준대로 유지하고, 모든 학번은 불투명하게 가렸다.
+- [x] 최종 네 이미지의 SHA-256을 source contract에 고정했다. 캡스톤·소프트웨어 공모전은 무손실 WebP로 저장했으며 검증 스크립트상 새 마스크 밖의 변경 픽셀 0개, 마스크 안의 비검정 픽셀 0개다.
 - [x] 업데이트한 PDF는 A4 portrait, rotation 0의 1 page이며 150dpi PNG 프리뷰는 `1241×1754`다. DOCX와 PDF의 정규화한 본문 3,258자는 완전히 일치하고 공개/비공개 보관 사본의 세 파일은 각각 byte-identical이다.
 - [x] 실제 브라우저 390×844, 768×1024, 1280×900에서 dialog와 이미지의 렌더 높이가 폭보다 크고 모든 모서리가 viewport 안에 있다. 각 root의 `scrollWidth <= clientWidth`로 horizontal overflow가 없다.
 - [x] 열 때 닫기 버튼으로 focus가 이동하며 단일 focus target의 Tab이 modal 안에서 순환한다. PageDown 중 배경 `scrollY`는 고정되고, Escape와 실제 backdrop 클릭은 정확한 opener로 focus를 복귀시킨다. 이미지 내부 클릭은 닫히지 않으며 다른 수상 재개방 시 title/src/alt가 함께 교체된다.

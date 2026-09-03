@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { access, readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { SITE_ROUTES } from '../config/site-routes.js';
@@ -20,6 +21,11 @@ const canonicalFor = ({ output }) => {
   const routePath = output === 'index.html' ? '/' : `/${output.replace(/index\.html$/, '')}`;
   return `${ORIGIN}${BASE_PATH}${routePath}`;
 };
+
+const sha256Of = async (file) => createHash('sha256')
+  .update(await readFile(sourceUrl(file)))
+  .digest('hex')
+  .toUpperCase();
 
 const readWebpDimensions = async (file) => {
   const buffer = await readFile(sourceUrl(file));
@@ -44,6 +50,15 @@ const readWebpDimensions = async (file) => {
       return {
         width: buffer.readUIntLE(dataOffset + 4, 3) + 1,
         height: buffer.readUIntLE(dataOffset + 7, 3) + 1
+      };
+    }
+
+    if (type === 'VP8L') {
+      assert.equal(buffer[dataOffset], 0x2f, `${file} must have a valid VP8L signature`);
+      const dimensions = buffer.readUInt32LE(dataOffset + 1);
+      return {
+        width: (dimensions & 0x3fff) + 1,
+        height: ((dimensions >>> 14) & 0x3fff) + 1
       };
     }
 
@@ -184,12 +199,12 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
   }
 
   const awardFiles = [
-    ['award-ssafy-common-project.webp', 1240, 1755],
-    ['award-it-project-pro-league.webp', 1240, 1755],
-    ['award-capstone-design.webp', 1239, 1758],
-    ['award-software-competition.webp', 1240, 1755]
+    ['award-ssafy-common-project.webp', 1240, 1755, '49B7DC1138ED00C38D01DA871A0ABE88C1FBD73D29A5D543CAD9B7BACEF2582E'],
+    ['award-it-project-pro-league.webp', 1240, 1755, '3E1C36FBE12AEE975E651917B05D88BF29D18753228E4FAD40465E1A6413D547'],
+    ['award-capstone-design.webp', 1239, 1758, '5381DFCFE078D33432B3F27EC08303F50395B378BB7FF98D0D3374158B61B7D7'],
+    ['award-software-competition.webp', 1240, 1755, '3F55E4CE7CDE57AFDD4FB102BE6994BF6F4E6B5846A324B91277BA540FB1F822']
   ];
-  for (const [filename, expectedWidth, expectedHeight] of awardFiles) {
+  for (const [filename, expectedWidth, expectedHeight, expectedHash] of awardFiles) {
     const reference = proofButtons.find((button) => button.includes(`data-proof-src="./${filename}"`));
     assert.ok(reference, `${filename} needs one proof trigger`);
     assert.match(reference, new RegExp(`data-proof-width="${expectedWidth}"`));
@@ -197,6 +212,7 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
     const dimensions = await readWebpDimensions(`public/resume/${filename}`);
     assert.deepEqual(dimensions, { width: expectedWidth, height: expectedHeight });
     assert.ok(dimensions.height > dimensions.width, `${filename} must be portrait`);
+    assert.equal(await sha256Of(`public/resume/${filename}`), expectedHash, `${filename} must match the manually audited redaction`);
   }
 
   for (const file of [
