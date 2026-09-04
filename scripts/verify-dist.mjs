@@ -137,6 +137,22 @@ if (unexpectedResumeFiles.length) {
   );
 }
 
+const approvedPortfolioFiles = new Set(
+  EXPECTED_DEPLOYMENT_FILES
+    .filter((file) => file.startsWith('portfolio/'))
+    .map((file) => file.slice('portfolio/'.length))
+);
+const portfolioDeploymentEntries = await readdir(resolve(distDirectory, 'portfolio'), { withFileTypes: true });
+const unexpectedPortfolioFiles = portfolioDeploymentEntries
+  .filter((entry) => !entry.isFile() || !approvedPortfolioFiles.has(entry.name))
+  .map((entry) => entry.name);
+
+if (unexpectedPortfolioFiles.length) {
+  throw new Error(
+    `Production Portfolio directory contains private or unapproved files: ${unexpectedPortfolioFiles.join(', ')}`
+  );
+}
+
 const distAssetEntries = await readdir(distAssetDirectory, { withFileTypes: true });
 const compiledAssetEntries = distAssetEntries
   .filter((entry) => entry.isFile() && /\.(?:css|js)$/.test(entry.name));

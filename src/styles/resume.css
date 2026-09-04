@@ -89,6 +89,26 @@
   }
 }
 
+.resume-portfolio__content {
+  min-width: 0;
+  display: grid;
+  gap: 18px;
+}
+
+.resume-portfolio__content > p {
+  max-width: 640px;
+  color: var(--text-soft);
+  font-size: var(--type-body-sm);
+  line-height: 1.72;
+}
+
+.resume-portfolio__content > .resume-portfolio__meta {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label);
+  line-height: 1.5;
+}
+
 .resume-original__content > header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

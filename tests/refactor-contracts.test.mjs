@@ -16,7 +16,7 @@ test('route manifest keeps unique build inputs and outputs', () => {
   assert.equal(new Set(SITE_ROUTES.map(({ source }) => source)).size, SITE_ROUTES.length);
   assert.equal(new Set(SITE_ROUTES.map(({ output }) => output)).size, SITE_ROUTES.length);
   assert.equal(SITE_ROUTES.filter(({ kind }) => kind === 'case-study').length, 6);
-  assert.equal(EXPECTED_DEPLOYMENT_FILES.length, SITE_ROUTES.length + 11);
+  assert.equal(EXPECTED_DEPLOYMENT_FILES.length, SITE_ROUTES.length + 12);
 });
 
 test('handwritten wordmark preserves its public name and stroke order', () => {

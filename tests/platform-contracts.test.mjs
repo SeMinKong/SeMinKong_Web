@@ -317,3 +317,26 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.doesNotMatch(workStory, /document\.fonts\?\.ready/);
   assert.match(workStory, /focus\(\{ preventScroll: true \}\)/);
 });
+
+test('the reviewed static portfolio is downloadable without exposing working files', async () => {
+  const [resume, home, distVerifier, pdf] = await Promise.all([
+    readFile(sourceUrl('resume/index.html'), 'utf8'),
+    readFile(sourceUrl('index.html'), 'utf8'),
+    readFile(sourceUrl('scripts/verify-dist.mjs'), 'utf8'),
+    readFile(sourceUrl('public/portfolio/SeMinKong-Portfolio.pdf'))
+  ]);
+  assert.match(resume, /aria-labelledby="portfolio-title"/);
+  assert.match(resume, /href="\.\.\/portfolio\/SeMinKong-Portfolio\.pdf" download="SeMinKong-Portfolio\.pdf"/);
+  assert.match(resume, /href="\.\.\/portfolio\/SeMinKong-Portfolio\.pdf" target="_blank" rel="noreferrer"/);
+  assert.match(home, /href="\.\/portfolio\/SeMinKong-Portfolio\.pdf" download="SeMinKong-Portfolio\.pdf"/);
+  assert.match(resume, /14 pages · A4 portrait · PDF · 9\.6 MB · 2026\.09\.04/);
+  assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
+  assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
+  assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
+  assert.equal(pdf.length, 10060384);
+  assert.equal(
+    await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
+    '90485E34BA9EC00CF1F6DEF27626549674DBFD9B2C7E7CAD6F9563926B538556',
+    'Published PDF must match the visually and structurally reviewed 14-page edition'
+  );
+});

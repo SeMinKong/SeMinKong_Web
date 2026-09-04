@@ -3,6 +3,9 @@ dist/
 .pnpm-store/
 .vite/
 .private/
+/output/pdf/
+/tmp/pdfs/portfolio/
+/scripts/portfolio/__pycache__/
 
 .env
 .env.*

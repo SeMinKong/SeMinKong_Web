@@ -983,3 +983,15 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 4개 버튼의 제목·이미지 경로 교체, 이미지 로드, 닫기 버튼 focus, Tab 순환, PageDown 중 배경 scrollY 고정, Escape 후 opener focus 복귀를 확인했다.
 - [x] 390px `?motion=reduced`에서 modal·panel·backdrop animation은 모두 none이며 warning/error console log는 0이다.
 - [x] 상장 작업의 `npm.cmd run verify`: 11 tests, 11 routes, 22 deployment entries 통과. 이후 문구·PDF 연결 변경도 최종 통합 검증 대상으로 둔다.
+
+## 2026-09-04 Static portfolio verification
+
+- [x] A4 세로 14쪽, 회전 0°, CropBox=MediaBox, 페이지별 책갈피 14개를 검사했다. 전체 페이지의 한글 텍스트가 추출되고 빈 페이지·대체문자·페이지 밖 텍스트와 링크는 없다. 나눔고딕은 subset 내장, 영문 Helvetica는 PDF Standard 14 font다.
+- [x] 세 쪽 시안과 최종 14쪽 PNG를 직접 확인했다. 잘림·겹침·한글 깨짐이 없다. 마지막 mailto 인코딩 수정 뒤 14쪽을 재렌더링했고 앞서 육안 확인한 PNG와 모두 SHA-256이 일치한다.
+- [x] 본인 커밋·프로젝트 기록과 1–8쪽, 9–14쪽을 별도 교차 검토했다. 미검증 성과 수치, 팀 작업의 개인 귀속, 개인정보·일련번호·비공개 Drive 링크가 없다. PDF에는 첨부·JavaScript·자동실행·입력 폼이 없다.
+- [x] 링크 44개: 공개 HTTPS 42개와 `mailto:semin1224@gmail.com` 2개. 한국어 GitHub 경로는 UTF-8 percent encoding, 이메일 @는 보존했다. QR 옆에 사람이 읽을 수 있는 전체 웹 URL을 함께 표시했다.
+- [x] 최종 PDF는 10,060,384 bytes이며 SHA-256 `90485E34BA9EC00CF1F6DEF27626549674DBFD9B2C7E7CAD6F9563926B538556`이다. 공개 사본과 편집 출력 사본의 hash가 일치하고 자동 계약에 고정했다.
+- [x] 실제 브라우저에서 Resume·Home의 390×844, 768×1024, 1280×900 horizontal overflow가 없다. Resume 두 PDF 버튼은 44px 이상이고 좁은 화면에서 한 열로 표시된다. 키보드 이동과 2px focus outline, 정상 href·download filename·새 탭 target을 확인했다.
+- [x] 최종 `npm.cmd run verify`: tests 12개, source routes 11개·stylesheets 12개, production modules 766개, deployment entries 23개 통과. PDF는 초기 페이지 요청에 미리 내려받지 않는 일반 파일 링크이며 새 runtime dependency는 없다.
+- [x] Drive의 지정 폴더 아래 `Portfolio`를 만들고 최종 PDF를 업로드했다. metadata 재조회에서 MIME `application/pdf`, 10,060,384 bytes, 올바른 parent와 소유자 한 명·shared=false를 확인했다. 원본 상장과 기존 공유 권한은 유지했다.
+- [ ] QR의 실제 카메라 스캔, OS 메일 앱 실행, 모든 외부 링크의 일괄 HTTP 검사는 수행하지 않았다. 코드 근거는 조사 단계에서 열람했고 웹/PDF 링크 문법·영역을 검증했다. IAB의 새 탭 PDF 뷰어 UI는 노출되지 않아 별도 OS PDF viewer 동작은 확인하지 않았다.
