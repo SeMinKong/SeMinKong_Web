@@ -76,3 +76,8 @@ The owner requested visuals that a first-time reader can understand and explicit
 - Alkkagi p17 removes the tiny local thumbnail and numbers the controlled stone, aiming vector and opponent. P18 shows authoritative server state broadcasting to both browsers. P19 removes Prompt's API-key modal and the English source diagram; a grouped six-domain Korean flow explains implementation rather than pretending to show a generated conversation/document.
 
 PDF-only display regions (normalized against the oriented full source): THING can-grasp `(0.08, 0.25, 0.95, 0.94)`; MRI comparison `(476/1320, 195/1032, 1217/1320, 815/1032)`. ReportLab clips the placed full image, preserving aspect ratio and source bytes. All other images remain full-frame. Number circles and leader arrows are native PDF overlays, not edits to the application UI. The unused source diagrams and local screenshots remain in working assets for traceability; they are not duplicated as tiny reader-facing evidence panels.
+
+## PDF-only owner portrait (2026-09-04)
+
+- The owner selected `공세민_증명사진` from the supplied private Drive folder and subsequently limited its use to the static PDF, not the website. The original is a 1086×1448 PNG, 1,682,635 bytes, with no EXIF or PNG metadata entries. It is placed on page 1 at 180×240pt with no crop or retouching.
+- The full-resolution source stays at ignored `.private/portfolio/se-min-kong-profile.png`. It is not a repository asset, website image or separate production download; do not relocate it into `scripts/portfolio/assets`, `src/assets` or `public`. To regenerate the PDF on another authorized machine, obtain the same owner-provided original and place it in that private path. The normal website build does not run the PDF authoring script.

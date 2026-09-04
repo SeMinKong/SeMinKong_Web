@@ -92,9 +92,10 @@ class Book:
         self.c.setFont(font, size)
         self.c.drawString(x, H - top - size, text)
 
-    def para(self, text, x, top, width, size=10.4, leading=16.5, color=INK, bold=False):
+    def para(self, text, x, top, width, size=10.4, leading=16.5, color=INK, bold=False,
+             keep_words=False):
         style = ParagraphStyle('p', fontName='KoreanBold' if bold else 'Korean', fontSize=size,
-                               leading=leading, textColor=color, wordWrap='CJK',
+                               leading=leading, textColor=color, wordWrap=None if keep_words else 'CJK',
                                splitLongWords=False, spaceAfter=0)
         p = Paragraph(text, style)
         _, height = p.wrap(width, H)
@@ -120,10 +121,15 @@ class Book:
             self.c.linkURL(quote(url, safe=':/#?=&%@'), rect, relative=0, thickness=0)
         return width
 
-    def image(self, name, x, top, width, height, region=(0, 0, 1, 1)):
+    def image(self, name, x, top, width, height, region=(0, 0, 1, 1),
+              caption=None, caption_size=9.5, caption_leading=15, caption_gap=10):
         """Place an unchanged source; optionally clip to an oriented display region."""
         if name not in self.images:
-            path = FIGURES / name[1:] if name.startswith('@') else ASSETS / name
+            # The owner approved this portrait inside the PDF only, not as a
+            # standalone website/repository asset. Keep its source private.
+            path = (ROOT / '.private/portfolio/se-min-kong-profile.png'
+                    if name == '@se-min-kong-profile.png'
+                    else FIGURES / name[1:] if name.startswith('@') else ASSETS / name)
             with Image.open(path) as im:
                 orientation = im.getexif().get(274, 1)
                 if name in PHOTO_IMAGES:
@@ -157,6 +163,9 @@ class Book:
         self.c.drawImage(reader, -iw * scale / 2, -ih * scale / 2,
                          width=iw * scale, height=ih * scale, mask='auto')
         self.c.restoreState()
+        if caption:
+            return self.para(caption, ix, top + dh + caption_gap, dw,
+                             caption_size, caption_leading, MUTED, keep_words=True)
         return top + dh
 
     def badge(self, number, x, top, target=None):
@@ -177,7 +186,7 @@ class Book:
     def legend(self, number, title, detail, x, top, width):
         self.badge(number, x, top)
         self.para(title, x+28, top, width-28, 11, 16, bold=True)
-        self.para(detail, x+28, top+23, width-28, 9.5, 15, MUTED)
+        self.para(detail, x+28, top+23, width-28, 9.5, 15, MUTED, keep_words=True)
 
     def node(self, title, body, x, top, width, height=62, accent=False):
         self.c.setFillColor(TINT if not accent else HexColor('#f0ded6'))
@@ -242,9 +251,9 @@ class Book:
                   W - M - 38, 577, 9, 'Helvetica-Bold', limit=H)
         self.c.showPage()
 
-    def section(self, title, body, x, top, width, size=10.4):
+    def section(self, title, body, x, top, width, size=10.4, keep_words=False):
         self.para(title, x, top, width, 12.3, 18, bold=True)
-        return self.para(body, x, top + 28, width, size, 16.5) + 18
+        return self.para(body, x, top + 28, width, size, 16.5, keep_words=keep_words) + 18
 
     def note(self, heading, body, top, x=M, width=CW):
         self.rule(top, x, width, ACCENT, 1)
@@ -294,13 +303,12 @@ def introduction(b):
     b.rule(476, M, 475)
     b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', M, 494, 10)
     b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', M, 515, 9.5)
-    b.rule(131, 548, 255, ACCENT, 1.5)
-    b.meta([
-        ('NOW', 'SSAFY Robotics Track<br/>2026.01 - 현재'),
-        ('EDUCATION', '숭실대학교 소프트웨어학부<br/>2020.03 - 2026.02'),
-        ('INTERESTS', 'Computer Vision<br/>Robotics / Physical AI'),
-        ('BASED IN', 'Seoul, Republic of Korea'),
-    ], 548, 151, 255)
+    b.image('@se-min-kong-profile.png', 548, 113, 180, 240)
+    b.rule(367, 548, 255, ACCENT, 1.5)
+    b.meta([('NOW', 'SSAFY Robotics Track<br/>2026.01 - 현재')], 548, 383, 121)
+    b.meta([('EDUCATION', '숭실대학교<br/>소프트웨어학부<br/>2020.03 - 2026.02')], 682, 383, 121)
+    b.meta([('INTERESTS', 'Computer Vision<br/>Robotics / Physical AI')], 548, 471, 121)
+    b.meta([('BASED IN', 'Seoul,<br/>Republic of Korea')], 682, 471, 121)
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/')])
 
 
@@ -327,11 +335,12 @@ def about(b):
                   'Isaac Sim과 Isaac Lab은 현재 학습 중인 도구입니다. 센서 오차, 통신 지연, 접촉과 마찰처럼 시뮬레이션과 실제 환경 사이에서 달라지는 조건에 관심을 두고 있습니다.',
                   right, y + 12, 473)
     b.rule(y - 5, right, 473)
-    b.section('Local AI & Software',
+    y = b.section('Local AI & Software',
               'Ollama와 llama.cpp 등 로컬 AI 도구를 살펴보고 있습니다. Python과 C++를 사용하며, Ubuntu, Git, Docker와 같은 개발 환경도 함께 다룹니다.',
               right, y + 12, 473)
-    b.para('학습 중인 분야와 실제 구현 경험은 구분해 소개합니다. 특정 분야에 한정하지 않고 소프트웨어 개발 직무 전반을 열어 두고 있습니다.',
-           right, 480, 473, 9.7, 16, MUTED)
+    b.rule(y - 5, right, 473)
+    b.para('학습 중인 분야와 실제 구현 경험은 구분해 소개합니다.<br/>특정 분야에 한정하지 않고 소프트웨어 개발 직무 전반을 열어 두고 있습니다.',
+           right, y + 12, 473, 9.7, 16, MUTED, keep_words=True)
     b.end([('About', WEB + 'about/'), ('학력·교육·어학', WEB + 'resume/')])
 
 
@@ -380,8 +389,8 @@ def thing_overview(b):
               '모터 통신 환경과 U2D2 연결, 7개 모터 점검·제어 스크립트, 전완부 아크릴 고정부 제작과 스풀·텐던 통합을 맡았습니다. 통신 확인, 개별 제어, 실제 조립을 각각 점검할 수 있도록 작업을 나눴습니다.',
               476, 265, 327)
     b.section('협업 범위',
-              '손동작 인식, ROS 2 명령 중재·guard, 관제와 데이터 기록은 팀 전체의 결과입니다. 이 사례에서는 직접 수행한 구동·기구 작업을 중심으로 설명합니다.',
-              476, 384, 327)
+              '손동작 인식, ROS 2 명령 중재·guard, 관제와 데이터 기록은<br/>팀 전체의 결과입니다. 이 사례에서는 직접 수행한<br/>구동·기구 작업을 중심으로 설명합니다.',
+              476, 384, 327, keep_words=True)
     b.para('<b>SSAFY 공통 프로젝트 우수상</b> / 2026.08.10', 233, 492, 570, 10.5, 17, ACCENT)
     b.end([('팀 전체 구조', THING + 'blob/main/README.md'), ('실제 시연', WEB + 'work/thing/'),
            ('상장 전시', WEB + 'resume/' + AWARDS[0][3])])
@@ -421,8 +430,10 @@ def thing_architecture(b):
 def thing_control(b):
     b.start('01 / THING / Implementation', '모터의 회전을 손가락을 당기는 힘으로 바꾸기',
             '모터가 스풀을 돌리면 텐던이 감기고, 연결된 손가락이 굽혀집니다.', key='thing-control')
-    b.image('@thing-spool-tendon.jpg', M, 137, 305, 229)
-    b.image('@thing-acrylic-mount.jpg', 365, 137, 157, 229)
+    b.image('@thing-spool-tendon.jpg', M, 137, 305, 229,
+            caption='구동부 내부: 모터·스풀·텐던 연결', caption_size=9.1, caption_leading=14)
+    b.image('@thing-acrylic-mount.jpg', 365, 137, 157, 229,
+            caption='전완부 모터 고정부', caption_size=9.1, caption_leading=14)
     b.badge(1, 63, 223, (87,253))
     b.badge(2, 125, 186, (144,209))
     b.badge(3, 226, 219, (213,251))
@@ -431,12 +442,10 @@ def thing_control(b):
     b.legend(2, '스풀', '모터와 함께 돌며 텐던을 감습니다.', 559, 195, 244)
     b.legend(3, '텐던', '주황색 줄이 손가락을 당깁니다.', 559, 253, 244)
     b.legend(4, '아크릴 고정부', '모터의 위치를 고정하는 틀입니다.', 559, 311, 244)
-    b.para('구동부 내부: 모터·스풀·텐던 연결', M, 375, 305, 9.1, 14, MUTED)
-    b.para('전완부 모터 고정부', 365, 375, 157, 9.1, 14, MUTED)
     b.rule(411)
-    b.section('통신부터 분리해 점검', '7개 모터 ID 응답을 확인한 뒤 개별 모터를 움직였습니다. 연결 문제와 조립 문제를 구분해 확인하는 순서를 만들었습니다.', M, 429, 241, 9.8)
-    b.section('필요한 동작을 명령으로', '단일·키보드 제어, 원위치 복귀와 정지 스크립트를 작성했습니다. 조립 중 필요한 동작을 나눠 실행하도록 했습니다.', 300, 429, 241, 9.8)
-    b.section('조립 상태까지 확인', '아크릴 고정부를 제작하고 스풀·텐던을 통합했습니다. 감김 방향, 장력과 프레임 간섭을 실제 조립 상태에서 점검했습니다.', 562, 429, 241, 9.8)
+    b.section('통신부터 분리해 점검', '7개 모터 ID 응답을 확인한 뒤 개별 모터를<br/>움직였습니다. 연결 문제와 조립 문제를 구분해<br/>확인하는 순서를 만들었습니다.', M, 429, 241, 9.8, keep_words=True)
+    b.section('필요한 동작을 명령으로', '단일·키보드 제어, 원위치 복귀와 정지<br/>스크립트를 작성했습니다. 조립 중 필요한 동작을<br/>나눠 실행하도록 했습니다.', 300, 429, 241, 9.8, keep_words=True)
+    b.section('조립 상태까지 확인', '아크릴 고정부를 제작하고 스풀·텐던을<br/>통합했습니다. 감김 방향, 장력과 프레임 간섭을<br/>실제 조립 상태에서 점검했습니다.', 562, 429, 241, 9.8, keep_words=True)
     b.end([('7/28 제어 기록', THING + 'blob/main/docs/daily-reports/2026-07-28/2026-07-28-공세민.md'),
            ('7/29 제작 기록', THING + 'blob/main/docs/daily-reports/2026-07-29/2026-07-29-공세민.md'),
            ('7/31 조립 기록', THING + 'blob/main/docs/daily-reports/2026-07-31/2026-07-31-공세민.md')])
@@ -445,14 +454,14 @@ def thing_control(b):
 def thing_result(b):
     b.start('01 / THING / Result', '시연 결과와 수상',
             '손동작 인식과 모터·텐던 구동을 연결해 손가락 동작과 물체 파지를 구현했습니다.', key='thing-result')
-    b.image('@thing-video-can-0010.jpg', M, 137, 302, 340, region=(.08,.25,.95,.94))
-    b.para('엄지와 손가락으로 원통형 물체를 감싸 쥐는 동작', M, 489, 302, 9.5, 15, MUTED)
+    b.image('@thing-video-can-0010.jpg', M, 137, 302, 340, region=(.08,.25,.95,.94),
+            caption='엄지와 손가락으로 원통형 물체를 감싸 쥐는 동작')
     b.label('PROJECT AWARD', 380, 137)
     b.award(0, 380, 162, 423)
     b.rule(251, 380, 423)
     b.section('시연한 동작', '사람의 손동작 모방, 손가락 순차 동작, 캔과 부드러운 물체 파지를 시연했습니다. 모터 명령이 기구를 거쳐 실제 손가락 동작으로 이어지는 것을 확인했습니다.', 380, 269, 423)
     b.section('이 작업에서 배운 점', '통신 성공과 원하는 동작의 완성은 다른 문제였습니다. 개별 모터 제어와 조립 상태를 나눠 확인하면서, 소프트웨어 명령과 물리적인 연결을 함께 다루는 경험을 했습니다.', 380, 367, 423)
-    b.para('<b>다음 과제</b> 반복 파지 성공률, 지연과 장력 변화를 같은 조건으로 측정해 동작의 재현성을 기록하는 것입니다.', 380, 475, 423, 9.7, 16, MUTED)
+    b.para('<b>다음 과제</b> 반복 파지 성공률, 지연과 장력 변화를 같은 조건으로 측정해<br/>동작의 재현성을 기록하는 것입니다.', 380, 461, 423, 9.7, 16, MUTED, keep_words=True)
     b.end([('원본 파지 영상', THING + 'blob/main/media/videos/모방캔파지.mp4'), ('파지 시험 절차', THING + 'blob/main/tests/procedures/grasp-test.md'),
            ('팀 안전 구조', THING + 'blob/main/docs/safety_manager.md')])
 
@@ -467,9 +476,9 @@ def aqis_overview(b):
     b.para('검출 영역, 작업 대기열과 실제 장비의 동작을 함께 보는 RealOps 관제 화면', M, 433, 508, 9.2, 15, MUTED)
     b.para('2026.05 기획 / 06 본 개발<br/><b>2인 팀 · 팀장</b><br/>Full-stack & Robot Integration', 576, 137, 227, 10.1, 18)
     b.rule(208,576,227)
-    b.legend(1, '검사 대상과 검출 영역', '카메라에서 인식한 대상의 위치와 집기 영역을 확인합니다.', 576, 225, 227)
-    b.legend(2, '판정과 작업 대기열', '검사 결과와 처리할 작업을 관제 화면에서 확인합니다.', 576, 310, 227)
-    b.legend(3, '로봇·컨베이어 동작', '물체를 옮기는 장비의 동작을 검사 화면과 함께 봅니다.', 576, 395, 227)
+    b.legend(1, '검사 대상과 검출 영역', '카메라에서 인식한 대상의 위치와<br/>집기 영역을 확인합니다.', 576, 225, 227)
+    b.legend(2, '판정과 작업 대기열', '검사 결과와 처리할 작업을<br/>관제 화면에서 확인합니다.', 576, 310, 227)
+    b.legend(3, '로봇·컨베이어 동작', '물체를 옮기는 장비의 동작을<br/>검사 화면과 함께 봅니다.', 576, 395, 227)
     b.para('<b>직접 맡은 일</b> React 관제, FastAPI·WebSocket, ROS 2 연결, 장비 adapter와 Dobot 집기 시퀀스를 담당했습니다. LLM 명령과 키워드 fallback도 연결했습니다.<br/><b>협업</b> 팀원은 모델 학습·Roboflow·CAD·시뮬레이션을 맡았습니다.', M, 474, 508, 9.7, 15.5)
     b.end([('역할·일정', AQIS + 'blob/main/docs/07-roles-and-schedule.md'), ('전체 구조', AQIS + 'blob/main/README.md'),
            ('원본 장비 시연', 'https://github.com/user-attachments/assets/70017e3e-594d-43b2-bcef-59bb4a8f0c32')])
@@ -531,10 +540,11 @@ def briefit_overview(b):
             '기사 수집, 요약 모델 학습과 생성된 문장의 후처리 등 AI·데이터 작업을 담당했습니다.', key='briefit')
     b.meta([('PERIOD', '2025.05 - 09'), ('TEAM / ROLE', '6인 팀 / AI 2인<br/>본인: AI 담당'),
             ('MY STACK', 'Python / aiohttp<br/>BeautifulSoup<br/>Transformers / KoBART')])
-    b.image('briefit/cover.webp', 233, 137, 570, 246)
-    b.para('뉴스를 모아 읽고 요약을 확인하는 서비스 / 제품 UI는 팀의 협업 결과입니다.', 233, 393, 570, 9.2, 14, MUTED)
-    b.section('직접 구현한 범위', '기사 수집 배치화, URL 필터·중복 제거, KoBART 데이터 분할·학습·생성·ROUGE 평가 스크립트와 반복 종결문 후처리를 작성했습니다.',
-              233, 428, 275)
+    b.image('briefit/cover.webp', 233, 137, 570, 246,
+            caption='뉴스를 모아 읽고 요약을 확인하는 서비스 / 제품 UI는 팀의 협업 결과입니다.',
+            caption_size=9.2, caption_leading=14)
+    b.section('직접 구현한 범위', '기사 수집 배치화, URL 필터·중복 제거,<br/>KoBART 데이터 분할·학습·생성·ROUGE 평가<br/>스크립트와 반복 종결문 후처리를 작성했습니다.',
+              233, 428, 275, keep_words=True)
     b.section('프로젝트 수상', 'IT대학 소프트웨어 공모전 금상<br/>숭실 캡스톤디자인 경진대회 장려상<br/>IT 프로젝트 프로리그 장려상<br/>수상 날짜와 상장은 13쪽에 정리했습니다.',
               533, 428, 270, 9.8)
     b.end([('팀 소개', 'https://github.com/capstone-btd/.github/blob/main/profile/README.md'),
@@ -598,19 +608,19 @@ def mri_overview(b):
     b.start('04 / Brain MRI / Overview', 'Brain MRI - 종양의 종류와 위치를 함께 보기',
             '개인 프로젝트 / 2026.02 - 04 / Python · PyTorch · YOLO11 · OpenCV', key='mri')
     b.image('@mri-video-overlay-007733.png', M, 137, 452, 353,
-            region=(476/1320,195/1032,1217/1320,815/1032))
+            region=(476/1320,195/1032,1217/1320,815/1032),
+            caption='① 왼쪽: 예측 영역 표시　② 오른쪽: 원본<br/>분류 결과는 수막종(Meningioma)으로 표시됩니다.')
     b.badge(1,82,230,(197,250))
     b.badge(2,411,230,(320,285))
-    b.para('① 왼쪽: 예측 영역 표시　② 오른쪽: 원본<br/>분류 결과는 수막종(Meningioma)으로 표시됩니다.',
-           M, 500, 452, 9.5, 15, MUTED)
     b.section('무엇을 구현했나', '분류와 분할을 각각 수행하는 두 YOLO11 모델의 학습·추론 경로를 구성했습니다. 분류 범주와 분할 위치를 하나의 이미지에서 함께 볼 수 있게 했습니다.',
               520, 137, 283)
     b.section('입력 형식의 문제', '원본 마스크를 그대로 쓰는 대신 분할 학습에 필요한 polygon label로 바꿔야 했습니다. 이진화, 형태학 처리, 외곽선 추출과 좌표 정규화를 연결했습니다.',
-              520, 273, 283)
-    b.section('본인 범위', '데이터 변환, 학습 설정과 통합 추론 코드를 작성했습니다. 두 모델을 독립적으로 학습하고, 결과를 한 화면에서 비교하도록 구성했습니다.',
-              520, 409, 283)
-    b.para('<b>사용 목적</b> 연구·학습용 프로젝트이며 임상 진단을 위한 검증은 수행하지 않았습니다.',
-           520, 500, 283, 9.2, 14, MUTED)
+              520, 255, 283)
+    b.section('본인 범위', '데이터 변환, 학습 설정과 통합 추론 코드를<br/>작성했습니다. 두 모델을 독립적으로 학습하고,<br/>결과를 한 화면에서 비교하도록 구성했습니다.',
+              520, 373, 283, keep_words=True)
+    b.rule(470, 520, 283)
+    b.para('<b>사용 목적</b> 연구·학습용 프로젝트이며<br/>임상 진단을 위한 검증은 수행하지 않았습니다.',
+           520, 483, 283, 9.2, 14, MUTED, keep_words=True)
     b.end([('전처리·학습', MRI_REF + 'src/training/train.py'), ('통합 추론', MRI_REF + 'src/testing/test.py'),
            ('원본 데모 영상', 'https://github.com/user-attachments/assets/9994b0b3-187b-4c12-bfd3-170f6bb8dda5')])
 

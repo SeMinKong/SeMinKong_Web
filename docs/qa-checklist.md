@@ -1058,3 +1058,14 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 최종 20쪽·6,138,051 bytes PDF의 output/public/dist SHA-256이 `D8CA46FCB84B5D0C9F08C2F8BCCBA7EB39C2A27D4BDEF639046D7091C4C13046`로 일치한다. PDF 구조 검사 및 `npm.cmd run verify`를 다시 실행해 테스트27·경로11·스타일12·모듈766·배포entry23 통과했다. 화면/CSS/모션은 직전 검수 상태와 같다.
 - [x] Drive의 기존 파일을 최종 바이트로 재업로드하고 metadata 재조회에서 크기·PDF MIME·기존 parent·shared=false·owner1을 확인했다.
 - [x] 독립 사전 검사에서 배포물에 작업 clone·렌더·metadata가 포함되지 않음을 확인했다. 임시 파일 및 사용자 `tmp/pdfs/skhynix-jd/`는 명시적 staging 대상에서 제외한다. GitHub Pages의 원격 배포 성공과 실제 공개 URL의 파일 동일성은 업로드 후 별도 확인한다.
+
+## 2026-09-04 정적 PDF 타이포그래피·PDF 전용 프로필 검수
+
+- [x] 최종 20쪽을 렌더했다. 변경된 1·2·4·6·7·8·11·14쪽을 직접 확인하고 독립 검토자의 승인을 받았다. 나머지 12쪽은 이전 검수 PNG와 바이트 동일하다. 사진 비율·자기소개 위계·2×2 개인 정보·의미 단위 줄바꿈에 겹침과 잘림이 없다.
+- [x] `verify_portfolio.py` 통과: 20쪽·책갈피20·외부링크64·내부링크6·레이아웃 겹침0. 다섯 사진 캡션의 이미지 시작선·폭·10pt 간격, 열한 문단의 끝줄 길이/폭과 프로필 비율을 추가 검사했다. 글꼴/크기·수상 귀속·프라이버시·원본 시각자료/도식은 유지한다.
+- [x] 최종 PDF는 8,836,654 bytes, SHA-256 `F526C7400A85B464C5DAB34823E496B6A102C9170F4B7A586920615C36F0004D`. 검수 뒤 재생성해도 같으며 output/public/dist 사본이 일치한다. 웹의 용량 안내와 해시 계약을 동기화했다.
+- [x] 사용자의 최종 지시대로 프로필은 PDF 첫 자기소개 페이지에만 포함한다. 웹 Home HTML/CSS의 Git 정규화 내용은 HEAD와 동일하다. 원본 사진은 ignored `.private/portfolio/`에만 두고 public/dist의 별도 이미지나 웹 코드 참조가 없음을 검사했다.
+- [x] 실제 production Resume 390×844·768×1024·1280×900의 8.8MB 안내·44px 다운로드 action·줄바꿈·수평 overflow0을 확인했다. Tab 이동과 2px focus outline, 기본 lite/static 및 full/interactive, 390px reduced/flat과 링크 가시성을 확인했다. 앱 warning/error는 없으며 Chrome의 기존 지갑 확장 프로그램 경고는 검증 대상과 구분했다.
+- [x] `npm.cmd run verify` 통과: 테스트27·소스경로11·스타일경계12·production 모듈766·배포entry23. `git diff --check` 통과. 런타임 의존성·웹 모션·원본 Resume와 상장은 변경하지 않았다.
+- [x] 기존 Drive PDF를 같은 ID로 갱신하고 재조회에서 8,836,654 bytes·application/pdf·기존 Portfolio parent·shared=false·owner1을 확인했다. 사진 원본과 다른 Drive 파일/공유 권한은 변경하지 않았다.
+- [ ] 실제 OS reduced-motion 변경·실물 터치·QR 스캔·메일 앱·PDF viewer 상호작용·전체 외부 링크 HTTP는 이번 검증 범위 밖이다. 공개 배포 성공과 live PDF 동일성은 GitHub Pages 완료 후 별도 확인한다.

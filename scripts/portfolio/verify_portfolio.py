@@ -90,10 +90,48 @@ def verify(path):
             if dx > .5 and dy > .5:
                 overlaps.append((a['page'], a['text'][:40], b['text'][:40]))
     assert not overlaps, f'Layout rectangle overlaps: {overlaps}'
+    figure_captions = [
+        (6, '@thing-spool-tendon.jpg', '구동부 내부:'),
+        (6, '@thing-acrylic-mount.jpg', '전완부 모터 고정부'),
+        (7, '@thing-video-can-0010.jpg', '엄지와 손가락으로'),
+        (11, 'briefit/cover.webp', '뉴스를 모아 읽고'),
+        (14, '@mri-video-overlay-007733.png', '① 왼쪽:'),
+    ]
+    for page, image_name, caption_prefix in figure_captions:
+        figure = next(e for e in elements if e['page'] == page and e['text'] == image_name)
+        caption = next(e for e in elements if e['page'] == page and e['text'].startswith(caption_prefix))
+        assert abs(figure['x'] - caption['x']) < .02, f'Page {page}: caption left alignment'
+        assert abs(figure['width'] - caption['width']) < .02, f'Page {page}: caption width'
+        gap = caption['top'] - figure['top'] - figure['height']
+        assert abs(gap - 10) < .02, f'Page {page}: caption gap is {gap}'
+    portrait = [e for e in elements if e['text'] == '@se-min-kong-profile.png']
+    assert len(portrait) == 1 and portrait[0]['page'] == 1
+    assert abs(portrait[0]['width'] / portrait[0]['height'] - 1086 / 1448) < .001
+    edited_paragraphs = [
+        (4, '손동작 인식, ROS 2'), (6, '7개 모터 ID'),
+        (6, '단일·키보드 제어'), (6, '아크릴 고정부를 제작'),
+        (7, '<b>다음 과제</b>'), (8, '카메라에서 인식한 대상'),
+        (8, '검사 결과와 처리할'), (8, '물체를 옮기는 장비'),
+        (11, '기사 수집 배치화'), (14, '데이터 변환, 학습 설정'),
+        (14, '<b>사용 목적</b>'),
+    ]
+    with pdfplumber.open(path) as doc:
+        for page, prefix in edited_paragraphs:
+            e = next(e for e in elements if e['page'] == page and e['text'].startswith(prefix))
+            bounds = (e['x']-.1, e['top']-.1, e['x']+e['width']+.1, e['top']+e['height']+1)
+            block = doc.pages[page-1].crop(bounds)
+            lines = block.extract_text().splitlines()
+            assert len(lines[-1].strip()) >= 6, f'Page {page}: short paragraph tail {lines[-1]!r}'
+            words = block.extract_words()
+            last_top = max(w['top'] for w in words)
+            last_words = [w for w in words if abs(w['top']-last_top) < 2]
+            last_width = max(w['x1'] for w in last_words) - min(w['x0'] for w in last_words)
+            assert last_width >= e['width'] * .25, f'Page {page}: unbalanced paragraph tail'
     return dict(pages=len(texts), page_characters=[len(t) for t in texts],
                 external_links=len(external), internal_links=internal,
                 min_font_pt=round(min(sizes), 2), max_font_pt=round(max(sizes), 2),
-                layout_overlaps=len(overlaps), bytes=path.stat().st_size,
+                layout_overlaps=len(overlaps), aligned_captions=len(figure_captions),
+                checked_paragraph_tails=len(edited_paragraphs), bytes=path.stat().st_size,
                 sha256=hashlib.sha256(path.read_bytes()).hexdigest().upper())
 
 

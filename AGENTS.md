@@ -23,7 +23,15 @@
 - Only one agent may edit a given file at a time.
 - Use a separate Git worktree for parallel code-writing tasks.
 - Subagents must return concise findings, changed files, verification evidence, and remaining risks.
-- Do not commit, push, or open a pull request unless the user explicitly asks.
+- Do not commit, push, or open a pull request unless the user explicitly asks. The standing deployment authorization below is an explicit exception for scoped website/static portfolio releases; it does not authorize unrelated changes or pull requests.
+
+## Publication workflow
+
+- Standing user instruction (2026-09-04): whenever requested work changes the website or static portfolio PDF, complete verification and deploy to the existing GitHub Pages site at `https://seminkong.github.io/SeMinKong_Web/` without requiring a separate deployment request.
+- This authorizes the scoped commits and pushes necessary for that deployment. Include only reviewed changes belonging to the requested work; never publish unrelated edits, private originals, credentials, scratch files, or unverified drafts.
+- For PDF changes, regenerate and visually verify the final PDF, synchronize the public download copy and its size/date/hash contracts, then build and deploy the website so the live download serves the same final file.
+- Use the existing deployment pipeline, wait for its result, and verify the live pages/downloads before reporting deployment complete. If validation or deployment is blocked, explain what remains unpublished rather than claiming success or bypassing checks.
+- A review, diagnosis, or planning request alone does not authorize content changes. Documentation-only preference updates do not require a website release. An explicit later instruction to keep work local, defer deployment, or not publish overrides this default.
 
 ## Design constraints
 
