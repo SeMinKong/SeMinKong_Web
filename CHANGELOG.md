@@ -4,22 +4,30 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-09-04
+
 ### Added
 
-- Added privacy-redacted portrait evidence images and accessible `증빙 보기` modal controls for four verified Resume awards.
+- Added a Home-only Kinetic playground with seven draggable physics objects, fixed lighting, and static reduced-motion/WebGL-failure fallbacks.
+- Added a reviewed 20-page A4 landscape portfolio with personal introduction, six projects, source-backed visuals and architecture diagrams, project-specific awards, and Home/Resume download links.
+- Added accessible portrait `상장 보기` modals for four Resume awards, with other recipients and certificate serial numbers masked for public display while retaining the owner and permitted issuers.
+- Added route-specific share metadata, canonical URLs, a sitemap and social image, capability-gated navigation enhancements, and stronger source/production contracts.
 
 ### Fixed
 
-- Extended the Capstone and Software Competition evidence masks so no other recipient-name glyph remains visible, while preserving Se Min Kong and permitted issuer names.
+- Restored all twelve handwritten name strokes when scrolling, input, navigation, lifecycle events, or reduced-motion changes interrupt the Home introduction.
+- Improved Kinetic pose interpolation, word-level collision boundaries, throw velocity limits, and consistent light/shadow behavior.
+- Tightened award masks to remove remaining recipient-name strokes and hide certificate serial numbers without changing permitted names or issuer information.
+- Preserved portfolio PDFs as binary files across Git checkouts and pinned the approved public PDF's byte size and SHA-256.
 
 ### Changed
 
-- Updated the linked static portfolio to the reviewed 20-page landscape edition with larger project screens, Korean functional diagrams, numbered explanations, and project-specific awards. Kept the Home/Resume download URL and synchronized its 6.1 MB metadata.
-- Synchronized the HTML, DOCX, PDF, and PNG Resume award records with the supplied certificates, including the 2026 SSAFY Common Project Excellence Award.
+- Replaced the former site-wide Fluid effects with restrained paper surfaces and route-scoped motion. Refined Work transitions, concise project summaries, case-study navigation, and THING demonstrations while retaining native scrolling and static fallbacks.
+- Updated web display typography to Signika/Jua and kept long-form copy on the system body stack.
 - Matched the Home greeting to the `프로젝트` action's display typeface and removed the separate `즐겁습니다.` color and weight emphasis.
-- Restored the original one-page Resume preview together with its PDF and DOCX actions after the owner explicitly approved republishing the original files.
-- Tightened the Resume Hero contact cluster into three consistent rows while preserving larger link targets on touch devices.
-- Centered the original Resume preview and its file actions independently of the left-hand section label column.
+- Updated browser Resume awards from the supplied certificates and restored the owner-approved original one-page Resume preview and PDF/DOCX actions, with a centered preview and aligned contact rows.
+- Refined portfolio typography and captions, centered the PDF-only profile portrait, and replaced sentence-style titles and decorative headers/numbering with concise headings and useful page/source references.
+- Kept the final portfolio download at 20 pages and 8.8 MB, synchronized with the existing Drive copy. Current residence is `Suwon, Republic of Korea` across Home, About, Resume, and the PDF.
 
 ## [2.0.1] - 2026-08-24
 
@@ -159,7 +167,8 @@ All notable changes to this project are recorded here. The project follows Seman
 - Reduced-motion, touch, keyboard, responsive, and lifecycle safeguards.
 - GitHub Flow CI, GitHub Pages deployment workflow, and automated dependency update configuration.
 
-[Unreleased]: https://github.com/SeMinKong/SeMinKong_Web/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/SeMinKong/SeMinKong_Web/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/SeMinKong/SeMinKong_Web/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.3.0...v2.0.0
 [1.3.0]: https://github.com/SeMinKong/SeMinKong_Web/compare/v1.2.0...v1.3.0

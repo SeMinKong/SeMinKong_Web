@@ -1097,4 +1097,12 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 최종 PDF 8,818,945 bytes, SHA-256 `5DDF97C453E4F5AC00BDB0A67B6E831C946C3A121F176FAF4305AD9D7A99F747`로 output/public/dist가 일치한다. 용량 8.8MB·날짜 안내는 동일하며 해시/바이트 계약 및 웹·PDF 거주지 회귀 검사를 갱신했다.
 - [x] `npm.cmd run verify` 통과: 테스트28·소스경로11·스타일경계12·production 모듈766·배포entry23. 실제 production Home/About/Resume를 390·768·1280px에서 확인해 Suwon 표기·Seoul 부재·수평 overflow0, lite/static 및 full/interactive를 확인했다. 대표 화면을 육안 검수했으며 Resume 다운로드 Tab focus2px, 390px reduced/flat, 콘솔 warning/error0을 확인했다. HTML 텍스트 외 CSS/JS/모션 변경은 없다.
 - [x] Drive 기존 파일 ID·Portfolio parent·비공개 설정을 유지해 같은 PDF로 갱신하고 재조회에서 8,818,945 bytes·application/pdf·shared=false·owner1을 확인했다. 비공개 사진 원본·원본 Resume·상장·사용자 tmp는 배포 범위에서 제외한다.
-- [ ] 공개 페이지 Suwon 표기와 배포 PDF 해시는 GitHub Pages 파이프라인 완료 후 확인한다. 실물 터치·OS 모션 설정·PDF viewer 조작·메일 앱·전체 외부 링크 검증은 이번 범위 밖이다.
+- [x] GitHub Pages run `33853405036` 성공 후 공개 Home/About/Resume의 HTTP 200·Suwon 표기·Seoul 부재를 확인했다. 공개 PDF도 HTTP 200·application/pdf·8,818,945 bytes와 위 SHA-256이 일치한다. 실물 터치·OS 모션 설정·PDF viewer 조작·메일 앱·전체 외부 링크 검증은 이번 범위 밖이다.
+
+## 2026-09-04 v2.1.0 릴리스 준비 검수
+
+- [x] 최신 원격 릴리스 v2.0.1과 현재 main 사이의 24개 커밋을 독립 감사했다. 새 Kinetic 상호작용·상장 모달·PDF 다운로드를 포함하고 기존 11개 경로를 유지하므로 minor v2.1.0으로 정리했다. 이미 제거된 Fluid/magnetic 동작이나 이전 6.1MB PDF를 최신 기능으로 기재하지 않는다.
+- [x] package/lockfile의 버전만 2.1.0으로 맞추고 CHANGELOG·한국어 릴리스 노트를 작성했다. `npm.cmd run verify` 테스트28·소스경로11·스타일경계12·production 모듈766·배포entry23 통과. 재빌드된 dist 77개 파일의 경로·SHA-256이 직전 Suwon 검수본과 전부 동일하다.
+- [x] HTML/CSS/JS와 PDF 바이트에 변화가 없어 직전 390/768/1280px·키보드·모션·콘솔 및 PDF 렌더 검수를 그대로 적용한다. 이번 릴리스 준비는 PDF 재생성이나 Drive 업로드를 수행하지 않는다. public PDF 크기/해시 계약은 8,818,945 bytes 및 `5DDF97C453E4F5AC00BDB0A67B6E831C946C3A121F176FAF4305AD9D7A99F747`다.
+- [x] 릴리스 첨부는 검수된 public PDF 한 파일로 제한한다. 원본 이력서의 소유자 승인 공개 범위를 유지하며 비공개 사진·tmp·output·dist를 Git staging하거나 작업 폴더 전체를 압축하지 않는다.
+- [ ] 릴리스 메타데이터 커밋의 Pages 성공과 live 확인 후 같은 커밋에 annotated tag/Release를 만들고 태그 대상·릴리스 본문·PDF 첨부 해시를 재조회한다.
