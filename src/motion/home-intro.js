@@ -1,7 +1,8 @@
 import { createDrawable, createTimeline } from 'animejs';
 import { mountHeroWordmark } from './home-intro-wordmark.js';
 
-const INTENT_EVENTS = ['wheel', 'pointerdown', 'touchstart', 'keydown'];
+const INTENT_EVENTS = ['wheel', 'pointerdown', 'touchstart', 'keydown', 'scroll'];
+const DRAWABLE_ATTRIBUTES = ['draw', 'pathLength', 'stroke-dasharray', 'stroke-dashoffset'];
 const SIGNATURE_DURATION = 1500;
 
 const getNavigationType = () => performance.getEntriesByType?.('navigation')?.[0]?.type;
@@ -30,6 +31,7 @@ export const initHomeIntro = (environment) => {
   const removeListeners = () => {
     INTENT_EVENTS.forEach((type) => window.removeEventListener(type, finish, true));
     window.removeEventListener('pagehide', finish);
+    window.removeEventListener('hashchange', finish);
     window.removeEventListener('pageshow', handlePageShow);
     document.removeEventListener('visibilitychange', handleVisibility);
     window.removeEventListener('portfolio:environment-change', handleEnvironmentChange);
@@ -38,7 +40,12 @@ export const initHomeIntro = (environment) => {
   const cleanupStyles = () => {
     heroName?.style.removeProperty('opacity');
     heroName?.style.removeProperty('transform');
-    paths.forEach((path) => path.removeAttribute('style'));
+    paths.forEach((path) => {
+      // Anime's drawable proxy writes SVG attributes, not just inline styles.
+      // Cancel first, then restore the original solid stroke (including i's dot).
+      DRAWABLE_ATTRIBUTES.forEach((attribute) => path.removeAttribute(attribute));
+      path.removeAttribute('style');
+    });
     heroName?.querySelectorAll('.handwritten-wordmark__letter').forEach((letter) => {
       letter.removeAttribute('style');
     });
@@ -85,6 +92,7 @@ export const initHomeIntro = (environment) => {
     window.addEventListener(type, finish, { capture: true, passive: true, once: true });
   });
   window.addEventListener('pagehide', finish);
+  window.addEventListener('hashchange', finish, { once: true });
   window.addEventListener('pageshow', handlePageShow);
   document.addEventListener('visibilitychange', handleVisibility);
   window.addEventListener('portfolio:environment-change', handleEnvironmentChange);
@@ -93,34 +101,39 @@ export const initHomeIntro = (environment) => {
   const totalDuration = SIGNATURE_DURATION;
   const entryDelay = full ? 45 : 25;
   const writingDuration = totalDuration - entryDelay;
-  const drawablePaths = createDrawable(paths);
-  const weights = paths.map((path) => Math.max(10, path.getTotalLength?.() ?? 10));
-  const totalWeight = weights.reduce((total, weight) => total + weight, 0);
-  let cursor = entryDelay;
+  try {
+    const drawablePaths = createDrawable(paths);
+    const weights = paths.map((path) => Math.max(10, path.getTotalLength?.() ?? 10));
+    const totalWeight = weights.reduce((total, weight) => total + weight, 0);
+    let cursor = entryDelay;
 
-  timeline = createTimeline({
-    autoplay: false,
-    onComplete: () => finish({ type: 'timeline-complete' })
-  });
-  timeline.add(heroName, {
-    opacity: [0.35, 1],
-    y: [4, 0],
-    duration: Math.min(420, writingDuration),
-    ease: 'out(3)'
-  }, 0);
+    timeline = createTimeline({
+      autoplay: false,
+      onComplete: () => finish({ type: 'timeline-complete' })
+    });
+    timeline.add(heroName, {
+      opacity: [0.35, 1],
+      y: [4, 0],
+      duration: Math.min(420, writingDuration),
+      ease: 'out(3)'
+    }, 0);
 
-  drawablePaths.forEach((drawable, index) => {
-    const duration = writingDuration * (weights[index] / totalWeight);
-    timeline.add(drawable, {
-      draw: ['0 0', '0 1'],
-      duration,
-      ease: 'inOut(2)'
-    }, cursor);
-    cursor += duration;
-  });
+    drawablePaths.forEach((drawable, index) => {
+      const duration = writingDuration * (weights[index] / totalWeight);
+      timeline.add(drawable, {
+        draw: ['0 0', '0 1'],
+        duration,
+        ease: 'inOut(2)'
+      }, cursor);
+      cursor += duration;
+    });
 
-  watchdog = window.setTimeout(() => finish({ type: 'watchdog' }), totalDuration + 700);
-  timeline.play();
+    watchdog = window.setTimeout(() => finish({ type: 'watchdog' }), totalDuration + 700);
+    timeline.play();
+  } catch {
+    // A partially initialized drawable must never hide the static signature.
+    finish({ type: 'setup-error' });
+  }
 
   return finishedPromise;
 };

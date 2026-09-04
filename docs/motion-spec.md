@@ -917,3 +917,10 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Native dialog와 dimmed backdrop은 각각 `220ms`, `180ms`의 짧은 opacity/최대 8px entrance만 사용한다. 증서 자체에는 pan, zoom, parallax나 반복 animation을 적용하지 않는다.
 - `prefers-reduced-motion: reduce` 또는 `html[data-motion="reduced"]`에서는 dialog, panel과 backdrop을 즉시 최종 상태로 표시하고 모든 modal animation을 `none`으로 만든다.
 - Modal open/close는 motion 완료에 의존하지 않는다. 열리자마자 닫기 버튼이 focus를 받고, Escape·백드롭·pagehide 정리는 animation 여부와 무관하게 동작한다.
+
+## 2026-09-04 — Home 서명 중단의 완성 상태 복구
+
+- 자연 완료와 모든 조기 종료는 timeline을 먼저 cancel한 뒤 12개 path의 Anime drawable 속성 `draw`, `pathLength`, `stroke-dasharray`, `stroke-dashoffset`과 소유 inline style을 제거한다. 원래의 solid stroke와 round linecap으로 복구하여 아직 시작하지 않은 획과 `i`의 점도 전부 표시한다.
+- 기존 wheel·pointerdown·touchstart·keydown에 실제 `scroll`과 `hashchange`를 추가한다. 모든 입력은 소비하지 않으며, 완료 알림과 ready Promise는 한 번만 처리한다. Pagehide의 smooth-scroll 초기화 지연 계약은 유지한다.
+- Hidden, BFCache 복귀, reduced 전환, watchdog, destroy, 정적 진입과 일부 drawable/timeline setup 실패도 동일한 복구 경로를 사용한다. 늦은 callback이 미완성 상태를 다시 적용해서는 안 된다.
+- 기존 총 1500ms, 길이 비례 획순·easing, SVG geometry, Kinetic ready gate와 레이아웃은 변경하지 않는다.

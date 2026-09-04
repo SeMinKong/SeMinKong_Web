@@ -813,3 +813,9 @@
 - Publication: `public/portfolio/SeMinKong-Portfolio.pdf` 한 파일만 공개한다. Resume의 별도 정적 포트폴리오 영역과 Home Contact에 다운로드 경로를 두고 PDF에는 읽을 수 있는 웹 URL, QR, 여섯 상세 페이지·공개 코드 링크와 책갈피를 제공한다. 기존 원본 이력서와 motion 동작은 유지한다. 사용자 지정 GitHub Pages 주소를 유지하며 새 호스팅 서비스로 이전하지 않는다.
 - Privacy: PDF에는 전화번호·생년월일·타인 수상자·상장 일련번호·비공개 Drive 링크를 넣지 않는다. 상장은 텍스트 목록과 웹 전시 링크로 연결한다. 최종 파일은 사용자 지정 Drive의 비공개 `Portfolio` 하위 폴더에 저장하며 원본 증서나 공유 권한은 변경하지 않는다.
 - Maintenance: 편집 원본은 `scripts/portfolio/build_portfolio.py`, 렌더링 결과와 검수 중간물은 ignored `output/pdf/`, `tmp/pdfs/portfolio/`에 둔다. 새 판은 전체 PDF를 다시 렌더링·검수한 뒤 public 사본과 승인 해시·byte size·표시 날짜를 함께 갱신한다. 배포 검증은 Portfolio 폴더의 비승인 파일을 거부한다.
+
+## 2026-09-04 — Home 손글씨 조기 종료 시 SVG 상태 정리
+
+- Decision: 서명 종료 시 timeline cancel 이후 drawable의 SVG 속성 네 개를 명시적으로 제거한다. 실제 scroll·hashchange와 setup 실패도 공통 종료 경로로 수렴시킨다.
+- Reason: Anime.js 4.5의 drawable은 inline style뿐 아니라 SVG dash 속성을 직접 쓴다. 기존 종료 코드는 style만 제거하여 현재 획의 일부와 아직 시작하지 않은 획이 가려진 상태로 남았다. `revert()`는 시작 상태인 숨긴 획을 되돌릴 수 있으므로 원래의 solid SVG로 복구한다.
+- Impact: 중단 시 `i`의 점을 포함한 이름 전체가 즉시 보인다. 입력 차단, 필기 시간·디자인 변경이나 새 의존성은 없다. 실제 controller를 실행하는 15개 회귀 테스트와 실제 Anime 브라우저 검사로 모든 종료 경로·정적 진입·native 입력을 확인한다.

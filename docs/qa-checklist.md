@@ -995,3 +995,14 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 최종 `npm.cmd run verify`: tests 12개, source routes 11개·stylesheets 12개, production modules 766개, deployment entries 23개 통과. PDF는 초기 페이지 요청에 미리 내려받지 않는 일반 파일 링크이며 새 runtime dependency는 없다.
 - [x] Drive의 지정 폴더 아래 `Portfolio`를 만들고 최종 PDF를 업로드했다. metadata 재조회에서 MIME `application/pdf`, 10,060,384 bytes, 올바른 parent와 소유자 한 명·shared=false를 확인했다. 원본 상장과 기존 공유 권한은 유지했다.
 - [ ] QR의 실제 카메라 스캔, OS 메일 앱 실행, 모든 외부 링크의 일괄 HTTP 검사는 수행하지 않았다. 코드 근거는 조사 단계에서 열람했고 웹/PDF 링크 문법·영역을 검증했다. IAB의 새 탭 PDF 뷰어 UI는 노출되지 않아 별도 OS PDF viewer 동작은 확인하지 않았다.
+
+## 2026-09-04 Home signature interruption verification
+
+- [x] 실제 controller를 실행하는 회귀 테스트 15개를 추가했다. Wheel·pointerdown·touchstart·keydown·scroll·hashchange·pagehide, 자연 완료·watchdog·hidden·persisted pageshow·reduced 전환·destroy, 정적 진입과 부분 setup 실패에서 12개 path 속성과 style, listener·timer 정리 및 한 번의 완료를 확인했다.
+- [x] 실제 Anime를 사용하는 ignored 로컬 harness에서 첫 획만 시작하고 나머지 11개는 `draw="0 0"`인 시점에 native scroll·Tab·anchor 이동을 수행했다. 전체 12개 path의 drawable 속성 잔여 0, computed dash `none`, linecap `round`이며 원래 스크롤·focus·hash 이동도 실행된다.
+- [x] 같은 harness의 자연 완료 후 전체 이름과 `i`의 점을 육안 확인했다. 완료 직후와 추가 시간이 지난 뒤에도 속성 잔여는 0이다.
+- [x] 실제 production preview 1280×900에서 필기 도중 About 이동 후 뒤로가기를 수행했고, 복귀한 Home은 전체 이름·속성 잔여 0·horizontal overflow 없음·기본 full motion/interactive depth다.
+- [x] Production preview 390×844와 768×1024의 기본 lite 진입에서 11개 미시작 획을 확인한 뒤 각각 PageDown·Tab으로 중단했다. 전체 12개 획이 복구되고 overflow가 없다. Tab은 skip link로 이동하고 focus outline도 유지한다. 768px 완성 화면을 육안 확인했다.
+- [x] 390×844 `?motion=reduced`는 처음부터 12개 완성 획, drawable 속성 잔여 0, flat depth와 overflow 없음이며 화면을 육안 확인했다. Warning/error console log는 0이다.
+- [x] `npm.cmd run verify`: tests 27개, source routes 11개·stylesheets 12개, production modules 766개, deployment entries 23개 통과. 새 runtime dependency와 공개 asset 변경은 없다.
+- [ ] 실제 터치 하드웨어, OS reduced-motion 전환, 실제 BFCache 저장 여부는 별도 검증하지 않았다. 해당 lifecycle 이벤트는 자동 테스트로 검사했다. IAB의 일부 viewport 변경 직후 reload/CDP 연결이 timeout되어 새 탭과 분리된 viewport 설정으로 고정 폭 검수를 마쳤으며 연속 resize는 완료로 주장하지 않는다.
