@@ -32,11 +32,11 @@ export const initAwardProofDialog = () => {
     }
 
     activeTrigger = trigger;
-    title.textContent = trigger.dataset.proofTitle || '수상 증빙';
-    caption.textContent = trigger.dataset.proofCaption || '수상 증빙 이미지입니다.';
+    title.textContent = trigger.dataset.proofTitle || '수상 전시';
+    caption.textContent = trigger.dataset.proofCaption || '개인정보를 가린 전시용 상장 이미지입니다.';
     image.width = readDimension(trigger.dataset.proofWidth, 1240);
     image.height = readDimension(trigger.dataset.proofHeight, 1755);
-    image.alt = `${title.textContent} 증빙 이미지`;
+    image.alt = `${title.textContent} 전시용 상장 이미지`;
     image.src = trigger.dataset.proofSrc;
 
     document.documentElement.classList.add('award-dialog-open');

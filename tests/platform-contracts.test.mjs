@@ -190,19 +190,24 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
 
   const proofButtons = resume.match(/<button\b[^>]*data-award-proof[^>]*>/g) ?? [];
   assert.equal(proofButtons.length, 4);
+  assert.equal((resume.match(/>상장 보기 /g) ?? []).length, 4);
+  assert.doesNotMatch(resume, /증빙 보기|수상 증빙|증빙 이미지/);
+  assert.match(resume, /Award gallery/);
+  assert.doesNotMatch(resume, /Award evidence/i);
+  assert.doesNotMatch(awardDialogSource, /수상 증빙|증빙 이미지/);
   for (const button of proofButtons) {
     assert.match(button, /type="button"/);
     assert.match(button, /aria-haspopup="dialog"/);
     assert.match(button, /aria-controls="award-proof-dialog"/);
     assert.match(button, /data-proof-title="[^"]+"/);
-    assert.match(button, /data-proof-caption="[^"]+"/);
+    assert.match(button, /data-proof-caption="[^"]*전시용 이미지입니다\.[^"]+"/);
   }
 
   const awardFiles = [
-    ['award-ssafy-common-project.webp', 1240, 1755, '49B7DC1138ED00C38D01DA871A0ABE88C1FBD73D29A5D543CAD9B7BACEF2582E'],
-    ['award-it-project-pro-league.webp', 1240, 1755, '3E1C36FBE12AEE975E651917B05D88BF29D18753228E4FAD40465E1A6413D547'],
-    ['award-capstone-design.webp', 1239, 1758, '5381DFCFE078D33432B3F27EC08303F50395B378BB7FF98D0D3374158B61B7D7'],
-    ['award-software-competition.webp', 1240, 1755, '3F55E4CE7CDE57AFDD4FB102BE6994BF6F4E6B5846A324B91277BA540FB1F822']
+    ['award-ssafy-common-project.webp', 1240, 1755, 'CFEA27E549987D9EF3758E66AC3534F2F55DBD2462D0AB035E9AAAC0B9999A9F'],
+    ['award-it-project-pro-league.webp', 1240, 1755, '610CD537EAAFEBE5610003A7941E2F058E1C04B82129569015D584287A3AA983'],
+    ['award-capstone-design.webp', 1239, 1758, '149AA5AEE5EBA3058E89065F5DF095DB0558FCBDBB29A6C03E325A984F642A69'],
+    ['award-software-competition.webp', 1240, 1755, '5868CA69CAAF69751580FD464890E587294DFCD9727FB10DF05A35A10C83C20B']
   ];
   for (const [filename, expectedWidth, expectedHeight, expectedHash] of awardFiles) {
     const reference = proofButtons.find((button) => button.includes(`data-proof-src="./${filename}"`));

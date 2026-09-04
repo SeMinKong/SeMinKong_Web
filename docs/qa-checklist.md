@@ -974,3 +974,12 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 열 때 닫기 버튼으로 focus가 이동하며 단일 focus target의 Tab이 modal 안에서 순환한다. PageDown 중 배경 `scrollY`는 고정되고, Escape와 실제 backdrop 클릭은 정확한 opener로 focus를 복귀시킨다. 이미지 내부 클릭은 닫히지 않으며 다른 수상 재개방 시 title/src/alt가 함께 교체된다.
 - [x] `?motion=reduced`에서 dialog, panel과 backdrop의 computed animation은 모두 `none / 0s`다. 직접 Resume 페이지의 warning/error console log는 비어 있다.
 - [x] `npm.cmd run verify`가 test 11개, source route 11개·stylesheet 12개, production module 766개와 deployment entry 22개를 통과했고 `git diff --check` whitespace error는 0이다.
+
+## 2026-09-04 Award gallery redaction verification
+
+- [x] 4개 공개 이미지와 확대 경계를 직접 확인했다. 일련번호가 있는 세 상장은 번호 전체를 가렸고, 프로리그의 타인 이름 상단 잔여도 가렸다. 공세민 이름·발급자·상명·날짜는 유지됐다.
+- [x] 4개 이미지에서 지정 마스크·허용 복구 영역 밖 변경 0픽셀, 새 마스크 내부 비검정 0픽셀. SW 공모전 이름 복구 영역은 원본 PDF raster와 0픽셀 차이다. SHA-256을 source contract에 갱신했다.
+- [x] 실제 production preview의 390×844, 768×1024, 1280×900에서 modal은 각각 약 355×646, 620×986, 620×866px이다. 모든 경계가 viewport 안에 있고 이미지도 portrait이며 horizontal overflow가 없다.
+- [x] 4개 버튼의 제목·이미지 경로 교체, 이미지 로드, 닫기 버튼 focus, Tab 순환, PageDown 중 배경 scrollY 고정, Escape 후 opener focus 복귀를 확인했다.
+- [x] 390px `?motion=reduced`에서 modal·panel·backdrop animation은 모두 none이며 warning/error console log는 0이다.
+- [x] 상장 작업의 `npm.cmd run verify`: 11 tests, 11 routes, 22 deployment entries 통과. 이후 문구·PDF 연결 변경도 최종 통합 검증 대상으로 둔다.
