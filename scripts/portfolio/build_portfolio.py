@@ -304,7 +304,7 @@ def introduction(b):
     b.meta([('현재', 'SSAFY Robotics Track<br/>2026.01 - 현재')], 548, 383, 121)
     b.meta([('학력', '숭실대학교<br/>소프트웨어학부<br/>2020.03 - 2026.02')], 682, 383, 121)
     b.meta([('관심 분야', 'Computer Vision<br/>Robotics / Physical AI')], 548, 471, 121)
-    b.meta([('거주지', 'Seoul,<br/>Republic of Korea')], 682, 471, 121)
+    b.meta([('거주지', 'Suwon,<br/>Republic of Korea')], 682, 471, 121)
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/')])
 
 

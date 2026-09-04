@@ -1089,3 +1089,12 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify`: 테스트27·경로11·스타일12·production 모듈766·배포entry23 통과. 실제 production Resume 390·768·1280px에서 overflow0, 44px 링크·모바일 한 열/큰 화면 가로 배치·Tab focus2px·정상 URL/filename/target, lite/static 및 full/interactive와 390px reduced/flat을 확인했다. 콘솔 warning/error0. viewport 복원·검수 탭 종료.
 - [x] Drive는 기존 파일 ID·parent·비공개 설정을 유지해 갱신하고 재조회에서 8,818,944 bytes·application/pdf·shared=false·owner1을 확인했다. 원본 사진·원본 Resume·상장·웹 HTML/CSS/모션과 사용자 tmp는 변경하지 않는다.
 - [ ] GitHub Pages 배포 성공과 공개 PDF 동일성은 푸시 후 별도 확인한다. QR 실물 스캔·OS 모션 설정·실물 터치·메일 앱·전체 외부 링크 HTTP·OS PDF viewer 조작은 이번 검증 범위 밖이다.
+
+## 2026-09-04 현재 거주지 Suwon 정정 검수
+
+- [x] Home Contact, About 역할/위치와 Based in, Resume 연락처, PDF 표지의 현재 거주지 다섯 곳을 Suwon으로 통일했다. 원본 Resume PDF/DOCX/미리보기에는 Seoul 표기가 없어 유지한다. 과거 학교/수상 기관 및 당시 결정 기록은 변경하지 않는다.
+- [x] PDF 표지 최종 렌더의 줄바꿈·정렬을 직접 확인했다. 독립 비교에서 p1 내용 스트림 및 layout의 Seoul→Suwon 한 문자열만 변경됐으며 p2–20, 모든 이미지 픽셀·링크 URI/영역·내부 목차·메타데이터는 동일하다. PDF 구조 검사와 겹침0·캡션5·문단 끝줄11·중앙 정렬 사진 검사도 통과한다.
+- [x] 최종 PDF 8,818,945 bytes, SHA-256 `5DDF97C453E4F5AC00BDB0A67B6E831C946C3A121F176FAF4305AD9D7A99F747`로 output/public/dist가 일치한다. 용량 8.8MB·날짜 안내는 동일하며 해시/바이트 계약 및 웹·PDF 거주지 회귀 검사를 갱신했다.
+- [x] `npm.cmd run verify` 통과: 테스트28·소스경로11·스타일경계12·production 모듈766·배포entry23. 실제 production Home/About/Resume를 390·768·1280px에서 확인해 Suwon 표기·Seoul 부재·수평 overflow0, lite/static 및 full/interactive를 확인했다. 대표 화면을 육안 검수했으며 Resume 다운로드 Tab focus2px, 390px reduced/flat, 콘솔 warning/error0을 확인했다. HTML 텍스트 외 CSS/JS/모션 변경은 없다.
+- [x] Drive 기존 파일 ID·Portfolio parent·비공개 설정을 유지해 같은 PDF로 갱신하고 재조회에서 8,818,945 bytes·application/pdf·shared=false·owner1을 확인했다. 비공개 사진 원본·원본 Resume·상장·사용자 tmp는 배포 범위에서 제외한다.
+- [ ] 공개 페이지 Suwon 표기와 배포 PDF 해시는 GitHub Pages 파이프라인 완료 후 확인한다. 실물 터치·OS 모션 설정·PDF viewer 조작·메일 앱·전체 외부 링크 검증은 이번 범위 밖이다.

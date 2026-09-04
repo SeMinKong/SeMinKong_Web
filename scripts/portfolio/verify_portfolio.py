@@ -51,6 +51,8 @@ def verify(path):
                 assert 'drive.google.com' not in uri
                 external.append(uri)
     intro = '\n'.join(texts[:2])
+    assert 'Suwon,' in texts[0] and 'Republic of Korea' in texts[0]
+    assert 'Seoul' not in intro
     assert not re.search(r'\b(THING|AQIS|Briefit|Alkkagi|KoBART)\b', intro)
     assert not any(value in intro for value in ['우수상', '장려상', '금상'])
     assert 'SSAFY 공통 프로젝트 우수상' in texts[6] and 'THING' in texts[6]

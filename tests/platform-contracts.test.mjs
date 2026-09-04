@@ -318,6 +318,15 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.match(workStory, /focus\(\{ preventScroll: true \}\)/);
 });
 
+test('current residence is consistently Suwon across the website', async () => {
+  for (const path of ['index.html', 'about/index.html', 'resume/index.html']) {
+    const html = await readFile(sourceUrl(path), 'utf8');
+    assert.match(html, /Suwon, Republic of Korea/);
+    assert.doesNotMatch(html, /Seoul|서울/);
+  }
+  assert.match(await readFile(sourceUrl('about/index.html'), 'utf8'), /Software Developer · Suwon/);
+});
+
 test('the reviewed static portfolio is downloadable without exposing working files', async () => {
   const [resume, home, distVerifier, pdf] = await Promise.all([
     readFile(sourceUrl('resume/index.html'), 'utf8'),
@@ -334,10 +343,10 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 8818944);
+  assert.equal(pdf.length, 8818945);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    '0054AF88D0E14587999A9447D9A951178E48AC35CB83197AD9B1643341B54D0F',
+    '5DDF97C453E4F5AC00BDB0A67B6E831C946C3A121F176FAF4305AD9D7A99F747',
     'Published PDF must match the visually and structurally reviewed 20-page landscape edition'
   );
 });
