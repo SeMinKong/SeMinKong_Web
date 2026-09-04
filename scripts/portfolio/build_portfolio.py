@@ -303,7 +303,7 @@ def introduction(b):
     b.rule(476, M, 475)
     b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', M, 494, 10)
     b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', M, 515, 9.5)
-    b.image('@se-min-kong-profile.png', 548, 113, 180, 240)
+    b.image('@se-min-kong-profile.png', 548, 113, 255, 240)
     b.rule(367, 548, 255, ACCENT, 1.5)
     b.meta([('NOW', 'SSAFY Robotics Track<br/>2026.01 - 현재')], 548, 383, 121)
     b.meta([('EDUCATION', '숭실대학교<br/>소프트웨어학부<br/>2020.03 - 2026.02')], 682, 383, 121)

@@ -107,6 +107,13 @@ def verify(path):
     portrait = [e for e in elements if e['text'] == '@se-min-kong-profile.png']
     assert len(portrait) == 1 and portrait[0]['page'] == 1
     assert abs(portrait[0]['width'] / portrait[0]['height'] - 1086 / 1448) < .001
+    assert abs(portrait[0]['x'] + portrait[0]['width'] / 2 - (548 + 255 / 2)) < .01
+    assert portrait[0]['width'] == 180 and portrait[0]['height'] == 240
+    with pdfplumber.open(path) as doc:
+        cover_images = doc.pages[0].images
+        assert len(cover_images) == 1
+        actual = cover_images[0]
+        assert abs((actual['x0'] + actual['x1']) / 2 - (548 + 255 / 2)) < .01
     edited_paragraphs = [
         (4, '손동작 인식, ROS 2'), (6, '7개 모터 ID'),
         (6, '단일·키보드 제어'), (6, '아크릴 고정부를 제작'),

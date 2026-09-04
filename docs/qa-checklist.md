@@ -1069,3 +1069,13 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify` 통과: 테스트27·소스경로11·스타일경계12·production 모듈766·배포entry23. `git diff --check` 통과. 런타임 의존성·웹 모션·원본 Resume와 상장은 변경하지 않았다.
 - [x] 기존 Drive PDF를 같은 ID로 갱신하고 재조회에서 8,836,654 bytes·application/pdf·기존 Portfolio parent·shared=false·owner1을 확인했다. 사진 원본과 다른 Drive 파일/공유 권한은 변경하지 않았다.
 - [ ] 실제 OS reduced-motion 변경·실물 터치·QR 스캔·메일 앱·PDF viewer 상호작용·전체 외부 링크 HTTP는 이번 검증 범위 밖이다. 공개 배포 성공과 live PDF 동일성은 GitHub Pages 완료 후 별도 확인한다.
+
+## 2026-09-04 PDF 증명사진 중앙 정렬 검수
+
+- [x] 첫 페이지 최종 렌더를 직접 확인했다. 사진은 180×240pt를 유지하며 255pt 오른쪽 영역 중앙에 위치한다. 좌우 여백은 각각 37.5pt이고 실제 PDF 이미지 좌표 및 layout 기록의 중심 x=675.5pt 검사가 통과한다. 사진 아래 정보·본문·웹의 사진 미노출 방침은 유지한다.
+- [x] 독립 비교에서 layout 기록의 유일한 차이는 p1 사진 x548→585.5pt이다. p1 내용 스트림도 사진 x좌표 두 곳만 변경됐고 p2–20 스트림은 동일하다. 전체 텍스트·이미지 픽셀 데이터·링크 URI·metadata가 유지된다.
+- [x] PDF 검사: 20쪽·책갈피20·외부링크64·내부링크6·레이아웃 겹침0·캡션5·문단 끝줄11 통과. 최종 8,836,658 bytes, SHA-256 `C8B093C0389A68CA402051EE635A29B544285BCDE47EB4C07804D2FBC6C1361F`로 output/public/dist가 일치하고 재생성 해시도 같다.
+- [x] `npm.cmd run verify`: 테스트27·경로11·스타일12·production 모듈766·배포entry23 통과. 웹의 HTML/CSS/JS는 수정하지 않고 기존 PDF 다운로드 파일과 검증 계약을 교체했다. 표시 용량 8.8MB·20쪽·날짜는 동일하다.
+- [x] 실제 production Resume 390·768·1280px에서 overflow0, 모바일 한 열·태블릿/데스크톱 가로 action 배치와 44px 높이, 다운로드 URL/filename/새 탭 속성을 확인했다. Tab 포커스 2px, lite/static 및 full/interactive, 390px reduced/flat과 링크 가시성이 정상이다. 앱 warning/error는 없고 기존 Chrome 지갑 확장 경고는 구분했다. 검수 탭을 닫고 viewport를 복원했다.
+- [x] Drive의 기존 PDF ID·parent·비공개 권한을 유지해 교체하고 재조회에서 8,836,658 bytes, application/pdf, shared=false·owner1을 확인했다. 사용자 임시 파일과 사진 원본을 배포 범위에서 제외한다.
+- [ ] GitHub Pages 성공과 공개 다운로드 동일성은 푸시 후 별도 확인한다. 실물 터치·OS 모션 설정·QR 카메라·메일 앱·외부 링크 전체 HTTP·PDF viewer 조작은 이번 검증 범위 밖이다.
