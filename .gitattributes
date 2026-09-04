@@ -1,0 +1,2 @@
+# Preserve the reviewed publication bytes across Windows/Linux checkouts.
+public/portfolio/*.pdf binary
