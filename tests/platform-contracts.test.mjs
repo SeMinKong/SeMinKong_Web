@@ -329,14 +329,14 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(resume, /href="\.\.\/portfolio\/SeMinKong-Portfolio\.pdf" download="SeMinKong-Portfolio\.pdf"/);
   assert.match(resume, /href="\.\.\/portfolio\/SeMinKong-Portfolio\.pdf" target="_blank" rel="noreferrer"/);
   assert.match(home, /href="\.\/portfolio\/SeMinKong-Portfolio\.pdf" download="SeMinKong-Portfolio\.pdf"/);
-  assert.match(resume, /14 pages · A4 portrait · PDF · 9\.6 MB · 2026\.09\.04/);
+  assert.match(resume, /20 pages · A4 landscape · PDF · 6\.1 MB · 2026\.09\.04/);
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 10060384);
+  assert.equal(pdf.length, 6138051);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    '90485E34BA9EC00CF1F6DEF27626549674DBFD9B2C7E7CAD6F9563926B538556',
-    'Published PDF must match the visually and structurally reviewed 14-page edition'
+    'D8CA46FCB84B5D0C9F08C2F8BCCBA7EB39C2A27D4BDEF639046D7091C4C13046',
+    'Published PDF must match the visually and structurally reviewed 20-page landscape edition'
   );
 });

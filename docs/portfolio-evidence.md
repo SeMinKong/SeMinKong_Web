@@ -1,12 +1,12 @@
 # Static portfolio evidence register
 
-Reviewed 2026-09-04. This is an editorial working record, not a claim that the upstream projects were executed or independently benchmarked in this workspace.
+Reviewed 2026-09-04. This is an editorial working record. Bounded local reproductions are documented below; neither the diagrams nor local smoke tests establish hardware, model-quality or production-performance claims.
 
 ## Editorial structure
 
-A4 portrait, 14 pages: cover; profile; project map; THING overview / personal work / verification; AQIS overview / integration decision; MRI pipeline / evaluation scope; Alkkagi; Briefit; Prompt Generator; awards and contact. First render a three-page style sample (cover, THING personal work, Alkkagi), then validate the complete document.
+A4 landscape, 20 pages: personal introduction; About / education / current learning; project index; THING overview / source architecture / implementation / results and award; AQIS overview / architecture / coordinate timing; Briefit overview / data pipeline / postprocessing and three awards; MRI overview / method and evaluation / synthetic mask preprocessing; Alkkagi overview / physics; Prompt Generator; contact. The opening two pages contain no project names or project-linked strengths. This visual revision extends the locally prepared 18-page edition; GitHub Pages deployment is separate.
 
-Use warm paper, near-black text, one vermilion accent, generous margins, thin rules and real project artifacts. Use a readable Korean body face instead of stretching the website's display face into long paragraphs. No synthetic project screenshots, skill percentages, invented impact numbers or decorative terminal windows. References inform hierarchy, not copied layout or branding.
+Use warm paper, near-black text, one vermilion accent, compact 38pt margins, thin rules and real project artifacts. Metadata rails, two/three-column explanations and implementation notes create dense technical pages. Use a readable Korean body face instead of stretching the website's display face into long paragraphs. No synthetic project screenshots, skill percentages, invented impact numbers or decorative terminal windows. References inform hierarchy, not copied layout or branding.
 
 ## THING
 
@@ -22,7 +22,7 @@ Use warm paper, near-black text, one vermilion accent, generous margins, thin ru
 - Own work: RealOps, FastAPI REST/WebSocket, ROS 2 bridge, conveyor HTTP, Dobot sequence, LLM command/fallback. Model training/Roboflow/CAD/simulation are separate teammate work, not personal claims.
 - Strong decision: develop common REST/WS with mock adapters before hardware access. [Day 1](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/docs/day1-decisions.md).
 - Strong integration issue: moving target coordinates become stale; use a detection after stop request and configured wait. [Main event flow](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/server/app/main.py), [related tests](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/server/tests/test_real_monitoring.py).
-- Tests exist but were not run here. Do not infer physical stop confirmation, classification success rate, cycle time, Nav2 completion or persistent database implementation. Demo contains speed-up segments.
+- Isolated local tests were run during the visual revision: 26 passed and two existing calibration-expectation tests failed. See reproduction scope below. Do not infer physical stop confirmation, classification success rate, cycle time, Nav2 completion or persistent database implementation. Demo contains speed-up segments.
 
 ## MRI
 
@@ -49,6 +49,8 @@ Use warm paper, near-black text, one vermilion accent, generous margins, thin ru
 
 ## Publication / privacy
 
+The following privacy and delivery rules apply to both the published edition and the locally implemented revision below.
+
 - PDF links to the canonical web URL, six case pages and public code/evidence. Searchable embedded Korean text, bookmarks and link annotations. QR has readable URL alternative.
 - No phone number, birth date, third-party recipient data, certificate serial numbers or private Drive links in the PDF. Awards are a concise list with a web display-gallery link.
 - Stable public PDF target: `public/portfolio/SeMinKong-Portfolio.pdf`. Keep editable source in `scripts/portfolio/`; rendering/QA intermediates are not public assets.
@@ -57,3 +59,29 @@ Use warm paper, near-black text, one vermilion accent, generous margins, thin ru
 ## Reference review
 
 [Moon, 6-page Korean developer PDF](https://zooxop.github.io/zooxop/resume/SW_DEV_MCH_portfolio.pdf), [Sujaan](https://sujaan.me/), [Benjamin Di Buono](https://benjamindibuono.com/projects), [Amith Polineni](https://amithp.com/portfolio/Amith_Polineni_Project_Portfolio.pdf), [Northwestern robotics portfolios](https://www.mccormick.northwestern.edu/robotics/curriculum/featured-project-portfolios.html). Borrow the principles of selective cases, explicit ownership and real artifacts, not branding or assets.
+
+## Implemented revision — owner-confirmed requirements (2026-09-04)
+
+- Keep the introduction and About personal: introduce Kong, education/training and known interests without project names, project achievements or project-linked descriptions of strengths. Do not invent personal motivations or personality traits.
+- Prioritize the self-introduction in the opening and use a dense but readable layout. Project cases follow later as a separate section. Following the owner's implementation request, the revision uses 18 A4 landscape pages.
+- For project cases, use the problem / constraints / decision / implementation / result / reflection narrative principle from [Ryu's portfolio](https://ryubyeongsun.github.io/bs_00.github.io/portfolio.pdf) and the compact metadata organization principle from Moon's portfolio. Do not copy branding, wording or assets.
+- Place awards inside the associated project cases, with links to the existing privacy-redacted web gallery. The owner explicitly confirmed the project associations below; certificate review establishes award names and dates, not every project association on its own.
+
+| Project | Award | Date |
+| --- | --- | --- |
+| THING | SSAFY 공통 프로젝트 우수상 | 2026-08-10 |
+| Briefit | 2025 IT대학 소프트웨어 공모전 금상 | 2025-08-18 |
+| Briefit | 제15회 숭실 캡스톤디자인 경진대회 장려상 | 2025-10-01 |
+| Briefit | 2025 IT 프로젝트 프로리그 장려상 | 2025-11-22 |
+
+The owner subsequently requested implementation. The initial 18-page implementation was extended to 20 pages by the source/reproduction visual revision below, pending separate website deployment. Validate with `scripts/portfolio/verify_portfolio.py`, visually inspect rendered pages, and keep the reviewed PDF byte count/hash in the web contract test. Do not publish source notes, layout JSON or draft PDFs.
+
+## Source and reproduction visual revision
+
+The owner requested local reproduction where hardware is unnecessary, reuse of THING/AQIS source architecture and code-based diagrams for the other projects. Implemented source selection, pinned commits, image hashes, sensitive metadata removal and precise execution limits are recorded in [portfolio-visual-sources.md](portfolio-visual-sources.md). Following the readability request, the 20-page PDF uses functional captions instead of separate video/local-run labels; provenance remains in the source notes. Synthetic explanatory inputs are labeled as examples. This is not a new hardware run or full ML reproduction.
+
+## Additional implementation detail checked for the revision
+
+- AQIS: configurable stop-request delay (default 0.6 seconds), timestamped detection maximum age (3 seconds), depth-bearing detection preference. Missing timestamps are accepted; this is not a universal freshness guarantee. Deduplication defaults are IoU 0.5, center distance 70px and an 8-second window; duplicates refresh time/position. These are code settings, not measured outcomes. [Configuration](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/server/app/config.py), [Deduper](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/server/app/services/detection_deduper.py).
+- Briefit, from the pinned personal commits above: 10-item target batches and a run-shared URL set; comment URL filtering and rejection of bodies shorter than 100 characters after tag cleanup; seed 42 with default 8:1:1 train/valid/test JSONL; generated/reference summary pairs for ROUGE. Trailing short/repeated sentence cleanup is rule-based and does not guarantee meaning preservation. Configured collection targets are not collected totals.
+- Alkkagi, from the pinned physics/server sources above: equal overlap correction; skip impulse when separating along the collision normal; inverse-mass impulse; radius +0.8 and mass +0.05 per kill point (absorbed opponent points can make one elimination worth several points); input speed cap 0.45 board size before division by mass; substep friction `FRICTION ** stepFactor`. These are implementation values, not benchmarks.

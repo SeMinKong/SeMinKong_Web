@@ -5,6 +5,7 @@ dist/
 .private/
 /output/pdf/
 /tmp/pdfs/portfolio/
+/tmp/portfolio-visuals/
 /scripts/portfolio/__pycache__/
 
 .env

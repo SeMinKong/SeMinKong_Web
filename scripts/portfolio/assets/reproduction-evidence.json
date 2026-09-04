@@ -1,0 +1,2170 @@
+{
+  "run_date": "2026-09-04",
+  "briefit": {
+    "scope": "Original pure postprocessing and split functions executed; no model inference or external news collection.",
+    "fixture_type": "synthetic authored inputs; NOT actual generated news summaries",
+    "postprocess_source": {
+      "commit": "da4ea1b09cfd44724facc19233d65c07e4301f3a",
+      "repository": "Briefit_AI",
+      "file": "Kobart/Scripts/GenerateJson.py",
+      "symbol": "_clean_tail",
+      "lines": [
+        16,
+        25
+      ],
+      "sha256": "868db9a9992e0396cce7b2c64d42bcab49f52b9af82042c61825449ba2a1e5a2"
+    },
+    "postprocess_cases": [
+      {
+        "case": "remove_short_repeated_tail",
+        "input": "지역 도서관은 다음 주부터 주말 운영 시간을 늘린다. 이용자는 토요일 저녁에도 자료를 열람할 수 있다. 밝혔다. 밝혔다.",
+        "expected": "지역 도서관은 다음 주부터 주말 운영 시간을 늘린다. 이용자는 토요일 저녁에도 자료를 열람할 수 있다.",
+        "actual": "지역 도서관은 다음 주부터 주말 운영 시간을 늘린다. 이용자는 토요일 저녁에도 자료를 열람할 수 있다.",
+        "pass": true
+      },
+      {
+        "case": "remove_adjacent_duplicate",
+        "input": "전시회는 다음 달부터 시립 미술관에서 열린다. 전시회는 다음 달부터 시립 미술관에서 열린다.",
+        "expected": "전시회는 다음 달부터 시립 미술관에서 열린다.",
+        "actual": "전시회는 다음 달부터 시립 미술관에서 열린다.",
+        "pass": true
+      },
+      {
+        "case": "preserve_two_complete_sentences",
+        "input": "공원 산책로 정비는 이번 주에 마무리될 예정이다. 보행자는 안내 표지에 따라 우회할 수 있다.",
+        "expected": "공원 산책로 정비는 이번 주에 마무리될 예정이다. 보행자는 안내 표지에 따라 우회할 수 있다.",
+        "actual": "공원 산책로 정비는 이번 주에 마무리될 예정이다. 보행자는 안내 표지에 따라 우회할 수 있다.",
+        "pass": true
+      },
+      {
+        "case": "limitation_short_sentence_can_be_removed",
+        "input": "비가 온다.",
+        "expected": "",
+        "actual": "",
+        "pass": true
+      }
+    ],
+    "split_source": {
+      "commit": "da4ea1b09cfd44724facc19233d65c07e4301f3a",
+      "repository": "Briefit_AI",
+      "file": "Kobart/Scripts/Prepare_Dataset.py",
+      "symbol": "main",
+      "lines": [
+        7,
+        36
+      ],
+      "sha256": "7967944a5ad64c8413492344a01ac820154e4ded50bcfe40567cc9a111f9ec83"
+    },
+    "split_seed": 42,
+    "split_fixture_records": 20,
+    "splits": {
+      "train": {
+        "count": 16,
+        "ids": [
+          "synthetic-19",
+          "synthetic-05",
+          "synthetic-14",
+          "synthetic-04",
+          "synthetic-09",
+          "synthetic-13",
+          "synthetic-15",
+          "synthetic-18",
+          "synthetic-06",
+          "synthetic-12",
+          "synthetic-17",
+          "synthetic-10",
+          "synthetic-01",
+          "synthetic-11",
+          "synthetic-02",
+          "synthetic-16"
+        ],
+        "sha256": "5aa7b9306a3a8bab340ce61d4ec926800d3200b3c68883ca03c260ba903ef369",
+        "repeat_identical": true,
+        "fields": [
+          "id",
+          "text",
+          "summary"
+        ],
+        "whitespace_stripped": true
+      },
+      "valid": {
+        "count": 2,
+        "ids": [
+          "synthetic-07",
+          "synthetic-08"
+        ],
+        "sha256": "842558c89ff8398a34cb9abed6a20ce97a8d9560298058b9926e4eab1ff1e08e",
+        "repeat_identical": true,
+        "fields": [
+          "id",
+          "text",
+          "summary"
+        ],
+        "whitespace_stripped": true
+      },
+      "test": {
+        "count": 2,
+        "ids": [
+          "synthetic-00",
+          "synthetic-03"
+        ],
+        "sha256": "dc7382fca78f4e0ba16bc2f2310bbf19d1009f8d228b83d76389c0d011af952f",
+        "repeat_identical": true,
+        "fields": [
+          "id",
+          "text",
+          "summary"
+        ],
+        "whitespace_stripped": true
+      }
+    },
+    "stdout": "Saved: ['train=16', 'valid=2', 'test=2']\nSaved: ['train=16', 'valid=2', 'test=2']\n",
+    "committed_dataset_metadata_only": {
+      "train": {
+        "records": 2819,
+        "bytes": 13181853,
+        "sha256": "63b054e7aed27282980485fae03f4aece7a956b5aaa9fc637e4b3a96c49d0bb8"
+      },
+      "valid": {
+        "records": 352,
+        "bytes": 1695182,
+        "sha256": "19287e5eaa28ddf2cbebbf6c36ba8f4ee1992c26c092c06f25a5074abba4b76c"
+      },
+      "test": {
+        "records": 353,
+        "bytes": 1680691,
+        "sha256": "c077cf091ff807054a6a5e011e3b75eafaea3788e3eb584891433831e60fb5aa"
+      }
+    },
+    "limitations": [
+      "No trained KoBART checkpoint in this pinned checkout.",
+      "No model output or quality score reproduced.",
+      "The short-tail rule can remove a valid short sentence; this is string cleanup, not factuality or bias assurance."
+    ]
+  },
+  "mri": {
+    "scope": "Exact mask_to_polygons function executed with only imread replaced by synthetic matrix; actual OpenCV threshold, morphology, contour routines.",
+    "fixture_type": "64x64 numeric synthetic matrix, NOT clinical data, NOT trained model inference",
+    "source": {
+      "commit": "3c9a0694dde759390c5813b60b60b5911448d716",
+      "repository": "BrainMRISegmentation_YOLO",
+      "file": "src/training/train.py",
+      "symbol": "mask_to_polygons",
+      "lines": [
+        25,
+        58
+      ],
+      "sha256": "e361a3b42de93110dc7412455c2eea00e84bd8dd90c3503b237cf06d2e276315"
+    },
+    "dependencies": {
+      "opencv": "4.12.0",
+      "numpy": "2.3.5"
+    },
+    "fixture": {
+      "shape": [
+        64,
+        64
+      ],
+      "rectangle_rows": [
+        16,
+        48
+      ],
+      "rectangle_columns": [
+        16,
+        48
+      ],
+      "ranges": "Python half-open",
+      "hole_rows": [
+        30,
+        33
+      ],
+      "hole_columns": [
+        30,
+        33
+      ],
+      "noise_pixels_rc_value": [
+        [
+          7,
+          7,
+          255
+        ],
+        [
+          55,
+          54,
+          255
+        ],
+        [
+          55,
+          7,
+          1
+        ]
+      ],
+      "foreground_value": 255,
+      "input_nonzero": 1018
+    },
+    "stages": [
+      {
+        "operation": "threshold",
+        "nonzero_pixels": 1017
+      },
+      {
+        "operation": "close",
+        "nonzero_pixels": 1026
+      },
+      {
+        "operation": "open",
+        "nonzero_pixels": 1024
+      }
+    ],
+    "original_parameters": {
+      "threshold": 1,
+      "binary_comparison": "pixel > 1",
+      "morphology_kernel": [
+        5,
+        5
+      ],
+      "contour_retrieval": "RETR_EXTERNAL",
+      "contour_approximation": "CHAIN_APPROX_SIMPLE",
+      "minimum_contour_area_fraction": 0.001
+    },
+    "output_yolo_label": "0 0.250000 0.250000 0.250000 0.734375 0.734375 0.734375 0.734375 0.250000",
+    "normalized_polygon_xy": [
+      [
+        0.25,
+        0.25
+      ],
+      [
+        0.25,
+        0.734375
+      ],
+      [
+        0.734375,
+        0.734375
+      ],
+      [
+        0.734375,
+        0.25
+      ]
+    ],
+    "assertions": {
+      "one_polygon_four_vertices": true,
+      "coordinates_normalized": true,
+      "hole_filled_noise_removed": true
+    },
+    "limitations": [
+      "No MRI images, masks, trained weights, or original result plots committed in pinned repo.",
+      "No real inference performed, no medical performance claim.",
+      "Numeric synthetic test illustrates preprocessing only."
+    ],
+    "numeric_stage_matrices_rle": {
+      "raw": {
+        "shape": [
+          64,
+          64
+        ],
+        "default_value": 0,
+        "coordinate_order": "row,column",
+        "run_format": "start_column,exclusive_end_column,value",
+        "rows": [
+          {
+            "row": 0,
+            "runs": []
+          },
+          {
+            "row": 1,
+            "runs": []
+          },
+          {
+            "row": 2,
+            "runs": []
+          },
+          {
+            "row": 3,
+            "runs": []
+          },
+          {
+            "row": 4,
+            "runs": []
+          },
+          {
+            "row": 5,
+            "runs": []
+          },
+          {
+            "row": 6,
+            "runs": []
+          },
+          {
+            "row": 7,
+            "runs": [
+              [
+                7,
+                8,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 8,
+            "runs": []
+          },
+          {
+            "row": 9,
+            "runs": []
+          },
+          {
+            "row": 10,
+            "runs": []
+          },
+          {
+            "row": 11,
+            "runs": []
+          },
+          {
+            "row": 12,
+            "runs": []
+          },
+          {
+            "row": 13,
+            "runs": []
+          },
+          {
+            "row": 14,
+            "runs": []
+          },
+          {
+            "row": 15,
+            "runs": []
+          },
+          {
+            "row": 16,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 17,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 18,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 19,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 20,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 21,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 22,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 23,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 24,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 25,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 26,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 27,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 28,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 29,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 30,
+            "runs": [
+              [
+                16,
+                30,
+                255
+              ],
+              [
+                33,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 31,
+            "runs": [
+              [
+                16,
+                30,
+                255
+              ],
+              [
+                33,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 32,
+            "runs": [
+              [
+                16,
+                30,
+                255
+              ],
+              [
+                33,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 33,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 34,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 35,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 36,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 37,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 38,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 39,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 40,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 41,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 42,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 43,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 44,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 45,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 46,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 47,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 48,
+            "runs": []
+          },
+          {
+            "row": 49,
+            "runs": []
+          },
+          {
+            "row": 50,
+            "runs": []
+          },
+          {
+            "row": 51,
+            "runs": []
+          },
+          {
+            "row": 52,
+            "runs": []
+          },
+          {
+            "row": 53,
+            "runs": []
+          },
+          {
+            "row": 54,
+            "runs": []
+          },
+          {
+            "row": 55,
+            "runs": [
+              [
+                7,
+                8,
+                1
+              ],
+              [
+                54,
+                55,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 56,
+            "runs": []
+          },
+          {
+            "row": 57,
+            "runs": []
+          },
+          {
+            "row": 58,
+            "runs": []
+          },
+          {
+            "row": 59,
+            "runs": []
+          },
+          {
+            "row": 60,
+            "runs": []
+          },
+          {
+            "row": 61,
+            "runs": []
+          },
+          {
+            "row": 62,
+            "runs": []
+          },
+          {
+            "row": 63,
+            "runs": []
+          }
+        ]
+      },
+      "threshold": {
+        "shape": [
+          64,
+          64
+        ],
+        "default_value": 0,
+        "coordinate_order": "row,column",
+        "run_format": "start_column,exclusive_end_column,value",
+        "rows": [
+          {
+            "row": 0,
+            "runs": []
+          },
+          {
+            "row": 1,
+            "runs": []
+          },
+          {
+            "row": 2,
+            "runs": []
+          },
+          {
+            "row": 3,
+            "runs": []
+          },
+          {
+            "row": 4,
+            "runs": []
+          },
+          {
+            "row": 5,
+            "runs": []
+          },
+          {
+            "row": 6,
+            "runs": []
+          },
+          {
+            "row": 7,
+            "runs": [
+              [
+                7,
+                8,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 8,
+            "runs": []
+          },
+          {
+            "row": 9,
+            "runs": []
+          },
+          {
+            "row": 10,
+            "runs": []
+          },
+          {
+            "row": 11,
+            "runs": []
+          },
+          {
+            "row": 12,
+            "runs": []
+          },
+          {
+            "row": 13,
+            "runs": []
+          },
+          {
+            "row": 14,
+            "runs": []
+          },
+          {
+            "row": 15,
+            "runs": []
+          },
+          {
+            "row": 16,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 17,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 18,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 19,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 20,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 21,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 22,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 23,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 24,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 25,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 26,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 27,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 28,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 29,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 30,
+            "runs": [
+              [
+                16,
+                30,
+                255
+              ],
+              [
+                33,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 31,
+            "runs": [
+              [
+                16,
+                30,
+                255
+              ],
+              [
+                33,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 32,
+            "runs": [
+              [
+                16,
+                30,
+                255
+              ],
+              [
+                33,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 33,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 34,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 35,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 36,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 37,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 38,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 39,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 40,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 41,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 42,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 43,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 44,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 45,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 46,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 47,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 48,
+            "runs": []
+          },
+          {
+            "row": 49,
+            "runs": []
+          },
+          {
+            "row": 50,
+            "runs": []
+          },
+          {
+            "row": 51,
+            "runs": []
+          },
+          {
+            "row": 52,
+            "runs": []
+          },
+          {
+            "row": 53,
+            "runs": []
+          },
+          {
+            "row": 54,
+            "runs": []
+          },
+          {
+            "row": 55,
+            "runs": [
+              [
+                54,
+                55,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 56,
+            "runs": []
+          },
+          {
+            "row": 57,
+            "runs": []
+          },
+          {
+            "row": 58,
+            "runs": []
+          },
+          {
+            "row": 59,
+            "runs": []
+          },
+          {
+            "row": 60,
+            "runs": []
+          },
+          {
+            "row": 61,
+            "runs": []
+          },
+          {
+            "row": 62,
+            "runs": []
+          },
+          {
+            "row": 63,
+            "runs": []
+          }
+        ]
+      },
+      "close": {
+        "shape": [
+          64,
+          64
+        ],
+        "default_value": 0,
+        "coordinate_order": "row,column",
+        "run_format": "start_column,exclusive_end_column,value",
+        "rows": [
+          {
+            "row": 0,
+            "runs": []
+          },
+          {
+            "row": 1,
+            "runs": []
+          },
+          {
+            "row": 2,
+            "runs": []
+          },
+          {
+            "row": 3,
+            "runs": []
+          },
+          {
+            "row": 4,
+            "runs": []
+          },
+          {
+            "row": 5,
+            "runs": []
+          },
+          {
+            "row": 6,
+            "runs": []
+          },
+          {
+            "row": 7,
+            "runs": [
+              [
+                7,
+                8,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 8,
+            "runs": []
+          },
+          {
+            "row": 9,
+            "runs": []
+          },
+          {
+            "row": 10,
+            "runs": []
+          },
+          {
+            "row": 11,
+            "runs": []
+          },
+          {
+            "row": 12,
+            "runs": []
+          },
+          {
+            "row": 13,
+            "runs": []
+          },
+          {
+            "row": 14,
+            "runs": []
+          },
+          {
+            "row": 15,
+            "runs": []
+          },
+          {
+            "row": 16,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 17,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 18,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 19,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 20,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 21,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 22,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 23,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 24,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 25,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 26,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 27,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 28,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 29,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 30,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 31,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 32,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 33,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 34,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 35,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 36,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 37,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 38,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 39,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 40,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 41,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 42,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 43,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 44,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 45,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 46,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 47,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 48,
+            "runs": []
+          },
+          {
+            "row": 49,
+            "runs": []
+          },
+          {
+            "row": 50,
+            "runs": []
+          },
+          {
+            "row": 51,
+            "runs": []
+          },
+          {
+            "row": 52,
+            "runs": []
+          },
+          {
+            "row": 53,
+            "runs": []
+          },
+          {
+            "row": 54,
+            "runs": []
+          },
+          {
+            "row": 55,
+            "runs": [
+              [
+                54,
+                55,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 56,
+            "runs": []
+          },
+          {
+            "row": 57,
+            "runs": []
+          },
+          {
+            "row": 58,
+            "runs": []
+          },
+          {
+            "row": 59,
+            "runs": []
+          },
+          {
+            "row": 60,
+            "runs": []
+          },
+          {
+            "row": 61,
+            "runs": []
+          },
+          {
+            "row": 62,
+            "runs": []
+          },
+          {
+            "row": 63,
+            "runs": []
+          }
+        ]
+      },
+      "open": {
+        "shape": [
+          64,
+          64
+        ],
+        "default_value": 0,
+        "coordinate_order": "row,column",
+        "run_format": "start_column,exclusive_end_column,value",
+        "rows": [
+          {
+            "row": 0,
+            "runs": []
+          },
+          {
+            "row": 1,
+            "runs": []
+          },
+          {
+            "row": 2,
+            "runs": []
+          },
+          {
+            "row": 3,
+            "runs": []
+          },
+          {
+            "row": 4,
+            "runs": []
+          },
+          {
+            "row": 5,
+            "runs": []
+          },
+          {
+            "row": 6,
+            "runs": []
+          },
+          {
+            "row": 7,
+            "runs": []
+          },
+          {
+            "row": 8,
+            "runs": []
+          },
+          {
+            "row": 9,
+            "runs": []
+          },
+          {
+            "row": 10,
+            "runs": []
+          },
+          {
+            "row": 11,
+            "runs": []
+          },
+          {
+            "row": 12,
+            "runs": []
+          },
+          {
+            "row": 13,
+            "runs": []
+          },
+          {
+            "row": 14,
+            "runs": []
+          },
+          {
+            "row": 15,
+            "runs": []
+          },
+          {
+            "row": 16,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 17,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 18,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 19,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 20,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 21,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 22,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 23,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 24,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 25,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 26,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 27,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 28,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 29,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 30,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 31,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 32,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 33,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 34,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 35,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 36,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 37,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 38,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 39,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 40,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 41,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 42,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 43,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 44,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 45,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 46,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 47,
+            "runs": [
+              [
+                16,
+                48,
+                255
+              ]
+            ]
+          },
+          {
+            "row": 48,
+            "runs": []
+          },
+          {
+            "row": 49,
+            "runs": []
+          },
+          {
+            "row": 50,
+            "runs": []
+          },
+          {
+            "row": 51,
+            "runs": []
+          },
+          {
+            "row": 52,
+            "runs": []
+          },
+          {
+            "row": 53,
+            "runs": []
+          },
+          {
+            "row": 54,
+            "runs": []
+          },
+          {
+            "row": 55,
+            "runs": []
+          },
+          {
+            "row": 56,
+            "runs": []
+          },
+          {
+            "row": 57,
+            "runs": []
+          },
+          {
+            "row": 58,
+            "runs": []
+          },
+          {
+            "row": 59,
+            "runs": []
+          },
+          {
+            "row": 60,
+            "runs": []
+          },
+          {
+            "row": 61,
+            "runs": []
+          },
+          {
+            "row": 62,
+            "runs": []
+          },
+          {
+            "row": 63,
+            "runs": []
+          }
+        ]
+      }
+    }
+  },
+  "privacy": "No credential-like files read or used. No original article text reproduced."
+}

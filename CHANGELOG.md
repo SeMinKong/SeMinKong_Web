@@ -14,6 +14,7 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Updated the linked static portfolio to the reviewed 20-page landscape edition with larger project screens, Korean functional diagrams, numbered explanations, and project-specific awards. Kept the Home/Resume download URL and synchronized its 6.1 MB metadata.
 - Synchronized the HTML, DOCX, PDF, and PNG Resume award records with the supplied certificates, including the 2026 SSAFY Common Project Excellence Award.
 - Matched the Home greeting to the `프로젝트` action's display typeface and removed the separate `즐겁습니다.` color and weight emphasis.
 - Restored the original one-page Resume preview together with its PDF and DOCX actions after the owner explicitly approved republishing the original files.

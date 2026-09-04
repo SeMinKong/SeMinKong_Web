@@ -1006,3 +1006,55 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 390×844 `?motion=reduced`는 처음부터 12개 완성 획, drawable 속성 잔여 0, flat depth와 overflow 없음이며 화면을 육안 확인했다. Warning/error console log는 0이다.
 - [x] `npm.cmd run verify`: tests 27개, source routes 11개·stylesheets 12개, production modules 766개, deployment entries 23개 통과. 새 runtime dependency와 공개 asset 변경은 없다.
 - [ ] 실제 터치 하드웨어, OS reduced-motion 전환, 실제 BFCache 저장 여부는 별도 검증하지 않았다. 해당 lifecycle 이벤트는 자동 테스트로 검사했다. IAB의 일부 viewport 변경 직후 reload/CDP 연결이 timeout되어 새 탭과 분리된 viewport 설정으로 고정 폭 검수를 마쳤으며 연속 resize는 완료로 주장하지 않는다.
+
+## 2026-09-04 Dense landscape portfolio revision verification
+
+- [x] A4 가로 18쪽, 회전 0°, CropBox=MediaBox, 책갈피 18개를 검사했다. 소개와 About의 첫 두 쪽에는 프로젝트명·프로젝트 수상·프로젝트 연계 강점이 없다. THING에 SSAFY 공통 프로젝트 우수상, Briefit에 나머지 세 상을 배치했다.
+- [x] 전체 18쪽과 내용 보강 후 변경 페이지의 렌더를 직접 확인했다. 별도 검토자가 전체 추출 본문과 주요 9쪽을 교차 검토했다. 마지막 AQIS 출처 링크 추가 후 9쪽도 다시 렌더링해 확인했다. 본문·이미지의 겹침, 잘림과 한글 깨짐을 발견하지 않았다.
+- [x] `scripts/portfolio/verify_portfolio.py`에서 텍스트 및 링크의 페이지 경계, 6개 내부 이동·59개 외부 링크, 4개 공개 상장 이미지 링크, layout rectangle overlap 0개를 확인했다. PDF에 첨부·JavaScript·자동실행·입력 폼·비공개 Drive 링크가 없다. 최소 글자는 출처/푸터 7.3pt이고 본문은 10.4pt다.
+- [x] 최종 파일은 10,100,328 bytes, SHA-256 `45D1EEB6E828639A7FAD4E336CB002B794D0F7E1A3BA91D39D5A447CED7E21DC`다. 편집 출력·public·production build 사본이 일치하고 웹 계약 테스트에 고정했다. 로컬 preview의 PDF 응답은 HTTP 200, MIME `application/pdf`, Content-Length `10100328`이다.
+- [x] 실제 브라우저의 Resume 390×844, 768×1024, 1280×900에서 horizontal overflow는 0이다. 다운로드와 새 탭 버튼은 높이 44px이며 390px에서는 세로로 배치된다. 메타데이터 줄바꿈과 전체 버튼 영역을 육안 확인했다.
+- [x] 키보드 Tab으로 새 탭 링크에 이동하고 2px focus outline을 확인했다. href·download filename·target이 올바르다. 1280px 기본 full/interactive, 768px·390px 기본 lite/static, 390px `?motion=reduced`의 reduced/flat과 보이는 링크를 확인했다. warning/error 로그는 비어 있다.
+- [x] `npm.cmd run verify`가 tests 27개, source routes 11개·stylesheets 12개, production modules 766개와 deployment entries 23개를 통과했다. 새 runtime dependency, motion/CSS 변경과 원본 Resume PDF·DOCX·PNG 변경은 없다.
+- [x] Drive의 기존 `SeMinKong-Portfolio.pdf` 파일 ID를 유지해 최종 PDF로 갱신했다. metadata 재조회에서 10,100,328 bytes, `application/pdf`, 기존 Portfolio parent, 소유자 한 명·shared=false를 확인했다. 원본 상장과 공유 권한은 변경하지 않았다.
+- [ ] 이번 턴은 로컬 구현 및 기존 Drive 파일 갱신 범위다. Commit·push·공개 웹 배포는 수행하지 않았다. QR의 실제 카메라 스캔, OS 메일 앱 실행, IAB PDF 새 탭 뷰어 UI와 모든 외부 링크의 일괄 HTTP 응답은 검사하지 않았다. Home은 변경하지 않았으므로 이번 반응형 시각 검수 범위는 Resume다.
+
+## 2026-09-04 Source/reproduction visual revision verification
+
+- [x] 20쪽 A4 가로 PDF의 최종 렌더 전체를 직접 확인했다. 도식 화살표, 사진 EXIF 방향, 한글, 페이지 번호, 링크 구역, 합성 마스크 패널, 사진 압축 후 선명도에 잘림·겹침을 발견하지 않았다. THING·웹·ML 담당 독립 검토자의 원본/코드 대조 의견을 반영했다.
+- [x] `verify_portfolio.py`: 20쪽·책갈피 20개, 외부 링크 64개·내부 링크 6개, 레이아웃 겹침 0개, 페이지 경계 정상. 최소 글자 7.3pt. 소개·About에 프로젝트/수상 연계 없음, THING 1개·Briefit 3개 수상, mock/합성 입력/추론 미재현 표시를 검사했다. PDF 첨부·JavaScript·자동실행·폼·비공개 Drive 링크 없음.
+- [x] 최종 SHA-256 `51557C78507C235EB04C9C3E91576B35DDE3797A5C0F6F65C521644EE1ADF0AC`, 9,996,780 bytes. 최종 렌더 이후 작업용 자산 메타데이터를 제거해도 PDF가 같은 해시로 재현된다. output/public/dist 세 파일의 바이트·해시 일치를 독립 검사했다. 로컬 PDF 응답 HTTP 200, application/pdf, Content-Length 9996780.
+- [x] 원본 THING 구성도·Prompt 설계도는 원본 해시와 일치. 작업용 THING 사진 2개는 원본과 디코딩 픽셀이 일치하며 EXIF orientation만 남기고 GPS/XMP를 제거했다. 원본은 ignored clone에 보존한다. AQIS PNG도 EXIF/text/XMP가 없고 정제 호출 내 전후 픽셀 일치 assertion이 통과했다. 정제 전 별도 사본이 없어 AQIS 픽셀의 독립 사후 비교는 미완료로 구분한다.
+- [x] Alkkagi 실제 두 브라우저 플레이와 서버/물리 검사, AQIS 차단된 mock HTTP/WS와 상태 조회, Prompt 빈 키 초기 화면을 확인했다. THING offline 5개 통과, AQIS 원본 테스트 26개 통과/2개 좌표 기대값 실패를 기록했다. Alkkagi upstream production TS 오류 3개는 수정하지 않았으며 dev 실행과 혼동하지 않는다.
+- [x] Briefit 원본 후처리 함수 합성 4사례와 20건 16/2/2 동일 분할, MRI 원본 변환 함수 합성 마스크 1018/1017/1026/1024 픽셀과 한 polygon을 기록했다. 재현 JSON은 작업용 자료이며 public/dist에 들어가지 않는다. 모델 학습·추론, 외부 LLM·뉴스 API, 실물 장치와 민감키 사용 없음.
+- [x] 최종 production Resume 390×844·768×1024·1280×900에서 수평 overflow 0, 두 action 높이 44px, 새 판수/용량/버튼을 육안 확인했다. 390px은 버튼 세로, 768px 이상은 가로 배치. 키보드 Tab으로 새 탭 링크에 포커스 이동하며 2px outline 유지. 390/768 기본 lite/static, 1280 기본 full/interactive, 390 reduced/flat과 링크 가시성을 확인했다. warning/error console 로그 0.
+- [x] `npm.cmd run verify`: 테스트 27개, 소스 경로 11개·스타일 경계 12개, production 모듈 766개·배포 entry 23개 통과. `git diff --check` 통과. 런타임 의존성·CSS·모션·원본 Resume·상장 파일을 변경하지 않았다.
+- [x] 기존 Drive 파일 ID/Portfolio parent를 유지하여 9,996,780 bytes의 application/pdf로 갱신했다. 재조회에서 소유자 1명·shared=false 유지 확인. 기존 링크와 원본 상장, 공유 권한을 변경하지 않았다.
+- [ ] Git commit/push 및 공개 배포는 하지 않았다. 모델 전체 추론·실장비·동시접속 부하/FPS·OS reduced-motion 변경·실물 터치·QR 카메라 스캔·메일 앱 실행·PDF 뷰어 상호작용·모든 외부 링크 HTTP는 검증 범위 밖이다. 모든 임시 재현 서버를 종료하고 브라우저 viewport를 복원했다. 사용자 `tmp/pdfs/skhynix-jd/` 파일은 보존했다.
+
+## 2026-09-04 README video still revision verification
+
+- [x] 사용자 허용에 따라 THING·AQIS·MRI·Alkkagi 동영상에서 장면을 추출했다. 선정한 네 장의 원본 비율·프레임 시간·출처·크롭/보정 없음과 개인정보를 직접 확인했다. 프로젝트별 독립 검토자가 영상 출처와 프레임 선택을 교차 검토했다. 얼굴 일부·개인 경로가 보이는 후보는 제외했다.
+- [x] AQIS·Alkkagi는 README 원격 영상 재다운로드와 로컬 MP4 SHA-256 일치를 확인했다. THING은 기존 웹 변환본임을 구분하고, MRI는 원격 403으로 바이트 동일성이 미검증임을 작업 근거에 남겼다. 원본 시연과 신규 재현을 구분하며 AQIS·Alkkagi 로컬 캡처도 유지했다. MRI의 진단 소견 로딩 상태를 완료 기능으로 주장하지 않았다.
+- [x] 전체 20쪽을 새로 렌더했다. 변경된 7·8·14·17쪽을 직접 확인해 잘림·한글 깨짐·캡션/이미지 겹침이 없음을 확인했고, 나머지 16쪽 PNG는 앞서 시각 검수한 렌더와 바이트 동일함을 확인했다. `verify_portfolio.py`가 20쪽·책갈피20·외부링크64·내부링크6·layout overlap0 및 네 영상 타임스탬프 표시를 통과했다.
+- [x] 최종 8,469,645 bytes, SHA-256 `D1107AA5A76A0B832C62A26753A57C42F268A5A3E2ABB21163BEAF7CB7DC1C70`. output/public/dist 해시 일치, 로컬 PDF HTTP200·application/pdf·Content-Length8469645 확인. 웹 metadata 20쪽·8.5MB와 PDF 계약을 갱신했다.
+- [x] `npm.cmd run verify` 통과: 테스트27, 소스경로11·스타일경계12, production 모듈766·배포entry23. Resume 390×844·768×1024·1280×900 실제 브라우저에서 8.5MB 줄바꿈·44px action·overflow0·키보드 Tab focus2px·기본 lite/static 및 full/interactive를 확인했다. 390px reduced/flat과 가시성도 확인했다. warning/error 로그0. viewport 복원·임시 탭/preview 종료.
+- [x] 기존 Drive PDF를 같은 ID로 교체하고 metadata 재조회에서 8,469,645 bytes·application/pdf·기존 parent·shared=false·owner1 유지 확인. 공유 설정과 상장·원본 Resume·모션 코드는 그대로다.
+- [ ] 공개 웹 배포·Git commit/push는 하지 않았다. 원격 MRI 영상 바이트 일치, THING 정확한 원본 변환 명령, 실제 PDF viewer·QR 카메라·OS 모션설정·실물 터치 등은 재검증하지 않았다. 새 모델 추론/하드웨어 실행은 하지 않았다.
+
+## 2026-09-04 설명 중심 시각자료 개정 검수
+
+- [x] 전체 20쪽을 다시 렌더했다. 4–19쪽은 최종 화면 또는 동일 픽셀의 검토 화면을 직접 확인했고, 1·2·3·20쪽은 이전 검수 렌더와 동일하다. 세 독립 검토자가 THING/AQIS, ML, 웹 프로젝트를 나눠 검토했다. MRI 화살표, THING 기록 위치·스풀 설명, Briefit 기준 요약 표현, Prompt 그룹 경계를 반영한 5·6·12·14·19쪽도 마지막에 다시 확인했다.
+- [x] PDF는 20쪽·책갈피20·외부링크64·내부링크6, 본문/사진 겹침0과 페이지 경계 검사를 통과한다. 사진 위 편집 번호만 의도한 겹침으로 허용한다. 소개·About 분리, THING1/Briefit3 수상, 예시 표기, 후처리 전 평가, 독립 MRI 모델, 임상 검증 미수행 조건과 영상/로컬 출처 라벨 제거를 계약으로 확인했다.
+- [x] 원본 그림·사진·캡처와 실행 근거 JSON 13개가 기존 manifest SHA-256과 일치한다. 원본 파일을 변경하지 않고 PDF에서만 비율 유지 확대/클리핑과 번호·화살표를 적용했다. 클리핑 영역은 내부 출처 문서에 기록했다.
+- [x] 최종 PDF는 6,138,051 bytes, SHA-256 `D8CA46FCB84B5D0C9F08C2F8BCCBA7EB39C2A27D4BDEF639046D7091C4C13046`. 재빌드가 같은 해시이며 output/public/dist 일치. 다운로드 응답 HTTP200·application/pdf·Content-Length6138051과 웹 안내 6.1MB를 확인했다.
+- [x] `npm.cmd run verify` 통과: 테스트27, 소스경로11·스타일경계12, production 모듈766·배포entry23. `git diff --check` 통과. 390×844·768×1024·1280×900 실제 브라우저에서 줄바꿈·44px action·overflow0, 모바일/데스크톱 키보드 포커스, lite/static 및 full/interactive 기본 상태를 확인했다. warning/error 로그0. 임시 탭과 preview를 종료하고 viewport를 복원했다.
+- [x] 기존 비공개 Drive 파일 ID/parent를 유지해 6,138,051 bytes의 application/pdf로 교체하고 metadata 재조회했다. shared=false·owner1, 원본 Resume·상장·웹 모션을 유지한다.
+- [ ] 공개 배포·Git commit/push는 수행하지 않았다. 이번 개정은 시각자료 편집으로, 추가 모델 추론·LLM 호출·실장비 실행과 OS reduced-motion 변경·실물 터치·QR 스캔·PDF viewer 상호작용·전체 외부 링크 HTTP는 재검증하지 않았다. 기존 내부 출처/실행 한계는 유지하며 사용자 `tmp/pdfs/skhynix-jd/` 파일은 보존했다.
+
+## 2026-09-04 사용자 승인 배포 사전 검사
+
+- [x] 사용자가 웹 연결·Drive 업로드·공개 웹 배포를 명시적으로 요청했다. Home/Resume의 상대 다운로드 링크는 기존 GitHub Pages 프로젝트 하위 `portfolio/SeMinKong-Portfolio.pdf`로 해석된다.
+- [x] 최종 20쪽·6,138,051 bytes PDF의 output/public/dist SHA-256이 `D8CA46FCB84B5D0C9F08C2F8BCCBA7EB39C2A27D4BDEF639046D7091C4C13046`로 일치한다. PDF 구조 검사 및 `npm.cmd run verify`를 다시 실행해 테스트27·경로11·스타일12·모듈766·배포entry23 통과했다. 화면/CSS/모션은 직전 검수 상태와 같다.
+- [x] Drive의 기존 파일을 최종 바이트로 재업로드하고 metadata 재조회에서 크기·PDF MIME·기존 parent·shared=false·owner1을 확인했다.
+- [x] 독립 사전 검사에서 배포물에 작업 clone·렌더·metadata가 포함되지 않음을 확인했다. 임시 파일 및 사용자 `tmp/pdfs/skhynix-jd/`는 명시적 staging 대상에서 제외한다. GitHub Pages의 원격 배포 성공과 실제 공개 URL의 파일 동일성은 업로드 후 별도 확인한다.

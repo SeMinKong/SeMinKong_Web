@@ -976,3 +976,12 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 증빙 이미지는 왜곡하거나 자르지 않은 세로 비율로 표시하고 390px, 768px, 1280px에서 viewport 안에 들어와야 한다. 모달 내부만 필요할 때 스크롤하며 배경 페이지는 열려 있는 동안 움직이지 않는다.
 - 공개 증빙은 공세민 본인의 이름, 수상 정보, 발급일과 발급기관을 유지하되 다른 팀원의 이름과 모든 학번은 불투명하게 가린 WebP만 배포한다. 원본 PDF와 편집 중간 파일은 production에 포함하지 않는다.
 - 닫기 버튼, Escape와 백드롭으로 닫을 수 있고, 닫힌 뒤에는 정확히 모달을 연 버튼으로 포커스를 돌려준다. 단일 focus target에서도 Tab이 dialog 밖으로 빠지지 않아야 한다.
+
+## 2026-09-04 — Static portfolio revision
+
+- Use a 20-page A4 landscape editorial composition after the source/reproduction visual revision. The opening two pages introduce the owner and education/current interests without tying the introduction to projects or awards.
+- Start project cases on page 3 with an index, then explain the project, personal role, problem, implementation decision, result and remaining verification. Use compact metadata, two/three columns, actual project media and implementation notes; avoid template-like audit disclaimers or invented metrics.
+- Keep SSAFY Common Project Excellence within THING and the three 2025 awards within Briefit. Link only to the existing privacy-redacted display images.
+- Preserve the website layout, motion and download URL. Update the reviewed PDF and edition metadata only; publication remains subject to the owner's explicit source-control/deployment instruction.
+- Use source photographs and code-checked native vector diagrams. Following the owner's subsequent readability request, redraw unclear source diagrams and prefer a large explanatory frame over redundant small screenshots. Keep video/local-run provenance in internal source notes, not separate viewer-facing labels. Describe what the screen shows and connect numbered markers to plain-language captions. Synthetic explanatory inputs still carry an `예시` label; do not invent model output or imply unmeasured performance.
+- Display-region clipping may enlarge the relevant part of a source image while preserving its scale ratio and original bytes. Record the region internally; do not retouch UI content or synthesize result screens. Full source files remain available in working evidence.
