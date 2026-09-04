@@ -109,7 +109,7 @@ class Book:
         self.c.line(x, H - top, x + width, H - top)
 
     def label(self, text, x, top):
-        self.text(text, x, top, 8.7, 'Helvetica-Bold', ACCENT)
+        self.text(text, x, top, 10, 'KoreanBold', MUTED)
 
     def link(self, title, url, x, top, size=9, internal=False, limit=BOTTOM):
         self.text(title, x, top, size, 'Korean', ACCENT, limit=limit)
@@ -223,16 +223,13 @@ class Book:
         self.c.drawPath(head, fill=1, stroke=0)
         self.c.restoreState()
 
-    def start(self, section, title, subtitle='', key=None):
+    def start(self, title, subtitle='', key=None):
         self.n += 1
         self.c.setFillColor(PAPER)
         self.c.rect(0, 0, W, H, fill=1, stroke=0)
-        self.text('SE MIN KONG', M, 20, 8.5, 'Helvetica-Bold')
-        self.text(section.upper(), 523, 20, 8.5, 'Helvetica', MUTED)
-        self.rule(40)
         self.para(title, M, 57, CW, 25, 31, bold=True)
         if subtitle:
-            self.para(subtitle, M, 97, CW, 9.5, 15, MUTED)
+            self.para(subtitle, M, 97, CW, 10.4, 16, MUTED)
         key = key or f'p{self.n}'
         self.c.bookmarkPage(key)
         self.c.addOutlineEntry(title, key, level=0, closed=False)
@@ -242,13 +239,12 @@ class Book:
         self.rule(548)
         x = M
         for title, url in sources or []:
-            x += self.link(title, url, x, 557, 8.5, limit=H - 20) + 23
-            if x > W - M + 23:
+            x += self.link(title, url, x, 557, 9, limit=H - 20) + 23
+            if x > W - M - 10:
                 raise ValueError(f'Page {self.n}: source row overflow')
-        self.text('PORTFOLIO / ' + VERSION + (' / SAMPLE' if self.sample else ''),
-                  M, 579, 7.3, 'Helvetica', MUTED, limit=H)
-        self.text(f'{self.n:02d} / {"03" if self.sample else str(PAGE_COUNT)}',
-                  W - M - 38, 577, 9, 'Helvetica-Bold', limit=H)
+        page_number = str(self.n)
+        self.text(page_number, W - M - pdfmetrics.stringWidth(page_number, 'Helvetica', 9),
+                  557, 9, 'Helvetica', MUTED, limit=H)
         self.c.showPage()
 
     def section(self, title, body, x, top, width, size=10.4, keep_words=False):
@@ -272,7 +268,7 @@ class Book:
         for i, (title, detail) in enumerate(items):
             xx = x + i * (col + gap)
             self.rule(top, xx, col, ACCENT, 1.15)
-            self.label(f'{i + 1:02d}', xx, top + 11)
+            self.label(str(i + 1), xx, top + 11)
             self.para(title, xx, top + 31, col, 11.4, 17, bold=True)
             self.para(detail.replace('\n', '<br/>'), xx, top + 61, col, 9.5, 15, MUTED)
             if i + 1 < len(items):
@@ -294,29 +290,28 @@ class Book:
 
 
 def introduction(b):
-    b.start('Introduction', '공세민', key='introduction')
+    b.start('공세민', key='introduction')
     b.text('Se Min Kong', M, 113, 57, 'Helvetica-Bold')
-    b.text('SOFTWARE DEVELOPER', M, 185, 11, 'Helvetica-Bold', ACCENT)
-    b.para('안녕하세요.<br/>새로운 것을 배우고<br/>직접 만드는 일이 즐겁습니다.', M, 239, 475, 24, 37, bold=True)
-    b.para('숭실대학교에서 소프트웨어를 전공했고,<br/>현재 SSAFY Robotics Track에서 배움을 이어가고 있습니다.<br/>소프트웨어를 바탕으로 AI와 로보틱스에 관심을 넓혀가고 있습니다.',
-           M, 373, 475, 11.2, 20)
+    b.para('소프트웨어 개발자', M, 190, 475, 18, 26, bold=True)
+    b.para('안녕하세요. 공세민입니다.', M, 260, 475, 14, 23)
+    b.para('숭실대학교에서 소프트웨어를 전공했습니다.<br/>현재 SSAFY Robotics Track에서 공부하고 있습니다.<br/><br/>Computer Vision과 로봇 제어, Physical AI에 관심이 있습니다.<br/>Python과 C++를 사용합니다.',
+           M, 303, 475, 12.5, 23, keep_words=True)
     b.rule(476, M, 475)
     b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', M, 494, 10)
     b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', M, 515, 9.5)
     b.image('@se-min-kong-profile.png', 548, 113, 255, 240)
     b.rule(367, 548, 255, ACCENT, 1.5)
-    b.meta([('NOW', 'SSAFY Robotics Track<br/>2026.01 - 현재')], 548, 383, 121)
-    b.meta([('EDUCATION', '숭실대학교<br/>소프트웨어학부<br/>2020.03 - 2026.02')], 682, 383, 121)
-    b.meta([('INTERESTS', 'Computer Vision<br/>Robotics / Physical AI')], 548, 471, 121)
-    b.meta([('BASED IN', 'Seoul,<br/>Republic of Korea')], 682, 471, 121)
+    b.meta([('현재', 'SSAFY Robotics Track<br/>2026.01 - 현재')], 548, 383, 121)
+    b.meta([('학력', '숭실대학교<br/>소프트웨어학부<br/>2020.03 - 2026.02')], 682, 383, 121)
+    b.meta([('관심 분야', 'Computer Vision<br/>Robotics / Physical AI')], 548, 471, 121)
+    b.meta([('거주지', 'Seoul,<br/>Republic of Korea')], 682, 471, 121)
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/')])
 
 
 def about(b):
-    b.start('About', '배우고 있는 것, 관심을 두고 있는 것',
-            'Software Developer / Seoul', key='about')
+    b.start('학력과 관심 분야', key='about')
     left, right = M, 330
-    b.label('EDUCATION & EXPERIENCE', left, 139)
+    b.label('학력·교육', left, 139)
     b.section('숭실대학교 소프트웨어학부',
               '2020.03 - 2026.02<br/>소프트웨어 공학사<br/>인공지능·빅데이터 전공<br/>빅데이터 융합전공', left, 164, 250)
     b.rule(294, left, 250)
@@ -325,7 +320,7 @@ def about(b):
     b.rule(433, left, 250)
     b.para('<b>병역</b> 2021.05 - 2022.11<br/>육군 전술 통신 장비 운용·정비 / 병장 전역<br/><br/><b>어학</b> OPIc IH / 2027.10까지 유효',
            left, 447, 250, 9.5, 16)
-    b.label('CURRENT INTERESTS', right, 139)
+    b.label('관심 분야', right, 139)
     y = 164
     y = b.section('Computer Vision & Robotics',
                   '지금은 Computer Vision과 ROS 2, 로봇 제어를 중심으로 배우고 있습니다. 소프트웨어가 실제 장치와 만나는 로보틱스와 Physical AI에 관심이 있습니다.',
@@ -338,27 +333,23 @@ def about(b):
     y = b.section('Local AI & Software',
               'Ollama와 llama.cpp 등 로컬 AI 도구를 살펴보고 있습니다. Python과 C++를 사용하며, Ubuntu, Git, Docker와 같은 개발 환경도 함께 다룹니다.',
               right, y + 12, 473)
-    b.rule(y - 5, right, 473)
-    b.para('학습 중인 분야와 실제 구현 경험은 구분해 소개합니다.<br/>특정 분야에 한정하지 않고 소프트웨어 개발 직무 전반을 열어 두고 있습니다.',
-           right, y + 12, 473, 9.7, 16, MUTED, keep_words=True)
     b.end([('About', WEB + 'about/'), ('학력·교육·어학', WEB + 'resume/')])
 
 
 def project_index(b):
-    b.start('Projects / Index', '프로젝트',
-            '역할과 구현 범위를 먼저 보고, 관심 있는 사례를 자세히 읽을 수 있도록 정리했습니다.', key='projects')
+    b.start('프로젝트', key='projects')
     rows = [
-        ('04 - 07', 'THING', '6인 팀 / 구동·기구 통합', 'DYNAMIXEL · U2D2 · 제어 스크립트', 'thing'),
-        ('08 - 10', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', 'FastAPI · WebSocket · ROS 2 · Dobot', 'aqis'),
+        ('4 - 7', 'THING', '6인 팀 / 구동·기구 통합', 'DYNAMIXEL · U2D2 · 제어 스크립트', 'thing'),
+        ('8 - 10', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', 'FastAPI · WebSocket · ROS 2 · Dobot', 'aqis'),
         ('11 - 13', 'Briefit', '6인 팀 / AI 담당', 'Python · 비동기 수집 · KoBART', 'briefit'),
         ('14 - 16', 'Brain MRI', '개인 / 전처리·학습·통합 추론', 'YOLO11 · PyTorch · OpenCV', 'mri'),
         ('17 - 18', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', 'TypeScript · React · Socket.IO', 'alkkagi'),
         ('19', 'Prompt Generator', '개인 / 대화 서버·상태 관리', 'FastAPI · WebSocket · LangChain', 'prompt'),
     ]
-    b.label('PAGE', M, 139)
-    b.label('PROJECT', 112, 139)
-    b.label('ROLE', 337, 139)
-    b.label('IMPLEMENTATION', 559, 139)
+    b.label('쪽', M, 139)
+    b.label('프로젝트', 112, 139)
+    b.label('역할', 337, 139)
+    b.label('주요 기술', 559, 139)
     for i, (pages, name, role, stack, key) in enumerate(rows):
         y = 162 + i * 47
         b.rule(y)
@@ -368,24 +359,20 @@ def project_index(b):
         b.para(stack, 559, y + 14, 244, 9.1, 15, MUTED)
         if not b.sample:
             b.c.linkRect('', key, (M, H - y - 45, W - M, H - y), relative=0, thickness=0)
-    b.note('프로젝트마다 같은 질문에 답합니다.',
-           '무엇을 만들었는가 / 내가 맡은 범위는 어디인가 / 어떤 문제가 있었는가 / 왜 이 방식을 선택했는가 / 무엇을 확인했고 무엇이 남았는가',
-           463)
     b.end([('프로젝트 전체 보기', WEB + 'work/'), ('공개 코드', 'https://github.com/SeMinKong')])
 
 
 def thing_overview(b):
-    b.start('01 / THING / Overview', 'THING - 손동작을 따라 움직이는 텐던 로봇 핸드',
-            '카메라 입력부터 실제 손가락 구동, 관제와 기록까지 연결한 팀 프로젝트', key='thing')
-    b.meta([('PERIOD', '2026.07 - 08'), ('TEAM / ROLE', '6인 팀<br/>모터 제어·기구 통합'),
-            ('MY TOOLS', 'DYNAMIXEL / U2D2<br/>모터 점검·제어 스크립트'),
-            ('TEAM STACK', 'ROS 2 / MediaPipe<br/>OpenCV / Jetson<br/>Raspberry Pi 5')])
+    b.start('THING · 텐던 로봇 핸드', key='thing')
+    b.meta([('기간', '2026.07 - 08'), ('팀·역할', '6인 팀<br/>모터 제어·기구 통합'),
+            ('사용 도구', 'DYNAMIXEL / U2D2<br/>모터 점검·제어 스크립트'),
+            ('팀 기술', 'ROS 2 / MediaPipe<br/>OpenCV / Jetson<br/>Raspberry Pi 5')])
     b.image('thing/integrated-robot-hand-portrait.webp', 233, 137, 215, 286)
     b.para('모터 고정부·스풀·텐던을 연결한 통합 조립 상태', 233, 433, 215, 8.8, 14, MUTED)
-    b.section('무엇을 만들었나',
+    b.section('프로젝트 개요',
               '카메라에서 읽은 손동작을 7개 논리축 명령으로 바꾸고 텐던 로봇손을 구동합니다. 엄지는 3축, 나머지 네 손가락은 각각 1축으로 다룹니다. 팀 시스템은 21개 손 landmark를 인식하고, 명령 중재와 guard를 거쳐 모터를 구동하도록 구성했습니다.',
               476, 137, 327)
-    b.section('내가 맡은 범위',
+    b.section('담당 작업',
               '모터 통신 환경과 U2D2 연결, 7개 모터 점검·제어 스크립트, 전완부 아크릴 고정부 제작과 스풀·텐던 통합을 맡았습니다. 통신 확인, 개별 제어, 실제 조립을 각각 점검할 수 있도록 작업을 나눴습니다.',
               476, 265, 327)
     b.section('협업 범위',
@@ -397,8 +384,8 @@ def thing_overview(b):
 
 
 def thing_architecture(b):
-    b.start('01 / THING / Architecture', '사람의 손동작이 로봇의 손가락을 움직이기까지',
-            '인식 → 명령 선택·안전 확인 → 모터 구동 / 아래 붉은 구동부가 직접 맡은 범위입니다.', key='thing-architecture')
+    b.start('THING · 시스템 구조',
+            '담당 영역: 붉은색으로 표시한 모터 제어와 손가락 구동부', key='thing-architecture')
     nodes = [
         ('손동작 촬영', '카메라\n사람의 손을 입력', 132),
         ('손동작 인식', 'Jetson / MediaPipe\n21개 손 관절점 추출', 146),
@@ -428,7 +415,7 @@ def thing_architecture(b):
 
 
 def thing_control(b):
-    b.start('01 / THING / Implementation', '모터의 회전을 손가락을 당기는 힘으로 바꾸기',
+    b.start('THING · 모터 제어와 기구 조립',
             '모터가 스풀을 돌리면 텐던이 감기고, 연결된 손가락이 굽혀집니다.', key='thing-control')
     b.image('@thing-spool-tendon.jpg', M, 137, 305, 229,
             caption='구동부 내부: 모터·스풀·텐던 연결', caption_size=9.1, caption_leading=14)
@@ -443,20 +430,19 @@ def thing_control(b):
     b.legend(3, '텐던', '주황색 줄이 손가락을 당깁니다.', 559, 253, 244)
     b.legend(4, '아크릴 고정부', '모터의 위치를 고정하는 틀입니다.', 559, 311, 244)
     b.rule(411)
-    b.section('통신부터 분리해 점검', '7개 모터 ID 응답을 확인한 뒤 개별 모터를<br/>움직였습니다. 연결 문제와 조립 문제를 구분해<br/>확인하는 순서를 만들었습니다.', M, 429, 241, 9.8, keep_words=True)
-    b.section('필요한 동작을 명령으로', '단일·키보드 제어, 원위치 복귀와 정지<br/>스크립트를 작성했습니다. 조립 중 필요한 동작을<br/>나눠 실행하도록 했습니다.', 300, 429, 241, 9.8, keep_words=True)
-    b.section('조립 상태까지 확인', '아크릴 고정부를 제작하고 스풀·텐던을<br/>통합했습니다. 감김 방향, 장력과 프레임 간섭을<br/>실제 조립 상태에서 점검했습니다.', 562, 429, 241, 9.8, keep_words=True)
+    b.section('모터 통신 점검', '7개 모터 ID 응답을 확인한 뒤 개별 모터를<br/>움직였습니다. 연결 문제와 조립 문제를 구분해<br/>확인하는 순서를 만들었습니다.', M, 429, 241, 9.8, keep_words=True)
+    b.section('제어 스크립트', '단일·키보드 제어, 원위치 복귀와 정지<br/>스크립트를 작성했습니다. 조립 중 필요한 동작을<br/>나눠 실행하도록 했습니다.', 300, 429, 241, 9.8, keep_words=True)
+    b.section('구동부 조립', '아크릴 고정부를 제작하고 스풀·텐던을<br/>통합했습니다. 감김 방향, 장력과 프레임 간섭을<br/>실제 조립 상태에서 점검했습니다.', 562, 429, 241, 9.8, keep_words=True)
     b.end([('7/28 제어 기록', THING + 'blob/main/docs/daily-reports/2026-07-28/2026-07-28-공세민.md'),
            ('7/29 제작 기록', THING + 'blob/main/docs/daily-reports/2026-07-29/2026-07-29-공세민.md'),
            ('7/31 조립 기록', THING + 'blob/main/docs/daily-reports/2026-07-31/2026-07-31-공세민.md')])
 
 
 def thing_result(b):
-    b.start('01 / THING / Result', '시연 결과와 수상',
-            '손동작 인식과 모터·텐던 구동을 연결해 손가락 동작과 물체 파지를 구현했습니다.', key='thing-result')
+    b.start('THING · 시연과 수상', key='thing-result')
     b.image('@thing-video-can-0010.jpg', M, 137, 302, 340, region=(.08,.25,.95,.94),
             caption='엄지와 손가락으로 원통형 물체를 감싸 쥐는 동작')
-    b.label('PROJECT AWARD', 380, 137)
+    b.label('수상', 380, 137)
     b.award(0, 380, 162, 423)
     b.rule(251, 380, 423)
     b.section('시연한 동작', '사람의 손동작 모방, 손가락 순차 동작, 캔과 부드러운 물체 파지를 시연했습니다. 모터 명령이 기구를 거쳐 실제 손가락 동작으로 이어지는 것을 확인했습니다.', 380, 269, 423)
@@ -467,7 +453,7 @@ def thing_result(b):
 
 
 def aqis_overview(b):
-    b.start('02 / AQIS / Overview', 'AQIS - 검출 결과를 공정의 다음 동작으로',
+    b.start('AQIS · 스마트 팩토리',
             '검사, 컨베이어, Dobot과 RealOps 관제를 연결한 스마트 팩토리 시스템', key='aqis')
     b.image('@aqis-video-inspection-0010.jpg', M, 137, 508, 286)
     b.badge(1, 246, 247, (219,275))
@@ -484,12 +470,12 @@ def aqis_overview(b):
            ('원본 장비 시연', 'https://github.com/user-attachments/assets/70017e3e-594d-43b2-bcef-59bb4a8f0c32')])
 
 def aqis_mock(b):
-    b.start('02 / AQIS / Architecture', '공통 서버 아래에 장비별 연결을 분리하기',
+    b.start('AQIS · 서버와 장비 연결',
             '화면은 공통 API만 사용하고, 서버가 검출 정보와 장비별 명령을 연결합니다.', key='aqis-mock')
-    b.node('작업자가 보는 관제 화면', 'React / RealOps<br/>명령 전송·작업 상태 확인', M, 139, 241, 66)
-    b.node('공정을 확인하는 시뮬레이션', 'RoboDK<br/>동일한 REST API 사용', 300, 139, 241, 66)
-    b.node('문장으로 내리는 명령', 'LLM 연결은 선택 사항<br/>미연결 시 키워드 규칙 사용', 562, 139, 241, 66)
-    b.node('공통 서버 · 명령과 상태를 한곳에서 관리', 'FastAPI / REST / WebSocket · 공정 상태·검출 이벤트 관리 · 장비 연결 경로 선택', M, 251, CW, 66, True)
+    b.node('관제 화면', 'React / RealOps<br/>명령 전송·작업 상태 확인', M, 139, 241, 66)
+    b.node('공정 시뮬레이션', 'RoboDK<br/>동일한 REST API 사용', 300, 139, 241, 66)
+    b.node('자연어 명령', 'LLM 연결은 선택 사항<br/>미연결 시 키워드 규칙 사용', 562, 139, 241, 66)
+    b.node('공통 서버', 'FastAPI / REST / WebSocket · 공정 상태·검출 이벤트 관리 · 장비 연결 경로 선택', M, 251, CW, 66, True)
     b.arrow([(112,205),(112,251)])
     b.arrow([(215,251),(215,205)], MUTED)
     b.arrow([(420,205),(420,251)])
@@ -513,9 +499,9 @@ def aqis_mock(b):
            ('좌표 테스트', AQIS + 'blob/main/server/tests/test_real_monitoring.py')])
 
 def aqis_coordinates(b):
-    b.start('02 / AQIS / Troubleshooting', '검출한 순간의 좌표로 바로 집지 않기',
+    b.start('AQIS · 집기 좌표 갱신',
             '문제: 컨베이어 위 대상이 이동하면, 로봇이 도착할 때 최초 검출 좌표는 이미 오래된 정보입니다.', key='aqis-coordinates')
-    b.para('같은 물체라도 시간이 지나면 위치가 달라집니다.', M, 135, CW, 11.3, 18, bold=True)
+    b.para('검출 시점에 따른 위치 변화', M, 135, CW, 11.3, 18, bold=True)
     b.c.setFillColor(TINT)
     b.c.roundRect(M, H-238, 490, 58, 5, fill=1, stroke=0)
     for x, color in [(137, MUTED),(391,ACCENT)]:
@@ -525,9 +511,9 @@ def aqis_coordinates(b):
     b.text('컨베이어 이동',225,187,9.4,color=MUTED)
     b.para('처음 검출한 위치 X1',60,249,205,10.1,16,MUTED)
     b.para('대기 후 다시 검출한 위치 X2',306,249,223,10.1,16,ACCENT,True)
-    b.section('로봇에는 갱신한 좌표 전달', 'X1을 계속 사용하지 않고, 정지 요청 후 준비 시점이 지난 검출에서 집기 좌표를 다시 계산합니다.', 570, 176, 233, 10)
+    b.section('좌표 재계산', 'X1을 계속 사용하지 않고, 정지 요청 후 준비 시점이 지난 검출에서 집기 좌표를 다시 계산합니다.', 570, 176, 233, 10)
     b.flow([('검출 수신', '작업 조건 확인'), ('정지 요청·대기', '기본 대기 0.6초'), ('새 검출 선택', '시각·깊이 정보 확인'), ('집기·분류·재개', '성공·실패에 따라 분기')], 296)
-    b.section('같은 대상을 두 번 집지 않기', '객체 ID, 검출 영역 겹침과 중심 거리로 중복 여부를 판단합니다. 작업 중에는 집기 명령의 중복 실행도 막습니다.', M, 413, 359, 9.7)
+    b.section('중복 집기 방지', '객체 ID, 검출 영역 겹침과 중심 거리로 중복 여부를 판단합니다. 작업 중에는 집기 명령의 중복 실행도 막습니다.', M, 413, 359, 9.7)
     b.section('현재 구현의 한계', '설정 시간 대기이며 센서로 정지를 확인하지는 않습니다. 시간 정보 없는 검출과 깊이 없는 고정 좌표 경로도 있어, 실물 적용 전 정지·좌표 검증을 보강해야 합니다.', 439, 413, 364, 9.7)
     b.end([('이벤트 처리', AQIS + 'blob/main/server/app/main.py'), ('관련 테스트', AQIS + 'blob/main/server/tests/test_real_monitoring.py'),
            ('Dobot 시퀀스', AQIS + 'blob/main/server/app/services/dobot_pick_place.py'),
@@ -536,10 +522,9 @@ def aqis_coordinates(b):
 
 
 def briefit_overview(b):
-    b.start('03 / Briefit / Overview', 'Briefit - 여러 기사를 짧은 요약으로 읽는 뉴스 서비스',
-            '기사 수집, 요약 모델 학습과 생성된 문장의 후처리 등 AI·데이터 작업을 담당했습니다.', key='briefit')
-    b.meta([('PERIOD', '2025.05 - 09'), ('TEAM / ROLE', '6인 팀 / AI 2인<br/>본인: AI 담당'),
-            ('MY STACK', 'Python / aiohttp<br/>BeautifulSoup<br/>Transformers / KoBART')])
+    b.start('Briefit · 뉴스 요약 서비스', key='briefit')
+    b.meta([('기간', '2025.05 - 09'), ('팀·역할', '6인 팀 / AI 2인<br/>본인: AI 담당'),
+            ('사용 기술', 'Python / aiohttp<br/>BeautifulSoup<br/>Transformers / KoBART')])
     b.image('briefit/cover.webp', 233, 137, 570, 246,
             caption='뉴스를 모아 읽고 요약을 확인하는 서비스 / 제품 UI는 팀의 협업 결과입니다.',
             caption_size=9.2, caption_leading=14)
@@ -552,21 +537,20 @@ def briefit_overview(b):
 
 
 def briefit_data(b):
-    b.start('03 / Briefit / Data architecture', '요약을 배우는 과정과 사용하는 과정을 분리하기',
-            '직접 구현한 2025년 KoBART 작업 / 학습·기사 요약·평가를 별도 스크립트로 구성했습니다.', key='briefit-data')
-    for top, number, heading, nodes in [
-        (137,1,'요약 방법 학습', [('기사·기준 요약','학습 / 검증 / 평가로 분할'),('KoBART 학습','기사 → 요약을 학습'),('학습한 모델 저장','요약과 평가에서 불러오기')]),
-        (260,2,'새로운 기사 요약', [('기사 수집·정리','URL 중복 제거·본문 추출'),('요약문 생성','저장한 KoBART 모델 사용'),('반복 문장 정리','후처리 후 요약문 출력')]),
-        (383,3,'요약 결과 평가', [('별도 평가 데이터','기사와 기준 요약 입력'),('후처리 전 요약 생성','후처리 미적용'),('기준 요약과 비교','ROUGE-1 / 2 / L 평가')]),
+    b.start('Briefit · 기사 수집과 요약 모델',
+            '2025년 KoBART 구현 · 학습, 기사 요약, 평가 스크립트 분리', key='briefit-data')
+    for top, heading, nodes in [
+        (137,'모델 학습', [('기사·기준 요약','학습 / 검증 / 평가로 분할'),('KoBART 학습','기사 → 요약을 학습'),('학습한 모델 저장','요약과 평가에서 불러오기')]),
+        (260,'기사 요약', [('기사 수집·정리','URL 중복 제거·본문 추출'),('요약문 생성','저장한 KoBART 모델 사용'),('반복 문장 정리','후처리 후 요약문 출력')]),
+        (383,'요약 평가', [('별도 평가 데이터','기사와 기준 요약 입력'),('후처리 전 요약 생성','후처리 미적용'),('기준 요약과 비교','ROUGE-1 / 2 / L 평가')]),
     ]:
-        b.badge(number,M,top)
-        b.para(heading,M+28,top,505,12,18,bold=True)
+        b.para(heading,M,top,533,12,18,bold=True)
         for i,(title,detail) in enumerate(nodes):
             x=M+i*186
             b.node(title,detail,x,top+33,155,64,i==1)
             if i<2:
                 b.arrow([(x+155,top+65),(x+186,top+65)])
-    b.label('DATA / 3,524 RECORDS',604,139)
+    b.label('데이터 3,524건',604,139)
     b.para('데이터를 약 8 : 1 : 1로 분리',604,166,199,11,17,bold=True)
     x=604
     for value,color in [(2819,ACCENT),(352,MUTED),(353,LINE)]:
@@ -583,7 +567,7 @@ def briefit_data(b):
     b.end([('수집 변경', BRIEF_COLLECT), ('학습·평가 구현', BRIEF_TRAIN), ('분할·후처리 근거', BRIEF_POST)])
 
 def briefit_result(b):
-    b.start('03 / Briefit / Result & Awards', '요약 끝에 반복되는 문장을 정리했습니다',
+    b.start('Briefit · 요약문 후처리와 수상',
             '문자열 규칙을 적용하는 후처리 / 아래 문장은 동작 설명을 위한 예시입니다.', key='briefit-result')
     b.para('정리 전 · 예시', M, 137, 359, 12, 18, bold=True)
     b.rule(162, M, 359)
@@ -594,8 +578,8 @@ def briefit_result(b):
     b.rule(315, M, 359)
     b.para('지역 도서관은 다음 주부터 주말 운영 시간을 늘린다. 이용자는 토요일 저녁에도 자료를 열람할 수 있다.', M, 330, 359, 12.2, 21)
     b.para('<b>구현 선택</b> 모델을 다시 학습하지 않고 생성 뒤 반복 표현을 정리하는 단계를 추가했습니다. 의미나 사실을 검증하는 기능은 아닙니다.', M, 410, 359, 9.7, 15.5)
-    b.note('경계 조건도 함께 확인', '«비가 온다.»처럼 유효하지만 짧은 문장도 빈 문자열이 됩니다. 반복 표현 감소와 함께 정보 누락을 비교해야 합니다.', 463, M, 359)
-    b.label('PROJECT AWARDS / BRIEFIT', 439, 139)
+    b.note('짧은 문장의 손실', '«비가 온다.»처럼 유효하지만 짧은 문장도 빈 문자열이 됩니다. 반복 표현 감소와 함께 정보 누락을 비교해야 합니다.', 463, M, 359)
+    b.label('Briefit 수상', 439, 139)
     for index, top in [(1,170),(2,287),(3,405)]:
         b.award(index,439,top,364)
         if index<3:
@@ -605,14 +589,14 @@ def briefit_result(b):
            ('웹 수상 전시', WEB+'resume/#awards-title')])
 
 def mri_overview(b):
-    b.start('04 / Brain MRI / Overview', 'Brain MRI - 종양의 종류와 위치를 함께 보기',
+    b.start('Brain MRI · 종양 분류와 영역 분할',
             '개인 프로젝트 / 2026.02 - 04 / Python · PyTorch · YOLO11 · OpenCV', key='mri')
     b.image('@mri-video-overlay-007733.png', M, 137, 452, 353,
             region=(476/1320,195/1032,1217/1320,815/1032),
             caption='① 왼쪽: 예측 영역 표시　② 오른쪽: 원본<br/>분류 결과는 수막종(Meningioma)으로 표시됩니다.')
     b.badge(1,82,230,(197,250))
     b.badge(2,411,230,(320,285))
-    b.section('무엇을 구현했나', '분류와 분할을 각각 수행하는 두 YOLO11 모델의 학습·추론 경로를 구성했습니다. 분류 범주와 분할 위치를 하나의 이미지에서 함께 볼 수 있게 했습니다.',
+    b.section('구현 범위', '분류와 분할을 각각 수행하는 두 YOLO11 모델의 학습·추론 경로를 구성했습니다. 분류 범주와 분할 위치를 하나의 이미지에서 함께 볼 수 있게 했습니다.',
               520, 137, 283)
     b.section('입력 형식의 문제', '원본 마스크를 그대로 쓰는 대신 분할 학습에 필요한 polygon label로 바꿔야 했습니다. 이진화, 형태학 처리, 외곽선 추출과 좌표 정규화를 연결했습니다.',
               520, 255, 283)
@@ -626,14 +610,14 @@ def mri_overview(b):
 
 
 def mri_method(b):
-    b.start('04 / Brain MRI / Architecture', '두 모델을 독립적으로 학습하고 추론 결과를 합치기',
+    b.start('Brain MRI · 분류·분할 모델 구조',
             '같은 MRI를 두 모델에 각각 입력합니다. 한 모델의 결과를 다른 모델의 입력으로 사용하지 않습니다.', key='mri-method')
     b.node('MRI 이미지', '같은 이미지 입력', M, 211, 153, 66)
-    b.node('어떤 종류인가요?', 'YOLO11 분류 모델<br/>이미지의 범주 예측', 241, 143, 210, 72, True)
-    b.node('어디에 있나요?', 'YOLO11 분할 모델<br/>위치·영역 예측', 241, 266, 210, 72, True)
+    b.node('종양 분류', 'YOLO11 분류 모델<br/>이미지의 범주 예측', 241, 143, 210, 72, True)
+    b.node('영역 분할', 'YOLO11 분할 모델<br/>위치·영역 예측', 241, 266, 210, 72, True)
     b.node('종류', '분류명·점수', 500, 149, 134, 60)
     b.node('영역', '영역·경계 표시', 500, 272, 134, 60)
-    b.node('한 화면에서 비교', '분류 이름과<br/>영역을 원본<br/>이미지 위에 표시', 677, 203, 126, 85)
+    b.node('결과 통합', '분류 이름과<br/>영역을 원본<br/>이미지 위에 표시', 677, 203, 126, 85)
     b.arrow([(191,244),(215,244),(215,179),(241,179)])
     b.arrow([(215,244),(215,302),(241,302)])
     b.arrow([(451,179),(500,179)])
@@ -648,7 +632,7 @@ def mri_method(b):
            ('BRISC 원문', 'https://arxiv.org/html/2506.14318v5')])
 
 def mri_preprocessing(b):
-    b.start('04 / Brain MRI / Preprocessing', '영역을 채운 이미지에서 학습용 테두리 좌표로',
+    b.start('Brain MRI · 마스크 전처리',
             '변환 과정 설명용 예시 / 검정은 영역, 흰색은 배경이며 실제 MRI나 모델 예측은 아닙니다.', key='mri-preprocessing')
     evidence = json.loads((FIGURES/'reproduction-evidence.json').read_text(encoding='utf-8'))['mri']
     stages = evidence['numeric_stage_matrices_rle']
@@ -691,20 +675,20 @@ def mri_preprocessing(b):
         if i < 3:
             b.arrow([(x+166,253),(x+187,253)],MUTED)
     b.rule(406)
-    b.section('왜 변환했나', '원본은 영역 내부를 채운 마스크 이미지입니다. YOLO 분할 학습에는 테두리 좌표가 필요하므로, 작은 구멍과 잡음을 정리한 뒤 외곽선을 추출했습니다.', M, 427, 359, 10)
-    b.section('학습 파일에는 무엇을 저장하나', '종류를 나타내는 클래스 번호와 테두리의 꼭짓점을 저장합니다. 좌표를 이미지 너비·높이로 나눠 0~1 범위로 바꾸면 이미지 크기와 무관하게 위치를 표현할 수 있습니다.', 439, 427, 364, 10)
+    b.section('마스크 변환', '원본은 영역 내부를 채운 마스크 이미지입니다. YOLO 분할 학습에는 테두리 좌표가 필요하므로, 작은 구멍과 잡음을 정리한 뒤 외곽선을 추출했습니다.', M, 427, 359, 10)
+    b.section('학습 라벨 형식', '종류를 나타내는 클래스 번호와 테두리의 꼭짓점을 저장합니다. 좌표를 이미지 너비·높이로 나눠 0~1 범위로 바꾸면 이미지 크기와 무관하게 위치를 표현할 수 있습니다.', 439, 427, 364, 10)
     b.end([('원본 변환 함수', MRI_REF+'src/training/train.py'), ('프로젝트 설명', WEB+'work/brain-tumor-mri/')])
 
 
 def alkkagi_overview(b):
-    b.start('05 / Alkkagi.io / Overview', 'Alkkagi.io - 돌을 튕겨 상대를 밀어내는 실시간 알까기',
+    b.start('Alkkagi.io · 실시간 알까기',
             '개인 프로젝트 / 2026.03 - 04 / React · TypeScript · Node.js · Socket.IO', key='alkkagi')
     b.image('@alkkagi-video-aim-0007.png', M, 137, 364, 362)
     b.badge(1,169,279,(194,312))
     b.badge(2,225,345,(238,320))
     b.badge(3,292,291,(269,326))
     b.para('드래그로 조준하고 놓으면 내 돌이 발사됩니다.', M, 511, 364, 9.5, 15, MUTED)
-    b.para('상대 돌을 보드 밖으로 밀어내면<br/>점수가 오르고 내 돌이 성장합니다.', 439, 137, 364, 14, 22, bold=True)
+    b.para('상대 돌을 보드 밖으로 밀어내면<br/>점수가 오르고 내 돌이 성장합니다.', 439, 137, 364, 11, 18)
     b.legend(1,'내 돌','드래그를 시작하는 플레이어의 돌입니다.',439,201,364)
     b.legend(2,'방향·세기','노란 조준선으로 발사 방향과 세기를 표시합니다.',439,264,364)
     b.legend(3,'상대 돌','충돌로 상대를 보드 밖으로 밀어내는 것이 목표입니다.',439,327,364)
@@ -715,24 +699,24 @@ def alkkagi_overview(b):
 
 
 def alkkagi_physics(b):
-    b.start('05 / Alkkagi.io / Architecture & Physics', '서버에서 물리를 확정하고, 브라우저는 결과를 표시',
+    b.start('Alkkagi.io · 서버 물리와 상태 동기화',
             '내 입력 → 서버의 충돌 계산 → 두 플레이어에게 같은 결과 / 상태는 서버 메모리에 유지합니다.', key='alkkagi-physics')
     b.node('내 브라우저의 입력', '드래그 방향·세기 전송<br/>React / Socket.IO', M, 177, 190, 75)
-    b.node('서버에서 결과 확정', '입력 검증 → 이동·충돌·마찰 계산<br/>모든 돌의 위치와 점수 갱신<br/>60Hz 목표 루프 / 10 substeps', 285, 177, 246, 86, True)
+    b.node('서버 물리 연산', '입력 검증 → 이동·충돌·마찰 계산<br/>모든 돌의 위치와 점수 갱신<br/>60Hz 목표 루프 / 10 substeps', 285, 177, 246, 86, True)
     b.node('내 브라우저', '같은 상태로 돌의 위치 표시', 588, 143, 215, 63)
     b.node('상대 브라우저', '같은 상태로 돌의 위치 표시', 588, 235, 215, 63)
     b.arrow([(228,214),(285,214)])
     b.arrow([(531,219),(558,219),(558,175),(588,175)])
     b.arrow([(558,219),(558,267),(588,267)])
-    b.para('서버가 유일한 기준 상태를 가지므로, 브라우저마다 다른 충돌 결과를 확정하지 않습니다.',M,322,CW,10.4,17,bold=True)
-    b.section('01. 겹친 돌을 분리', '충돌 순간 두 돌이 겹치면 겹친 거리의 절반씩 위치를 옮깁니다. 이미 서로 멀어지는 중이면 추가 충돌 힘을 적용하지 않습니다.', M, 366, 241, 10)
-    b.section('02. 질량에 따른 충돌', '반발계수, 상대 속도와 질량으로 속도를 갱신합니다. 점수가 오를수록 반경과 질량이 함께 증가해 돌의 충돌 특성이 달라집니다.', 300, 366, 241, 10)
-    b.section('03. 입력 제한과 마찰', '입력 간격을 500ms로 제한하고 발사 속도에 상한을 둡니다. 이동하는 동안 마찰을 적용해 속도가 점차 줄어들도록 했습니다.', 562, 366, 241, 10)
+    b.para('서버가 유일한 기준 상태를 가지므로, 브라우저마다 다른 충돌 결과를 확정하지 않습니다.',M,322,CW,10.4,17)
+    b.section('겹침 보정', '충돌 순간 두 돌이 겹치면 겹친 거리의 절반씩 위치를 옮깁니다. 이미 서로 멀어지는 중이면 추가 충돌 힘을 적용하지 않습니다.', M, 366, 241, 10)
+    b.section('질량에 따른 충돌', '반발계수, 상대 속도와 질량으로 속도를 갱신합니다. 점수가 오를수록 반경과 질량이 함께 증가해 돌의 충돌 특성이 달라집니다.', 300, 366, 241, 10)
+    b.section('입력 제한과 마찰', '입력 간격을 500ms로 제한하고 발사 속도에 상한을 둡니다. 이동하는 동안 마찰을 적용해 속도가 점차 줄어들도록 했습니다.', 562, 366, 241, 10)
     b.para('<b>후속 검증</b> 동시접속자가 늘어날 때의 지연과 지속 프레임률은 별도로 측정해야 합니다. 서버 재시작 시 상태 복구도 추가 과제입니다.',M,495,CW,9.6,16,MUTED)
     b.end([('서버·입력 제한', ALK_REF+'server/index.ts'), ('물리 구현', ALK_REF+'server/physics.ts')])
 
 def prompt_generator(b):
-    b.start('06 / Prompt Generator / Architecture', '설계 질문을 여섯 영역의 대화로 나누기',
+    b.start('Prompt Generator · 영역별 설계 대화',
             '개인 프로젝트 / 2026 / FastAPI · WebSocket · LangChain · Solar Pro', key='prompt')
     b.node('아이디어 입력', '만들고 싶은 프로젝트 설명', M, 187, 161, 65)
     b.para('여섯 영역의 질문·답변',244,137,280,12,18,bold=True)
@@ -748,7 +732,7 @@ def prompt_generator(b):
     b.arrow([(199,220),(219,220),(219,237),(237,237)])
     b.arrow([(532,237),(551,237),(551,193),(574,193)])
     b.arrow([(688,229),(688,276)])
-    b.para('하나의 긴 대화에 섞이지 않도록, 영역마다 대화 이력·진행 상태·결과를 따로 유지합니다.', M, 361, CW, 10.6, 17, bold=True)
+    b.para('영역마다 대화 이력·진행 상태·결과를 따로 유지합니다.', M, 361, CW, 10.6, 17)
     b.rule(401)
     b.section('문제와 선택', '화면, 데이터와 배포 질문이 뒤섞이면 필요한 조건을 빠뜨리기 쉽습니다. 기본 여섯 영역의 첫 질문을 병렬로 시작하고, 각 영역의 답변을 따로 누적하게 했습니다.',M,420,241,9.8)
     b.section('구현 구조', '브라우저는 WebSocket으로 질문과 상태를 받습니다. FastAPI는 세션별 대화를 관리하고 LangChain·Solar Pro 호출로 질문과 프롬프트를 생성하도록 구성했습니다.',300,420,241,9.8)
@@ -757,18 +741,15 @@ def prompt_generator(b):
            ('원본 설계도', PROMPT_REF+'README.md')])
 
 def contact(b):
-    b.start('Contact / Links', '공세민', 'Software Developer', key='contact')
+    b.start('연락처', key='contact')
     b.text('Se Min Kong', M, 139, 42, 'Helvetica-Bold')
-    b.para('읽어주셔서 감사합니다.<br/>더 자세한 영상과 코드는 웹에서 확인하실 수 있습니다.',
-           M, 213, 463, 18, 29, bold=True)
+    b.para('공세민 · 소프트웨어 개발자', M, 213, 463, 15, 24)
     b.rule(303, M, 463)
-    b.label('EMAIL', M, 325)
+    b.label('이메일', M, 325)
     b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', M, 349, 14)
-    b.label('GITHUB', M, 397)
+    b.label('GitHub', M, 397)
     b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', M, 421, 12)
-    b.para('2026.09.04 기준으로 작성했습니다.<br/>본인 작업과 팀 결과, 구현된 기능과 후속 검증을 구분해 정리했습니다.',
-           M, 482, 463, 9.5, 16, MUTED)
-    b.label('WEB PORTFOLIO', 547, 139)
+    b.label('웹 포트폴리오', 547, 139)
     widget = qr.QrCodeWidget(WEB)
     x0, y0, x1, y1 = widget.getBounds()
     side = 146
@@ -779,8 +760,6 @@ def contact(b):
     b.rule(380, 547, 256)
     b.link('프로젝트 영상과 상세 설명', WEB + 'work/', 547, 400, 10)
     b.link('이력서와 상장 전시', WEB + 'resume/', 547, 432, 10)
-    b.para('PDF에서 웹으로, 웹에서 PDF로<br/>같은 공개 주소를 통해 이어집니다.<br/>상장은 개인정보를 가린 전시용 이미지로 연결합니다.',
-           547, 474, 256, 9.5, 16, MUTED)
     b.end()
 
 

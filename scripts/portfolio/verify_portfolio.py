@@ -27,7 +27,8 @@ def verify(path):
             assert not page.rotation
             text = page.extract_text() or ''
             assert len(text) > 100 and '\ufffd' not in text
-            assert f'{index:02d} / 20' in text, f'Page number missing: {index}'
+            footer = page.crop((page.width - 60, 550, page.width - 37, 578)).extract_text()
+            assert footer.strip() == str(index), f'Page number missing: {index}'
             texts.append(text)
             for char in page.chars:
                 assert char['x0'] >= 0 and char['x1'] <= page.width + .1
@@ -60,13 +61,18 @@ def verify(path):
     assert '예시' in texts[15] and '실제 MRI나 모델 예측은 아닙니다' in texts[15]
     assert all(label in texts[7] for label in ['검사 대상과 검출 영역', '판정과 작업 대기열', '로봇·컨베이어 동작'])
     assert '후처리 미적용' in texts[11]
-    assert '어떤 종류인가요?' in texts[14] and '어디에 있나요?' in texts[14]
+    assert '종양 분류' in texts[14] and '영역 분할' in texts[14]
     assert all(label in texts[16] for label in ['내 돌', '방향·세기', '상대 돌'])
     assert '모터와 함께 돌며 텐던을 감습니다' in texts[5]
     assert '원통형 물체를 감싸 쥐는' in texts[6]
     assert '임상 진단을 위한 검증은 수행하지' in texts[13] and '않았습니다' in texts[13]
     assert all(label in texts[18] for label in ['아이디어 입력', '화면·사용성', '시스템 구조', '데이터 저장', '통합 설계 문서'])
     all_text = '\n'.join(texts)
+    assert not any(value in all_text for value in [
+        'PORTFOLIO /', 'SE MIN KONG', 'PROJECT AWARD', 'TEAM / ROLE',
+        '프로젝트마다 같은 질문', 'PDF에서 웹으로, 웹에서 PDF로',
+        '01. 겹친 돌', '02. 질량', '03. 입력', '기준으로 작성했습니다',
+    ])
     assert not re.search(r'010[- ]?\d{4}[- ]?\d{4}|\d{6}-[1-4]\d{6}', all_text)
     assert not any(value in all_text for value in ['99.4%', '92.7%', 'STYLE SAMPLE', 'PLACEHOLDER', 'TODO'])
     assert not any(value in all_text for value in ['LOCAL / MOCK', '로컬 재현', '이번 재현', '원본 시연 00:', '영상 00:', 'LangGraph'])
@@ -77,6 +83,10 @@ def verify(path):
     layout = json.loads(path.with_suffix('.layout.json').read_text(encoding='utf-8'))
     overlaps = []
     elements = layout['elements']
+    assert all(e['top'] >= 57 for e in elements), 'Decorative running header returned'
+    assert not any(e['kind'] == 'annotation' for e in elements if e['page'] == 12)
+    for entry in layout['pages']:
+        assert not re.search(r'(하기|까지|했습니다|합니다|인가요\?)$', entry['title'])
     for i, a in enumerate(elements):
         for b in elements[i+1:]:
             if a['page'] != b['page']:

@@ -1079,3 +1079,13 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 실제 production Resume 390·768·1280px에서 overflow0, 모바일 한 열·태블릿/데스크톱 가로 action 배치와 44px 높이, 다운로드 URL/filename/새 탭 속성을 확인했다. Tab 포커스 2px, lite/static 및 full/interactive, 390px reduced/flat과 링크 가시성이 정상이다. 앱 warning/error는 없고 기존 Chrome 지갑 확장 경고는 구분했다. 검수 탭을 닫고 viewport를 복원했다.
 - [x] Drive의 기존 PDF ID·parent·비공개 권한을 유지해 교체하고 재조회에서 8,836,658 bytes, application/pdf, shared=false·owner1을 확인했다. 사용자 임시 파일과 사진 원본을 배포 범위에서 제외한다.
 - [ ] GitHub Pages 성공과 공개 다운로드 동일성은 푸시 후 별도 확인한다. 실물 터치·OS 모션 설정·QR 카메라·메일 앱·외부 링크 전체 HTTP·PDF viewer 조작은 이번 검증 범위 밖이다.
+
+## 2026-09-04 정적 PDF의 제목·장식 정리 검수
+
+- [x] 전체 20쪽 렌더를 직접 확인하고 독립 편집 검토를 받았다. 문장형 제목은 구체적인 명사형으로, 표지 강조 인사말은 평문으로 정리했다. 반복 영문 머리말·Portfolio/날짜 footer·장식 번호·문서 사용법 안내를 제거했고, 소개의 마지막 한 문장을 축약한 최종 표지도 다시 렌더해 확인했다. 나머지 19쪽은 검수 PNG와 바이트 동일하다.
+- [x] 이미지 픽셀 데이터·배치, MRI 숫자 도식 위치와 페이지별 링크 URI는 이전본과 같다. THING 1개/Briefit 3개 수상, Briefit 분할 수치·후처리 전 ROUGE·짧은 문장 손실·예시, MRI 독립 모델·비임상/평가 한계·예시, AQIS 0.6초·정지 센서 미확인, Alkkagi 목표 루프·입력 제한·검증 한계, Prompt 메모리 세션 한계를 독립 대조했다.
+- [x] `verify_portfolio.py`: 20쪽·책갈피20·외부링크64·내부링크6·레이아웃 겹침0·캡션5·문단 끝줄11·중앙 정렬 사진 통과. 장식 머리말/푸터 금지와 단순 쪽수, Briefit의 세 독립 경로에 장식 번호가 없음을 회귀 검사한다. 최소 글자 8.5pt이며 유용한 사실 라벨과 출처 크기는 각각 10pt·9pt다.
+- [x] 최종 PDF는 8,818,944 bytes, SHA-256 `0054AF88D0E14587999A9447D9A951178E48AC35CB83197AD9B1643341B54D0F`. 재생성·output/public/dist 해시가 일치하고 다운로드 계약을 갱신했다. 웹 안내의 반올림 용량 8.8MB·20쪽·날짜는 동일하다.
+- [x] `npm.cmd run verify`: 테스트27·경로11·스타일12·production 모듈766·배포entry23 통과. 실제 production Resume 390·768·1280px에서 overflow0, 44px 링크·모바일 한 열/큰 화면 가로 배치·Tab focus2px·정상 URL/filename/target, lite/static 및 full/interactive와 390px reduced/flat을 확인했다. 콘솔 warning/error0. viewport 복원·검수 탭 종료.
+- [x] Drive는 기존 파일 ID·parent·비공개 설정을 유지해 갱신하고 재조회에서 8,818,944 bytes·application/pdf·shared=false·owner1을 확인했다. 원본 사진·원본 Resume·상장·웹 HTML/CSS/모션과 사용자 tmp는 변경하지 않는다.
+- [ ] GitHub Pages 배포 성공과 공개 PDF 동일성은 푸시 후 별도 확인한다. QR 실물 스캔·OS 모션 설정·실물 터치·메일 앱·전체 외부 링크 HTTP·OS PDF viewer 조작은 이번 검증 범위 밖이다.

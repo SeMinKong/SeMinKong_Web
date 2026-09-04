@@ -992,3 +992,11 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - Keep photo captions aligned to the actual rendered image edge and width, with a 10pt gap. Bring the About closing note into its column rhythm and redistribute MRI overview text blocks without crowding the bottom note.
 - Place the owner's requested original portrait only on the PDF introduction page, without cropping or retouching. Center the 180×240pt portrait horizontally within the 255pt right column, as requested on 2026-09-04, and arrange the existing personal facts beneath it. Keep the standalone portrait in ignored private storage; do not add it to website markup, public assets or the public repository.
 - The explicit PDF-only instruction supersedes the briefly requested Home-photo addition. Home layout, signature and Kinetic behavior remain unchanged. Refresh the existing PDF download and size/hash contracts, then publish under the standing deployment authorization.
+
+## 2026-09-04 — Plain editorial portfolio override
+
+- The owner wants less template-like decoration and fewer sentence-shaped headlines. This overrides copy preservation for PDF titles, labels, introduction emphasis and document-about-itself guidance, not for technical facts or evidence.
+- Use short, specific project/topic titles and ordinary body text for personal introduction and explanatory sentences. Avoid slogan-sized greetings and generic rhetorical headings.
+- Remove the repeated uppercase name/section-path running header, project ordinals, `PORTFOLIO / date` footer and redundant guidance about how the document is organized. Use a single unobtrusive page number beside useful source links.
+- Use readable, neutral Korean labels for factual metadata. Remove decorative section numbering and the numbers on Briefit's three independent processing paths. Preserve image-to-legend markers, actual sequential processing steps, quantitative values, dates of education/work/awards, project index links and citations.
+- Keep the 20-page structure, fonts, centered PDF-only portrait, project media, diagram geometry, personal/team ownership, synthetic-example labels and implementation/evaluation limitations. Deploy the reviewed download and synchronize the existing private Drive PDF without changing website layout or sharing.
