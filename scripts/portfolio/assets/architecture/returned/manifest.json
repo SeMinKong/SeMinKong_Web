@@ -1,0 +1,11 @@
+{
+  "date": "2026-09-07",
+  "source": "Owner-returned Photoroom PNGs; copied without pixel or metadata edits",
+  "figures": [
+    {"file": "aqis.png", "page": 9, "size": [1419, 1031], "sha256": "d78add967865b8e432c0045f5f7d88d75f8db08d323f2f5b41d9400393bbd655"},
+    {"file": "briefit.png", "page": 12, "size": [2400, 1749], "sha256": "cc35184aa30f82feaed629e73d2bb53b6b453da2c85645f379997c95942f156a"},
+    {"file": "mri.png", "page": 15, "size": [2400, 1815], "sha256": "41280aa01f8b61c5b4dc959232b5468037a283baef0598d0a95d94e6908427f4"},
+    {"file": "alkkagi.png", "page": 18, "size": [2400, 1755], "sha256": "a8ef96dfcc1f4177fa2c8365c9f62188762b2a6db00b9229f0e81478bc104af9"},
+    {"file": "prompt.png", "page": 19, "size": [2400, 1821], "sha256": "eced4cea1093cf762ab34e410141cb92094389b4c49543849e0f54964839fa18"}
+  ]
+}

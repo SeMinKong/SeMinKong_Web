@@ -7,6 +7,7 @@ import re
 from urllib.parse import urlsplit
 
 import pdfplumber
+from PIL import Image
 from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -64,20 +65,20 @@ def verify(path):
     assert '예시' in texts[12] and '밝혔다. 밝혔다.' in texts[12]
     assert '예시' in texts[15] and '실제 MRI나 모델 예측은 아닙니다' in texts[15]
     assert all(label in texts[7] for label in ['검사 대상과 검출 영역', '판정과 작업 대기열', '로봇·컨베이어 동작'])
-    assert '후처리 미적용' in texts[11]
-    assert '종양 분류' in texts[14] and '영역 분할' in texts[14]
+    # Architecture labels now live in the owner's unchanged PNGs. Check the
+    # searchable explanation here and verify all image/alpha bytes below.
     for page, labels in {
-        12: ['Crawl4AI', 'BeautifulSoup', 'content 필드', 'body 필드', 'KoBART', 'ROUGE'],
-        15: ['LOCAL INFERENCE', 'classifier', 'segmenter', 'OpenCV', 'plot()'],
-        18: ['Socket.IO', 'DOM / SVG', 'IN-MEMORY GAME STATE', '60Hz', '10 substeps'],
-        19: ['FastAPI', 'LangChain', 'Solar Pro', 'MEMORY SESSION', 'Markdown'],
+        12: ['3,524건', '2,819건', '352건', '353건', 'content', 'body', 'ROUGE', '후처리 전 생성문'],
+        15: ['같은 MRI를 두 모델에 각각', 'polygon label', 'test', 'val', '환자 단위 독립성', '임상 진단 검증'],
+        18: ['서버 메모리', '500ms', '반발계수', '마찰', '지속 프레임률', '서버 재시작'],
+        19: ['FastAPI', 'LangChain', 'Solar Pro', '여섯 영역', '병렬', '연결 종료 시 삭제'],
     }.items():
-        assert all(label in texts[page-1] for label in labels), f'Incomplete architecture on page {page}'
+        normalized = re.sub(r'\s+', ' ', texts[page-1])
+        assert all(label in normalized for label in labels), f'Incomplete explanation on page {page}'
     assert all(label in texts[16] for label in ['내 돌', '방향·세기', '상대 돌'])
     assert '모터와 함께 돌며 텐던을 감습니다' in texts[5]
     assert '원통형 물체를 감싸 쥐는' in texts[6]
     assert '임상 진단을 위한 검증은 수행하지' in texts[13] and '않았습니다' in texts[13]
-    assert all(label in texts[18] for label in ['아이디어 입력', '화면·사용성', '시스템 구조', '데이터 저장', '통합 설계 문서'])
     all_text = '\n'.join(texts)
     assert not any(value in all_text for value in [
         'PORTFOLIO /', 'SE MIN KONG', 'PROJECT AWARD', 'TEAM / ROLE',
@@ -94,6 +95,32 @@ def verify(path):
     layout = json.loads(path.with_suffix('.layout.json').read_text(encoding='utf-8'))
     overlaps = []
     elements = layout['elements']
+    figure_root = ROOT / 'scripts/portfolio/assets/architecture/returned'
+    figures = json.loads((figure_root / 'manifest.json').read_text(encoding='utf-8'))['figures']
+    assert {f['page'] for f in figures} == {9, 12, 15, 18, 19}
+    for figure in figures:
+        source = figure_root / figure['file']
+        assert hashlib.sha256(source.read_bytes()).hexdigest() == figure['sha256']
+        with Image.open(source) as image:
+            assert image.mode == 'RGBA' and list(image.size) == figure['size']
+            assert image.getchannel('A').getextrema() == (0, 255)
+            objects = reader.pages[figure['page']-1]['/Resources']['/XObject']
+            embedded = [obj.get_object() for obj in objects.values()
+                        if obj.get_object().get('/Subtype') == '/Image']
+            assert len(embedded) == 1, f"Unexpected figure count on page {figure['page']}"
+            rgb = embedded[0]
+            assert (rgb['/Width'], rgb['/Height']) == image.size
+            assert rgb['/ColorSpace'] == '/DeviceRGB' and rgb['/BitsPerComponent'] == 8
+            assert rgb.get_data() == image.convert('RGB').tobytes(), f"RGB changed: {source.name}"
+            alpha = rgb['/SMask']
+            assert (alpha['/Width'], alpha['/Height']) == image.size
+            assert alpha['/ColorSpace'] == '/DeviceGray' and alpha['/BitsPerComponent'] == 8
+            assert alpha.get_data() == image.getchannel('A').tobytes(), f"Alpha changed: {source.name}"
+        placements = [e for e in elements if e['page'] == figure['page'] and e['kind'] == 'image']
+        assert len(placements) == 1
+        placed = placements[0]
+        assert placed['text'] == '@architecture/returned/' + source.name
+        assert abs(placed['width'] / placed['height'] - figure['size'][0] / figure['size'][1]) < .0001
     assert all(e['top'] >= 57 for e in elements), 'Decorative running header returned'
     assert not any(e['kind'] == 'annotation' for e in elements if e['page'] == 12)
     for entry in layout['pages']:
@@ -160,6 +187,7 @@ def verify(path):
                 min_font_pt=round(min(sizes), 2), max_font_pt=round(max(sizes), 2),
                 layout_overlaps=len(overlaps), aligned_captions=len(figure_captions),
                 checked_paragraph_tails=len(edited_paragraphs), bytes=path.stat().st_size,
+                exact_rgba_architectures=len(figures),
                 sha256=hashlib.sha256(path.read_bytes()).hexdigest().upper())
 
 

@@ -3,7 +3,7 @@
 Run from the repository root. --sample makes a three-page layout check;
 --publish copies the fully reviewed final bytes to the web download location.
 Source visual content is preserved; sensitive metadata is removed from copies.
-Owner architecture images are preserved; new diagrams are native PDF vectors based on code.
+Owner-returned architecture PNGs retain their original pixels and alpha channels.
 """
 from pathlib import Path
 from io import BytesIO
@@ -13,7 +13,6 @@ import json
 import shutil
 from urllib.parse import quote
 
-from architecture_diagrams import draw_architecture
 from PIL import Image
 from reportlab.pdfgen import canvas
 from reportlab.lib.colors import HexColor
@@ -453,7 +452,7 @@ def aqis_overview(b):
 def aqis_mock(b):
     b.start('AQIS · 서버와 장비 연결',
             '직접 그린 원본 아키텍처 / 시뮬레이션·장비·관제와 LLM 연결', key='aqis-mock')
-    b.image('@aqis-architecture-source.png', M, 129, 543, 395)
+    b.image('@architecture/returned/aqis.png', M, 129, 543, 395)
     b.section('공통 API', 'React 관제와 RoboDK 시뮬레이션은 FastAPI 서버에 연결됩니다. 서버가 검출·상태와 장비 명령을 다루고 WebSocket으로 관제에 전달합니다.', 613, 133, 190, 9.7, keep_words=True)
     b.section('Mock으로 먼저 개발', '가상 장비 응답으로 관제와 API를 먼저 개발한 뒤, 같은 인터페이스 아래 실제 장비 연결을 교체했습니다. 장비 adapter와 집기 시퀀스를 각각 점검합니다.', 613, 278, 190, 9.7, keep_words=True)
     b.section('설계와 구현 범위', '그림은 확장 설계를 포함합니다. TurtleBot은 SLAM·카메라·상태 관제까지 구현했으며 자동 임무는 후속 과제입니다. LLM 미연결 시 키워드 규칙을 사용합니다.', 613, 423, 190, 9.5, keep_words=True)
@@ -503,11 +502,10 @@ def briefit_overview(b):
 def briefit_data(b):
     b.start('Briefit · 기사 수집과 요약 모델',
             '2025년 KoBART 구현 / 수집·학습·추론·평가를 분리한 로컬 Python 파이프라인', key='briefit-data')
-    draw_architecture(b, 'briefit', M, 133)
-    b.rule(431)
-    b.section('학습 데이터 3,524건', '학습 2,819건, 검증 352건, 평가 353건으로 약 8 : 1 : 1 분할했습니다. 평가에는 별도 기사와 기준 요약을 사용합니다.', M, 442, 241, 9.5, keep_words=True)
-    b.section('수집과 요약 입력', 'URL 중복·댓글 URL·짧은 본문을 걸러 로컬 JSON으로 저장합니다. 수집 파일의 content와 추론 입력의 body는 필드 매핑이 필요합니다.', 300, 442, 241, 9.5, keep_words=True)
-    b.section('요약 후처리와 평가', '생성 뒤 반복·짧은 끝문장을 정리합니다. ROUGE 평가는 후처리 전 생성문을 비교하므로 후처리 효과는 별도로 확인해야 합니다.', 562, 442, 241, 9.5, keep_words=True)
+    b.image('@architecture/returned/briefit.png', M, 137, 515, 388)
+    b.section('학습 데이터 3,524건', '학습 2,819건, 검증 352건, 평가 353건으로 약 8 : 1 : 1 분할했습니다. 평가에는 별도 기사와 기준 요약을 사용합니다.', 585, 137, 218, 9.5, keep_words=True)
+    b.section('수집과 요약 입력', 'URL 중복·댓글 URL·짧은 본문을 걸러 로컬 JSON으로 저장합니다. 수집 파일의 content와 추론 입력의 body는 필드 매핑이 필요합니다.', 585, 268, 218, 9.5, keep_words=True)
+    b.section('요약 후처리와 평가', '생성 뒤 반복·짧은 끝문장을 정리합니다. ROUGE 평가는 후처리 전 생성문을 비교하므로 후처리 효과는 별도로 확인해야 합니다.', 585, 399, 218, 9.5, keep_words=True)
     b.end([('수집 변경', BRIEF_COLLECT), ('학습·평가 구현', BRIEF_TRAIN), ('분할·후처리 근거', BRIEF_POST)])
 
 
@@ -557,11 +555,11 @@ def mri_overview(b):
 def mri_method(b):
     b.start('Brain MRI · 분류·분할 모델 구조',
             '같은 MRI를 두 모델에 각각 입력합니다. 한 모델의 결과를 다른 모델의 입력으로 사용하지 않습니다.', key='mri-method')
-    draw_architecture(b, 'mri', M, 130)
-    b.para('학습 입력은 작업에 맞게 나눕니다. 분류는 폴더별 이미지, 분할은 마스크를 변환한 polygon label을 사용합니다.', M, 409, CW, 9.5, 15, MUTED)
-    b.section('학습 데이터 준비', '영역을 채운 마스크에서 테두리를 추출해 분할 모델의 학습 좌표로 바꿉니다. 다음 쪽에서는 이 변환 과정을 예시로 설명합니다.', M, 436, 241, 9.7, keep_words=True)
-    b.section('현재 평가 조건', '학습 코드는 test 경로를 검증용 val에 연결합니다. 최종 성능을 판단하려면 학습·검증에서 사용하지 않은 별도 데이터로 평가해야 합니다.', 300, 436, 241, 9.7, keep_words=True)
-    b.section('데이터 해석', 'BRISC는 환자 식별 정보가 없어 환자 단위 독립성을 보장하기 어렵습니다. 비종양에도 병변이 포함될 수 있습니다. 임상 진단 검증은 수행하지 않았습니다.', 562, 436, 241, 9.7, keep_words=True)
+    b.image('@architecture/returned/mri.png', M, 129, 485, 367)
+    b.para('학습 입력은 작업에 맞게 나눕니다. 분류는 폴더별 이미지, 분할은 마스크를 변환한 polygon label을 사용합니다.', M, 504, 485, 9.5, 15, MUTED)
+    b.section('학습 데이터 준비', '영역을 채운 마스크에서 테두리를 추출해 분할 모델의 학습 좌표로 바꿉니다. 다음 쪽에서는 이 변환 과정을 예시로 설명합니다.', 555, 137, 248, 9.7, keep_words=True)
+    b.section('현재 평가 조건', '학습 코드는 test 경로를 검증용 val에 연결합니다. 최종 성능을 판단하려면 학습·검증에서 사용하지 않은 별도 데이터로 평가해야 합니다.', 555, 268, 248, 9.7, keep_words=True)
+    b.section('데이터 해석', 'BRISC는 환자 식별 정보가 없어 환자 단위 독립성을 보장하기 어렵습니다. 비종양에도 병변이 포함될 수 있습니다. 임상 진단 검증은 수행하지 않았습니다.', 555, 399, 248, 9.7, keep_words=True)
     b.end([('전처리·학습', MRI_REF+'src/training/train.py'), ('통합 추론', MRI_REF+'src/testing/test.py'),
            ('BRISC 원문', 'https://arxiv.org/html/2506.14318v5')])
 
@@ -635,23 +633,22 @@ def alkkagi_overview(b):
 def alkkagi_physics(b):
     b.start('Alkkagi.io · 서버 물리와 상태 동기화',
             '내 입력 → 서버의 충돌 계산 → 두 플레이어에게 같은 결과 / 상태는 서버 메모리에 유지합니다.', key='alkkagi-physics')
-    draw_architecture(b, 'alkkagi', M, 128)
-    b.para('서버가 유일한 기준 상태를 가지므로, 브라우저마다 다른 충돌 결과를 확정하지 않습니다.',M,387,CW,10.4,17)
-    b.section('겹침 보정', '충돌 순간 두 돌이 겹치면 겹친 거리의 절반씩 위치를 옮깁니다. 이미 서로 멀어지는 중이면 추가 충돌 힘을 적용하지 않습니다.', M, 424, 241, 9.5, keep_words=True)
-    b.section('질량에 따른 충돌', '반발계수, 상대 속도와 질량으로 속도를 갱신합니다. 점수가 오를수록 반경과 질량이 함께 증가해 돌의 충돌 특성이 달라집니다.', 300, 424, 241, 9.5, keep_words=True)
-    b.section('입력 제한과 마찰', '입력 간격을 500ms로 제한하고 발사 속도에 상한을 둡니다. 이동하는 동안 마찰을 적용해 속도가 점차 줄어들도록 했습니다.', 562, 424, 241, 9.5, keep_words=True)
-    b.para('<b>후속 검증</b> 동시접속자가 늘어날 때의 지연과 지속 프레임률은 별도로 측정해야 합니다. 서버 재시작 시 상태 복구도 추가 과제입니다.',M,511,CW,9.2,14,MUTED)
+    b.image('@architecture/returned/alkkagi.png', M, 129, 500, 366)
+    b.para('서버가 유일한 기준 상태를 가지므로, 브라우저마다 다른 충돌 결과를 확정하지 않습니다.', M, 498, 500, 9.5, 15)
+    b.section('겹침 보정', '충돌 순간 두 돌이 겹치면 겹친 거리의 절반씩 위치를 옮깁니다. 이미 서로 멀어지는 중이면 추가 충돌 힘을 적용하지 않습니다.', 570, 137, 233, 9.5, keep_words=True)
+    b.section('질량에 따른 충돌', '반발계수, 상대 속도와 질량으로 속도를 갱신합니다. 점수가 오를수록 반경과 질량이 함께 증가해 돌의 충돌 특성이 달라집니다.', 570, 262, 233, 9.5, keep_words=True)
+    b.section('입력 제한과 마찰', '입력 간격을 500ms로 제한하고 발사 속도에 상한을 둡니다. 이동하는 동안 마찰을 적용해 속도가 점차 줄어들도록 했습니다.', 570, 387, 233, 9.5, keep_words=True)
+    b.para('<b>후속 검증</b> 동시접속자가 늘어날 때의 지연과 지속 프레임률은 별도로 측정해야 합니다. 서버 재시작 시 상태 복구도 추가 과제입니다.',M,520,CW,9.2,14,MUTED)
     b.end([('서버·입력 제한', ALK_REF+'server/index.ts'), ('물리 구현', ALK_REF+'server/physics.ts')])
 
 def prompt_generator(b):
     b.start('Prompt Generator · 영역별 설계 대화',
             '개인 프로젝트 / 2026 / FastAPI · WebSocket · LangChain · Solar Pro', key='prompt')
-    draw_architecture(b, 'prompt', M, 126)
-    b.para('영역마다 대화 이력·진행 상태·결과를 따로 유지합니다.', M, 402, CW, 10.6, 17)
-    b.rule(429)
-    b.section('문제와 선택', '화면, 데이터와 배포 질문이 뒤섞이면 필요한 조건을 빠뜨리기 쉽습니다. 기본 여섯 영역의 첫 질문을 병렬로 시작하고, 각 영역의 답변을 따로 누적하게 했습니다.',M,438,241,9.5, keep_words=True)
-    b.section('구현 구조', '브라우저는 WebSocket으로 질문과 상태를 받습니다. FastAPI는 세션별 대화를 관리하고 LangChain·Solar Pro 호출로 질문과 프롬프트를 생성하도록 구성했습니다.',300,438,241,9.5, keep_words=True)
-    b.section('수정 흐름과 다음 과제', '생성이 끝난 영역도 추가 대화로 수정할 수 있습니다. 세션은 메모리에만 있고 연결 종료 시 삭제되므로, 대화 저장과 재접속 복구가 다음 과제입니다.',562,438,241,9.5, keep_words=True)
+    b.image('@architecture/returned/prompt.png', M, 129, 490, 372)
+    b.para('영역마다 대화 이력·진행 상태·결과를 따로 유지합니다.', M, 515, 490, 9.5, 15)
+    b.section('문제와 선택', '화면, 데이터와 배포 질문이 뒤섞이면 필요한 조건을 빠뜨리기 쉽습니다. 기본 여섯 영역의 첫 질문을 병렬로 시작하고, 각 영역의 답변을 따로 누적하게 했습니다.', 560, 137, 243, 9.5, keep_words=True)
+    b.section('구현 구조', '브라우저는 WebSocket으로 질문과 상태를 받습니다. FastAPI는 세션별 대화를 관리하고 LangChain·Solar Pro 호출로 질문과 프롬프트를 생성하도록 구성했습니다.', 560, 268, 243, 9.5, keep_words=True)
+    b.section('수정 흐름과 다음 과제', '생성이 끝난 영역도 추가 대화로 수정할 수 있습니다. 세션은 메모리에만 있고 연결 종료 시 삭제되므로, 대화 저장과 재접속 복구가 다음 과제입니다.', 560, 399, 243, 9.5, keep_words=True)
     b.end([('영역별 상태', PROMPT_REF+'state.py'), ('대화 서버', PROMPT_REF+'server/app.py'),
            ('원본 설계도', PROMPT_REF+'README.md')])
 

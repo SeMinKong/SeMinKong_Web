@@ -1114,7 +1114,7 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 공식 Excalidraw 0.18.1을 localhost에서 실행해 네 장면을 loadFromBlob으로 불러오고 실제 캔버스 텍스트를 수정·복원했다. 요소/텍스트/이미지/화살표 개수 보존, SVG 전부 로드, 실행 오류0·외부 요청0, 네 편집기 화면 육안 검수를 확인했다. 공개 Excalidraw 사이트로 자료를 전송하지 않았다.
 - [x] 최종 PDF는 11,020,297 bytes, SHA-256 `FB9A131053F0472E7368C8435BF4A70029C7FA433DFBDEE8B6D08A47E8E4A2AE`. 재생성과 output/public/dist 세 사본이 동일하며 다운로드 안내를 11.0MB·20쪽·2026.09.07로 갱신했다.
 - [x] `npm.cmd run verify`: 테스트28·소스경로11·스타일경계12·production 모듈766·배포entry23 통과. 실제 Chrome에서 production Resume를 390·768·1280px로 확인해 overflow0·44px 링크·키보드 포커스2px·정상 파일명/새 탭 속성·실제 다운로드 해시 일치를 검증했다. 기본 lite/static·full/interactive, reduced/flat, JavaScript 미사용 폴백과 콘솔 warning/error0을 확인하고 검수 브라우저를 종료했다.
-- [ ] GitHub Pages workflow 성공과 공개 PDF의 크기·해시/메타데이터 확인은 푸시 후 기록한다. 실물 터치·OS PDF viewer·전체 외부 링크 HTTP·로봇 하드웨어 재실행은 이번 범위 밖이다.
+- [x] 커밋 `36829e8`의 GitHub Pages run `34070258035` 성공 후 공개 Home·Resume·PDF의 HTTP 200을 확인했다. Resume의 11.0MB·2026.09.07 안내와 PDF application/pdf·11,020,297 bytes·위 SHA-256이 일치한다. 공개 Home에 병행 작업의 kinetic-part 변경이 없음을 확인했다. 실물 터치·OS PDF viewer·전체 외부 링크 HTTP·로봇 하드웨어 재실행은 이번 범위 밖이다.
 
 ## 2026-09-07 Home 관절형 마네킹 이스터에그 검수
 
@@ -1126,3 +1126,11 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify` 전 단계로 build 766 modules, source 11 routes·12 stylesheet boundaries, dist 23 deployment entries가 통과한다. Home runtime은 route-local dynamic chunk 209.37 kB raw / 61.94 kB gzip이다.
 - [ ] 실제 터치 하드웨어의 세로/가로 gesture 경쟁, OS 강제 색상 전환, 사용자가 10개 관절을 전부 조립하는 장시간 세션과 완성 연출의 육안 검수는 자동화·데스크톱 포인터 검증 범위 밖이다. 스냅·완성 그래프·감소 모션 계약은 자동 테스트와 소스 계약으로 확인했다.
 - [ ] GitHub Pages 배포 성공과 공개 Home 반영은 푸시 후 이 항목에 추가한다.
+
+## 2026-09-07 사용자 배경 제거 아키텍처 적용 검수
+
+- [x] 사용자 PNG 다섯 개의 SHA-256과 RGBA 치수를 기록했다. PDF 내부의 RGB 픽셀과 alpha soft mask를 각각 전 바이트 비교해 일치하고, 전체 이미지 화면비·위치와 투명 영역을 확인했다. 추가 배경 제거·리터치·크롭은 하지 않았다.
+- [x] 변경된 9·12·15·18·19쪽과 유지한 THING 5쪽을 2배 렌더로 직접 확인했다. 종이색 위의 라벨·로고·연결선, 오른쪽 설명과 하단 주석은 잘림·겹침 없이 읽힌다. 독립 감사에서 다른 15쪽의 픽셀·텍스트·링크 영역이 기존 배포본과 정확히 같고, 전체 링크70·책갈피20의 대상·순서가 유지된다.
+- [x] PDF 검증: 20쪽·외부링크64·내부링크6·최소 본문8.5pt·레이아웃겹침0·사진캡션5·문단끝줄11·RGBA그림5 통과. 재생성 및 output/public/dist 파일은 모두 15,189,951 bytes, SHA-256 `A519FB83E3D55A75F954A038453A664179B0FB6F378FB34066A0612FD05AEB32`로 일치한다.
+- [x] `npm.cmd run verify`: 테스트31·소스경로11·스타일경계12·production 모듈766·배포entry23 통과. 다운로드 안내를 15.2MB·20쪽·2026.09.07로 갱신하고 바이트/해시 계약도 동기화했다.
+- [x] 실제 Chrome production Resume 390·768·1280px에서 overflow0·44px 링크·Tab 포커스2px·정상 파일명/새 탭·실제 다운로드 SHA 일치를 확인했다. 기본 lite/static·full/interactive, reduced/flat, JavaScript 미사용 폴백과 콘솔 warning/error0을 검증했다. 실물 터치·OS PDF viewer·전체 외부 링크 HTTP는 이번 범위 밖이다.

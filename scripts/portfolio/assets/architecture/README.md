@@ -1,3 +1,5 @@
+> Current PDF assets: see [returned/README.md](returned/README.md). The owner-returned transparent PNGs supersede the historical vector diagrams below. THING remains unchanged.
+
 # Editable software architectures
 
 Four code-reviewed diagrams accompany the 2026.09.07 static portfolio:
