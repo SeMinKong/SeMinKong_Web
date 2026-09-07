@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52" height="28" viewBox="0 0 52 28" fill="none">
+  <g id="underplate">
+    <path d="M13 2H39L49 8L51 21L43 27H9L1 21L3 8L13 2Z" fill="#24211D"/>
+  </g>
+  <g id="frame">
+    <path d="M23 1H29L33 22L26 27L19 22L23 1Z" fill="#24211D"/>
+    <path d="M12 8L26 22L40 8" stroke="#B8AFA2" stroke-width="3" stroke-linejoin="bevel"/>
+  </g>
+  <g id="shell">
+    <path d="M13 2H23L21 20L10 25L3 20L5 9L13 2Z" fill="#DED6CA" stroke="#24211D" stroke-opacity=".54" stroke-width="1.2" stroke-linejoin="bevel"/>
+    <path d="M39 2H29L31 20L42 25L49 20L47 9L39 2Z" fill="#DED6CA" stroke="#24211D" stroke-opacity=".54" stroke-width="1.2" stroke-linejoin="bevel"/>
+    <path d="M8 9H20L19 17L10 21L6 18L8 9ZM44 9H32L33 17L42 21L46 18L44 9Z" fill="#E9E3D9"/>
+  </g>
+  <g id="mechanism">
+    <circle cx="14" cy="21" r="5" fill="#24211D"/>
+    <circle cx="14" cy="21" r="2.7" fill="#B8AFA2"/>
+    <circle cx="38" cy="21" r="5" fill="#24211D"/>
+    <circle cx="38" cy="21" r="2.7" fill="#B8AFA2"/>
+    <path d="M8 8H20M32 8H44" stroke="#24211D" stroke-opacity=".38" stroke-width="1"/>
+  </g>
+  <g id="actuator">
+    <path d="M20 7L24 11M32 7L28 11" stroke="#A73524" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M8 23H11M41 23H44" stroke="#A73524" stroke-width="1.5"/>
+  </g>
+  <g id="rim">
+    <path d="M13 4H21M31 4H39" stroke="#F1EEE6" stroke-opacity=".78" stroke-width=".7"/>
+  </g>
+</svg>

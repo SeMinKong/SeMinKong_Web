@@ -939,3 +939,11 @@
 - Motion: snap 때 저장한 socket↔plug 상대 각도를 기준으로 family별 soft limit, 약한 복원과 damping을 fixed substep에 적용한다. 상대 각속도를 family별 상한으로 제한하고 완성 연출 종료 시 현재 자세를 새 기준각으로 저장해 관절 튐과 불필요한 ticker 지속을 막는다. 기존 한 점 constraint·스냅 거리/각도·분리 gesture·완성 연출은 유지한다.
 - Fallback and access: no-JS/reduced/forced fallback은 같은 11개 실루엣과 viewport 비례 완성 좌표를 쓴다. 장식 canvas의 `tabindex=-1`을 제거해 pointer click focus가 `aria-hidden` 내부로 들어가지 않게 한다. 서명 완료 전에는 runtime을 mount하지 않고, Pixi의 미사용 document-level interaction system을 분리하며 active drag가 아닐 때 window pointermove에서 layout을 읽지 않는다.
 - Scope: Home 코드·테스트·문서만 배포한다. 병행 중인 정적 PDF·Drive·아키텍처 작업 파일과 `tmp/`는 이번 release에 포함하지 않는다.
+
+## 2026-09-07 — Home 퍼즐의 authored robot asset과 pose hold
+
+- Visual: 머리·흉곽·골반·상완·전완·대퇴·하퇴의 7개 수제 SVG master를 좌우 limb에 재사용한다. warm shell, graphite frame, metal bearing, vermilion actuator 네 색으로 제한하고 모든 선과 면을 sensor aperture, load rail, joint housing, slider, gripper, damper, foot plate처럼 부품 기능에 연결한다. 얼굴·HUD·회로·번호·의미 없는 vent와 장식 나사는 사용하지 않는다.
+- Runtime: Vite URL import와 Pixi `Assets`/`Sprite`로 같은 SVG를 WebGL 파츠에 올리고, 포트 glyph·고정 광원·그림자·완성 효과만 procedural layer로 남긴다. CSS fail-open도 같은 SVG를 사용하고 forced-colors에서만 system-color geometric silhouette로 바꾼다.
+- Scale: 1280px에서 nominal geometry의 약 2배, 768px에서 약 1.75배, 390px에서 약 1.55배를 사용한다. 물리 body, port, artwork와 정적 fallback을 함께 조정하고 density를 scale²로 나눠 질량을 유지한다. live resize는 connected component의 비율과 constraint anchor까지 함께 갱신한다.
+- Joint feel: snap constraint는 `0.84 / 0.24`, 조립체 이동 drag는 `0.30 / 0.34`와 angular stiffness `0.88`로 강화한다. 고정된 해부학적 limit 중심 `baseAngle`과 사용자가 놓은 자세 `poseAngle`을 분리한다. 몸통 쪽 grip은 현재 상대각을 유지한 채 전체를 옮기고, 말단 grip은 잡은 부품이 plug인 해부학적 parent 관절 하나의 child branch만 socket pivot 주위로 포징한 뒤 15도 detent에 정착시킨다. Physics 뒤 hard-limit 투영, 취소 시 pose 미저장, 고정 chamfer와 resize impulse 초기화로 자세와 콜라이더를 결정적으로 유지한다.
+- Scope: Home Kinetic과 해당 계약·문서만 변경한다. 공개 PDF와 병행 중인 `scripts/portfolio`, `tmp` 작업물은 수정·배포 범위에 포함하지 않는다.

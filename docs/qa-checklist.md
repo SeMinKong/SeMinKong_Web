@@ -1144,3 +1144,13 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] Canvas에서 실제 click 후 active element가 canvas가 아니고 `tabindex`가 없음을 확인했다. `aria-hidden`, native pointer interaction과 CTA/skip-link 경로는 유지한다. Hover layout read를 canvas로 한정하고 window handler는 active pointer를 먼저 검사한다.
 - [x] `npm.cmd run verify`: 테스트33·소스경로11·스타일경계12·production 모듈766·배포entry23 통과. 390×844·768×1024·1280×720의 full/reduced 화면, 실제 click·drag·scroll·focus와 console warning/error0을 확인했다. Runtime은 Home 전용 dynamic chunk 215.64 kB raw / 63.68 kB gzip이다.
 - [ ] 실제 터치 하드웨어의 gesture 경쟁, OS 강제 색상 전환, 10개 관절 전체 수동 조립의 장시간 완성 연출은 자동화·데스크톱 포인터 검증 범위 밖이다. GitHub Pages 배포 성공과 공개 Home 반영은 push 후 확인한다.
+
+## 2026-09-07 Home authored robot asset·rigid pose 검수
+
+- [x] 머리·흉곽·골반·상완·전완·대퇴·하퇴 7개 SVG master를 검사했다. 같은 자산을 11개 Pixi runtime part와 CSS fallback이 공유하며, 외부 이미지·문자·스크립트·filter·gradient·pattern·foreignObject가 없다.
+- [x] 기존 11개 조각·10개 관절·좌우 교환 계약을 유지했다. 1280/768/390 폭의 배율, scale² density, 고정 chamfer quality, 회전 AABB+8px 초기 여유, live resize의 body·port·constraint anchor 및 solver impulse reset을 소스 계약과 단위 검사로 확인했다.
+- [x] `baseAngle`/`poseAngle`을 분리했다. 실제 Chromium에서 전완을 팔꿈치에 결합해 말단 drag로 parent 상완은 고정된 채 15도 단위 포즈가 만들어지고 유지되는 것, 이어 상완 몸통을 drag하면 꺾인 두 부품이 강체로 함께 이동하며 connection 1개가 유지되는 것을 확인했다.
+- [x] 실제 390×844, 768×1024, 1280×720에서 authored 11부품, 수평 overflow 0, 이름·문장·CTA 가독성과 canvas의 `pan-y pinch-zoom`을 확인했다. 390×844·1280×720 reduced에서는 canvas none, 완성형 11부품, overflow 0이며 모바일 로봇이 본문 위에 끝난다. 페이지 자체 console error/warning은 0이고 기록된 warning은 Chrome의 MetaMask extension에서만 발생했다.
+- [x] `npm.cmd run verify`: 테스트 34개, 소스 경로 11개·스타일 경계 12개, production modules 773개·배포 entry 23개가 통과했다. Home 전용 runtime chunk는 257.79 kB raw / 75.79 kB gzip이며 초기 공통 번들에는 포함되지 않는다.
+- [ ] 실제 터치 하드웨어의 gesture 경쟁, OS forced-colors, 10개 관절 전체 수동 조립의 장시간 완성 연출은 이번 자동화·데스크톱 검증 범위 밖이다.
+- [ ] GitHub Pages 배포 성공과 공개 Home 반영은 push 후 확인한다.

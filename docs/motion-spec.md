@@ -947,3 +947,14 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - 관절 시각 layer는 mount 때 한 번 생성한 Pixi Graphics만 사용한다. frame·panel·actuator·keyed port는 frame loop에서 재생성하지 않고 기존 고정 광원에 따른 highlight alpha/offset만 갱신한다.
 - Kinetic mount는 Home 서명 ready가 완료된 뒤에만 intersection·visibility gate를 통과한다. Pixi renderer 초기화 뒤 사용하지 않는 document-level EventSystem을 분리하고, hover hit-test는 canvas 내부 pointermove에서만 수행한다. Window pointermove는 active drag가 있을 때만 DOM rect와 body hit state를 읽어 Hero 밖·paused 상태의 불필요한 layout read를 피한다.
 - 장식용 canvas에는 `tabindex`를 두지 않는다. Pointer drag는 유지하되 click 뒤 focus가 `aria-hidden` subtree로 이동해서는 안 되고, skip link·navigation·CTA가 유일한 keyboard 경로로 남는다.
+
+## 2026-09-07 — Rigid kit pose-hold override
+
+이 항목은 위 `Research robot joint response`의 작은 파츠 크기와 connected drag 중 center spring을 끄는 동작을 대체한다.
+
+- Part geometry는 1280px에서 nominal의 `2.0`, 768px 부근에서 약 `1.75`, 390px에서 `1.55`를 사용한다. Density는 scale²에 반비례시켜 질량을 유지하고 snap·분리 반경은 최대 `1.4`까지만 확장한다.
+- Joint position constraint는 stiffness `0.84`, damping `0.24`, 조립체 이동용 pointer drag는 `0.30 / 0.34`, angular stiffness `0.88`이다.
+- Drag 시작 시 component의 현재 상대각을 한 번 저장한다. 부품 몸통을 잡은 이동은 모든 관절을 그 각도에 유지한다. Head의 sensor 쪽 또는 pelvis·limb의 말단 grip을 잡은 포즈 입력은 잡은 부품이 plug인 해부학적 parent 관절만 선택하고, drag constraint 대신 socket pivot 주위의 child branch 전체를 회전시킨다.
+- Release에서 선택 관절을 15도 detent 또는 좁은 neck/waist endpoint로 정리해 `poseAngle`에 저장한다. `pointercancel`과 세로 touch scroll은 새 자세를 저장하지 않는다.
+- `baseAngle`은 결합 순간 또는 완성 연출 뒤에만 정하는 고정 hard-limit 중심이다. 각 physics substep 뒤 초과 각도를 child branch 단위로 투영하고 port anchor를 다시 일치시켜 반복 조작과 충돌에서도 limit가 표류하거나 관절이 벌어지지 않게 한다.
+- Collider chamfer quality는 모든 배율에서 `4`로 고정한다. Live resize는 body geometry, component 내부 거리, port, constraint anchor와 렌더 scale을 같은 비율로 바꾸고 solver의 constraint·collision warm-start impulse를 비운 뒤 component 단위로 viewport 안에 맞춘다.

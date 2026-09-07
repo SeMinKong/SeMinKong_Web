@@ -1,5 +1,12 @@
-import { Application, Container, Graphics, Rectangle } from 'pixi.js';
+import { Application, Assets, Container, Graphics, Rectangle, Sprite } from 'pixi.js';
 import Matter from 'matter-js';
+import chestAssetUrl from '../assets/kinetic-robot/chest.svg?url';
+import forearmAssetUrl from '../assets/kinetic-robot/forearm.svg?url';
+import headAssetUrl from '../assets/kinetic-robot/head.svg?url';
+import pelvisAssetUrl from '../assets/kinetic-robot/pelvis.svg?url';
+import shinAssetUrl from '../assets/kinetic-robot/shin.svg?url';
+import thighAssetUrl from '../assets/kinetic-robot/thigh.svg?url';
+import upperArmAssetUrl from '../assets/kinetic-robot/upper-arm.svg?url';
 import {
   calculateJointServo,
   clamp,
@@ -8,6 +15,7 @@ import {
   interpolatePose,
   limitRelativeAngularVelocity,
   pointInRotatedRect,
+  projectJointLimit,
   rotatePoint,
   smoothThrowVelocity,
   solveMovingPortPose,
@@ -31,28 +39,76 @@ const CELEBRATION_DURATION = 1780;
 const BOARD = 0xded6ca;
 const PAPER = 0xf1eee6;
 const INK = 0x24211d;
-const METAL = 0xb8afa2;
 const SIGNAL = 0xa73524;
 const SHADOW = 0x171512;
 const PORT = Object.freeze({ PLUG: 'plug', SOCKET: 'socket' });
+const DETENT_STEP = Math.PI / 12;
+const POSE_JOINT_PRIORITIES = Object.freeze({
+  head: Object.freeze(['neck']),
+  chest: Object.freeze([]),
+  pelvis: Object.freeze(['waist', 'hip']),
+  'upper-arm': Object.freeze(['shoulder', 'elbow']),
+  forearm: Object.freeze(['elbow']),
+  thigh: Object.freeze(['hip', 'knee']),
+  shin: Object.freeze(['knee'])
+});
+const POSE_GRIP_DIRECTION = Object.freeze({
+  head: -1,
+  pelvis: 1,
+  'upper-arm': 1,
+  forearm: 1,
+  thigh: 1,
+  shin: 1
+});
+
+const ROBOT_TEXTURE_ALIASES = Object.freeze({
+  head: 'kinetic-robot/head',
+  chest: 'kinetic-robot/chest',
+  pelvis: 'kinetic-robot/pelvis',
+  'upper-arm': 'kinetic-robot/upper-arm',
+  forearm: 'kinetic-robot/forearm',
+  thigh: 'kinetic-robot/thigh',
+  shin: 'kinetic-robot/shin'
+});
+
+const ROBOT_ASSETS = Object.freeze([
+  { alias: ROBOT_TEXTURE_ALIASES.head, src: headAssetUrl, data: { width: 38, height: 42, resolution: 3, parseAsGraphicsContext: false } },
+  { alias: ROBOT_TEXTURE_ALIASES.chest, src: chestAssetUrl, data: { width: 58, height: 64, resolution: 3, parseAsGraphicsContext: false } },
+  { alias: ROBOT_TEXTURE_ALIASES.pelvis, src: pelvisAssetUrl, data: { width: 52, height: 28, resolution: 3, parseAsGraphicsContext: false } },
+  { alias: ROBOT_TEXTURE_ALIASES['upper-arm'], src: upperArmAssetUrl, data: { width: 21, height: 44, resolution: 3, parseAsGraphicsContext: false } },
+  { alias: ROBOT_TEXTURE_ALIASES.forearm, src: forearmAssetUrl, data: { width: 20, height: 43, resolution: 3, parseAsGraphicsContext: false } },
+  { alias: ROBOT_TEXTURE_ALIASES.thigh, src: thighAssetUrl, data: { width: 24, height: 48, resolution: 3, parseAsGraphicsContext: false } },
+  { alias: ROBOT_TEXTURE_ALIASES.shin, src: shinAssetUrl, data: { width: 22, height: 49, resolution: 3, parseAsGraphicsContext: false } }
+]);
+
+let robotTexturesPromise;
+const loadRobotTextures = () => {
+  if (!robotTexturesPromise) {
+    robotTexturesPromise = Assets.load(ROBOT_ASSETS).catch((error) => {
+      robotTexturesPromise = null;
+      throw error;
+    });
+  }
+  return robotTexturesPromise;
+};
 
 const JOINT_SERVO_PROFILES = Object.freeze({
-  neck: { softLimit: 0.35, centerStrength: 0.006, limitStrength: 0.03, damping: 0.16, maxCorrection: 0.014, maxRelativeVelocity: 0.055 },
-  waist: { softLimit: 0.26, centerStrength: 0.007, limitStrength: 0.034, damping: 0.18, maxCorrection: 0.014, maxRelativeVelocity: 0.05 },
-  shoulder: { softLimit: 1.75, centerStrength: 0.0016, limitStrength: 0.018, damping: 0.1, maxCorrection: 0.016, maxRelativeVelocity: 0.085 },
-  elbow: { softLimit: 1.85, centerStrength: 0.0018, limitStrength: 0.024, damping: 0.13, maxCorrection: 0.017, maxRelativeVelocity: 0.09 },
-  hip: { softLimit: 0.9, centerStrength: 0.0022, limitStrength: 0.027, damping: 0.14, maxCorrection: 0.016, maxRelativeVelocity: 0.075 },
-  knee: { softLimit: 1.45, centerStrength: 0.0022, limitStrength: 0.027, damping: 0.14, maxCorrection: 0.017, maxRelativeVelocity: 0.08 }
+  neck: { softLimit: 0.24, centerStrength: 0.012, dragHoldStrength: 0.026, limitStrength: 0.038, damping: 0.24, maxCorrection: 0.016, maxRelativeVelocity: 0.05 },
+  waist: { softLimit: 0.18, centerStrength: 0.013, dragHoldStrength: 0.028, limitStrength: 0.04, damping: 0.26, maxCorrection: 0.017, maxRelativeVelocity: 0.045 },
+  shoulder: { softLimit: 1.05, centerStrength: 0.0045, dragHoldStrength: 0.011, limitStrength: 0.026, damping: 0.19, maxCorrection: 0.018, maxRelativeVelocity: 0.07 },
+  elbow: { softLimit: 1.22, centerStrength: 0.005, dragHoldStrength: 0.012, limitStrength: 0.03, damping: 0.21, maxCorrection: 0.019, maxRelativeVelocity: 0.075 },
+  hip: { softLimit: 0.66, centerStrength: 0.0055, dragHoldStrength: 0.013, limitStrength: 0.032, damping: 0.21, maxCorrection: 0.019, maxRelativeVelocity: 0.065 },
+  knee: { softLimit: 0.96, centerStrength: 0.0055, dragHoldStrength: 0.013, limitStrength: 0.032, damping: 0.22, maxCorrection: 0.019, maxRelativeVelocity: 0.07 }
 });
 
 const PART_SPECS = [
   {
-    id: 'head', role: 'head', kind: 'head', x: 0.1, y: 0.22,
+    id: 'head', role: 'head', kind: 'head', asset: 'head', x: 0.1, y: 0.22,
     width: 38, height: 42, angle: Math.PI / 3,
     ports: [{ id: 'neck', family: 'neck', polarity: PORT.PLUG, x: 0, y: 0.5, normal: Math.PI / 2 }]
   },
   {
-    id: 'chest', role: 'chest', kind: 'chest', x: 0.82, y: 0.22,
+    id: 'chest', role: 'chest', kind: 'chest', asset: 'chest', x: 0.82, y: 0.22,
     width: 58, height: 64, angle: -Math.PI / 6,
     ports: [
       { id: 'neck', family: 'neck', polarity: PORT.SOCKET, x: 0, y: -0.5, normal: -Math.PI / 2 },
@@ -62,7 +118,7 @@ const PART_SPECS = [
     ]
   },
   {
-    id: 'pelvis', role: 'pelvis', kind: 'pelvis', x: 0.91, y: 0.42,
+    id: 'pelvis', role: 'pelvis', kind: 'pelvis', asset: 'pelvis', x: 0.91, y: 0.42,
     width: 52, height: 28, angle: Math.PI / 6,
     ports: [
       { id: 'waist', family: 'waist', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
@@ -71,7 +127,7 @@ const PART_SPECS = [
     ]
   },
   {
-    id: 'upper-arm-a', role: 'upper-arm', kind: 'upper-limb', x: 0.07, y: 0.49,
+    id: 'upper-arm-a', role: 'upper-arm', kind: 'upper-limb', asset: 'upper-arm', x: 0.07, y: 0.49,
     width: 21, height: 44, angle: -Math.PI / 3,
     ports: [
       { id: 'shoulder', family: 'shoulder', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
@@ -79,7 +135,7 @@ const PART_SPECS = [
     ]
   },
   {
-    id: 'upper-arm-b', role: 'upper-arm', kind: 'upper-limb', x: 0.86, y: 0.61,
+    id: 'upper-arm-b', role: 'upper-arm', kind: 'upper-limb', asset: 'upper-arm', x: 0.86, y: 0.61,
     width: 21, height: 44, angle: Math.PI * 2 / 3,
     ports: [
       { id: 'shoulder', family: 'shoulder', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
@@ -87,17 +143,17 @@ const PART_SPECS = [
     ]
   },
   {
-    id: 'forearm-a', role: 'forearm', kind: 'forearm', x: 0.2, y: 0.65,
+    id: 'forearm-a', role: 'forearm', kind: 'forearm', asset: 'forearm', x: 0.2, y: 0.65,
     width: 20, height: 43, angle: Math.PI / 6,
     ports: [{ id: 'elbow', family: 'elbow', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
   },
   {
-    id: 'forearm-b', role: 'forearm', kind: 'forearm', x: 0.68, y: 0.83,
+    id: 'forearm-b', role: 'forearm', kind: 'forearm', asset: 'forearm', x: 0.68, y: 0.83,
     width: 20, height: 43, angle: -Math.PI * 2 / 3,
     ports: [{ id: 'elbow', family: 'elbow', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
   },
   {
-    id: 'thigh-a', role: 'thigh', kind: 'upper-limb', x: 0.1, y: 0.82,
+    id: 'thigh-a', role: 'thigh', kind: 'upper-limb', asset: 'thigh', x: 0.1, y: 0.82,
     width: 24, height: 48, angle: Math.PI / 3,
     ports: [
       { id: 'hip', family: 'hip', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
@@ -105,7 +161,7 @@ const PART_SPECS = [
     ]
   },
   {
-    id: 'thigh-b', role: 'thigh', kind: 'upper-limb', x: 0.57, y: 0.21,
+    id: 'thigh-b', role: 'thigh', kind: 'upper-limb', asset: 'thigh', x: 0.57, y: 0.21,
     width: 24, height: 48, angle: -Math.PI / 6,
     ports: [
       { id: 'hip', family: 'hip', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
@@ -113,12 +169,12 @@ const PART_SPECS = [
     ]
   },
   {
-    id: 'shin-a', role: 'shin', kind: 'shin', x: 0.34, y: 0.86,
+    id: 'shin-a', role: 'shin', kind: 'shin', asset: 'shin', x: 0.34, y: 0.86,
     width: 22, height: 49, angle: Math.PI * 2 / 3,
     ports: [{ id: 'knee', family: 'knee', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
   },
   {
-    id: 'shin-b', role: 'shin', kind: 'shin', x: 0.91, y: 0.79,
+    id: 'shin-b', role: 'shin', kind: 'shin', asset: 'shin', x: 0.91, y: 0.79,
     width: 22, height: 49, angle: -Math.PI / 3,
     ports: [{ id: 'knee', family: 'knee', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
   }
@@ -126,7 +182,7 @@ const PART_SPECS = [
 
 const ROBOT_MATERIAL = { elevation: 6, shadowAlpha: 0.14, edgeAlpha: 0.28 };
 
-const getScale = (width) => clamp(width / 1280, 0.72, 1.06);
+const getScale = (width) => clamp(1.55 + (width - 390) * (0.45 / 890), 1.5, 2.06);
 const tracePart = (graphics, spec, width, height) => {
   if (spec.kind === 'head') {
     return graphics.poly([
@@ -204,149 +260,11 @@ const drawFilledPart = (spec, width, height, color, alpha = 1) => {
   return graphics;
 };
 
-const createSurface = (spec, width, height) => {
-  const surface = drawFilledPart(spec, width, height, BOARD);
-  tracePart(surface, spec, width, height).stroke({
-    color: INK,
-    alpha: 0.48,
-    width: 1.4
-  });
-  return surface;
-};
-
-const createRobotDetails = (spec, width, height, scale) => {
-  const root = new Container();
-  const frame = new Graphics();
-  const panel = new Graphics();
-  const actuator = new Graphics();
-  const lineWidth = Math.max(0.8, scale);
-
-  if (spec.role === 'head') {
-    frame
-      .poly([
-        -width * 0.34, height * 0.24,
-        width * 0.25, height * 0.24,
-        width * 0.18, height * 0.46,
-        -width * 0.24, height * 0.46
-      ])
-      .fill({ color: INK, alpha: 0.86 });
-    panel
-      .moveTo(-width * 0.33, -height * 0.24)
-      .lineTo(width * 0.22, -height * 0.24)
-      .lineTo(width * 0.37, -height * 0.08)
-      .stroke({ color: INK, alpha: 0.42, width: lineWidth });
-    frame
-      .poly([
-        width * 0.04, -height * 0.12,
-        width * 0.34, -height * 0.12,
-        width * 0.38, height * 0.02,
-        width * 0.02, height * 0.02
-      ])
-      .fill({ color: INK, alpha: 0.9 });
-    actuator.circle(width * 0.28, -height * 0.05, 1.6 * scale)
-      .fill({ color: SIGNAL, alpha: 0.9 });
-  } else if (spec.role === 'chest') {
-    frame
-      .poly([
-        -width * 0.08, -height * 0.4,
-        width * 0.08, -height * 0.4,
-        width * 0.1, height * 0.38,
-        0, height * 0.48,
-        -width * 0.1, height * 0.38
-      ])
-      .fill({ color: INK, alpha: 0.92 });
-    frame
-      .poly([
-        -width * 0.4, -height * 0.28,
-        width * 0.4, -height * 0.28,
-        width * 0.33, -height * 0.13,
-        -width * 0.33, -height * 0.13
-      ])
-      .fill({ color: METAL, alpha: 0.96 });
-    panel
-      .moveTo(-width * 0.36, -height * 0.07)
-      .lineTo(-width * 0.18, height * 0.3)
-      .moveTo(width * 0.36, -height * 0.07)
-      .lineTo(width * 0.18, height * 0.3)
-      .moveTo(-width * 0.22, height * 0.34)
-      .lineTo(width * 0.22, height * 0.34)
-      .stroke({ color: INK, alpha: 0.34, width: lineWidth });
-    actuator
-      .moveTo(0, -height * 0.31)
-      .lineTo(0, height * 0.29)
-      .moveTo(0, -height * 0.14)
-      .lineTo(-width * 0.3, -height * 0.22)
-      .moveTo(0, -height * 0.14)
-      .lineTo(width * 0.3, -height * 0.22)
-      .stroke({ color: SIGNAL, alpha: 0.62, width: 1.1 * scale })
-      .circle(0, height * 0.02, 4.4 * scale)
-      .fill({ color: SIGNAL, alpha: 0.86 })
-      .circle(0, height * 0.02, 7 * scale)
-      .stroke({ color: INK, alpha: 0.28, width: lineWidth });
-  } else if (spec.role === 'pelvis') {
-    frame
-      .poly([
-        -width * 0.09, -height * 0.42,
-        width * 0.09, -height * 0.42,
-        width * 0.18, height * 0.3,
-        0, height * 0.46,
-        -width * 0.18, height * 0.3
-      ])
-      .fill({ color: INK, alpha: 0.9 });
-    for (const direction of [-1, 1]) {
-      frame.circle(direction * width * 0.27, height * 0.28, 5.2 * scale)
-        .fill({ color: INK, alpha: 0.82 })
-        .circle(direction * width * 0.27, height * 0.28, 2.7 * scale)
-        .fill({ color: METAL, alpha: 1 });
-      actuator
-        .moveTo(0, 0)
-        .lineTo(direction * width * 0.23, height * 0.21)
-        .stroke({ color: SIGNAL, alpha: 0.58, width: lineWidth });
-    }
-    panel
-      .moveTo(-width * 0.33, -height * 0.05)
-      .lineTo(width * 0.33, -height * 0.05)
-      .stroke({ color: INK, alpha: 0.38, width: lineWidth });
-  } else {
-    const isDistal = spec.role === 'forearm' || spec.role === 'shin';
-    const railTop = isDistal ? -height * 0.32 : -height * 0.26;
-    const railBottom = isDistal ? height * 0.22 : height * 0.3;
-    frame
-      .poly([
-        -width * 0.1, railTop,
-        width * 0.1, railTop,
-        width * 0.13, railBottom,
-        -width * 0.13, railBottom
-      ])
-      .fill({ color: INK, alpha: 0.9 });
-    panel
-      .moveTo(-width * 0.31, -height * 0.27)
-      .lineTo(width * 0.31, -height * 0.27)
-      .moveTo(-width * 0.24, height * 0.27)
-      .lineTo(width * 0.24, height * 0.27)
-      .stroke({ color: INK, alpha: 0.36, width: lineWidth });
-    actuator
-      .moveTo(width * 0.19, railTop)
-      .lineTo(width * 0.16, railBottom)
-      .stroke({ color: SIGNAL, alpha: 0.68, width: lineWidth });
-
-    if (spec.role === 'forearm') {
-      frame
-        .moveTo(-width * 0.08, height * 0.34)
-        .lineTo(0, height * 0.45)
-        .lineTo(width * 0.08, height * 0.34)
-        .stroke({ color: INK, alpha: 0.9, width: 1.2 * scale });
-    }
-    if (spec.role === 'shin') {
-      frame
-        .moveTo(-width * 0.37, height * 0.36)
-        .lineTo(width * 0.37, height * 0.36)
-        .stroke({ color: INK, alpha: 0.74, width: 1.4 * scale });
-    }
-  }
-
-  root.addChild(frame, panel, actuator);
-  return root;
+const createArtwork = (texture, width, height) => {
+  const artwork = new Sprite(texture);
+  artwork.anchor.set(0.5);
+  artwork.scale.set(width / texture.width, height / texture.height);
+  return artwork;
 };
 
 const createPortMarker = (port, scale) => {
@@ -411,13 +329,12 @@ const createPortMarker = (port, scale) => {
   return marker;
 };
 
-const createView = (spec, width, height, ports, scale) => {
+const createView = (spec, width, height, ports, scale, texture) => {
   const root = new Container();
   const farShadow = drawFilledPart(spec, width, height, SHADOW);
   const nearShadow = drawFilledPart(spec, width, height, SHADOW);
   const underplate = drawFilledPart(spec, width, height, INK);
-  const surface = createSurface(spec, width, height);
-  const details = createRobotDetails(spec, width, height, scale);
+  const artwork = createArtwork(texture, width, height);
   const highlight = new Graphics()
     .moveTo(-width * 0.24, -height * 0.34)
     .lineTo(width * 0.18, -height * 0.34)
@@ -429,7 +346,7 @@ const createView = (spec, width, height, ports, scale) => {
   underplate.scale.set(0.965);
   underplate.position.set(1.2 * scale, 1.8 * scale);
   highlight.alpha = 0;
-  root.addChild(underplate, surface, details, highlight);
+  root.addChild(underplate, artwork, highlight);
 
   for (const port of ports) {
     const marker = createPortMarker(port, scale);
@@ -465,10 +382,10 @@ const updateViewLighting = (view, pose, viewport) => {
   view.highlight.alpha = view.material.edgeAlpha * light.intensity;
 };
 
-const createBody = (spec, x, y, width, height) => Bodies.rectangle(x, y, width, height, {
+const createBody = (spec, x, y, width, height, scale) => Bodies.rectangle(x, y, width, height, {
   label: `kinetic:part:${spec.id}`,
   angle: spec.angle,
-  density: spec.role === 'chest' || spec.role === 'pelvis' ? 0.0032 : 0.0024,
+  density: (spec.role === 'chest' || spec.role === 'pelvis' ? 0.0032 : 0.0024) / (scale * scale),
   friction: 0.18,
   frictionAir: 0.032,
   frictionStatic: 0.25,
@@ -478,7 +395,8 @@ const createBody = (spec, x, y, width, height) => Bodies.rectangle(x, y, width, 
   chamfer: {
     radius: spec.kind === 'head'
       ? Math.min(width, height) * 0.42
-      : Math.min(width, height) * 0.14
+      : Math.min(width, height) * 0.14,
+    quality: 4
   }
 });
 
@@ -500,7 +418,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   const app = new Application();
   const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
   const resolution = Math.min(window.devicePixelRatio || 1, mode === 'full' && !coarsePointer ? 1.5 : 1);
+  let robotTextures;
   try {
+    robotTextures = await loadRobotTextures();
     await app.init({
       canvas,
       width: Math.round(initialRect.width),
@@ -559,7 +479,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   let walls = [];
   let width = initialRect.width;
 
-  const scale = getScale(width);
+  let scale = getScale(width);
+  let interactionScale = clamp(scale, 1, 1.4);
   const ambientLayer = new Container();
   const shadowLayer = new Container();
   const objectLayer = new Container();
@@ -582,16 +503,35 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   for (const spec of PART_SPECS) {
     const bodyWidth = spec.width * scale;
     const bodyHeight = spec.height * scale;
+    const rotatedHalfWidth = (
+      Math.abs(Math.cos(spec.angle)) * bodyWidth
+      + Math.abs(Math.sin(spec.angle)) * bodyHeight
+    ) / 2;
+    const rotatedHalfHeight = (
+      Math.abs(Math.sin(spec.angle)) * bodyWidth
+      + Math.abs(Math.cos(spec.angle)) * bodyHeight
+    ) / 2;
+    const edgeSafety = 8;
     const topBoundary = getTopBoundary();
-    const x = clamp(width * spec.x, inset + bodyWidth / 2, width - inset - bodyWidth / 2);
-    const y = clamp(height * spec.y, topBoundary + inset + bodyHeight / 2, height - inset - bodyHeight / 2);
-    const body = createBody(spec, x, y, bodyWidth, bodyHeight);
+    const x = clamp(
+      width * spec.x,
+      inset + edgeSafety + rotatedHalfWidth,
+      width - inset - edgeSafety - rotatedHalfWidth
+    );
+    const y = clamp(
+      height * spec.y,
+      topBoundary + inset + edgeSafety + rotatedHalfHeight,
+      height - inset - edgeSafety - rotatedHalfHeight
+    );
+    const body = createBody(spec, x, y, bodyWidth, bodyHeight, scale);
     const ports = spec.ports.map((port) => ({
       ...port,
       x: port.x * bodyWidth,
       y: port.y * bodyHeight
     }));
-    const view = createView(spec, bodyWidth, bodyHeight, ports, scale);
+    const texture = robotTextures[ROBOT_TEXTURE_ALIASES[spec.asset]];
+    if (!texture) throw new Error(`The ${spec.asset} robot artwork failed to load.`);
+    const view = createView(spec, bodyWidth, bodyHeight, ports, scale, texture);
     Body.setVelocity(body, { x: 0, y: 0 });
     Body.setAngularVelocity(body, 0);
     dynamicBodies.push(body);
@@ -613,8 +553,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     pointB: { x: 0, y: 0 },
     bodyB: null,
     length: 0,
-    stiffness: 0.18,
-    damping: 0.24
+    stiffness: 0.3,
+    damping: 0.34,
+    angularStiffness: 0.88
   });
   Composite.add(engine.world, dragConstraint);
 
@@ -631,12 +572,13 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
   };
 
-  const getComponent = (startBody) => {
+  const getComponent = (startBody, excludedConnection = null) => {
     const found = new Set([startBody]);
     const queue = [startBody];
     while (queue.length) {
       const current = queue.shift();
       for (const connection of connections) {
+        if (connection === excludedConnection) continue;
         const next = connection.bodyA === current
           ? connection.bodyB
           : connection.bodyB === current ? connection.bodyA : null;
@@ -647,6 +589,37 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       }
     }
     return [...found];
+  };
+
+  const getConnectionPort = (connection, body) => connection.bodyA === body
+    ? connection.portA
+    : connection.portB;
+
+  const getPortAnchor = (body, port) => worldPort({
+    x: body.position.x,
+    y: body.position.y,
+    angle: body.angle
+  }, port);
+
+  const rotateChildBranch = (connection, rotation) => {
+    const joint = connection.angular;
+    const childBranch = getComponent(joint.plugBody, connection);
+    if (childBranch.includes(joint.socketBody)) return null;
+    const socketPort = getConnectionPort(connection, joint.socketBody);
+    const plugPort = getConnectionPort(connection, joint.plugBody);
+    const socketAnchor = getPortAnchor(joint.socketBody, socketPort);
+    for (const body of childBranch) {
+      const offset = rotatePoint(Vector.sub(body.position, socketAnchor), rotation);
+      Body.setPosition(body, {
+        x: socketAnchor.x + offset.x,
+        y: socketAnchor.y + offset.y
+      });
+      Body.setAngle(body, body.angle + rotation);
+    }
+    const plugAnchor = getPortAnchor(joint.plugBody, plugPort);
+    const anchorCorrection = Vector.sub(socketAnchor, plugAnchor);
+    for (const body of childBranch) Body.translate(body, anchorCorrection);
+    return childBranch;
   };
 
   const wakeComponent = (body) => {
@@ -874,6 +847,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       const joint = connection.angular;
       if (!joint) continue;
       joint.baseAngle = wrapAngle(joint.plugBody.angle - joint.socketBody.angle);
+      joint.poseAngle = joint.baseAngle;
     }
   };
 
@@ -888,6 +862,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       body.constraintImpulse.x = 0;
       body.constraintImpulse.y = 0;
       body.constraintImpulse.angle = 0;
+      body.positionImpulse.x = 0;
+      body.positionImpulse.y = 0;
       Sleeping.set(body, true);
     }
   };
@@ -974,6 +950,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     if (activePointer) {
       dragConstraint.bodyB = null;
       dragConstraint.pointB = { x: 0, y: 0 };
+      dragConstraint.angularStiffness = 0.88;
       activePointer = null;
     }
     canvas.style.cursor = 'default';
@@ -1010,13 +987,18 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       const relativeVelocity = joint.plugBody.angularVelocity - joint.socketBody.angularVelocity;
       const movingTogether = draggedComponent?.has(joint.socketBody)
         && draggedComponent.has(joint.plugBody);
+      const isFlexible = movingTogether && activePointer?.flexConnection === connection;
+      const heldAngle = movingTogether ? activePointer?.jointHolds?.get(connection) : undefined;
       const result = calculateJointServo({
         parentAngle: joint.socketBody.angle,
         childAngle: joint.plugBody.angle,
-        restAngle: joint.baseAngle,
+        centerAngle: heldAngle ?? joint.poseAngle,
+        limitAngle: joint.baseAngle,
         relativeVelocity,
         ...profile,
-        centerStrength: movingTogether ? 0 : profile.centerStrength
+        centerStrength: movingTogether
+          ? isFlexible ? profile.centerStrength * 0.35 : profile.dragHoldStrength
+          : profile.centerStrength
       });
       if (Math.abs(result.excess) < 0.0001
         && Math.abs(result.error) < 0.025
@@ -1044,17 +1026,51 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
   };
 
+  const projectJointLimits = () => {
+    for (const connection of connections) {
+      const joint = connection.angular;
+      const profile = joint && JOINT_SERVO_PROFILES[joint.family];
+      if (!joint || !profile) continue;
+      const projection = projectJointLimit({
+        parentAngle: joint.socketBody.angle,
+        childAngle: joint.plugBody.angle,
+        limitAngle: joint.baseAngle,
+        softLimit: profile.softLimit,
+        inverseParent: 0,
+        inverseChild: 1
+      });
+      if (!projection.projected) continue;
+
+      const childBranch = rotateChildBranch(connection, -projection.correction);
+      if (!childBranch) continue;
+
+      const relativeVelocity = joint.plugBody.angularVelocity - joint.socketBody.angularVelocity;
+      if (projection.limitError * relativeVelocity > 0) {
+        const angularDelta = joint.socketBody.angularVelocity - joint.plugBody.angularVelocity;
+        for (const body of childBranch) {
+          Body.setAngularVelocity(body, body.angularVelocity + angularDelta);
+        }
+      }
+
+    }
+  };
+
   const jointServosSettled = () => connections.every((connection) => {
     const joint = connection.angular;
     const profile = joint && JOINT_SERVO_PROFILES[joint.family];
     if (!joint || !profile) return true;
     const error = Math.abs(wrapAngle(
+      joint.plugBody.angle - joint.socketBody.angle - joint.poseAngle
+    ));
+    const limitError = Math.abs(wrapAngle(
       joint.plugBody.angle - joint.socketBody.angle - joint.baseAngle
     ));
     const relativeVelocity = Math.abs(
       joint.plugBody.angularVelocity - joint.socketBody.angularVelocity
     );
-    return error <= Math.min(profile.softLimit, 0.18) && relativeVelocity < 0.008;
+    return error <= 0.055
+      && limitError <= profile.softLimit + 0.02
+      && relativeVelocity < 0.008;
   });
 
   const advancePhysics = () => {
@@ -1071,6 +1087,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       }
       applyJointServos();
       Engine.update(engine, PHYSICS_SUBSTEP);
+      projectJointLimits();
       if (activePointer?.phase === 'dragging'
         && !activePointer.snappedDuringDrag
         && !activePointer.skipSnapUntilRelease) {
@@ -1193,7 +1210,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     const component = getComponent(movingRoot);
     const componentSet = new Set(component);
     let best = null;
-    const maxDistance = (coarsePointer ? 34 : 28) * scale;
+    const maxDistance = (coarsePointer ? 34 : 28) * interactionScale;
     const maxAngle = coarsePointer ? Math.PI / 6 : Math.PI / 8;
     for (const movingBody of component) {
       const movingMeta = bodyMeta.get(movingBody);
@@ -1231,16 +1248,18 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       bodyB: best.targetBody,
       pointB: rotatePoint(best.targetPort, best.targetBody.angle),
       length: 0,
-      stiffness: 0.68,
-      damping: 0.16
+      stiffness: 0.84,
+      damping: 0.24
     });
+    const baseAngle = wrapAngle(
+      (best.movingPort.polarity === PORT.PLUG ? best.movingBody : best.targetBody).angle
+        - (best.movingPort.polarity === PORT.SOCKET ? best.movingBody : best.targetBody).angle
+    );
     const connection = {
       angular: {
-        baseAngle: wrapAngle(
-          (best.movingPort.polarity === PORT.PLUG ? best.movingBody : best.targetBody).angle
-            - (best.movingPort.polarity === PORT.SOCKET ? best.movingBody : best.targetBody).angle
-        ),
+        baseAngle,
         family: best.movingPort.family,
+        poseAngle: baseAngle,
         plugBody: best.movingPort.polarity === PORT.PLUG ? best.movingBody : best.targetBody,
         socketBody: best.movingPort.polarity === PORT.SOCKET ? best.movingBody : best.targetBody
       },
@@ -1276,7 +1295,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const getBreakCandidate = (body, localPoint) => {
     const meta = bodyMeta.get(body);
-    const maximum = (coarsePointer ? 18 : 12) * scale;
+    const maximum = (coarsePointer ? 18 : 12) * interactionScale;
     let best = null;
     for (const port of meta.ports) {
       const connection = occupiedPorts.get(portKey(body, port));
@@ -1298,16 +1317,97 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     return best;
   };
 
+  const getFlexConnection = (body, localPoint) => {
+    const meta = bodyMeta.get(body);
+    const gripDirection = POSE_GRIP_DIRECTION[meta.spec.role];
+    if (!gripDirection || localPoint.y * gripDirection < meta.height * 0.12) return null;
+    const priorities = POSE_JOINT_PRIORITIES[meta.spec.role] ?? [];
+    for (const family of priorities) {
+      for (const port of meta.ports) {
+        if (port.family !== family) continue;
+        const connection = occupiedPorts.get(portKey(body, port));
+        if (connection?.angular?.plugBody === body) return connection;
+      }
+    }
+    return null;
+  };
+
+  const applyFlexGesture = (pointer, point) => {
+    const connection = pointer.flexConnection;
+    if (!connection || !connections.includes(connection)) return;
+    const joint = connection.angular;
+    const profile = JOINT_SERVO_PROFILES[joint.family];
+    if (!profile) return;
+    const socketPort = getConnectionPort(connection, joint.socketBody);
+    const pivot = getPortAnchor(joint.socketBody, socketPort);
+    const pointerAngle = Math.atan2(point.y - pivot.y, point.x - pivot.x);
+    const angleDelta = wrapAngle(pointerAngle - pointer.flexStartPointerAngle);
+    const targetDelta = clamp(
+      wrapAngle(pointer.flexStartJointAngle + angleDelta - joint.baseAngle),
+      -profile.softLimit,
+      profile.softLimit
+    );
+    const targetAngle = wrapAngle(joint.baseAngle + targetDelta);
+    const currentAngle = wrapAngle(joint.plugBody.angle - joint.socketBody.angle);
+    const childBranch = rotateChildBranch(connection, wrapAngle(targetAngle - currentAngle));
+    if (!childBranch) return;
+    pointer.jointHolds.set(connection, targetAngle);
+    for (const body of childBranch) {
+      Body.setVelocity(body, { x: 0, y: 0 });
+      Body.setAngularVelocity(body, 0);
+      Sleeping.set(body, false);
+    }
+  };
+
   const beginDrag = (pointer, point) => {
     pointer.phase = 'dragging';
     pointer.target = { ...point };
-    dragConstraint.bodyB = pointer.body;
+    const component = new Set(getComponent(pointer.body));
+    pointer.jointHolds = new Map(connections
+      .filter((connection) => component.has(connection.bodyA) && component.has(connection.bodyB))
+      .map((connection) => [
+        connection,
+        wrapAngle(connection.angular.plugBody.angle - connection.angular.socketBody.angle)
+      ]));
+    pointer.flexConnection = pointer.breakCandidate
+      ? null
+      : getFlexConnection(pointer.body, pointer.localPoint);
+    if (pointer.flexConnection) {
+      const joint = pointer.flexConnection.angular;
+      const socketPort = getConnectionPort(pointer.flexConnection, joint.socketBody);
+      const pivot = getPortAnchor(joint.socketBody, socketPort);
+      pointer.flexStartJointAngle = wrapAngle(joint.plugBody.angle - joint.socketBody.angle);
+      pointer.flexStartPointerAngle = Math.atan2(point.y - pivot.y, point.x - pivot.x);
+    }
+    dragConstraint.bodyB = pointer.flexConnection ? null : pointer.body;
     dragConstraint.angleB = pointer.body.angle;
     dragConstraint.pointA = { ...point };
     dragConstraint.pointB = rotatePoint(pointer.localPoint, pointer.body.angle);
+    dragConstraint.angularStiffness = 0.88;
     wakeComponent(pointer.body);
     canvas.style.cursor = 'grabbing';
     start();
+  };
+
+  const settleFlexPose = (pointer) => {
+    const connection = pointer.flexConnection;
+    if (!connection || !connections.includes(connection)) return;
+    const joint = connection.angular;
+    const profile = JOINT_SERVO_PROFILES[joint.family];
+    if (!profile) return;
+    const relativeAngle = wrapAngle(joint.plugBody.angle - joint.socketBody.angle);
+    const delta = clamp(
+      wrapAngle(relativeAngle - joint.baseAngle),
+      -profile.softLimit,
+      profile.softLimit
+    );
+    let detent = Math.round(delta / DETENT_STEP) * DETENT_STEP;
+    if (!detent && Math.abs(delta) >= profile.softLimit * 0.55) {
+      detent = Math.sign(delta) * profile.softLimit;
+    }
+    joint.poseAngle = wrapAngle(
+      joint.baseAngle + clamp(detent, -profile.softLimit, profile.softLimit)
+    );
   };
 
   const releasePointer = (event, applyGesture = true) => {
@@ -1319,9 +1419,16 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     pointer.samples.push({ ...point, time: performance.now() });
     dragConstraint.bodyB = null;
     dragConstraint.pointB = { x: 0, y: 0 };
+    dragConstraint.angularStiffness = 0.88;
     activePointer = null;
     canvas.style.cursor = 'default';
     if (!applyGesture || pointer.phase === 'scrolling') return;
+    if (pointer.phase === 'dragging' && pointer.flexConnection) {
+      settleFlexPose(pointer);
+      wakeComponent(body);
+      start();
+      return;
+    }
 
     if (pointer.phase === 'dragging' && travel >= 7) {
       placeGrabAtPoint(body, pointer.localPoint, point);
@@ -1400,12 +1507,20 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       ? Math.abs(dx * breakCandidate.direction.y - dy * breakCandidate.direction.x)
       : Infinity;
     if (breakCandidate
-      && outwardTravel >= 34 * scale
+      && outwardTravel >= 34 * interactionScale
       && outwardTravel >= crossTravel * 0.72) {
       removeConnection(breakCandidate.connection);
       activePointer.breakCandidate = null;
+      activePointer.flexConnection = null;
+      dragConstraint.bodyB = activePointer.body;
+      dragConstraint.angleB = activePointer.body.angle;
+      dragConstraint.pointA = { ...point };
+      dragConstraint.pointB = rotatePoint(activePointer.localPoint, activePointer.body.angle);
+      dragConstraint.angularStiffness = 0.88;
       activePointer.skipSnapUntilRelease = true;
       wakeComponent(activePointer.body);
+    } else if (activePointer.flexConnection) {
+      applyFlexGesture(activePointer, point);
     }
     const now = performance.now();
     activePointer.samples.push({ ...point, time: now });
@@ -1462,6 +1577,60 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     for (const body of component) Body.translate(body, { x: dx, y: dy });
   };
 
+  const resizeParts = (nextScale) => {
+    if (Math.abs(nextScale - scale) < 0.001) return;
+    const ratio = nextScale / scale;
+    const visited = new Set();
+    for (const body of dynamicBodies) {
+      if (visited.has(body)) continue;
+      const component = getComponent(body);
+      component.forEach((part) => visited.add(part));
+      const pivot = component.reduce((sum, part) => ({
+        x: sum.x + part.position.x / component.length,
+        y: sum.y + part.position.y / component.length
+      }), { x: 0, y: 0 });
+      for (const part of component) {
+        Body.setPosition(part, {
+          x: pivot.x + (part.position.x - pivot.x) * ratio,
+          y: pivot.y + (part.position.y - pivot.y) * ratio
+        });
+      }
+    }
+
+    for (const body of dynamicBodies) {
+      Body.scale(body, ratio, ratio);
+      const meta = bodyMeta.get(body);
+      meta.width *= ratio;
+      meta.height *= ratio;
+      for (const port of meta.ports) {
+        port.x *= ratio;
+        port.y *= ratio;
+      }
+      const baseDensity = meta.spec.role === 'chest' || meta.spec.role === 'pelvis'
+        ? 0.0032
+        : 0.0024;
+      Body.setDensity(body, baseDensity / (nextScale * nextScale));
+      body.constraintImpulse.x = 0;
+      body.constraintImpulse.y = 0;
+      body.constraintImpulse.angle = 0;
+      body.positionImpulse.x = 0;
+      body.positionImpulse.y = 0;
+
+      const view = bodyToView.get(body);
+      view.root.scale.set(view.root.scale.x * ratio, view.root.scale.y * ratio);
+      view.farShadow.scale.set(view.farShadow.scale.x * ratio, view.farShadow.scale.y * ratio);
+      view.nearShadow.scale.set(view.nearShadow.scale.x * ratio, view.nearShadow.scale.y * ratio);
+    }
+    for (const connection of connections) {
+      connection.constraint.pointA.x *= ratio;
+      connection.constraint.pointA.y *= ratio;
+      connection.constraint.pointB.x *= ratio;
+      connection.constraint.pointB.y *= ratio;
+    }
+    scale = nextScale;
+    interactionScale = clamp(scale, 1, 1.4);
+  };
+
   const resize = () => {
     if (destroyed) return;
     const rect = stage.getBoundingClientRect();
@@ -1472,12 +1641,14 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     if (activePointer) {
       dragConstraint.bodyB = null;
       dragConstraint.pointB = { x: 0, y: 0 };
+      dragConstraint.angularStiffness = 0.88;
       activePointer = null;
     }
     canvas.style.cursor = 'default';
     if (celebration) finishCelebration(true);
     width = nextWidth;
     height = nextHeight;
+    resizeParts(getScale(width));
     app.renderer.resize(width, height, resolution);
     app.stage.hitArea = new Rectangle(0, 0, width, height);
     rebuildWalls();
@@ -1555,6 +1726,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       window.removeEventListener('pointercancel', handlePointerCancel);
       app.ticker.remove(handleTick);
       dragConstraint.bodyB = null;
+      dragConstraint.angularStiffness = 0.88;
       if (celebration) finishCelebration(false);
       Composite.clear(engine.world, false, true);
       Engine.clear(engine);

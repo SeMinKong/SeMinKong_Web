@@ -10,6 +10,7 @@ import {
   interpolatePose,
   limitRelativeAngularVelocity,
   pointInRotatedRect,
+  projectJointLimit,
   rotatePoint,
   solveMovingPortPose,
   smoothThrowVelocity,
@@ -17,7 +18,7 @@ import {
   wrapAngle
 } from '../src/motion/kinetic-math.js';
 
-const { Bodies, Composite, Constraint, Engine } = Matter;
+const { Body, Bodies, Composite, Constraint, Engine } = Matter;
 
 test('kinetic pose interpolation stays clamped and continuous', () => {
   const previous = { x: 10, y: 20, angle: -0.4 };
@@ -85,6 +86,37 @@ test('joint servo wraps relative angles and caps soft-limit correction', () => {
     damping: 0
   });
   assert.equal(freeInsideLimit.correction, 0);
+
+  const heldPoseWithFixedLimit = calculateJointServo({
+    parentAngle: 0,
+    childAngle: 0.62,
+    centerAngle: 0.52,
+    limitAngle: 0,
+    softLimit: 0.7,
+    centerStrength: 0.1,
+    limitStrength: 0.2,
+    damping: 0,
+    maxCorrection: 0.05
+  });
+  assert.ok(Math.abs(heldPoseWithFixedLimit.error - 0.1) < 1e-9);
+  assert.ok(Math.abs(heldPoseWithFixedLimit.limitError - 0.62) < 1e-9);
+  assert.equal(heldPoseWithFixedLimit.excess, 0);
+  assert.ok(heldPoseWithFixedLimit.correction > 0);
+
+  const heldPoseBeyondFixedLimit = calculateJointServo({
+    parentAngle: 0,
+    childAngle: 0.9,
+    centerAngle: 0.9,
+    limitAngle: 0,
+    softLimit: 0.7,
+    centerStrength: 0.1,
+    limitStrength: 0.2,
+    damping: 0,
+    maxCorrection: 0.05
+  });
+  assert.equal(heldPoseBeyondFixedLimit.error, 0);
+  assert.ok(Math.abs(heldPoseBeyondFixedLimit.excess - 0.2) < 1e-9);
+  assert.ok(heldPoseBeyondFixedLimit.correction > 0);
 });
 
 test('joint relative velocity limiter preserves pair momentum', () => {
@@ -106,6 +138,37 @@ test('joint relative velocity limiter preserves pair momentum', () => {
   assert.ok(Math.abs(limited.relativeVelocity - 0.06) < 1e-12);
   assert.ok(Math.abs(limited.plugVelocity - limited.socketVelocity - 0.06) < 1e-12);
   assert.ok(Math.abs(afterMomentum - beforeMomentum) < 1e-12);
+});
+
+test('joint projection enforces a fixed base limit with inertia weighting', () => {
+  const projection = projectJointLimit({
+    parentAngle: 0.2,
+    childAngle: 1.4,
+    limitAngle: 0.1,
+    softLimit: 0.7,
+    inverseParent: 0.25,
+    inverseChild: 0.75
+  });
+
+  assert.equal(projection.projected, true);
+  assert.ok(Math.abs(projection.correction - 0.4) < 1e-12);
+  assert.ok(Math.abs(wrapAngle(
+    projection.childAngle - projection.parentAngle - 0.1
+  ) - 0.7) < 1e-12);
+  assert.ok(Math.abs(projection.parentAngle - 0.3) < 1e-12);
+  assert.ok(Math.abs(projection.childAngle - 1.1) < 1e-12);
+
+  const insideLimit = projectJointLimit({
+    parentAngle: -0.2,
+    childAngle: 0.15,
+    limitAngle: 0,
+    softLimit: 0.7,
+    inverseParent: 0.25,
+    inverseChild: 0.75
+  });
+  assert.equal(insideLimit.projected, false);
+  assert.equal(insideLimit.parentAngle, -0.2);
+  assert.equal(insideLimit.childAngle, 0.15);
 });
 
 test('throw smoothing caps diagonal magnitude and respects long sample gaps', () => {
@@ -196,11 +259,17 @@ test('Matter constraints preserve aligned ports on rotated bodies', () => {
     bodyB: targetBody,
     pointB: rotatePoint(targetPort, targetBody.angle),
     length: 0,
-    stiffness: 1
+    stiffness: 0.84,
+    damping: 0.24
   });
   Composite.add(engine.world, [movingBody, targetBody, joint]);
+  Body.translate(movingBody, { x: 6, y: -4 });
+  Body.setVelocity(movingBody, { x: 2.4, y: -1.6 });
 
-  for (let tick = 0; tick < 10; tick += 1) Engine.update(engine, 1000 / 60);
+  for (let tick = 0; tick < 60; tick += 1) {
+    Engine.update(engine, 1000 / 120);
+    Engine.update(engine, 1000 / 120);
+  }
 
   const movingWorld = worldPort({
     x: movingBody.position.x,
@@ -212,7 +281,7 @@ test('Matter constraints preserve aligned ports on rotated bodies', () => {
     y: targetBody.position.y,
     angle: targetBody.angle
   }, targetPort);
-  assert.ok(Math.hypot(movingWorld.x - targetWorld.x, movingWorld.y - targetWorld.y) < 0.01);
+  assert.ok(Math.hypot(movingWorld.x - targetWorld.x, movingWorld.y - targetWorld.y) < 0.25);
   Engine.clear(engine);
 });
 

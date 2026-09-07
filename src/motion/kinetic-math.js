@@ -55,6 +55,8 @@ export const calculateJointServo = ({
   parentAngle = 0,
   childAngle = 0,
   restAngle = 0,
+  centerAngle,
+  limitAngle,
   relativeVelocity = 0,
   softLimit = Math.PI,
   centerStrength = 0,
@@ -62,16 +64,57 @@ export const calculateJointServo = ({
   damping = 0,
   maxCorrection = 0.02
 } = {}) => {
-  const error = wrapAngle(childAngle - parentAngle - restAngle);
+  const relativeAngle = wrapAngle(childAngle - parentAngle);
+  const centerTarget = centerAngle ?? restAngle;
+  const limitTarget = limitAngle ?? restAngle;
+  const error = wrapAngle(relativeAngle - centerTarget);
+  const limitError = wrapAngle(relativeAngle - limitTarget);
   const limit = Math.max(0, softLimit);
-  const excess = Math.sign(error) * Math.max(0, Math.abs(error) - limit);
+  const excess = Math.sign(limitError) * Math.max(0, Math.abs(limitError) - limit);
   const rawCorrection = error * centerStrength
     + excess * limitStrength
     + relativeVelocity * damping;
   return {
     correction: clamp(rawCorrection, -Math.abs(maxCorrection), Math.abs(maxCorrection)),
     error,
+    limitError,
     excess
+  };
+};
+
+export const projectJointLimit = ({
+  parentAngle = 0,
+  childAngle = 0,
+  limitAngle = 0,
+  softLimit = Math.PI,
+  inverseParent = 0,
+  inverseChild = 0
+} = {}) => {
+  const relativeAngle = wrapAngle(childAngle - parentAngle);
+  const limitError = wrapAngle(relativeAngle - limitAngle);
+  const limit = Math.max(0, softLimit);
+  const boundedError = clamp(limitError, -limit, limit);
+  const correction = limitError - boundedError;
+  const inverseTotal = inverseParent + inverseChild;
+
+  if (inverseTotal <= 0 || Math.abs(correction) < 1e-9) {
+    return {
+      boundedError,
+      childAngle,
+      correction: 0,
+      limitError,
+      parentAngle,
+      projected: false
+    };
+  }
+
+  return {
+    boundedError,
+    childAngle: childAngle - correction * inverseChild / inverseTotal,
+    correction,
+    limitError,
+    parentAngle: parentAngle + correction * inverseParent / inverseTotal,
+    projected: true
   };
 };
 

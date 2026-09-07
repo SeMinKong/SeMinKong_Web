@@ -1,5 +1,16 @@
 # Design brief
 
+## 2026-09-07 — Authored research robot kit
+
+Home의 11조각 퍼즐은 추상 도형이 아니라 실제 교육·연구용 조립 로봇 키트처럼 읽혀야 한다. 머리, 흉곽, 골반, 상완, 전완, 대퇴, 하퇴의 7개 SVG master를 좌우 대칭 부품에 재사용하고 각 부품은 silhouette와 기능 디테일로 구분한다. warm shell `#DED6CA`, graphite `#24211D`, metal `#B8AFA2`, vermilion actuator `#A73524`만 사용한다.
+
+- 머리는 단일 sensor aperture와 neck cradle, 흉곽은 shoulder yoke·spine·rotary actuator, 골반은 waist bearing·hip housing을 갖는다.
+- 상완은 load rail과 elbow housing, 전완은 slider와 2지 gripper, 대퇴는 이중 rail과 knee plate, 하퇴는 damper·ankle brace·foot plate로 구분한다.
+- 두 눈, 표정, visor, HUD, 회로 패턴, 문자·번호, neon, 무작위 vent·볼트·chevron은 넣지 않는다.
+- 분해된 부품은 desktop 약 2배, tablet 약 1.75배, mobile 약 1.55배 크기로 표시한다. 초기 각도를 반영한 외곽선과 port·shadow 여유까지 viewport 안에 두며, 이름·인사말·CTA와 시각적으로 겹칠 수 있지만 DOM 콘텐츠가 계속 읽기와 pointer ownership을 가진다.
+- 연결된 부품의 몸통 쪽을 잡으면 조립체가 강체처럼 이동하고, 말단 grip을 잡으면 그 부품의 해부학적 parent 관절 하나만 움직인다. 다른 관절은 현재 각도를 유지한다.
+- 정적·reduced fallback도 같은 authored SVG를 사용한다. 좁은 화면의 완성 실루엣은 본문 위 여백에 맞춘 1.1배, forced colors에서는 SVG 대신 system colors와 단순 silhouette를 사용한다.
+
 ## 2026-08-10 — Home Hero hand restoration
 
 The Home opening must communicate the portfolio as a browsable body of work, not only an identity statement. The Hero keeps only the role, name, one core statement, and two project actions; the repeated THING system summary is left to Selected Work and the case study. It preserves the animated dexterous-hand graphic as the Hero's signature visual; on mobile the copy stays at the top and the hand occupies the centered lower field indicated in the approved reference. The real THING demonstration appears in the immediately following Featured Selected Work card. The portrait demonstration keeps its native 9:16 composition beside concise project proof, and the shortened Hero lets Selected Work enter with less empty scroll. The About teaser follows the project and capability evidence.
