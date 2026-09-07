@@ -16,6 +16,8 @@
 
 경로와 entry의 기준은 `config/site-routes.js`다. 프로젝트 사실과 자료 출처는 [포트폴리오 근거](portfolio-evidence.md), [시각자료 출처](portfolio-visual-sources.md)를 따른다.
 
+정적 PDF는 18쪽으로 구성한다. AQIS의 장비 연동·집기 순서·예외 입력, THING의 기구 편차·제어 조건, Briefit의 정보 보존을 중심에 두며 MRI·Alkkagi·Prompt는 보조 사례로 압축한다. 사소한 테스트 개수와 합성 입력 예시는 대표 성과로 쓰지 않는다. 확인된 구현, 후속 Mock 재현, 실물 시연과 미검증 조건을 구분한다. 원본 구조도와 수상 자료는 보존한다.
+
 ## 시각 언어
 
 따뜻한 종이색, 짙은 graphite, 제한적인 vermilion을 사용한다. 배경의 wash와 grain은 정적이며, 실제 프로젝트 이미지와 영상의 원래 비율을 보존한다. 과장된 HUD, 기술 점수, 장식용 상태 표시를 추가하지 않는다.

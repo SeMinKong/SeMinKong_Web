@@ -1,10 +1,12 @@
 # Static portfolio evidence register
 
-Reviewed 2026-09-04. This is an editorial working record. Bounded local reproductions are documented below; neither the diagrams nor local smoke tests establish hardware, model-quality or production-performance claims.
+Reviewed 2026-09-07. This is an editorial working record. Bounded local reproductions are documented below; neither the diagrams nor local smoke tests establish hardware, model-quality or production-performance claims.
 
 ## Editorial structure
 
-A4 landscape, 20 pages: personal introduction; About / education / current learning; project index; THING overview / source architecture / implementation / results and award; AQIS overview / architecture / coordinate timing; Briefit overview / data pipeline / postprocessing and three awards; MRI overview / method and evaluation / synthetic mask preprocessing; Alkkagi overview / physics; Prompt Generator; contact. The opening two pages contain no project names or project-linked strengths. This visual revision extends the locally prepared 18-page edition; GitHub Pages deployment is separate.
+A4 landscape, 18 pages: introduction / About / index (1–3); AQIS integration, initial hardware constraint, coordinate timing and verification boundaries (4–7); THING integration, source architecture, physical variation and demonstration / award (8–11); Briefit contribution / three awards and quality tradeoffs (12–13); MRI inference and evaluation boundaries (14–15); Alkkagi server-owned state (16); Prompt domain state / revision limits (17); contact (18). The opening two pages contain no project names or project-linked awards. Publication follows the standing GitHub Pages authorization after PDF and website verification.
+
+The owner selected practical engineering evidence over minor counts or toy demonstrations. Remove the synthetic summary and mask demonstration pages and the Alkkagi instruction page. Keep source imagery unchanged. No planned experiment, benchmark setting, synthetic check, or repository-reported score becomes a measured achievement. New offline / hardware / model experiments were not run for this editorial revision.
 
 Use warm paper, near-black text, one vermilion accent, compact 38pt margins, thin rules and real project artifacts. Metadata rails, two/three-column explanations and implementation notes create dense technical pages. Use a readable Korean body face instead of stretching the website's display face into long paragraphs. No synthetic project screenshots, skill percentages, invented impact numbers or decorative terminal windows. References inform hierarchy, not copied layout or branding.
 
@@ -21,8 +23,10 @@ Use warm paper, near-black text, one vermilion accent, compact 38pt margins, thi
 - Two people; Kong is team lead and Full-stack/Robot Integration owner. Main development 2026-06-01 to 06-26, initial planning in May. [Roles and schedule](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/docs/07-roles-and-schedule.md).
 - Own work: RealOps, FastAPI REST/WebSocket, ROS 2 bridge, conveyor HTTP, Dobot sequence, LLM command/fallback. Model training/Roboflow/CAD/simulation are separate teammate work, not personal claims.
 - Strong decision: develop common REST/WS with mock adapters before hardware access. [Day 1](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/docs/day1-decisions.md).
+- The initial plan limits hardware use to the final three days. This is a documented planning constraint, not a measured actual deployment duration. The PDF links this constraint to the implemented adapter/API separation.
 - Strong integration issue: moving target coordinates become stale; use a detection after stop request and configured wait. [Main event flow](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/server/app/main.py), [related tests](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/server/tests/test_real_monitoring.py).
 - Isolated local tests were run during the visual revision: 26 passed and two existing calibration-expectation tests failed. See reproduction scope below. Do not infer physical stop confirmation, classification success rate, cycle time, Nav2 completion or persistent database implementation. Demo contains speed-up segments.
+- Current PDF verification table covers duplicate detections, STOPPED monitoring and timestamped stale input, supported by original tests plus prior bounded Mock reproduction. A missing timestamp passes freshness checking; the automatic path does not gate the next stage on conveyor stop failure; missing depth can use fixed coordinates. Process exit code zero is the resume condition, not sensed grasp success. Hardware cycle time, repeated sorting success and outage recovery remain unmeasured. See pinned source `9f6530a2acffa0555f9df2eb628b40e4d01b6341`.
 
 ## MRI
 

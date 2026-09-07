@@ -35,3 +35,14 @@
 - [x] 구현 커밋 `f02199a`의 GitHub Pages run `34088579312`에서 build·deploy 모두 성공했다. 공개 Home에서 새 `portfolio-CjyuSrh-.js`와 `portfolio-CVdpmLl9.css`, full/interactive, 11부품 sleeping, overflow 0, warning/error 0을 확인했다. 캐시 구분 query로 새 배포를 확인한 뒤 기본 주소로 복귀했다. Work는 1280px의 6개 프로젝트와 390px의 정적 목록·overflow 0을 확인했다.
 
 이전 로봇 디자인 검수는 이력 첫 항목에 기록되어 있다. 이번 작업은 동일 동작의 구조 정리이며 실물 터치 기기와 OS forced-colors 전환은 별도 검증 대상이다.
+
+## 2026-09-07 실무 판단 중심 정적 포트폴리오
+
+- [x] 최종 PDF 18쪽을 렌더링해 전체 구성과 변경 페이지를 검수했다. 본문·이미지 겹침 0, 링크 60개·내부 목차 링크 6개, 수상 4건, 북마크 18개, 캡션 정렬 5개, 문단 끝줄 11개를 확인했다. 원본 구조도 PNG 5개의 RGB·alpha·해시가 모두 일치한다. 최소 글자 크기 8.8pt.
+- [x] THING 이동 명령의 토크 순서, 개인/팀 기여, AQIS 정지·timestamp·고정 좌표·스크립트 종료 조건, Briefit 정보 손실과 평가 범위를 원본과 대조했다. 새 실물·모델·부하 실험 결과나 미확인 성능 수치는 추가하지 않았다.
+- [x] 공개 사본과 최종 PDF: 15,053,868 bytes, SHA-256 `4E57CC1F514FD4B70AD578F307A1E057565A072F30CC039310D0DE9A85E6C661`. 다운로드 설명·18쪽·15.1MB·2026.09.07 및 바이트/해시 계약을 동기화했다.
+- [x] `npm.cmd run verify`: 49개 테스트, 11개 route·28개 module·12개 stylesheet 경계, production build·22개 배포 entry 검증 통과. `git diff --check` 통과.
+- [x] 실제 Chromium의 Resume 390×844·768×1024·1280×900에서 다운로드 설명·크기·링크·가로 overflow 0을 확인했다. Skip link의 focus와 Enter 본문 이동, PDF 링크의 2px focus outline, console warning/error 0을 확인했다.
+- [x] Home의 기본 390/768 lite·static, 1280 full·interactive 및 가로 overflow 0을 확인했다. localhost reduced override에서 flat·canvas 숨김과 모바일 완성형 로봇을 확인했다. 로봇 동작 코드는 이번 변경 대상이 아니며 실물 touch 기기·OS forced-colors 전환은 별도로 검증하지 않았다.
+
+배포는 이 검증 파일만 선별해 기존 Pages workflow로 수행한다. 별도 진행 중인 아키텍처 SVG·아이콘 변경과 임시 렌더 파일은 포함하지 않는다.
