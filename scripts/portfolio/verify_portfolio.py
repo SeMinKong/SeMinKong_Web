@@ -71,11 +71,12 @@ def verify(path):
     # Architecture labels now live in the owner's unchanged PNGs. Check the
     # searchable explanation here and verify all image/alpha bytes below.
     for page, labels in {
+        4: ['21개 landmark', '굴곡 5축', '대립·외전 2축', '저역통과 필터', 'Sync Write', '팀 구현', '본인은 모터 점검'],
         8: ['마지막 3일', '초기 계획', 'Mock', '공통 API', '자동 임무'],
         9: ['스크립트 정상 종료 시 재개', '파지 성공', '센서', 'timestamp', '정지 명령의 실패 응답', 'Mock', '기대값 불일치', '고정 좌표'],
         5: ['현재 위치 읽기', '토크 ON', '가까운 중앙각', '끝점 보정', '후속 과제'],
         11: ['URL 집합', '부분 요약', '재요약', '잘릴 수', 'ROUGE', '후처리 전 생성문', '정보 손실'],
-        13: ['같은 MRI를 두 모델에 각각', 'polygon label', 'test', 'val', '환자 단위 독립성', '임상 진단 검증', '작은 병변', '내부 구멍'],
+        13: ['같은 MRI를 두 모델에 각각', 'polygon label', 'closing·opening', '너비/높이', 'test', 'val', '환자 단위 독립성', '임상 진단 검증', '작은 병변', '내부 구멍'],
         14: ['프로젝트 개요', '직접 맡은 일', '개인 프로젝트', '초기 설계 흐름'],
         16: ['프로젝트 개요', '직접 맡은 일', '개인 프로젝트', '실제 플레이'],
         17: ['서버 메모리', '서버에서 입력 검증', '마찰', '지속 프레임률', '서버 재시작', '절반씩', '소단계'],
@@ -84,7 +85,7 @@ def verify(path):
         normalized = re.sub(r'\s+', '', texts[page-1])
         assert all(re.sub(r'\s+', '', label) in normalized for label in labels), f'Incomplete explanation on page {page}'
     assert '캔 파지 시연' in texts[5]
-    assert '임상 진단 검증과 독립 성능 평가는 완료하지 않았습니다' in texts[12]
+    assert '임상 진단 검증은 완료하지 않았습니다' in texts[12]
     all_text = '\n'.join(texts)
     assert not any(value in all_text for value in [
         'PORTFOLIO /', 'SE MIN KONG', 'PROJECT AWARD', 'TEAM / ROLE',
@@ -136,6 +137,15 @@ def verify(path):
         'aqis', 'aqis-mock', 'aqis-coordinates', 'briefit', 'briefit-data',
         'mri', 'mri-method', 'prompt', 'prompt-architecture', 'alkkagi', 'alkkagi-physics', 'contact',
     ]
+    # Each introduction is followed by one source-backed technical explanation.
+    technical_pages = [4, 8, 11, 13, 15, 17]
+    for page in technical_pages:
+        page_elements = [e for e in elements if e['page'] == page]
+        assert any('→' in e['text'] and e['top'] == 97 for e in page_elements)
+        sources = [str(a.get_object()['/A']['/URI']) for a in reader.pages[page-1].get('/Annots', [])
+                   if '/A' in a.get_object()]
+        assert sum(bool(re.search(r'/blob/[0-9a-f]{40}/', u)) for u in sources) >= 3, f'Page {page}: source pins missing'
+        assert len([e for e in page_elements if e['x'] == 515 and e['height'] >= 45]) == 3
     for entry in layout['pages']:
         assert not re.search(r'(하기|까지|했습니다|합니다|인가요\?)$', entry['title'])
     for i, a in enumerate(elements):
@@ -182,8 +192,8 @@ def verify(path):
         (5, '다회전 위치에서'), (5, '중앙각 복귀만으로'),
         (9, '같은 대상이'), (9, '관제가 정지되면'),
         (9, '설정 시간 대기와'), (9, 'timestamp가 없으면'),
-        (11, '긴 입력은'), (13, '마스크의 작은'),
-        (15, '처리 대상 LLM'), (17, '겹친 거리는'),
+        (11, '생성 시에는'), (13, '마스크를 이진화하고'),
+        (15, '영역별 라운드'), (17, '중심 거리와'),
     ]
     with pdfplumber.open(path) as doc:
         for page, prefix in edited_paragraphs:

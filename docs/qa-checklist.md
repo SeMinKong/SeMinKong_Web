@@ -2,6 +2,17 @@
 
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
+## 2026-09-07 프로젝트별 핵심 기술 페이지
+
+- [x] 4·8·11·13·15·17쪽을 소스 기반 기술 해설로 편집하고 최종 렌더를 육안 검수했다. 나머지 12쪽은 이전 공개 PDF의 105dpi 렌더와 픽셀 단위로 동일하다. 총 18쪽·프로젝트 소개 시작·지정 순서·수상 자료를 유지한다.
+- [x] GitHub의 고정 commit 파일/함수와 여섯 페이지 문구를 재대조했다. THING 명령 종류·엄지 제어, AQIS 동일 이벤트 cooldown, Briefit 학습/평가 범위, MRI 독립 추론, Prompt 일부 영역 합성과 라운드 조건, Alkkagi 위치/속도 보정의 차이를 확인했다.
+- [x] PDF 검사 통과: 북마크 18개, 외부 링크 69개·소개로 연결되는 내부 링크 6개, 겹침 0, 캡션 7개, 문단 끝줄 12개, 최소 글자 9pt. 기술 페이지마다 입력/출력 흐름과 고정 commit 소스 3개 이상을 확인했다. 원본 구조도 PNG 5개의 RGB·alpha·해시는 동일하다.
+- [x] 공개 사본과 최종 PDF는 15,241,011 bytes, SHA-256 `042CBEFD1D296D4470C6D1F814535D9783EE7C45A124F6E5DDC8F7EF959B1345`로 일치한다. Resume의 18쪽·15.2MB·2026.09.07 표기와 바이트/해시 계약을 확인했다.
+- [x] `npm.cmd run verify`: 테스트 49개, route 11개·module 28개·stylesheet 12개, production build·배포 entry 22개 검증 통과. `git diff --check` 통과.
+- [x] 실제 Chromium Home·Resume 390×844·768×1024·1280×900에서 레이아웃과 가로 overflow 0, 다운로드 설명·링크를 확인했다. Skip link와 PDF 링크의 2px focus, Enter 본문 이동, warning/error 0을 확인했다. 기본 lite/static·full/interactive와 localhost reduced/flat·canvas 숨김도 확인했다.
+
+새 실물·모델·부하 시험은 하지 않았다. 모션 코드는 변경하지 않았고, 실물 touch 기기·OS forced-colors 전환은 별도로 검증하지 않았다. 검증된 PDF·웹 설명·제작/검증 스크립트·문서만 기존 Pages pipeline으로 배포하며 별도 아키텍처 SVG·아이콘 작업은 포함하지 않는다.
+
 ## 자동 검증
 
 - `npm.cmd run verify`: 동작 테스트 → 소스 route/import graph/CSS 경계 → production build → 배포 산출물과 링크 검사.

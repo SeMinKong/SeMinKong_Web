@@ -1,6 +1,8 @@
 # Portfolio visual sources and bounded reproduction
 
-## Current edition — 2026-09-07 compact implementation narrative
+## Current edition — 2026-09-07 source-backed technical explanations
+
+Pages 4, 8, 11, 13, 15 and 17 pair the unchanged source diagram with three technical paragraphs and an input → processing → output subtitle. The text explains actual algorithms, data formats and state transitions; footer links are pinned to implementation commits and functions. Personal/team scope and evaluation limits remain below each diagram. The other twelve pages retain their existing content and layout. No new model, hardware or load experiment was run.
 
 The current PDF is 18 pages: THING 3–6, AQIS 7–9, Briefit 10–11, MRI 12–13, Prompt 14–15, Alkkagi 16–17. Every project starts with an overview. Prompt page 14 uses the original `prompt-design-flow.png`; Alkkagi page 16 uses the actual gameplay frame `alkkagi-video-aim-0007.png`. Owner-returned architecture PNGs are on pages 8, 11, 13, 15 and 17; their pixels, alpha and file hashes are unchanged. Image-guide badges and explanatory legends are removed; short captions retain artifact / provenance identification. Earlier page references below describe their historical editions.
 

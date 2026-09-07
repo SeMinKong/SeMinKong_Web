@@ -254,6 +254,15 @@ class Book:
         self.para(title, x, top, width, 12.3, 18, bold=True)
         return self.para(body, x, top + 28, width, size, 16.5, keep_words=keep_words) + 18
 
+    def technology(self, figure, sections, scope):
+        """Source diagram with three readable implementation explanations."""
+        self.image(figure, M, 137, 445, 310)
+        self.rule(460, M, 445, ACCENT, 1)
+        self.para(scope, M, 474, 445, 9.5, 15, MUTED, keep_words=True)
+        for top, (title, body) in zip((137, 267, 397), sections):
+            self.para(title, 515, top, 288, 12.3, 18, bold=True)
+            self.para(body, 515, top + 27, 288, 10, 15.5, keep_words=True)
+
     def note(self, heading, body, top, x=M, width=CW):
         self.rule(top, x, width, ACCENT, 1)
         self.para(heading, x, top + 12, width, 11, 17, bold=True)
@@ -358,14 +367,20 @@ def thing_overview(b):
 
 
 def thing_architecture(b):
-    b.start('THING · 시스템 구조',
-            '인식·제어권 중재·구동을 연결한 팀 구조와 독립 점검 경로', key='thing-architecture')
-    b.image('@thing-architecture-source.png', M, 135, 555, 380)
-    b.section('제어권을 거치는 운영 경로', '모방·웹·키보드 입력을 선택한 뒤 guard를 거쳐 모터 명령을 전달합니다. 인식은 Jetson, 제어권 중재와 장치 제어는 Raspberry Pi가 담당합니다.', 617, 137, 186, 10, keep_words=True)
-    b.section('구동부를 따로 점검', '본인 점검 스크립트는 통신 응답과 개별 구동을 확인하는 독립 도구입니다. 운영 경로의 명령 중재·guard와 구분해 조립 단계의 구동부를 점검했습니다.', 617, 323, 186, 10, keep_words=True)
-    b.para('원본: 최종 발표자료 25쪽. DDS는 내부 ROS 2 통신이며, Jetson → EC2 기록 전송은 HTTPS입니다.', M, 520, CW, 9.1, 14, MUTED)
-    b.end([('최종 발표자료 · 25쪽', THING + 'blob/main/output/THING_최종발표_진짜최종.pptx'),
-           ('시스템 문서', THING + 'blob/main/docs/architecture.md')])
+    b.start('THING · 손 자세를 모터 명령으로 변환',
+            'MediaPipe landmark → 7축 목표 → ROS 2 명령 선택·검사 → DYNAMIXEL 구동', key='thing-architecture')
+    b.technology('@thing-architecture-source.png', [
+        ('21개 landmark에서 7축 목표로',
+         '팀 인식 코드는 관절 굴곡 5축과 엄지 대립·외전 2축을 분리합니다. 굴곡은 관절각을 합성하고, 엄지는 손바닥 폭으로 정규화한 거리와 평면 투영 각도로 계산합니다. deadband·저역통과 필터·프레임별 변화량 제한으로 목표의 흔들림을 줄입니다.'),
+        ('선택된 명령만 구동부로 전달',
+         'ROS 2 토픽으로 모방·원격 조작·수동 동작 명령을 분리하고 manager가 제어권을 선택합니다. guard는 상태·시각·축 범위·변화량을 검사합니다. 드라이버가 일반 손가락 축을 엔코더 값으로 바꾸고 엄지 기능 자세를 선택해 Sync Write로 전송합니다.'),
+        ('직접 구현한 모터 점검 경로',
+         'U2D2 통신과 개별·원위치·정지 스크립트를 작성했습니다. 이동 명령에서 현재 위치를 Goal Position에 기록한 뒤 Torque ON과 새 목표를 적용했습니다. 이 점검 도구로 구동부를 확인하고 아크릴 고정부·스풀·텐던을 통합했습니다.'),
+    ], '<b>구현 범위</b> 인식·ROS 2 중재·guard·운영 드라이버는 팀 구현, 본인은 모터 점검과 기구 통합을 담당했습니다. DDS는 내부 통신이며, Jetson → EC2 기록 전송은 HTTPS입니다.')
+    b.end([('손 자세 계산 · compute_hand_targets', THING_REF + 'thing_ws/src/thing_vision/thing_vision/hand_target_node.py#L183'),
+           ('명령 검사 · validate', THING_REF + 'thing_ws/src/thing_control/thing_control/command_guard_core.py#L344'),
+           ('모터 드라이버', THING_REF + 'thing_ws/src/thing_hardware/src/motor_driver_node.cpp#L908'),
+           ('본인 점검 코드', THING_REF + 'tools/dynamixel/rpi/keyboard_control_7.py#L139')])
 
 
 def thing_control(b):
@@ -415,15 +430,21 @@ def aqis_overview(b):
            ('원본 장비 시연', 'https://github.com/user-attachments/assets/70017e3e-594d-43b2-bcef-59bb4a8f0c32')])
 
 def aqis_mock(b):
-    b.start('AQIS · 장비 사용 전 통합 경로 확보',
-            '초기 일정의 제약을 Mock/Real adapter와 공통 관제 인터페이스로 다뤘습니다.', key='aqis-mock')
-    b.image('@architecture/returned/aqis.png', M, 129, 543, 395)
-    b.section('제약: 마지막 3일', '초기 계획에서 실물 장비 사용은 마지막 3일로 제한됐습니다. 앞선 기간에 관제·API·WebSocket 흐름을 먼저 연결하는 전략을 정했습니다.', 613, 133, 190, 9.7, keep_words=True)
-    b.section('선택: 연결부 분리', 'Mock 응답으로 개발한 관제 아래에 실제 장비 adapter를 연결했습니다. 서버의 공통 API와 상태 이벤트를 유지하면서 장비별 연결을 분리했습니다.', 613, 278, 190, 9.7, keep_words=True)
-    b.section('통합 범위', '컨베이어·Dobot·검사 관제를 연결했습니다. 그림의 TurtleBot 자동 임무는 확장 설계이며, 구현은 SLAM·카메라·상태 관제까지입니다.', 613, 423, 190, 9.5, keep_words=True)
-    b.end([('시스템 문서', AQIS_REF + 'README.md'),
-           ('일정 제약과 결정', AQIS_REF + 'docs/day1-decisions.md'),
-           ('서버 구현', AQIS_REF + 'server/app/main.py')])
+    b.start('AQIS · 검출을 공정 제어로 연결',
+            'YOLO·깊이 카메라 → ROS 2 검출 이벤트 → FastAPI 상태 관리 → 장비 명령·WebSocket 관제', key='aqis-mock')
+    b.technology('@architecture/returned/aqis.png', [
+        ('영상의 검출 중심을 공간 좌표로',
+         '팀 비전 노드는 YOLO 검출 중심이 집기 ROI 안에 있는 후보를 남깁니다. 중심 주변 유효 깊이의 중앙값과 카메라 내부 파라미터로 픽셀을 3D 좌표로 역투영합니다. 라벨 누적과 동일 라벨·위치 이벤트의 재발행 제한을 거쳐 결과를 ROS 토픽에 보냅니다.'),
+        ('검출 형식을 통일해 상태를 갱신',
+         '직접 구현한 서버는 ROS 콜백의 JSON을 개별 검출로 펼치고 정상·불량 라벨을 공통 형식으로 정규화합니다. 중복을 거른 뒤 통계와 공정 상태를 갱신하고, asyncio 루프의 WebSocket으로 React 관제에 전달합니다.'),
+        ('장비 연결부와 집기 좌표의 분리',
+         '초기 계획의 실물 사용은 마지막 3일이었습니다. 공통 API 아래 Mock·실장비 adapter를 두어 관제 흐름을 먼저 연결했습니다. 정지 요청 뒤 갱신한 카메라 X/Y는 affine 계수·단위·오프셋을 적용해 Dobot 집기 목표로 변환합니다.'),
+    ], '<b>구현 범위</b> 본인은 관제·서버·ROS 연결·장비 adapter·집기 시퀀스, 비전·모델 학습은 팀 구현입니다. 그림의 TurtleBot 자동 임무는 확장 설계이며 SLAM·카메라·상태 관제까지 구현했습니다.')
+    b.end([('검출·깊이 변환', AQIS_REF + 'aqis_ws/src/integrate_prac/integrate_prac/realsense_yolo_node.py#L215'),
+           ('검출 정규화·처리', AQIS_REF + 'server/app/main.py#L165'),
+           ('ROS → asyncio', AQIS_REF + 'server/app/services/ros_bridge.py#L147'),
+           ('장비 adapter', AQIS_REF + 'server/app/adapters/conveyor.py#L58'),
+           ('집기 좌표 변환', AQIS_REF + 'server/app/services/dobot_pick_place.py#L142')])
 
 
 def aqis_coordinates(b):
@@ -462,14 +483,20 @@ def briefit_overview(b):
 
 
 def briefit_data(b):
-    b.start('Briefit · 긴 기사와 요약 손실',
-            '입력 중복, 모델의 길이 제한, 후처리의 정보 손실을 서로 다른 문제로 다뤘습니다.', key='briefit-data')
-    b.image('@architecture/returned/briefit.png', M, 137, 485, 365)
-    b.section('본문 정제와 중복 방지', '본문에서 스크립트·스타일을 제거하고 댓글 URL을 제외합니다. 같은 실행의 여러 배치가 URL 집합을 공유해 이미 수집한 기사의 재저장을 막습니다.', 555, 137, 248, 9.7, keep_words=True)
-    b.section('부분 요약 뒤 재요약', '긴 입력은 문단을 묶어 부분 요약한 뒤 다시 요약합니다. 긴 문단이나 재요약 입력은 길이 제한으로 잘릴 수 있어 전체 문맥 보존을 보장하지는 않습니다.', 555, 263, 248, 9.7, keep_words=True)
-    b.section('후처리와 평가의 분리', '반복·짧은 끝문장을 제거하는 규칙은 정상 문장도 지울 수 있습니다. ROUGE는 후처리 전 생성문을 평가하므로 반복 감소와 정보 손실은 별도 비교가 필요합니다.', 555, 389, 248, 9.7, keep_words=True)
-    b.para('검증 범위: 생성·평가 코드 확인. ROUGE 점수 로그와 후처리 전후 품질 비교 결과는 확인되지 않았습니다.', M, 520, CW, 9.1, 14, MUTED)
-    b.end([('수집 구현', BRIEF_COLLECT), ('부분 요약·재요약', BRIEF_GENERATE), ('학습·평가', BRIEF_TRAIN), ('출력 후처리', BRIEF_POST)])
+    b.start('Briefit · KoBART 학습과 요약 생성',
+            '기사·기준 요약으로 학습 구성 → 기사에서 요약 토큰 생성 → 긴 입력 재요약·출력 정리', key='briefit-data')
+    b.technology('@architecture/returned/briefit.png', [
+        ('기사와 기준 요약을 학습 쌍으로',
+         '사전학습 KoBART의 인코더는 기사 문맥을 표현하고 디코더는 요약 토큰을 생성합니다. 기사 text를 입력 토큰으로, 기준 summary를 정답 labels로 변환해 Seq2SeqTrainer에 전달합니다. 본인은 토큰화·학습 설정·평가 스크립트를 구성했습니다.'),
+        ('긴 입력은 부분 요약 뒤 재요약',
+         '생성 시에는 기사만 입력하고 beam search로 요약 후보를 탐색합니다. 긴 입력은 문단을 묶어 부분 요약한 뒤 결과를 이어 붙여 재요약합니다. 입력을 나누더라도 긴 문단과 재요약 입력은 토큰 제한으로 잘릴 수 있어 전체 문맥 보존을 보장하지 않습니다.'),
+        ('모델 생성과 규칙 후처리의 분리',
+         '별도 함수에서 생성문 끝의 반복·짧은 문장을 제거합니다. 정상 문장도 삭제될 수 있어 반복 감소와 정보 손실을 함께 확인해야 합니다. ROUGE는 기준 요약과 후처리 전 생성문을 비교하며, 최종 서비스 출력의 후처리 효과를 평가하지는 않습니다.'),
+    ], '<b>2025년 본인 구현</b> 본문 정제·실행 내 URL 집합 공유부터 KoBART 학습·생성·평가 코드까지 담당했습니다. 학습 완료·ROUGE 점수 로그와 후처리 전후 품질 비교 결과는 확인되지 않았습니다.')
+    b.end([('학습 · preprocess_fn', BRIEF + 'blob/714502c017f0c57ebebd634b60ea77a102945d81/Kobart/Scripts/Train.py#L25'),
+           ('생성 · smart_summarize', BRIEF_GENERATE + '#L43'),
+           ('후처리 · _clean_tail', BRIEF + 'blob/da4ea1b09cfd44724facc19233d65c07e4301f3a/Kobart/Scripts/GenerateJson.py#L16'),
+           ('평가 · Evaluate.py', BRIEF + 'blob/714502c017f0c57ebebd634b60ea77a102945d81/Kobart/Scripts/Evaluate.py#L12')])
 
 
 def mri_overview(b):
@@ -489,14 +516,19 @@ def mri_overview(b):
 
 
 def mri_method(b):
-    b.start('Brain MRI · 분류·분할 모델 구조',
-            '분류와 분할은 독립적으로 추론하고, 라벨 변환과 평가 데이터의 조건을 별도로 관리합니다.', key='mri-method')
-    b.image('@architecture/returned/mri.png', M, 129, 485, 367)
-    b.section('라벨 정제와 영역 손실', '마스크의 작은 영역을 제거하고 외부 윤곽을 polygon label로 변환합니다. 잡음을 줄이는 규칙이 작은 병변이나 내부 구멍도 지울 수 있어 원본 마스크와 대조가 필요합니다.', 555, 137, 248, 9.7, keep_words=True)
-    b.section('분류가 분할을 차단하지 않도록', '같은 MRI를 두 모델에 각각 입력합니다. 비종양으로 분류해도 분할 추론을 실행하며, 두 결과를 함께 표시합니다. 결과 불일치를 자동으로 보정하는 구조는 아닙니다.', 555, 263, 248, 9.7, keep_words=True)
-    b.section('평가 데이터의 독립성', '학습 코드는 test를 검증용 val에 연결합니다. 학습·검증에 쓰지 않은 별도 평가가 필요하며, BRISC에는 환자 식별자가 없어 환자 단위 독립성도 확인할 수 없습니다.', 555, 389, 248, 9.7, keep_words=True)
-    b.para('연구용 데이터의 비종양 범주에도 병변이 포함될 수 있습니다. 임상 진단 검증과 독립 성능 평가는 완료하지 않았습니다.', M, 520, CW, 9.1, 14, MUTED)
-    b.end([('전처리·학습', MRI_REF+'src/training/train.py'), ('통합 추론', MRI_REF+'src/testing/test.py'),
+    b.start('Brain MRI · YOLO11 분류·분할의 결합',
+            '이미지·마스크를 학습 형식으로 변환 → 두 모델에 독립 입력 → 범주와 분할 영역 시각화', key='mri-method')
+    b.technology('@architecture/returned/mri.png', [
+        ('유형과 위치를 서로 다른 모델로',
+         'YOLO11 분류 모델은 이미지 전체의 범주를, 분할 모델은 영역의 위치와 형태를 예측합니다. 클래스별 이미지 폴더와 이미지·polygon label 쌍으로 학습 입력을 나누고, 사전학습 cls·seg 모델을 각각 불러와 별도 가중치로 추론하도록 구성했습니다.'),
+        ('픽셀 마스크를 정규화 좌표로',
+         '마스크를 이진화하고 closing·opening으로 정리한 뒤 외부 윤곽을 추출합니다. 면적·점 수 조건을 통과한 꼭짓점의 x/y를 너비/높이로 나눠 polygon label로 저장합니다. 이 과정에서 작은 병변이나 내부 구멍이 사라질 수 있어 원본과 대조가 필요합니다.'),
+        ('같은 MRI의 두 출력을 함께 표시',
+         '같은 MRI를 두 모델에 각각 입력합니다. 분류의 최상위 범주·점수를 읽고 분할 마스크가 그려진 이미지 위에 표시합니다. 비종양 분류도 분할 추론을 차단하지 않으며, 두 결과가 다를 때 자동으로 판정을 보정하는 구조는 아닙니다.'),
+    ], '<b>평가 범위</b> 학습에서 test를 val에 연결해 별도 독립 평가가 필요합니다. BRISC의 환자 단위 독립성은 확인할 수 없고 비종양 범주가 정상만 뜻하지는 않습니다. 임상 진단 검증은 완료하지 않았습니다.')
+    b.end([('모델별 학습', MRI_REF+'src/training/train.py#L136'),
+           ('라벨 변환 · mask_to_polygons', MRI_REF+'src/training/train.py#L25'),
+           ('통합 추론 · run_integrated_test', MRI_REF+'src/testing/test.py#L76'),
            ('BRISC 원문', 'https://arxiv.org/html/2506.14318v5')])
 
 def alkkagi_overview(b):
@@ -517,14 +549,19 @@ def alkkagi_overview(b):
 
 def alkkagi_physics(b):
     b.start('Alkkagi.io · 서버 물리와 상태 동기화',
-            '입력 제한, 겹침 보정과 충돌 반응을 분리하고 계산이 끝난 상태를 전송합니다.', key='alkkagi-physics')
-    b.image('@architecture/returned/alkkagi.png', M, 129, 500, 366)
-    b.section('겹침과 충격량의 분리', '겹친 거리는 두 돌에 절반씩 나눠 위치를 보정합니다. 이미 서로 멀어지면 충격량을 더하지 않고, 접근 중인 충돌에는 질량을 반영해 속도를 갱신합니다.', 570, 137, 233, 9.7, keep_words=True)
-    b.section('계산 간격과 마찰', '한 번의 갱신을 소단계로 나눠 이동·충돌을 계산합니다. 마찰 계수에도 소단계 비율을 지수로 적용해 계산을 나눌 때 감속이 과도하게 누적되지 않도록 했습니다.', 570, 263, 233, 9.7, keep_words=True)
-    b.section('서버에서 입력 검증', '발사 간격과 속도를 서버에서 제한합니다. 기준 상태는 서버 메모리에 두고 연결 종료 시 플레이어를 정리합니다. 재접속·서버 재시작 후 복구는 구현하지 않았습니다.', 570, 389, 233, 9.7, keep_words=True)
-    b.para('구조도의 60Hz는 갱신 설정입니다. 동시접속 부하·네트워크 지연·지속 프레임률의 측정 결과는 없습니다.',M,520,CW,9.1,14,MUTED)
-    b.end([('서버·입력 제한', ALK_REF+'server/index.ts'), ('물리 구현', ALK_REF+'server/physics.ts'),
-           ('실제 플레이 영상', 'https://github.com/user-attachments/assets/20bc9007-97ea-4cc4-948a-e1d901ea8f4b')])
+            '드래그 벡터 → Socket.IO 발사 입력 → 이동·마찰·충돌 계산 → 모든 클라이언트에 상태 전송', key='alkkagi-physics')
+    b.technology('@architecture/returned/alkkagi.png', [
+        ('서버에서 입력 검증과 상태 계산',
+         'React의 드래그를 속도 벡터로 바꿔 flick 이벤트로 보냅니다. 서버는 발사 간격·최대 속도를 제한하고 질량을 반영해 속도를 정합니다. 위치·속도·반지름·질량은 서버 메모리에 두며, 갱신 후 gameStateUpdate를 배포해 클라이언트가 화면을 그립니다.'),
+        ('겹친 위치와 충돌 속도를 분리',
+         '중심 거리와 반지름 합으로 겹침을 찾고, 겹친 거리는 두 돌에 절반씩 나눠 위치를 보정합니다. 충돌 방향으로 이미 멀어지면 충격량을 더하지 않습니다. 접근하는 돌은 상대 속도·반발계수·역질량으로 충격량을 계산해 각각의 속도를 갱신합니다.'),
+        ('소단계에서도 감속 비율 유지',
+         '한 번의 갱신을 10개 소단계로 나눠 이동·충돌을 계산합니다. 마찰 계수에 소단계 비율을 지수로 적용해 분할 횟수만큼 감속이 중복되지 않게 했습니다. 보드 이탈 시 충돌 기록으로 점수·재배치를 처리하고 돌의 반지름·질량을 갱신합니다.'),
+    ], '<b>개인 구현·검증 범위</b> 웹 UI·통신·물리 함수를 직접 작성했습니다. 60Hz는 갱신 설정이며 부하·지속 프레임률의 실측값은 없습니다. 연결 종료 시 플레이어를 정리하며 재접속·서버 재시작 복구는 없습니다.')
+    b.end([('서버 · updatePhysics', ALK_REF+'server/index.ts#L50'),
+           ('충돌 · resolveCollisions', ALK_REF+'server/physics.ts#L31'),
+           ('이동·마찰', ALK_REF+'server/physics.ts#L79'),
+           ('입력·화면 갱신', ALK_REF+'client/src/App.tsx')])
 
 def prompt_overview(b):
     b.start('Prompt Generator · 프로젝트 설계 도우미',
@@ -541,15 +578,20 @@ def prompt_overview(b):
 
 
 def prompt_generator(b):
-    b.start('Prompt Generator · 영역별 설계 대화',
-            '대화 문맥, 완료 조건과 호출 오류를 각각의 상태 전환으로 다룹니다.', key='prompt-architecture')
-    b.image('@architecture/returned/prompt.png', M, 129, 490, 372)
-    b.section('영역별 문맥 분리', '여섯 영역의 첫 질문을 병렬로 시작하고, 각 영역의 대화 이력·진행 상태·결과를 따로 유지합니다. 한 영역의 답변을 다른 영역의 대화에 섞지 않는 구조입니다.', 560, 137, 243, 9.7, keep_words=True)
-    b.section('질문과 완료 결과의 구분', '처리 라운드 조건과 결과 생성 태그를 함께 확인해 완료로 전환합니다. 조건이 맞지 않으면 질문을 이어가며, 이 조건이 생성 품질을 판정하는 것은 아닙니다.', 560, 263, 243, 9.7, keep_words=True)
-    b.section('호출 오류 시 상태 처리', '처리 대상 LLM 오류가 나면 라운드를 되돌리고 해당 영역을 대기 상태로 바꿉니다. 입력·응답은 호출 성공 뒤 이력에 추가하며 자동 재시도는 하지 않습니다.', 560, 389, 243, 9.7, keep_words=True)
-    b.para('세션은 연결 종료 시 삭제되며 재접속 복구는 없습니다. 요구사항 반영률·생성 품질의 평가 결과는 확인되지 않았습니다.', M, 520, CW, 9.1, 14, MUTED)
-    b.end([('영역별 상태', PROMPT_REF+'state.py'), ('완료 조건', PROMPT_REF+'dimensions/runner.py'),
-           ('오류 처리', PROMPT_REF+'server/graph_runner.py'), ('대화 서버', PROMPT_REF+'server/app.py')])
+    b.start('Prompt Generator · 문맥 구성과 대화 상태',
+            '프로젝트 입력 → 영역별 지침·이력 → Solar Pro 응답 → 상태 갱신 → 설계 문서 합성', key='prompt-architecture')
+    b.technology('@architecture/returned/prompt.png', [
+        ('영역별 이력으로 다음 질문 구성',
+         'UI·API·DB·구조·테스트·배포의 여섯 영역을 나눕니다. 호출마다 영역 지침·프로젝트 설명·해당 대화 이력을 LangChain 메시지로 묶어 Solar Pro에 전달합니다. 첫 질문은 asyncio.gather로 병렬 실행하고 FastAPI가 WebSocket으로 응답을 전송합니다.'),
+        ('응답과 서버 상태를 함께 관리',
+         '영역별 라운드·이력·결과를 저장합니다. 처리 라운드가 3 이상이고 응답에 [GENERATE_PROMPT] 태그가 있으면 완료로 전환하며 추가 대화로 수정할 수 있습니다. 입력·응답은 호출 성공 뒤 기록하고, 처리 대상 오류는 라운드를 되돌리고 대기 상태로 전환합니다.'),
+        ('영역별 결과에서 최종 문서로',
+         '생성 결과가 있는 영역의 프롬프트와 프로젝트 설명을 모아 별도의 LLM 호출로 문서를 합성합니다. 서버는 하나 이상의 영역에 결과가 있으면 해당 부분만으로도 합성을 허용합니다. 웹 UI부터 대화 상태 전환·최종 문서 생성까지 직접 연결했습니다.'),
+    ], '<b>검증 범위</b> 완료 조건은 생성 품질의 판정이 아닙니다. 처리 오류의 자동 재시도는 없고, 메모리 세션은 연결 종료 시 삭제됩니다. 재접속 복구와 요구사항 반영률·생성 품질의 평가 결과는 없습니다.')
+    b.end([('문맥 · run_dimension_turn', PROMPT_REF+'dimensions/runner.py#L14'),
+           ('상태 전환 · handle_dimension_turn', PROMPT_REF+'server/graph_runner.py#L22'),
+           ('문서 합성 · handle_finalize', PROMPT_REF+'server/graph_runner.py#L93'),
+           ('대화 서버', PROMPT_REF+'server/app.py#L73')])
 
 def contact(b):
     b.start('연락처', key='contact')
