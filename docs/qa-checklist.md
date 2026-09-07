@@ -1153,4 +1153,4 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 실제 390×844, 768×1024, 1280×720에서 authored 11부품, 수평 overflow 0, 이름·문장·CTA 가독성과 canvas의 `pan-y pinch-zoom`을 확인했다. 390×844·1280×720 reduced에서는 canvas none, 완성형 11부품, overflow 0이며 모바일 로봇이 본문 위에 끝난다. 페이지 자체 console error/warning은 0이고 기록된 warning은 Chrome의 MetaMask extension에서만 발생했다.
 - [x] `npm.cmd run verify`: 테스트 34개, 소스 경로 11개·스타일 경계 12개, production modules 773개·배포 entry 23개가 통과했다. Home 전용 runtime chunk는 257.79 kB raw / 75.79 kB gzip이며 초기 공통 번들에는 포함되지 않는다.
 - [ ] 실제 터치 하드웨어의 gesture 경쟁, OS forced-colors, 10개 관절 전체 수동 조립의 장시간 완성 연출은 이번 자동화·데스크톱 검증 범위 밖이다.
-- [ ] GitHub Pages 배포 성공과 공개 Home 반영은 push 후 확인한다.
+- [x] 커밋 `3e73aa8`의 GitHub Pages run `34081083859` 성공 후 공개 Home을 1280px 실제 브라우저에서 확인했다. 11개 authored 부품과 runtime canvas가 로드되고, puzzle 상태 `scattered`·연결 0·horizontal overflow 0이며 사이트 자체 warning/error는 없다.
