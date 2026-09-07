@@ -9,7 +9,7 @@
 - [x] 실제 pointer drag로 연결된 전완의 말단 회전 시 상완 고정, 이어 상완 body drag 시 상대 포즈와 연결 유지를 확인했다. Sleeping hover는 물리를 깨우지 않고 해당 elbow ring 1개와 crosshair를 표시한다. 접근 중 호환 pair ring 2개, cancel 뒤 ring 0개를 확인했다.
 - [x] Full/lite breakpoint에서 동일 canvas를 재초기화할 때 브라우저 정지를 재현하고 controller를 유지하도록 수정했다. 768→1280→768 실제 전환이 응답하며 조립 상태를 유지한다. 초기화 중 모드 변경의 중복 mount도 회귀 테스트로 방지한다.
 - [x] `npm.cmd run verify`: 테스트 41개, 소스 route 11개·stylesheet 경계 12개, production 774 modules·배포 entry 23개 통과. Runtime은 Home 전용 dynamic chunk 259.25kB raw / 76.50kB gzip이며 변경 전 258.28 / 75.91 대비 gzip 0.59kB 증가다. `git diff --check` 통과.
-- [ ] GitHub Pages 배포 결과와 공개 페이지 확인은 배포 후 기록한다.
+- [x] 구현 커밋 `f592bec`의 GitHub Pages run `34086627898`이 build·deploy 모두 성공했다. 공개 Home 1280px에서 새 11부품, `portfolio-DD5YpGlf.js`, sleeping 상태, overflow 0, 앱 warning/error 0을 확인했다.
 - [ ] 실제 터치 하드웨어의 gesture 경쟁, OS forced-colors 전환, 장시간 전체 수동 조립은 이번 데스크톱 검증 범위 밖이다. OS 설정 자체 대신 localhost reduced 경로를 확인했으며 강제 색상은 역할별 silhouette와 system-color 소스 계약을 검토했다.
 
 ## 2026-08-10 — Home portfolio overview verification
