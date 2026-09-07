@@ -931,3 +931,11 @@
 - AQIS는 기존 위치를 유지하고 네 신규 그림은 세로 비중에 맞춰 왼쪽에 크게 배치한다. 설명은 오른쪽으로 옮기고 기존 기술 사실·평가 한계·주석·링크를 보존한다. 20쪽 중 9·12·15·18·19쪽만 변경하며, 다른 15쪽은 픽셀까지 동일하다.
 - PDF 내부 그림의 RGB 데이터와 8-bit alpha soft mask를 원본과 직접 비교하고 manifest SHA-256·치수·화면비를 검증한다. PNG 속 라벨은 이미지로 유지하며 옆의 설명과 제목은 검색 가능한 PDF 텍스트로 남긴다. 이전 네이티브 벡터 장면은 현재 PDF 생성 경로에서 사용하지 않는다.
 - 전달본·편집 파일과 자동 배경제거 실험은 별도 작업 자료로 유지한다. 이번 배포는 검수된 PDF, 15.2MB 다운로드 안내, 최종 PNG 및 생성·검증 소스에 한정한다. Home 코드와 비공개 원본, Drive 파일은 변경하지 않는다.
+
+## 2026-09-07 — Home research robot visual system
+
+- Form: 기존 11개 퍼즐 그래프는 유지하되, 단색 도형을 graphite 내부 프레임·warm board 외장 셸·vermilion actuator와 keyed bearing으로 재구성한다. Head sensor case, chest yoke/spine, pelvis hip housing, 전완의 대칭 gripper와 하퇴의 foot plate가 완성 전에도 부위 역할을 보여 준다.
+- Identity: 두 눈·표정·visor·PCB·HUD·번호는 사용하지 않는다. 한 개의 비인격적 sensor aperture와 기능성 rail/collar만 사용해 작은 연구용 휴머노이드 프로토타입으로 읽히게 한다. A/B 팔·다리의 좌우 교환성은 유지한다.
+- Motion: snap 때 저장한 socket↔plug 상대 각도를 기준으로 family별 soft limit, 약한 복원과 damping을 fixed substep에 적용한다. 상대 각속도를 family별 상한으로 제한하고 완성 연출 종료 시 현재 자세를 새 기준각으로 저장해 관절 튐과 불필요한 ticker 지속을 막는다. 기존 한 점 constraint·스냅 거리/각도·분리 gesture·완성 연출은 유지한다.
+- Fallback and access: no-JS/reduced/forced fallback은 같은 11개 실루엣과 viewport 비례 완성 좌표를 쓴다. 장식 canvas의 `tabindex=-1`을 제거해 pointer click focus가 `aria-hidden` 내부로 들어가지 않게 한다. 서명 완료 전에는 runtime을 mount하지 않고, Pixi의 미사용 document-level interaction system을 분리하며 active drag가 아닐 때 window pointermove에서 layout을 읽지 않는다.
+- Scope: Home 코드·테스트·문서만 배포한다. 병행 중인 정적 PDF·Drive·아키텍처 작업 파일과 `tmp/`는 이번 release에 포함하지 않는다.

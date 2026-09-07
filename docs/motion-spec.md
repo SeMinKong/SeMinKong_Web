@@ -935,6 +935,15 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Fine pointer와 horizontal-dominant touch drag는 조각 또는 연결 묶음을 움직인다. 최근 100ms throw velocity는 component 전체에 적용한다. 짧은 click/tap은 30° 단위로 component를 회전한다. 결합된 port 가까이에서 일정 거리 이상 당기면 연결을 끊으며 같은 gesture 안에서 즉시 재결합하지 않는다.
 - Coarse pointer는 8px 전까지 drag constraint를 연결하지 않는다. 세로 우세 이동은 `scrolling`으로 분류하고 native pan과 `pointercancel`에 맡긴다. Passive listener, `touch-action: pan-y pinch-zoom`, no capture와 gesture handler의 no-`preventDefault` 계약은 유지한다.
 - 마지막 연결은 1회성 완성 연출을 시작한다. 약 620ms 동안 모형을 안정된 자세로 정렬한 뒤 520ms 동안 머리를 기울이고 오른팔을 들며, 10개 관절의 주홍 ring pulse와 머리 위 12개 이하의 작은 paper/ink/vermilion particle을 총 1.78초 안에 끝낸다. 문구·소리·neon bloom은 사용하지 않는다.
-- 완성 연출 중 Matter body를 source of truth로 직접 보간하고 particle은 render-only Pixi layer에 둔다. 연출 종료, hidden, pagehide, context loss와 destroy는 particle을 제거하고 body를 sleep시킨다. 같은 mount에서 재진입·resize로 축하를 다시 재생하지 않는다.
+- 완성 연출 중 Matter body를 source of truth로 직접 보간하고 particle은 render-only Pixi layer에 둔다. 연출 종료 시 현재 socket↔plug 상대각을 새 servo 기준으로 저장한 뒤 body를 sleep시켜 마지막 자세가 되감기거나 ticker가 계속 돌지 않게 한다. hidden, pagehide, context loss와 destroy는 particle을 제거하며 같은 mount에서 재진입·resize로 축하를 다시 재생하지 않는다.
 - Resize는 active drag를 취소하고 connected component별 공통 translation으로 viewport 안에 맞춘다. 각 body를 따로 clamp해 관절이 찢어지는 동작은 금지한다.
 - Reduced motion과 forced colors는 runtime을 만들지 않는 기존 계약을 유지한다. CSS fallback은 11조각의 완성된 정적 연구 모형을 표시하고 pose recovery, joint pulse와 particle을 만들지 않는다.
+
+## 2026-09-07 — Research robot joint response
+
+- 각 snap connection은 조립 순서와 무관하게 socket body와 plug body를 정규화하고 결합 순간의 상대 각도를 기준값으로 저장한다. 기존 한 점 pin constraint와 회전 앵커 계산은 바꾸지 않는다.
+- 각 fixed substep 직전에 neck·waist·shoulder·elbow·hip·knee별 soft angular limit, 약한 center spring과 relative angular damping을 적용한다. 보정은 상대 각속도에 제한을 두고 두 body의 inverse inertia 비율로 나눠 순간이동·과구속·지속 진동을 만들지 않는다.
+- 연결 묶음을 직접 drag하는 동안에는 범위 안의 center spring을 끄고 hard-limit·damping만 유지한다. Release 뒤에는 작은 servo resistance로 기준 자세 가까이 돌아오며 limit과 상대 속도가 안정되기 전에는 custom settle이 강제로 sleep시키지 않는다.
+- 관절 시각 layer는 mount 때 한 번 생성한 Pixi Graphics만 사용한다. frame·panel·actuator·keyed port는 frame loop에서 재생성하지 않고 기존 고정 광원에 따른 highlight alpha/offset만 갱신한다.
+- Kinetic mount는 Home 서명 ready가 완료된 뒤에만 intersection·visibility gate를 통과한다. Pixi renderer 초기화 뒤 사용하지 않는 document-level EventSystem을 분리하고, hover hit-test는 canvas 내부 pointermove에서만 수행한다. Window pointermove는 active drag가 있을 때만 DOM rect와 body hit state를 읽어 Hero 밖·paused 상태의 불필요한 layout read를 피한다.
+- 장식용 canvas에는 `tabindex`를 두지 않는다. Pointer drag는 유지하되 click 뒤 focus가 `aria-hidden` subtree로 이동해서는 안 되고, skip link·navigation·CTA가 유일한 keyboard 경로로 남는다.

@@ -44,7 +44,10 @@ test('gallery direction keeps static surfaces and restrained typography', async 
   assert.match(homeHtml, /data-hero-surface/);
   assert.doesNotMatch(homeHtml, /data-hero-fluid/i);
   assert.equal(homeHtml.match(/<canvas\b/g)?.length, 1);
-  assert.match(homeHtml, /<canvas\b(?=[^>]*data-kinetic-canvas)(?=[^>]*aria-hidden="true")(?=[^>]*tabindex="-1")[^>]*>/i);
+  const kineticCanvas = homeHtml.match(/<canvas\b(?=[^>]*data-kinetic-canvas)[^>]*>/i)?.[0] ?? '';
+  assert.match(kineticCanvas, /aria-hidden="true"/);
+  assert.doesNotMatch(kineticCanvas, /\btabindex=/);
+  assert.equal(homeHtml.match(/kinetic-part__surface/g)?.length, 11);
   assert.match(galleryStyles, /body::before/);
   assert.match(galleryStyles, /repeating-linear-gradient/);
   assert.match(tokenStyles, /Signika Variable/);
@@ -84,6 +87,11 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(kineticFacade, /import\('\.\/kinetic-sandbox-runtime\.js'\)/);
   assert.match(kineticFacade, /environment\.motion !== 'reduced'/);
   assert.match(kineticFacade, /forced-colors: active/);
+  assert.match(kineticFacade, /let readyResolved = false/);
+  assert.match(kineticFacade, /const canRun = \(\) => readyResolved && isEligible\(\) && intersecting && pageActive/);
+  assert.match(kineticFacade, /readyResolved = true;\s+sync\(\);/);
+  assert.match(kineticFacade, /await import\('\.\/kinetic-sandbox-runtime\.js'\);[\s\S]*?if \(!canRun\(\)\) \{[\s\S]*?showFallback\('static'\);[\s\S]*?return;/);
+  assert.match(kineticFacade, /await mountKineticSandbox[\s\S]*?currentGeneration !== generation \|\| !canRun\(\)/);
   assert.match(kineticFacade, /new IntersectionObserver/);
   assert.match(kineticFacade, /addEventListener\('visibilitychange'/);
   assert.match(kineticFacade, /addEventListener\('pagehide'/);
@@ -101,6 +109,14 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.doesNotMatch(kineticRuntime, /hero-story__actions \.button/);
   assert.match(kineticRuntime, /const PART_SPECS = \[/);
   assert.match(kineticRuntime, /const REQUIRED_CONNECTIONS = 10/);
+  assert.match(kineticRuntime, /const JOINT_SERVO_PROFILES/);
+  assert.match(kineticRuntime, /createRobotDetails/);
+  assert.match(kineticRuntime, /calculateJointServo/);
+  assert.match(kineticRuntime, /limitRelativeAngularVelocity/);
+  assert.match(kineticRuntime, /app\.renderer\.events\?\.setTargetElement\(null\)/);
+  assert.match(kineticRuntime, /const rebaseJointAngles = \(\) =>/);
+  assert.match(kineticRuntime, /joint\.baseAngle = wrapAngle\(joint\.plugBody\.angle - joint\.socketBody\.angle\)/);
+  assert.match(kineticRuntime, /if \(applyFinalPose\) applyTargetBlend[\s\S]*?rebaseJointAngles\(\);[\s\S]*?celebration = null;/);
   assert.match(kineticRuntime, /evaluatePortSnap/);
   assert.match(kineticRuntime, /pointA: rotatePoint\(best\.movingPort, best\.movingBody\.angle\)/);
   assert.match(kineticRuntime, /pointB: rotatePoint\(best\.targetPort, best\.targetBody\.angle\)/);
@@ -116,6 +132,7 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(kineticRuntime, /new ResizeObserver/);
   assert.match(kineticRuntime, /canvas\.style\.touchAction = 'pan-y pinch-zoom'/);
   assert.match(kineticRuntime, /window\.addEventListener\('pointermove', handlePointerMove, \{ passive: true \}\)/);
+  assert.match(kineticRuntime, /canvas\.addEventListener\('pointermove', handleHoverPointerMove, \{ passive: true \}\)/);
   assert.match(kineticRuntime, /webglcontextlost/);
   assert.match(kineticRuntime, /webglcontextrestored/);
   assert.doesNotMatch(kineticRuntime, /setPointerCapture|requestAnimationFrame/);

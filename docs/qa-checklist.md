@@ -1134,3 +1134,13 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] PDF 검증: 20쪽·외부링크64·내부링크6·최소 본문8.5pt·레이아웃겹침0·사진캡션5·문단끝줄11·RGBA그림5 통과. 재생성 및 output/public/dist 파일은 모두 15,189,951 bytes, SHA-256 `A519FB83E3D55A75F954A038453A664179B0FB6F378FB34066A0612FD05AEB32`로 일치한다.
 - [x] `npm.cmd run verify`: 테스트31·소스경로11·스타일경계12·production 모듈766·배포entry23 통과. 다운로드 안내를 15.2MB·20쪽·2026.09.07로 갱신하고 바이트/해시 계약도 동기화했다.
 - [x] 실제 Chrome production Resume 390·768·1280px에서 overflow0·44px 링크·Tab 포커스2px·정상 파일명/새 탭·실제 다운로드 SHA 일치를 확인했다. 기본 lite/static·full/interactive, reduced/flat, JavaScript 미사용 폴백과 콘솔 warning/error0을 검증했다. 실물 터치·OS PDF viewer·전체 외부 링크 HTTP는 이번 범위 밖이다.
+
+## 2026-09-07 Home research robot detail 검수
+
+- [x] Runtime의 11개 ID·10개 port pair·좌우 교환 계약과 Matter rectangle body를 유지했다. 역할별 outer silhouette, 내부 frame/panel/actuator, solid plug·recessed socket과 family glyph를 mount-time Graphics로 추가했고 별도 손·발 body는 만들지 않았다.
+- [x] 390×844, 774×778, 1280×720 실제 Chromium에서 분해 상태를 확인했다. Head sensor case, chest yoke/spine, pelvis housing, limb rail과 전완 gripper/하퇴 foot plate가 구분되며 11개 조각, overflow 0, 읽을 수 있는 이름·문장·CTA를 유지한다.
+- [x] 390×844·1280×720 reduced/flat에서 canvas display none, 정적 완성 로봇과 overflow 0을 확인했다. 비례 clamp 좌표로 모바일 neck·waist·팔꿈치·무릎 간격이 분리되지 않고 로봇은 이름 위 우측에서 본문을 가리지 않는다.
+- [x] `calculateJointServo`의 ±π wrap, limit excess, correction cap과 damping 방향을 단위 테스트했다. Runtime은 socket/plug 기준 상대 각도, family별 soft limit와 inverse-inertia 보정을 사용하고 active drag 중 centering을 끈다.
+- [x] Canvas에서 실제 click 후 active element가 canvas가 아니고 `tabindex`가 없음을 확인했다. `aria-hidden`, native pointer interaction과 CTA/skip-link 경로는 유지한다. Hover layout read를 canvas로 한정하고 window handler는 active pointer를 먼저 검사한다.
+- [x] `npm.cmd run verify`: 테스트33·소스경로11·스타일경계12·production 모듈766·배포entry23 통과. 390×844·768×1024·1280×720의 full/reduced 화면, 실제 click·drag·scroll·focus와 console warning/error0을 확인했다. Runtime은 Home 전용 dynamic chunk 215.64 kB raw / 63.68 kB gzip이다.
+- [ ] 실제 터치 하드웨어의 gesture 경쟁, OS 강제 색상 전환, 10개 관절 전체 수동 조립의 장시간 완성 연출은 자동화·데스크톱 포인터 검증 범위 밖이다. GitHub Pages 배포 성공과 공개 Home 반영은 push 후 확인한다.

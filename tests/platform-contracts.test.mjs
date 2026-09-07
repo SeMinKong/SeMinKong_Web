@@ -270,6 +270,10 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.doesNotMatch(homeHtml, /Flagship/i);
   assert.match(heroSection, /data-kinetic-stage/);
   assert.equal(heroSection.match(/data-kinetic-canvas/g)?.length, 1);
+  const kineticCanvas = heroSection.match(/<canvas\b(?=[^>]*data-kinetic-canvas)[^>]*>/i)?.[0] ?? '';
+  assert.match(kineticCanvas, /aria-hidden="true"/);
+  assert.doesNotMatch(kineticCanvas, /\btabindex=/);
+  assert.equal(heroSection.match(/kinetic-part__surface/g)?.length, 11);
   const puzzlePieceIds = [...heroSection.matchAll(/data-puzzle-piece="([^"]+)"/g)]
     .map(([, id]) => id);
   assert.deepEqual(puzzlePieceIds, [
@@ -311,12 +315,17 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.match(kineticStyles, /place-items: center/);
   assert.match(kineticStyles, /\.kinetic-stage \{[\s\S]*?position: absolute/);
   assert.match(kineticStyles, /\.kinetic-stage__canvas \{[\s\S]*?touch-action: pan-y pinch-zoom/);
-  assert.match(kineticStyles, /html\[data-motion="reduced"\] \.kinetic-part--head/);
-  assert.match(kineticStyles, /html\[data-motion="reduced"\] \.kinetic-part--shin-b/);
+  assert.match(kineticStyles, /html\[data-motion="reduced"\] \.kinetic-part\s*\{[\s\S]*?--part-angle:\s*var\(--complete-angle\)/);
+  assert.match(kineticStyles, /--complete-y:\s*calc\(var\(--model-y\) \+ clamp\(95\.4px/);
   assert.match(kineticFacade, /Promise\.resolve\(ready\)/);
   assert.match(kineticFacade, /environment\.motion !== 'reduced'/);
   assert.match(kineticRuntime, /PART_SPECS/);
   assert.match(kineticRuntime, /REQUIRED_CONNECTIONS = 10/);
+  assert.match(kineticRuntime, /JOINT_SERVO_PROFILES/);
+  assert.match(kineticRuntime, /createRobotDetails/);
+  assert.match(kineticRuntime, /calculateJointServo/);
+  assert.match(kineticStyles, /--part-shape:/);
+  assert.match(kineticStyles, /--part-surface:/);
   assert.doesNotMatch(kineticRuntime, /handwritten-wordmark__letter|getTextFragmentRects|hero-story__actions \.button/);
   assert.match(kineticRuntime, /gravity\.scale = 0/);
   assert.doesNotMatch(homeHtml, /data-home-intro|__homeIntroGate|aria-busy/);

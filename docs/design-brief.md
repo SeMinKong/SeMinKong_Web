@@ -1017,4 +1017,15 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 흉곽의 목·양어깨·허리 네 socket, 골반의 허리·양엉덩이 세 접점, 상완·대퇴의 양끝과 나머지 조각의 한 접점이 보이게 한다. Plug는 채운 주홍 점, socket은 주홍 고리로 구분하며 설명문, 번호, 진행률, reset 버튼은 추가하지 않는다.
 - 조각과 연결 묶음은 이름, 인사와 CTA를 충돌면으로 취급하지 않고 그 뒤를 통과한다. 조각끼리와 viewport/navigation 경계는 계속 충돌하며, DOM copy와 link가 canvas보다 앞에서 읽기·클릭·focus를 소유한다.
 - 완성 시 오른쪽 가장자리의 작은 전신 비율로 자세를 정리하고 머리 기울임과 한 팔 들기를 보여 준다. 피드백은 주홍 관절 pulse, 짧은 밝기 상승과 머리 주변의 작은 paper/ink/vermilion 조각만 사용하며 축하 문구와 소리는 없다.
-- 정적 HTML/CSS fallback도 동일한 11개 part를 source of truth로 가진다. Normal no-JS 첫 화면은 분해 배치, reduced motion과 forced colors는 완성된 정적 실루엣을 제공한다. Canvas는 계속 `aria-hidden`, `tabindex=-1`이며 퍼즐 완성은 정보나 navigation을 해제하지 않는다.
+- 정적 HTML/CSS fallback도 동일한 11개 part를 source of truth로 가진다. Normal no-JS 첫 화면은 분해 배치, reduced motion과 forced colors는 완성된 정적 실루엣을 제공한다. Canvas는 `aria-hidden`을 유지하되 focus 가능한 `tabindex`는 두지 않으며, 퍼즐 완성은 정보나 navigation을 해제하지 않는다.
+
+## 2026-09-07 — Home research robot detail override
+
+이 항목은 위 관절 연구 모형의 단순 달걀·사다리꼴·절단 막대 외형을 대체한다. 11개 body, 포트 family, 조립 규칙, 콘텐츠 collision과 축하 연출은 유지한다.
+
+- 완성 전의 낱개도 로봇 부품으로 읽히도록 모든 파츠에 `graphite inner frame → warm board shell → vermilion actuator/joint`의 공통 재질 계층을 사용한다. 부품 전체를 검정·아이보리로 번갈아 칠하지 않는다.
+- 머리는 앞뒤가 구분되는 faceted sensor case와 단일 비인격적 aperture, 흉곽은 shoulder yoke·central spine·분할 panel, 골반은 중앙 brace와 좌우 hip housing으로 그린다. 두 눈·표정·발광 visor는 넣지 않는다.
+- 상완·대퇴는 몸 쪽이 넓은 proximal shell, 전완은 외곽 안의 대칭 2지 gripper, 하퇴는 대칭 foot plate를 갖는다. 손·발은 기존 전완·하퇴 body에 포함해 조각 수와 좌우 교환성을 유지한다.
+- 포트는 solid stud plug와 recessed bearing socket으로 먼저 극성을 구분하고 neck·waist·shoulder·elbow·hip·knee family는 글자나 번호가 아닌 tick·cross·ring·square 계열의 작은 keyed glyph로 구분한다.
+- 임의 serial, 좌표, 경고문, microcopy, PCB 장식과 neon은 사용하지 않는다. 고정 광원의 얕은 underplate·rim·shadow와 실제 조립 기능을 설명하는 rail·collar만 남긴다.
+- CSS fallback은 runtime과 같은 역할별 실루엣, 비례 scale과 완성 좌표를 사용한다. 390px에서는 모든 11개 조각과 완성형 로봇이 본문·CTA를 가리지 않아야 한다.

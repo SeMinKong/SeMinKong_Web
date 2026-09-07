@@ -1,10 +1,12 @@
 import { Application, Container, Graphics, Rectangle } from 'pixi.js';
 import Matter from 'matter-js';
 import {
+  calculateJointServo,
   clamp,
   evaluatePortSnap,
   getWorldLight,
   interpolatePose,
+  limitRelativeAngularVelocity,
   pointInRotatedRect,
   rotatePoint,
   smoothThrowVelocity,
@@ -29,19 +31,29 @@ const CELEBRATION_DURATION = 1780;
 const BOARD = 0xded6ca;
 const PAPER = 0xf1eee6;
 const INK = 0x24211d;
+const METAL = 0xb8afa2;
 const SIGNAL = 0xa73524;
 const SHADOW = 0x171512;
 const PORT = Object.freeze({ PLUG: 'plug', SOCKET: 'socket' });
 
+const JOINT_SERVO_PROFILES = Object.freeze({
+  neck: { softLimit: 0.35, centerStrength: 0.006, limitStrength: 0.03, damping: 0.16, maxCorrection: 0.014, maxRelativeVelocity: 0.055 },
+  waist: { softLimit: 0.26, centerStrength: 0.007, limitStrength: 0.034, damping: 0.18, maxCorrection: 0.014, maxRelativeVelocity: 0.05 },
+  shoulder: { softLimit: 1.75, centerStrength: 0.0016, limitStrength: 0.018, damping: 0.1, maxCorrection: 0.016, maxRelativeVelocity: 0.085 },
+  elbow: { softLimit: 1.85, centerStrength: 0.0018, limitStrength: 0.024, damping: 0.13, maxCorrection: 0.017, maxRelativeVelocity: 0.09 },
+  hip: { softLimit: 0.9, centerStrength: 0.0022, limitStrength: 0.027, damping: 0.14, maxCorrection: 0.016, maxRelativeVelocity: 0.075 },
+  knee: { softLimit: 1.45, centerStrength: 0.0022, limitStrength: 0.027, damping: 0.14, maxCorrection: 0.017, maxRelativeVelocity: 0.08 }
+});
+
 const PART_SPECS = [
   {
-    id: 'head', role: 'head', kind: 'head', tone: 'board', x: 0.1, y: 0.22,
-    width: 34, height: 40, angle: Math.PI / 3,
+    id: 'head', role: 'head', kind: 'head', x: 0.1, y: 0.22,
+    width: 38, height: 42, angle: Math.PI / 3,
     ports: [{ id: 'neck', family: 'neck', polarity: PORT.PLUG, x: 0, y: 0.5, normal: Math.PI / 2 }]
   },
   {
-    id: 'chest', role: 'chest', kind: 'chest', tone: 'ink', x: 0.82, y: 0.22,
-    width: 50, height: 58, angle: -Math.PI / 6,
+    id: 'chest', role: 'chest', kind: 'chest', x: 0.82, y: 0.22,
+    width: 58, height: 64, angle: -Math.PI / 6,
     ports: [
       { id: 'neck', family: 'neck', polarity: PORT.SOCKET, x: 0, y: -0.5, normal: -Math.PI / 2 },
       { id: 'waist', family: 'waist', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 },
@@ -50,8 +62,8 @@ const PART_SPECS = [
     ]
   },
   {
-    id: 'pelvis', role: 'pelvis', kind: 'pelvis', tone: 'board', x: 0.91, y: 0.42,
-    width: 46, height: 24, angle: Math.PI / 6,
+    id: 'pelvis', role: 'pelvis', kind: 'pelvis', x: 0.91, y: 0.42,
+    width: 52, height: 28, angle: Math.PI / 6,
     ports: [
       { id: 'waist', family: 'waist', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
       { id: 'hip-left', family: 'hip', polarity: PORT.SOCKET, x: -0.27, y: 0.5, normal: Math.PI / 2 },
@@ -59,84 +71,130 @@ const PART_SPECS = [
     ]
   },
   {
-    id: 'upper-arm-a', role: 'upper-arm', kind: 'limb', tone: 'board', x: 0.07, y: 0.49,
-    width: 18, height: 42, angle: -Math.PI / 3,
+    id: 'upper-arm-a', role: 'upper-arm', kind: 'upper-limb', x: 0.07, y: 0.49,
+    width: 21, height: 44, angle: -Math.PI / 3,
     ports: [
       { id: 'shoulder', family: 'shoulder', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
       { id: 'elbow', family: 'elbow', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 }
     ]
   },
   {
-    id: 'upper-arm-b', role: 'upper-arm', kind: 'limb', tone: 'ink', x: 0.86, y: 0.61,
-    width: 18, height: 42, angle: Math.PI * 2 / 3,
+    id: 'upper-arm-b', role: 'upper-arm', kind: 'upper-limb', x: 0.86, y: 0.61,
+    width: 21, height: 44, angle: Math.PI * 2 / 3,
     ports: [
       { id: 'shoulder', family: 'shoulder', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
       { id: 'elbow', family: 'elbow', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 }
     ]
   },
   {
-    id: 'forearm-a', role: 'forearm', kind: 'limb', tone: 'ink', x: 0.2, y: 0.65,
-    width: 16, height: 40, angle: Math.PI / 6,
+    id: 'forearm-a', role: 'forearm', kind: 'forearm', x: 0.2, y: 0.65,
+    width: 20, height: 43, angle: Math.PI / 6,
     ports: [{ id: 'elbow', family: 'elbow', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
   },
   {
-    id: 'forearm-b', role: 'forearm', kind: 'limb', tone: 'board', x: 0.68, y: 0.83,
-    width: 16, height: 40, angle: -Math.PI * 2 / 3,
+    id: 'forearm-b', role: 'forearm', kind: 'forearm', x: 0.68, y: 0.83,
+    width: 20, height: 43, angle: -Math.PI * 2 / 3,
     ports: [{ id: 'elbow', family: 'elbow', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
   },
   {
-    id: 'thigh-a', role: 'thigh', kind: 'limb', tone: 'ink', x: 0.1, y: 0.82,
-    width: 20, height: 45, angle: Math.PI / 3,
+    id: 'thigh-a', role: 'thigh', kind: 'upper-limb', x: 0.1, y: 0.82,
+    width: 24, height: 48, angle: Math.PI / 3,
     ports: [
       { id: 'hip', family: 'hip', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
       { id: 'knee', family: 'knee', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 }
     ]
   },
   {
-    id: 'thigh-b', role: 'thigh', kind: 'limb', tone: 'board', x: 0.57, y: 0.21,
-    width: 20, height: 45, angle: -Math.PI / 6,
+    id: 'thigh-b', role: 'thigh', kind: 'upper-limb', x: 0.57, y: 0.21,
+    width: 24, height: 48, angle: -Math.PI / 6,
     ports: [
       { id: 'hip', family: 'hip', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
       { id: 'knee', family: 'knee', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 }
     ]
   },
   {
-    id: 'shin-a', role: 'shin', kind: 'limb', tone: 'board', x: 0.34, y: 0.86,
-    width: 17, height: 46, angle: Math.PI * 2 / 3,
+    id: 'shin-a', role: 'shin', kind: 'shin', x: 0.34, y: 0.86,
+    width: 22, height: 49, angle: Math.PI * 2 / 3,
     ports: [{ id: 'knee', family: 'knee', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
   },
   {
-    id: 'shin-b', role: 'shin', kind: 'limb', tone: 'ink', x: 0.91, y: 0.79,
-    width: 17, height: 46, angle: -Math.PI / 3,
+    id: 'shin-b', role: 'shin', kind: 'shin', x: 0.91, y: 0.79,
+    width: 22, height: 49, angle: -Math.PI / 3,
     ports: [{ id: 'knee', family: 'knee', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
   }
 ];
 
-const MATERIALS = {
-  board: { elevation: 5, shadowAlpha: 0.14, edgeAlpha: 0.22 },
-  ink: { elevation: 7, shadowAlpha: 0.17, edgeAlpha: 0.18 }
-};
+const ROBOT_MATERIAL = { elevation: 6, shadowAlpha: 0.14, edgeAlpha: 0.28 };
 
 const getScale = (width) => clamp(width / 1280, 0.72, 1.06);
-const toneColor = (tone) => tone === 'ink' ? INK : BOARD;
-
 const tracePart = (graphics, spec, width, height) => {
-  if (spec.kind === 'head') return graphics.ellipse(0, 0, width / 2, height / 2);
+  if (spec.kind === 'head') {
+    return graphics.poly([
+      -width * 0.34, -height / 2,
+      width * 0.2, -height / 2,
+      width * 0.46, -height * 0.24,
+      width * 0.43, height * 0.27,
+      width * 0.23, height / 2,
+      -width * 0.32, height / 2,
+      -width * 0.48, height * 0.2,
+      -width * 0.48, -height * 0.24
+    ]);
+  }
   if (spec.kind === 'chest') {
     return graphics.poly([
-      -width / 2, -height / 2, width / 2, -height / 2,
-      width * 0.34, height / 2, -width * 0.34, height / 2
+      -width * 0.32, -height / 2,
+      width * 0.32, -height / 2,
+      width / 2, -height * 0.32,
+      width * 0.38, height * 0.34,
+      width * 0.22, height / 2,
+      -width * 0.22, height / 2,
+      -width * 0.38, height * 0.34,
+      -width / 2, -height * 0.32
     ]);
   }
   if (spec.kind === 'pelvis') {
     return graphics.poly([
-      -width * 0.4, -height / 2, width * 0.4, -height / 2,
-      width / 2, height / 2, -width / 2, height / 2
+      -width * 0.24, -height / 2,
+      width * 0.24, -height / 2,
+      width * 0.45, -height * 0.2,
+      width / 2, height * 0.34,
+      width * 0.33, height / 2,
+      -width * 0.33, height / 2,
+      -width / 2, height * 0.34,
+      -width * 0.45, -height * 0.2
+    ]);
+  }
+  if (spec.kind === 'forearm') {
+    return graphics.poly([
+      -width * 0.32, -height / 2,
+      width * 0.32, -height / 2,
+      width * 0.38, height * 0.24,
+      width / 2, height / 2,
+      width * 0.16, height / 2,
+      width * 0.06, height * 0.34,
+      -width * 0.06, height * 0.34,
+      -width * 0.16, height / 2,
+      -width / 2, height / 2,
+      -width * 0.38, height * 0.24
+    ]);
+  }
+  if (spec.kind === 'shin') {
+    return graphics.poly([
+      -width * 0.34, -height / 2,
+      width * 0.34, -height / 2,
+      width * 0.28, height * 0.18,
+      width / 2, height * 0.38,
+      width * 0.46, height / 2,
+      -width * 0.46, height / 2,
+      -width / 2, height * 0.38,
+      -width * 0.28, height * 0.18
     ]);
   }
   return graphics.poly([
-    -width * 0.38, -height / 2, width * 0.38, -height / 2,
-    width / 2, height / 2, -width / 2, height / 2
+    -width / 2, -height / 2,
+    width / 2, -height / 2,
+    width * 0.34, height / 2,
+    -width * 0.34, height / 2
   ]);
 };
 
@@ -147,36 +205,209 @@ const drawFilledPart = (spec, width, height, color, alpha = 1) => {
 };
 
 const createSurface = (spec, width, height) => {
-  const surface = drawFilledPart(spec, width, height, toneColor(spec.tone));
-  const stroke = spec.tone === 'ink' ? PAPER : INK;
+  const surface = drawFilledPart(spec, width, height, BOARD);
   tracePart(surface, spec, width, height).stroke({
-    color: stroke,
-    alpha: spec.tone === 'ink' ? 0.32 : 0.34,
+    color: INK,
+    alpha: 0.48,
     width: 1.4
   });
-  if (spec.kind === 'limb') {
-    surface
-      .moveTo(-width * 0.2, -height * 0.17)
-      .lineTo(width * 0.2, -height * 0.17)
-      .stroke({ color: stroke, alpha: 0.18, width: 1 });
-  }
   return surface;
 };
 
-const createPortMarker = (port, spec, scale) => {
-  const marker = new Graphics();
-  const radius = Math.max(2.8, 3.8 * scale);
-  if (port.polarity === PORT.SOCKET) {
-    marker
-      .circle(port.x, port.y, radius)
-      .fill({ color: toneColor(spec.tone), alpha: 1 })
-      .stroke({ color: SIGNAL, alpha: 0.9, width: Math.max(1.2, 1.5 * scale) });
+const createRobotDetails = (spec, width, height, scale) => {
+  const root = new Container();
+  const frame = new Graphics();
+  const panel = new Graphics();
+  const actuator = new Graphics();
+  const lineWidth = Math.max(0.8, scale);
+
+  if (spec.role === 'head') {
+    frame
+      .poly([
+        -width * 0.34, height * 0.24,
+        width * 0.25, height * 0.24,
+        width * 0.18, height * 0.46,
+        -width * 0.24, height * 0.46
+      ])
+      .fill({ color: INK, alpha: 0.86 });
+    panel
+      .moveTo(-width * 0.33, -height * 0.24)
+      .lineTo(width * 0.22, -height * 0.24)
+      .lineTo(width * 0.37, -height * 0.08)
+      .stroke({ color: INK, alpha: 0.42, width: lineWidth });
+    frame
+      .poly([
+        width * 0.04, -height * 0.12,
+        width * 0.34, -height * 0.12,
+        width * 0.38, height * 0.02,
+        width * 0.02, height * 0.02
+      ])
+      .fill({ color: INK, alpha: 0.9 });
+    actuator.circle(width * 0.28, -height * 0.05, 1.6 * scale)
+      .fill({ color: SIGNAL, alpha: 0.9 });
+  } else if (spec.role === 'chest') {
+    frame
+      .poly([
+        -width * 0.08, -height * 0.4,
+        width * 0.08, -height * 0.4,
+        width * 0.1, height * 0.38,
+        0, height * 0.48,
+        -width * 0.1, height * 0.38
+      ])
+      .fill({ color: INK, alpha: 0.92 });
+    frame
+      .poly([
+        -width * 0.4, -height * 0.28,
+        width * 0.4, -height * 0.28,
+        width * 0.33, -height * 0.13,
+        -width * 0.33, -height * 0.13
+      ])
+      .fill({ color: METAL, alpha: 0.96 });
+    panel
+      .moveTo(-width * 0.36, -height * 0.07)
+      .lineTo(-width * 0.18, height * 0.3)
+      .moveTo(width * 0.36, -height * 0.07)
+      .lineTo(width * 0.18, height * 0.3)
+      .moveTo(-width * 0.22, height * 0.34)
+      .lineTo(width * 0.22, height * 0.34)
+      .stroke({ color: INK, alpha: 0.34, width: lineWidth });
+    actuator
+      .moveTo(0, -height * 0.31)
+      .lineTo(0, height * 0.29)
+      .moveTo(0, -height * 0.14)
+      .lineTo(-width * 0.3, -height * 0.22)
+      .moveTo(0, -height * 0.14)
+      .lineTo(width * 0.3, -height * 0.22)
+      .stroke({ color: SIGNAL, alpha: 0.62, width: 1.1 * scale })
+      .circle(0, height * 0.02, 4.4 * scale)
+      .fill({ color: SIGNAL, alpha: 0.86 })
+      .circle(0, height * 0.02, 7 * scale)
+      .stroke({ color: INK, alpha: 0.28, width: lineWidth });
+  } else if (spec.role === 'pelvis') {
+    frame
+      .poly([
+        -width * 0.09, -height * 0.42,
+        width * 0.09, -height * 0.42,
+        width * 0.18, height * 0.3,
+        0, height * 0.46,
+        -width * 0.18, height * 0.3
+      ])
+      .fill({ color: INK, alpha: 0.9 });
+    for (const direction of [-1, 1]) {
+      frame.circle(direction * width * 0.27, height * 0.28, 5.2 * scale)
+        .fill({ color: INK, alpha: 0.82 })
+        .circle(direction * width * 0.27, height * 0.28, 2.7 * scale)
+        .fill({ color: METAL, alpha: 1 });
+      actuator
+        .moveTo(0, 0)
+        .lineTo(direction * width * 0.23, height * 0.21)
+        .stroke({ color: SIGNAL, alpha: 0.58, width: lineWidth });
+    }
+    panel
+      .moveTo(-width * 0.33, -height * 0.05)
+      .lineTo(width * 0.33, -height * 0.05)
+      .stroke({ color: INK, alpha: 0.38, width: lineWidth });
   } else {
-    marker
-      .circle(port.x, port.y, radius)
-      .fill({ color: SIGNAL, alpha: 0.88 })
-      .stroke({ color: PAPER, alpha: 0.52, width: 1 });
+    const isDistal = spec.role === 'forearm' || spec.role === 'shin';
+    const railTop = isDistal ? -height * 0.32 : -height * 0.26;
+    const railBottom = isDistal ? height * 0.22 : height * 0.3;
+    frame
+      .poly([
+        -width * 0.1, railTop,
+        width * 0.1, railTop,
+        width * 0.13, railBottom,
+        -width * 0.13, railBottom
+      ])
+      .fill({ color: INK, alpha: 0.9 });
+    panel
+      .moveTo(-width * 0.31, -height * 0.27)
+      .lineTo(width * 0.31, -height * 0.27)
+      .moveTo(-width * 0.24, height * 0.27)
+      .lineTo(width * 0.24, height * 0.27)
+      .stroke({ color: INK, alpha: 0.36, width: lineWidth });
+    actuator
+      .moveTo(width * 0.19, railTop)
+      .lineTo(width * 0.16, railBottom)
+      .stroke({ color: SIGNAL, alpha: 0.68, width: lineWidth });
+
+    if (spec.role === 'forearm') {
+      frame
+        .moveTo(-width * 0.08, height * 0.34)
+        .lineTo(0, height * 0.45)
+        .lineTo(width * 0.08, height * 0.34)
+        .stroke({ color: INK, alpha: 0.9, width: 1.2 * scale });
+    }
+    if (spec.role === 'shin') {
+      frame
+        .moveTo(-width * 0.37, height * 0.36)
+        .lineTo(width * 0.37, height * 0.36)
+        .stroke({ color: INK, alpha: 0.74, width: 1.4 * scale });
+    }
   }
+
+  root.addChild(frame, panel, actuator);
+  return root;
+};
+
+const createPortMarker = (port, scale) => {
+  const marker = new Container();
+  const face = new Graphics();
+  const glyph = new Graphics();
+  const radius = Math.max(3.1, 4.15 * scale);
+  const normal = { x: Math.cos(port.normal), y: Math.sin(port.normal) };
+  const tangent = { x: -normal.y, y: normal.x };
+  marker.position.set(port.x, port.y);
+
+  if (port.polarity === PORT.SOCKET) {
+    face
+      .circle(0, 0, radius + 0.7 * scale)
+      .fill({ color: INK, alpha: 0.88 })
+      .circle(0, 0, radius)
+      .stroke({ color: SIGNAL, alpha: 0.95, width: Math.max(1.2, 1.55 * scale) })
+      .circle(0, 0, radius * 0.48)
+      .fill({ color: BOARD, alpha: 1 });
+  } else {
+    face
+      .moveTo(-normal.x * radius * 0.45, -normal.y * radius * 0.45)
+      .lineTo(normal.x * radius * 1.65, normal.y * radius * 1.65)
+      .stroke({ color: INK, alpha: 0.82, width: Math.max(2.5, 3.1 * scale) })
+      .circle(0, 0, radius)
+      .fill({ color: SIGNAL, alpha: 0.88 })
+      .stroke({ color: PAPER, alpha: 0.62, width: 1 });
+  }
+
+  const glyphColor = port.polarity === PORT.SOCKET ? INK : PAPER;
+  const glyphWidth = Math.max(0.75, scale * 0.9);
+  const line = (ax, ay, bx, by) => glyph.moveTo(ax, ay).lineTo(bx, by);
+  if (port.family === 'neck') {
+    line(-normal.x * radius * 0.45, -normal.y * radius * 0.45, normal.x * radius * 0.45, normal.y * radius * 0.45);
+  } else if (port.family === 'waist') {
+    for (const offset of [-1, 1]) {
+      line(
+        tangent.x * radius * 0.52 + normal.x * offset,
+        tangent.y * radius * 0.52 + normal.y * offset,
+        -tangent.x * radius * 0.52 + normal.x * offset,
+        -tangent.y * radius * 0.52 + normal.y * offset
+      );
+    }
+  } else if (port.family === 'shoulder') {
+    line(-radius * 0.48, 0, radius * 0.48, 0);
+    line(0, -radius * 0.48, 0, radius * 0.48);
+  } else if (port.family === 'elbow') {
+    line(-tangent.x * radius * 0.52, -tangent.y * radius * 0.52, tangent.x * radius * 0.52, tangent.y * radius * 0.52);
+  } else if (port.family === 'hip') {
+    glyph
+      .circle(0, 0, radius * 0.54)
+      .stroke({ color: glyphColor, alpha: 0.88, width: glyphWidth });
+  } else if (port.family === 'knee') {
+    glyph
+      .rect(-radius * 0.35, -radius * 0.35, radius * 0.7, radius * 0.7)
+      .stroke({ color: glyphColor, alpha: 0.88, width: glyphWidth });
+  }
+  if (port.family !== 'hip' && port.family !== 'knee') {
+    glyph.stroke({ color: glyphColor, alpha: 0.9, width: glyphWidth });
+  }
+  marker.addChild(face, glyph);
   return marker;
 };
 
@@ -184,27 +415,24 @@ const createView = (spec, width, height, ports, scale) => {
   const root = new Container();
   const farShadow = drawFilledPart(spec, width, height, SHADOW);
   const nearShadow = drawFilledPart(spec, width, height, SHADOW);
+  const underplate = drawFilledPart(spec, width, height, INK);
   const surface = createSurface(spec, width, height);
+  const details = createRobotDetails(spec, width, height, scale);
   const highlight = new Graphics()
-    .moveTo(-width * 0.2, -height * 0.3)
-    .lineTo(width * 0.13, -height * 0.3)
+    .moveTo(-width * 0.24, -height * 0.34)
+    .lineTo(width * 0.18, -height * 0.34)
     .stroke({ color: 0xffffff, alpha: 1, width: 1.2 });
   const portMarkers = new Map();
   farShadow.scale.set(1.035);
   farShadow.alpha = 0;
   nearShadow.alpha = 0;
+  underplate.scale.set(0.965);
+  underplate.position.set(1.2 * scale, 1.8 * scale);
   highlight.alpha = 0;
-  root.addChild(surface, highlight);
+  root.addChild(underplate, surface, details, highlight);
 
-  if (spec.role === 'chest') {
-    root.addChild(new Graphics()
-      .circle(0, 1.5 * scale, 5.2 * scale)
-      .fill({ color: SIGNAL, alpha: 0.68 })
-      .circle(0, 1.5 * scale, 8.6 * scale)
-      .stroke({ color: SIGNAL, alpha: 0.18, width: 1 }));
-  }
   for (const port of ports) {
-    const marker = createPortMarker(port, spec, scale);
+    const marker = createPortMarker(port, scale);
     portMarkers.set(port.id, marker);
     root.addChild(marker);
   }
@@ -212,7 +440,7 @@ const createView = (spec, width, height, ports, scale) => {
     farShadow,
     height,
     highlight,
-    material: MATERIALS[spec.tone],
+    material: ROBOT_MATERIAL,
     nearShadow,
     portMarkers,
     root,
@@ -287,6 +515,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       sharedTicker: false,
       clearBeforeRender: true
     });
+    // This scene owns pointer input natively; detach Pixi's document-level
+    // hit-testing listeners and system event ticker after renderer setup.
+    app.renderer.events?.setTargetElement(null);
   } catch (error) {
     try {
       app.destroy({ removeView: false }, { children: true });
@@ -443,8 +674,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       for (const port of meta.ports) {
         const marker = view.portMarkers.get(port.id);
         const occupied = occupiedPorts.has(portKey(body, port));
-        marker.alpha = occupied ? 1 : 0.74;
-        marker.scale.set(occupied ? 1.14 : 1);
+        marker.alpha = occupied ? 0.96 : 0.78;
+        marker.scale.set(occupied ? 0.92 : 1);
       }
     }
   };
@@ -638,11 +869,21 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     updatePoseStatesFromBodies();
   };
 
+  const rebaseJointAngles = () => {
+    for (const connection of connections) {
+      const joint = connection.angular;
+      if (!joint) continue;
+      joint.baseAngle = wrapAngle(joint.plugBody.angle - joint.socketBody.angle);
+    }
+  };
+
   const finishCelebration = (applyFinalPose = true) => {
     if (!celebration) return;
     if (applyFinalPose) applyTargetBlend(celebration.raisedTargets, celebration.raisedTargets, 1);
+    rebaseJointAngles();
     clearEffects();
     celebration = null;
+    settledDuration = SETTLE_DURATION;
     for (const body of dynamicBodies) {
       body.constraintImpulse.x = 0;
       body.constraintImpulse.y = 0;
@@ -757,6 +998,65 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     app.start();
   };
 
+  const applyJointServos = () => {
+    const draggedComponent = activePointer?.phase === 'dragging'
+      ? new Set(getComponent(activePointer.body))
+      : null;
+    for (const connection of connections) {
+      const joint = connection.angular;
+      if (!joint || (joint.socketBody.isSleeping && joint.plugBody.isSleeping)) continue;
+      const profile = JOINT_SERVO_PROFILES[joint.family];
+      if (!profile) continue;
+      const relativeVelocity = joint.plugBody.angularVelocity - joint.socketBody.angularVelocity;
+      const movingTogether = draggedComponent?.has(joint.socketBody)
+        && draggedComponent.has(joint.plugBody);
+      const result = calculateJointServo({
+        parentAngle: joint.socketBody.angle,
+        childAngle: joint.plugBody.angle,
+        restAngle: joint.baseAngle,
+        relativeVelocity,
+        ...profile,
+        centerStrength: movingTogether ? 0 : profile.centerStrength
+      });
+      if (Math.abs(result.excess) < 0.0001
+        && Math.abs(result.error) < 0.025
+        && Math.abs(relativeVelocity) < 0.004) continue;
+      const needsVelocityLimit = Math.abs(relativeVelocity) > profile.maxRelativeVelocity;
+      if (Math.abs(result.correction) < 0.00001 && !needsVelocityLimit) continue;
+
+      const inverseSocket = joint.socketBody.inverseInertia;
+      const inversePlug = joint.plugBody.inverseInertia;
+      const inverseTotal = inverseSocket + inversePlug;
+      if (inverseTotal <= 0) continue;
+      Sleeping.set(joint.socketBody, false);
+      Sleeping.set(joint.plugBody, false);
+      const limitedVelocity = limitRelativeAngularVelocity({
+        socketVelocity: joint.socketBody.angularVelocity
+          + result.correction * inverseSocket / inverseTotal,
+        plugVelocity: joint.plugBody.angularVelocity
+          - result.correction * inversePlug / inverseTotal,
+        inverseSocket,
+        inversePlug,
+        maxRelativeVelocity: profile.maxRelativeVelocity
+      });
+      Body.setAngularVelocity(joint.socketBody, limitedVelocity.socketVelocity);
+      Body.setAngularVelocity(joint.plugBody, limitedVelocity.plugVelocity);
+    }
+  };
+
+  const jointServosSettled = () => connections.every((connection) => {
+    const joint = connection.angular;
+    const profile = joint && JOINT_SERVO_PROFILES[joint.family];
+    if (!joint || !profile) return true;
+    const error = Math.abs(wrapAngle(
+      joint.plugBody.angle - joint.socketBody.angle - joint.baseAngle
+    ));
+    const relativeVelocity = Math.abs(
+      joint.plugBody.angularVelocity - joint.socketBody.angularVelocity
+    );
+    return error <= Math.min(profile.softLimit, 0.18) && relativeVelocity < 0.008;
+  });
+
   const advancePhysics = () => {
     for (const state of poseStates.values()) {
       state.previous.x = state.current.x;
@@ -769,6 +1069,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
         dragConstraint.pointA.x += (activePointer.target.x - dragConstraint.pointA.x) * response;
         dragConstraint.pointA.y += (activePointer.target.y - dragConstraint.pointA.y) * response;
       }
+      applyJointServos();
       Engine.update(engine, PHYSICS_SUBSTEP);
       if (activePointer?.phase === 'dragging'
         && !activePointer.snappedDuringDrag
@@ -795,6 +1096,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       }
       const settled = !celebration
         && !activePointer
+        && jointServosSettled()
         && dynamicBodies.every((body) => body.isSleeping || (body.speed < 0.035 && Math.abs(body.angularSpeed) < 0.012));
       settledDuration = settled ? settledDuration + frameDelta : 0;
       if (settledDuration >= SETTLE_DURATION) {
@@ -933,6 +1235,15 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       damping: 0.16
     });
     const connection = {
+      angular: {
+        baseAngle: wrapAngle(
+          (best.movingPort.polarity === PORT.PLUG ? best.movingBody : best.targetBody).angle
+            - (best.movingPort.polarity === PORT.SOCKET ? best.movingBody : best.targetBody).angle
+        ),
+        family: best.movingPort.family,
+        plugBody: best.movingPort.polarity === PORT.PLUG ? best.movingBody : best.targetBody,
+        socketBody: best.movingPort.polarity === PORT.SOCKET ? best.movingBody : best.targetBody
+      },
       bodyA: best.movingBody,
       bodyB: best.targetBody,
       constraint,
@@ -1067,12 +1378,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   };
 
   const handlePointerMove = (event) => {
+    if (!activePointer || event.pointerId !== activePointer.id) return;
     const point = toWorldPoint(event.clientX, event.clientY);
-    if (!activePointer) {
-      if (event.pointerType !== 'touch') canvas.style.cursor = findBody(point) ? 'grab' : 'default';
-      return;
-    }
-    if (event.pointerId !== activePointer.id) return;
 
     const dx = point.x - activePointer.start.x;
     const dy = point.y - activePointer.start.y;
@@ -1107,6 +1414,12 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       .slice(-24);
   };
 
+  const handleHoverPointerMove = (event) => {
+    if (destroyed || activePointer || event.pointerType === 'touch') return;
+    const point = toWorldPoint(event.clientX, event.clientY);
+    canvas.style.cursor = findBody(point) ? 'grab' : 'default';
+  };
+
   const handlePointerUp = (event) => releasePointer(event, true);
   const handlePointerCancel = (event) => releasePointer(event, false);
   const handlePointerLeave = () => {
@@ -1114,6 +1427,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   };
 
   canvas.addEventListener('pointerdown', handlePointerDown, { passive: true });
+  canvas.addEventListener('pointermove', handleHoverPointerMove, { passive: true });
   canvas.addEventListener('pointerleave', handlePointerLeave, { passive: true });
   window.addEventListener('pointermove', handlePointerMove, { passive: true });
   window.addEventListener('pointerup', handlePointerUp, { passive: true });
@@ -1232,6 +1546,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       destroyed = true;
       resizeObserver.disconnect();
       canvas.removeEventListener('pointerdown', handlePointerDown);
+      canvas.removeEventListener('pointermove', handleHoverPointerMove);
       canvas.removeEventListener('pointerleave', handlePointerLeave);
       canvas.removeEventListener('webglcontextlost', handleContextLost);
       canvas.removeEventListener('webglcontextrestored', handleContextRestored);

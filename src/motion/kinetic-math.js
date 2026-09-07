@@ -51,6 +51,53 @@ export const solveMovingPortPose = (movingPose, movingPort, targetPose, targetPo
   };
 };
 
+export const calculateJointServo = ({
+  parentAngle = 0,
+  childAngle = 0,
+  restAngle = 0,
+  relativeVelocity = 0,
+  softLimit = Math.PI,
+  centerStrength = 0,
+  limitStrength = 0,
+  damping = 0,
+  maxCorrection = 0.02
+} = {}) => {
+  const error = wrapAngle(childAngle - parentAngle - restAngle);
+  const limit = Math.max(0, softLimit);
+  const excess = Math.sign(error) * Math.max(0, Math.abs(error) - limit);
+  const rawCorrection = error * centerStrength
+    + excess * limitStrength
+    + relativeVelocity * damping;
+  return {
+    correction: clamp(rawCorrection, -Math.abs(maxCorrection), Math.abs(maxCorrection)),
+    error,
+    excess
+  };
+};
+
+export const limitRelativeAngularVelocity = ({
+  socketVelocity = 0,
+  plugVelocity = 0,
+  inverseSocket = 0,
+  inversePlug = 0,
+  maxRelativeVelocity = Infinity
+} = {}) => {
+  const inverseTotal = inverseSocket + inversePlug;
+  const relativeVelocity = plugVelocity - socketVelocity;
+  const limit = Math.max(0, maxRelativeVelocity);
+  if (inverseTotal <= 0 || !Number.isFinite(limit)) {
+    return { socketVelocity, plugVelocity, relativeVelocity };
+  }
+
+  const limitedRelativeVelocity = clamp(relativeVelocity, -limit, limit);
+  const correction = relativeVelocity - limitedRelativeVelocity;
+  return {
+    socketVelocity: socketVelocity + correction * inverseSocket / inverseTotal,
+    plugVelocity: plugVelocity - correction * inversePlug / inverseTotal,
+    relativeVelocity: limitedRelativeVelocity
+  };
+};
+
 export const pointInRotatedRect = (point, pose, width, height, padding = 0) => {
   const local = rotatePoint({
     x: (point?.x ?? 0) - (pose?.x ?? 0),

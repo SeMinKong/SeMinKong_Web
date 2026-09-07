@@ -24,10 +24,11 @@ export const initKineticSandbox = (environment, { ready } = {}) => {
   let loading = false;
   let pageActive = !document.hidden;
   let queuedIntent = null;
+  let readyResolved = false;
   let retryCount = 0;
 
   const isEligible = () => environment.motion !== 'reduced' && !forcedColors.matches;
-  const canRun = () => isEligible() && intersecting && pageActive;
+  const canRun = () => readyResolved && isEligible() && intersecting && pageActive;
 
   const setState = (state) => {
     if (!destroyed) stage.dataset.kineticState = state;
@@ -64,15 +65,24 @@ export const initKineticSandbox = (environment, { ready } = {}) => {
 
     try {
       const { mountKineticSandbox } = await import('./kinetic-sandbox-runtime.js');
-      if (destroyed || currentGeneration !== generation || !isEligible()) return;
+      if (destroyed || currentGeneration !== generation) return;
+      if (!canRun()) {
+        loading = false;
+        showFallback('static');
+        return;
+      }
 
       const nextController = await mountKineticSandbox(stage, {
         mode: environment.motion,
         onFailure: handleRuntimeFailure
       });
 
-      if (destroyed || currentGeneration !== generation || !isEligible()) {
+      if (destroyed || currentGeneration !== generation || !canRun()) {
         nextController.destroy();
+        if (!destroyed && currentGeneration === generation) {
+          loading = false;
+          showFallback('static');
+        }
         return;
       }
 
@@ -84,8 +94,7 @@ export const initKineticSandbox = (environment, { ready } = {}) => {
         queuedIntent = null;
       }
 
-      if (canRun()) controller.start();
-      else controller.stop();
+      controller.start();
     } catch (error) {
       loading = false;
       if (destroyed || currentGeneration !== generation) return;
@@ -182,7 +191,9 @@ export const initKineticSandbox = (environment, { ready } = {}) => {
   observer?.observe(stage);
 
   Promise.resolve(ready).catch(() => {}).then(() => {
-    if (!destroyed) sync();
+    if (destroyed) return;
+    readyResolved = true;
+    sync();
   });
 
   return {

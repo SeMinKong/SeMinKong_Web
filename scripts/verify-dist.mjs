@@ -106,9 +106,9 @@ const verifyGallerySurface = async (route, html, references) => {
     canvases.length !== 1
     || !/data-kinetic-canvas/.test(canvases[0])
     || !/aria-hidden="true"/.test(canvases[0])
-    || !/tabindex="-1"/.test(canvases[0])
+    || /\btabindex=/.test(canvases[0])
   ) {
-    throw new Error('Built Home must contain one inaccessible Kinetic canvas.');
+    throw new Error('Built Home must contain one decorative, non-focusable Kinetic canvas.');
   }
 
   if (!/\.kinetic-stage\{[^}]*position:absolute/.test(compiledCss) || /\.kinetic-stage\{[^}]*position:fixed/.test(compiledCss)) {

@@ -3,10 +3,12 @@ import Matter from 'matter-js';
 import test from 'node:test';
 import {
   WORLD_LIGHT_ANCHOR,
+  calculateJointServo,
   capVectorMagnitude,
   evaluatePortSnap,
   getWorldLight,
   interpolatePose,
+  limitRelativeAngularVelocity,
   pointInRotatedRect,
   rotatePoint,
   solveMovingPortPose,
@@ -27,6 +29,83 @@ test('kinetic pose interpolation stays clamped and continuous', () => {
   assert.equal(midpoint.x, 20);
   assert.equal(midpoint.y, 40);
   assert.ok(Math.abs(midpoint.angle - 0.2) < 1e-9);
+});
+
+test('joint servo wraps relative angles and caps soft-limit correction', () => {
+  const wrapped = calculateJointServo({
+    parentAngle: 3.1,
+    childAngle: -3.1,
+    centerStrength: 0.1,
+    maxCorrection: 0.02
+  });
+  assert.ok(wrapped.error > 0.08 && wrapped.error < 0.09);
+  assert.ok(wrapped.correction > 0);
+
+  const limited = calculateJointServo({
+    parentAngle: 0,
+    childAngle: 2.4,
+    softLimit: 0.9,
+    centerStrength: 0,
+    limitStrength: 0.1,
+    maxCorrection: 0.017
+  });
+  assert.ok(Math.abs(limited.excess - 1.5) < 1e-9);
+  assert.equal(limited.correction, 0.017);
+
+  const damped = calculateJointServo({
+    relativeVelocity: -0.08,
+    damping: 0.2,
+    maxCorrection: 0.02
+  });
+  assert.equal(damped.error, 0);
+  assert.ok(damped.correction < 0);
+
+  const positiveRestOffset = calculateJointServo({
+    parentAngle: 0.4,
+    childAngle: 0.4 + Math.PI / 2 + 0.2,
+    restAngle: Math.PI / 2,
+    centerStrength: 0.1,
+    maxCorrection: 0.03
+  });
+  const negativeRestOffset = calculateJointServo({
+    parentAngle: 0.4,
+    childAngle: 0.4 - Math.PI / 2 - 0.2,
+    restAngle: -Math.PI / 2,
+    centerStrength: 0.1,
+    maxCorrection: 0.03
+  });
+  assert.ok(positiveRestOffset.correction > 0);
+  assert.ok(negativeRestOffset.correction < 0);
+
+  const freeInsideLimit = calculateJointServo({
+    childAngle: 0.5,
+    softLimit: 0.9,
+    centerStrength: 0,
+    limitStrength: 0.1,
+    damping: 0
+  });
+  assert.equal(freeInsideLimit.correction, 0);
+});
+
+test('joint relative velocity limiter preserves pair momentum', () => {
+  const inverseSocket = 0.25;
+  const inversePlug = 0.5;
+  const socketVelocity = 0.2;
+  const plugVelocity = 0.5;
+  const beforeMomentum = socketVelocity / inverseSocket + plugVelocity / inversePlug;
+  const limited = limitRelativeAngularVelocity({
+    socketVelocity,
+    plugVelocity,
+    inverseSocket,
+    inversePlug,
+    maxRelativeVelocity: 0.06
+  });
+  const afterMomentum = limited.socketVelocity / inverseSocket
+    + limited.plugVelocity / inversePlug;
+
+  assert.ok(Math.abs(limited.relativeVelocity - 0.06) < 1e-12);
+  assert.ok(Math.abs(limited.plugVelocity - limited.socketVelocity - 0.06) < 1e-12);
+  assert.ok(Math.abs(afterMomentum - beforeMomentum) < 1e-12);
 });
 
 test('throw smoothing caps diagonal magnitude and respects long sample gaps', () => {

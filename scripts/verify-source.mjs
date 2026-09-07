@@ -136,9 +136,9 @@ if (
   homeCanvases.length !== 1
   || !/data-kinetic-canvas/.test(homeCanvases[0])
   || !/aria-hidden="true"/.test(homeCanvases[0])
-  || !/tabindex="-1"/.test(homeCanvases[0])
+  || /\btabindex=/.test(homeCanvases[0])
 ) {
-  throw new Error('Home must keep one inaccessible, hero-local Kinetic canvas.');
+  throw new Error('Home must keep one decorative, non-focusable, hero-local Kinetic canvas.');
 }
 
 const heroSection = homeHtml.match(/<section class="hero-story"[\s\S]*?<\/section>/)?.[0] || '';
@@ -171,12 +171,16 @@ for (const contract of [
   "canvas.style.touchAction = 'pan-y pinch-zoom'",
   'const PART_SPECS = [',
   'const REQUIRED_CONNECTIONS = 10',
+  'const JOINT_SERVO_PROFILES',
+  'createRobotDetails',
+  'calculateJointServo',
   'evaluatePortSnap',
   'pointA: rotatePoint(best.movingPort, best.movingBody.angle)',
   'pointB: rotatePoint(best.targetPort, best.targetBody.angle)',
   'dragConstraint.pointB = rotatePoint(pointer.localPoint, pointer.body.angle)',
   'placeGrabAtPoint(body, pointer.localPoint, point)',
   "activePointer.phase = 'scrolling'",
+  "canvas.addEventListener('pointermove', handleHoverPointerMove, { passive: true })",
   "window.addEventListener('pointermove', handlePointerMove, { passive: true })",
   'outwardTravel >= 34 * scale',
   'body.constraintImpulse.angle = 0',

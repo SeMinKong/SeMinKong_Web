@@ -135,11 +135,19 @@
 
 .kinetic-part {
   --part-angle: 0deg;
-  --part-fill: #ded6ca;
-  --part-height: clamp(30px, 3.2vw, 42px);
-  --part-width: clamp(15px, 1.5vw, 20px);
+  --part-shape: polygon(0 0, 100% 0, 84% 100%, 16% 100%);
+  --part-surface:
+    linear-gradient(90deg, transparent 0 41%, #24211d 42% 58%, transparent 59%),
+    linear-gradient(90deg, transparent 0 66%, rgba(167, 53, 36, 0.78) 67% 70%, transparent 71%),
+    linear-gradient(180deg, transparent 0 27%, rgba(36, 33, 29, 0.42) 28% 30%, transparent 31%),
+    linear-gradient(145deg, #ebe4d9 0%, #d7cdbf 62%, #b8afa2 100%);
+  --part-height: clamp(31.68px, 3.4375vw, 46.64px);
+  --part-width: clamp(15.12px, 1.640625vw, 22.26px);
   --part-x: 50%;
   --part-y: 50%;
+  --complete-angle: 0deg;
+  --complete-x: 50%;
+  --complete-y: 50%;
   position: absolute;
   display: block;
   box-sizing: border-box;
@@ -147,23 +155,35 @@
   left: var(--part-x);
   width: var(--part-width);
   height: var(--part-height);
-  border: 1px solid rgba(36, 33, 29, 0.3);
-  border-radius: 999px;
-  background: var(--part-fill);
-  filter: drop-shadow(7px 10px 10px rgba(23, 21, 18, 0.14));
   transform-origin: center;
   transform: translate(-50%, -50%) rotate(var(--part-angle));
+}
+
+.kinetic-part__surface {
+  position: absolute;
+  inset: 0;
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid rgba(36, 33, 29, 0.5);
+  background: var(--part-surface);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.52),
+    inset -2px -2px 0 rgba(36, 33, 29, 0.12);
+  clip-path: var(--part-shape);
+  filter: drop-shadow(4px 6px 5px rgba(23, 21, 18, 0.14));
 }
 
 .kinetic-part::before,
 .kinetic-part::after {
   position: absolute;
   left: 50%;
-  width: 7px;
-  height: 7px;
-  border: 1px solid rgba(255, 248, 237, 0.7);
+  z-index: 2;
+  width: 8px;
+  height: 8px;
+  border: 1px solid rgba(241, 238, 230, 0.76);
   border-radius: 50%;
-  background: var(--signal-on-light);
+  background: #a73524;
+  box-shadow: 0 0 0 1px rgba(36, 33, 29, 0.76);
   content: "";
   translate: -50% -50%;
 }
@@ -174,138 +194,200 @@
 
 .kinetic-part::after {
   top: 100%;
+  border: 2px solid #a73524;
+  background: #ded6ca;
+  box-shadow: 0 0 0 1px rgba(36, 33, 29, 0.82);
 }
 
 .kinetic-part--head {
   --part-angle: 60deg;
-  --part-height: clamp(32px, 3vw, 40px);
-  --part-width: clamp(28px, 2.7vw, 36px);
+  --part-shape: polygon(16% 0, 70% 0, 96% 26%, 93% 77%, 73% 100%, 18% 100%, 2% 70%, 2% 26%);
+  --part-surface:
+    radial-gradient(ellipse at 71% 39%, #a73524 0 2px, #24211d 2.5px 6px, transparent 6.5px),
+    linear-gradient(#24211d, #24211d) 50% 92% / 38% 22% no-repeat,
+    linear-gradient(180deg, transparent 0 26%, rgba(36, 33, 29, 0.46) 27% 29%, transparent 30%),
+    linear-gradient(145deg, #eee7dc 0%, #d8cec0 68%, #b8afa2 100%);
+  --part-height: clamp(30.24px, 3.28125vw, 44.52px);
+  --part-width: clamp(27.36px, 2.96875vw, 40.28px);
   --part-x: 10%;
-  --part-y: 24%;
-  border-radius: 48% 48% 42% 42%;
+  --part-y: 22%;
+  --complete-angle: 5deg;
+  --complete-x: var(--model-x);
+  --complete-y: calc(var(--model-y) - clamp(38.16px, 4.140625vw, 56.18px));
 }
 
 .kinetic-part--head::before {
   display: none;
 }
 
+.kinetic-part--head::after {
+  border: 1px solid rgba(241, 238, 230, 0.76);
+  background: #a73524;
+}
+
 .kinetic-part--chest {
   --part-angle: -30deg;
-  --part-fill:
-    radial-gradient(circle at 50% 1px, #a73524 0 3px, transparent 3.5px),
-    radial-gradient(circle at 1px 30%, #a73524 0 3px, transparent 3.5px),
-    radial-gradient(circle at calc(100% - 1px) 30%, #a73524 0 3px, transparent 3.5px),
-    radial-gradient(circle at 50% calc(100% - 1px), #a73524 0 3px, transparent 3.5px),
-    #24211d;
-  --part-height: clamp(46px, 4.2vw, 58px);
-  --part-width: clamp(40px, 3.7vw, 50px);
+  --part-shape: polygon(18% 0, 82% 0, 100% 18%, 88% 84%, 72% 100%, 28% 100%, 12% 84%, 0 18%);
+  --part-surface:
+    radial-gradient(circle at 50% 52%, #a73524 0 4px, rgba(36, 33, 29, 0.36) 4.5px 7px, transparent 7.5px),
+    linear-gradient(90deg, transparent 0 44%, #24211d 45% 55%, transparent 56%),
+    linear-gradient(#b8afa2, #b8afa2) 50% 24% / 78% 12% no-repeat,
+    linear-gradient(64deg, transparent 0 43%, rgba(36, 33, 29, 0.34) 44% 46%, transparent 47%),
+    linear-gradient(-64deg, transparent 0 43%, rgba(36, 33, 29, 0.34) 44% 46%, transparent 47%),
+    linear-gradient(145deg, #eee7dc 0%, #d6ccbe 70%, #b8afa2 100%);
+  --part-height: clamp(46.08px, 5vw, 67.84px);
+  --part-width: clamp(41.76px, 4.53125vw, 61.48px);
   --part-x: 82%;
   --part-y: 22%;
-  border-color: rgba(241, 238, 230, 0.34);
-  border-radius: 9px 9px 5px 5px;
+  --complete-angle: -2deg;
+  --complete-x: var(--model-x);
+  --complete-y: var(--model-y);
 }
 
 .kinetic-part--chest::before {
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  box-shadow: 0 0 0 5px rgba(167, 53, 36, 0.14);
+  display: none;
 }
 
 .kinetic-part--chest::after {
-  display: none;
+  inset: -5px;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background:
+    radial-gradient(circle 4px at 50% 5px, #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px),
+    radial-gradient(circle 4px at 5px 30%, #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px),
+    radial-gradient(circle 4px at calc(100% - 5px) 30%, #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px),
+    radial-gradient(circle 4px at 50% calc(100% - 5px), #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px);
+  box-shadow: none;
+  translate: none;
 }
 
 .kinetic-part--pelvis {
   --part-angle: 30deg;
-  --part-fill:
-    radial-gradient(circle at 50% 1px, #a73524 0 3px, transparent 3.5px),
-    #ded6ca;
-  --part-height: clamp(21px, 1.9vw, 26px);
-  --part-width: clamp(39px, 3.6vw, 48px);
+  --part-shape: polygon(26% 0, 74% 0, 95% 30%, 100% 84%, 83% 100%, 17% 100%, 0 84%, 5% 30%);
+  --part-surface:
+    radial-gradient(circle at 23% 72%, #b8afa2 0 3px, #24211d 3.5px 6px, transparent 6.5px),
+    radial-gradient(circle at 77% 72%, #b8afa2 0 3px, #24211d 3.5px 6px, transparent 6.5px),
+    linear-gradient(90deg, transparent 0 43%, #24211d 44% 56%, transparent 57%),
+    linear-gradient(180deg, transparent 0 45%, rgba(36, 33, 29, 0.42) 46% 50%, transparent 51%),
+    linear-gradient(145deg, #ebe4d9 0%, #d6ccbe 68%, #b8afa2 100%);
+  --part-height: clamp(20.16px, 2.1875vw, 29.68px);
+  --part-width: clamp(37.44px, 4.0625vw, 55.12px);
   --part-x: 91%;
-  --part-y: 41%;
-  border-radius: 7px;
-}
-
-.kinetic-part--pelvis::before,
-.kinetic-part--pelvis::after {
-  top: 50%;
+  --part-y: 42%;
+  --complete-angle: 1deg;
+  --complete-x: var(--model-x);
+  --complete-y: calc(var(--model-y) + clamp(33.12px, 3.59375vw, 48.76px));
 }
 
 .kinetic-part--pelvis::before {
-  left: 28%;
+  top: 0;
 }
 
 .kinetic-part--pelvis::after {
-  left: 72%;
+  inset: -5px;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background:
+    radial-gradient(circle 4px at 36% calc(100% - 5px), #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px),
+    radial-gradient(circle 4px at 64% calc(100% - 5px), #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px);
+  box-shadow: none;
+  translate: none;
+}
+
+.kinetic-part--upper-arm-a,
+.kinetic-part--upper-arm-b {
+  --complete-y: calc(var(--model-y) + clamp(6.624px, 0.71875vw, 9.752px));
 }
 
 .kinetic-part--upper-arm-a {
   --part-angle: -60deg;
   --part-x: 7%;
-  --part-y: 50%;
+  --part-y: 49%;
+  --complete-angle: 10deg;
+  --complete-x: calc(var(--model-x) - clamp(20.88px, 2.265625vw, 30.74px));
 }
 
 .kinetic-part--upper-arm-b {
   --part-angle: 120deg;
-  --part-fill: #24211d;
   --part-x: 86%;
   --part-y: 61%;
+  --complete-angle: -10deg;
+  --complete-x: calc(var(--model-x) + clamp(20.88px, 2.265625vw, 30.74px));
+}
+
+.kinetic-part--forearm-a,
+.kinetic-part--forearm-b {
+  --part-shape: polygon(18% 0, 82% 0, 88% 74%, 100% 100%, 66% 100%, 56% 84%, 44% 84%, 34% 100%, 0 100%, 12% 74%);
+  --part-height: clamp(30.96px, 3.359375vw, 45.58px);
+  --part-width: clamp(14.4px, 1.5625vw, 21.2px);
+  --complete-y: calc(var(--model-y) + clamp(38.16px, 4.140625vw, 56.18px));
 }
 
 .kinetic-part--forearm-a {
   --part-angle: 30deg;
-  --part-height: clamp(32px, 3vw, 40px);
-  --part-fill: #24211d;
   --part-x: 20%;
   --part-y: 65%;
+  --complete-angle: -1deg;
+  --complete-x: calc(var(--model-x) - clamp(24.48px, 2.65625vw, 36.04px));
 }
 
 .kinetic-part--forearm-b {
   --part-angle: -120deg;
-  --part-height: clamp(32px, 3vw, 40px);
   --part-x: 68%;
   --part-y: 83%;
+  --complete-angle: 1deg;
+  --complete-x: calc(var(--model-x) + clamp(24.48px, 2.65625vw, 36.04px));
 }
 
 .kinetic-part--thigh-a,
 .kinetic-part--thigh-b {
-  --part-height: clamp(36px, 3.5vw, 45px);
-  --part-width: clamp(17px, 1.7vw, 22px);
+  --part-height: clamp(34.56px, 3.75vw, 50.88px);
+  --part-width: clamp(17.28px, 1.875vw, 25.44px);
+  --complete-y: calc(var(--model-y) + clamp(60.48px, 6.5625vw, 89.04px));
 }
 
 .kinetic-part--thigh-a {
   --part-angle: 60deg;
-  --part-fill: #24211d;
   --part-x: 10%;
   --part-y: 82%;
+  --complete-angle: 3deg;
+  --complete-x: calc(var(--model-x) - clamp(10.08px, 1.09375vw, 14.84px));
 }
 
 .kinetic-part--thigh-b {
   --part-angle: -30deg;
   --part-x: 57%;
   --part-y: 21%;
+  --complete-angle: -3deg;
+  --complete-x: calc(var(--model-x) + clamp(10.08px, 1.09375vw, 14.84px));
 }
 
 .kinetic-part--shin-a,
 .kinetic-part--shin-b {
-  --part-height: clamp(37px, 3.6vw, 46px);
-  --part-width: clamp(15px, 1.5vw, 19px);
+  --part-shape: polygon(16% 0, 84% 0, 78% 68%, 100% 88%, 96% 100%, 4% 100%, 0 88%, 22% 68%);
+  --part-height: clamp(35.28px, 3.828125vw, 51.94px);
+  --part-width: clamp(15.84px, 1.71875vw, 23.32px);
+  --complete-y: calc(var(--model-y) + clamp(95.4px, 10.3515625vw, 140.45px));
 }
 
 .kinetic-part--shin-a {
   --part-angle: 120deg;
-  --part-fill: #ded6ca;
   --part-x: 34%;
   --part-y: 86%;
+  --complete-angle: -1deg;
+  --complete-x: calc(var(--model-x) - clamp(10.8px, 1.171875vw, 15.9px));
 }
 
 .kinetic-part--shin-b {
   --part-angle: -60deg;
-  --part-fill: #24211d;
   --part-x: 91%;
   --part-y: 79%;
+  --complete-angle: 1deg;
+  --complete-x: calc(var(--model-x) + clamp(10.8px, 1.171875vw, 15.9px));
 }
 
 .kinetic-part--forearm-a::after,
@@ -406,22 +488,7 @@
     padding-inline: 14px;
   }
 
-  .kinetic-part {
-    scale: 0.88;
-  }
-
-  .kinetic-part--head { --part-x: 8%; --part-y: 21%; }
-  .kinetic-part--chest { --part-x: 86%; --part-y: 22%; }
-  .kinetic-part--pelvis { --part-x: 91%; --part-y: 43%; }
-  .kinetic-part--upper-arm-a { --part-x: 6%; --part-y: 47%; }
-  .kinetic-part--upper-arm-b { --part-x: 91%; --part-y: 62%; }
-  .kinetic-part--forearm-a { --part-x: 13%; --part-y: 68%; }
-  .kinetic-part--forearm-b { --part-x: 72%; --part-y: 84%; }
-  .kinetic-part--thigh-a { --part-x: 7%; --part-y: 84%; }
-  .kinetic-part--thigh-b { --part-x: 59%; --part-y: 18%; }
-  .kinetic-part--shin-a { --part-x: 35%; --part-y: 88%; }
-  .kinetic-part--shin-b { --part-x: 93%; --part-y: 82%; }
-  }
+}
 
 @media (max-width: 720px) and (max-height: 700px) {
   .home-page .hero-story,
@@ -455,70 +522,10 @@
     transition: none;
   }
 
-  .kinetic-part--head {
-    --part-angle: 5deg;
-    --part-x: var(--model-x);
-    --part-y: calc(var(--model-y) - 49px);
-  }
-
-  .kinetic-part--chest {
-    --part-angle: -2deg;
-    --part-x: var(--model-x);
-    --part-y: var(--model-y);
-  }
-
-  .kinetic-part--pelvis {
-    --part-angle: 1deg;
-    --part-x: var(--model-x);
-    --part-y: calc(var(--model-y) + 41px);
-  }
-
-  .kinetic-part--upper-arm-a {
-    --part-angle: 10deg;
-    --part-x: calc(var(--model-x) - 29px);
-    --part-y: calc(var(--model-y) + 9px);
-  }
-
-  .kinetic-part--upper-arm-b {
-    --part-angle: -10deg;
-    --part-x: calc(var(--model-x) + 29px);
-    --part-y: calc(var(--model-y) + 9px);
-  }
-
-  .kinetic-part--forearm-a {
-    --part-angle: -1deg;
-    --part-x: calc(var(--model-x) - 33px);
-    --part-y: calc(var(--model-y) + 50px);
-  }
-
-  .kinetic-part--forearm-b {
-    --part-angle: 1deg;
-    --part-x: calc(var(--model-x) + 33px);
-    --part-y: calc(var(--model-y) + 50px);
-  }
-
-  .kinetic-part--thigh-a {
-    --part-angle: 3deg;
-    --part-x: calc(var(--model-x) - 14px);
-    --part-y: calc(var(--model-y) + 76px);
-  }
-
-  .kinetic-part--thigh-b {
-    --part-angle: -3deg;
-    --part-x: calc(var(--model-x) + 14px);
-    --part-y: calc(var(--model-y) + 76px);
-  }
-
-  .kinetic-part--shin-a {
-    --part-angle: -1deg;
-    --part-x: calc(var(--model-x) - 15px);
-    --part-y: calc(var(--model-y) + 121px);
-  }
-
-  .kinetic-part--shin-b {
-    --part-angle: 1deg;
-    --part-x: calc(var(--model-x) + 15px);
-    --part-y: calc(var(--model-y) + 121px);
+  .kinetic-part {
+    --part-angle: var(--complete-angle);
+    --part-x: var(--complete-x);
+    --part-y: var(--complete-y);
   }
 }
 
@@ -531,23 +538,47 @@
 }
 
 @media (forced-colors: active) {
-  .kinetic-part {
+  .kinetic-part__surface {
     border: 2px solid CanvasText;
     background: Canvas;
+    box-shadow: none;
     filter: none;
     forced-color-adjust: none;
   }
 
-  .kinetic-part::before,
-  .kinetic-part::after,
-  .kinetic-part--chest::before {
+  .kinetic-part::before {
     border-color: Canvas;
     background: CanvasText;
     box-shadow: none;
+    forced-color-adjust: none;
   }
 
-  .kinetic-part--chest {
+  .kinetic-part::after {
+    border: 2px solid CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    forced-color-adjust: none;
+  }
+
+  .kinetic-part--head::after {
+    border: 1px solid Canvas;
     background: CanvasText;
+  }
+
+  .kinetic-part--chest::after {
+    border: 0;
+    background:
+      radial-gradient(circle 4px at 50% 5px, Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px),
+      radial-gradient(circle 4px at 5px 30%, Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px),
+      radial-gradient(circle 4px at calc(100% - 5px) 30%, Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px),
+      radial-gradient(circle 4px at 50% calc(100% - 5px), Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px);
+  }
+
+  .kinetic-part--pelvis::after {
+    border: 0;
+    background:
+      radial-gradient(circle 4px at 36% calc(100% - 5px), Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px),
+      radial-gradient(circle 4px at 64% calc(100% - 5px), Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px);
   }
 }
 
@@ -562,70 +593,10 @@ html[data-motion="reduced"] .kinetic-stage__fallback {
   transition: none;
 }
 
-html[data-motion="reduced"] .kinetic-part--head {
-  --part-angle: 5deg;
-  --part-x: var(--model-x);
-  --part-y: calc(var(--model-y) - 49px);
-}
-
-html[data-motion="reduced"] .kinetic-part--chest {
-  --part-angle: -2deg;
-  --part-x: var(--model-x);
-  --part-y: var(--model-y);
-}
-
-html[data-motion="reduced"] .kinetic-part--pelvis {
-  --part-angle: 1deg;
-  --part-x: var(--model-x);
-  --part-y: calc(var(--model-y) + 41px);
-}
-
-html[data-motion="reduced"] .kinetic-part--upper-arm-a {
-  --part-angle: 10deg;
-  --part-x: calc(var(--model-x) - 29px);
-  --part-y: calc(var(--model-y) + 9px);
-}
-
-html[data-motion="reduced"] .kinetic-part--upper-arm-b {
-  --part-angle: -10deg;
-  --part-x: calc(var(--model-x) + 29px);
-  --part-y: calc(var(--model-y) + 9px);
-}
-
-html[data-motion="reduced"] .kinetic-part--forearm-a {
-  --part-angle: -1deg;
-  --part-x: calc(var(--model-x) - 33px);
-  --part-y: calc(var(--model-y) + 50px);
-}
-
-html[data-motion="reduced"] .kinetic-part--forearm-b {
-  --part-angle: 1deg;
-  --part-x: calc(var(--model-x) + 33px);
-  --part-y: calc(var(--model-y) + 50px);
-}
-
-html[data-motion="reduced"] .kinetic-part--thigh-a {
-  --part-angle: 3deg;
-  --part-x: calc(var(--model-x) - 14px);
-  --part-y: calc(var(--model-y) + 76px);
-}
-
-html[data-motion="reduced"] .kinetic-part--thigh-b {
-  --part-angle: -3deg;
-  --part-x: calc(var(--model-x) + 14px);
-  --part-y: calc(var(--model-y) + 76px);
-}
-
-html[data-motion="reduced"] .kinetic-part--shin-a {
-  --part-angle: -1deg;
-  --part-x: calc(var(--model-x) - 15px);
-  --part-y: calc(var(--model-y) + 121px);
-}
-
-html[data-motion="reduced"] .kinetic-part--shin-b {
-  --part-angle: 1deg;
-  --part-x: calc(var(--model-x) + 15px);
-  --part-y: calc(var(--model-y) + 121px);
+html[data-motion="reduced"] .kinetic-part {
+  --part-angle: var(--complete-angle);
+  --part-x: var(--complete-x);
+  --part-y: var(--complete-y);
 }
 
 @media (max-width: 720px) {
