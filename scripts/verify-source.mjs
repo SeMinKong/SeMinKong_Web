@@ -174,6 +174,7 @@ for (const contract of [
   'const JOINT_SERVO_PROFILES',
   'Assets.load(ROBOT_ASSETS)',
   'const createArtwork = (texture, width, height)',
+  'alignPosePositionToPort',
   'calculateJointServo',
   'projectJointLimit',
   'evaluatePortSnap',
@@ -198,6 +199,9 @@ for (const contract of [
   'Body.setDensity(body, baseDensity / (nextScale * nextScale))',
   'body.constraintImpulse.angle = 0',
   'body.positionImpulse.y = 0',
+  'if (destroyed || celebration || activePointer',
+  'if (hasCelebrated || celebration || activePointer || !isPuzzleComplete()) return;',
+  'Body.setPosition(edge.body, aligned)',
   "stage.dataset.kineticLight = 'fixed-upper-left'",
   'new ResizeObserver',
   'webglcontextlost',
@@ -206,6 +210,17 @@ for (const contract of [
   if (!kineticRuntime.includes(contract)) {
     throw new Error(`Home Kinetic runtime contract is missing: ${contract}.`);
   }
+}
+
+const kineticSnapBlock = kineticRuntime.match(/const trySnap = \(movingRoot\) => \{[\s\S]*?\n  \};/)?.[0] ?? '';
+const kineticPointerDownBlock = kineticRuntime.match(/const handlePointerDown = \(event\) => \{[\s\S]*?\n  \};/)?.[0] ?? '';
+if (!kineticSnapBlock || /startCelebration\(/.test(kineticSnapBlock)) {
+  throw new Error('Home Kinetic celebration must wait until the final pointer releases.');
+}
+if (!kineticPointerDownBlock
+  || !/celebration \|\| activePointer/.test(kineticPointerDownBlock)
+  || /finishCelebration\(/.test(kineticPointerDownBlock)) {
+  throw new Error('Home Kinetic celebration must ignore direct puzzle manipulation until it finishes.');
 }
 
 for (const retiredCollision of [

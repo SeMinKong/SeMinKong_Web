@@ -947,3 +947,9 @@
 - Scale: 1280px에서 nominal geometry의 약 2배, 768px에서 약 1.75배, 390px에서 약 1.55배를 사용한다. 물리 body, port, artwork와 정적 fallback을 함께 조정하고 density를 scale²로 나눠 질량을 유지한다. live resize는 connected component의 비율과 constraint anchor까지 함께 갱신한다.
 - Joint feel: snap constraint는 `0.84 / 0.24`, 조립체 이동 drag는 `0.30 / 0.34`와 angular stiffness `0.88`로 강화한다. 고정된 해부학적 limit 중심 `baseAngle`과 사용자가 놓은 자세 `poseAngle`을 분리한다. 몸통 쪽 grip은 현재 상대각을 유지한 채 전체를 옮기고, 말단 grip은 잡은 부품이 plug인 해부학적 parent 관절 하나의 child branch만 socket pivot 주위로 포징한 뒤 15도 detent에 정착시킨다. Physics 뒤 hard-limit 투영, 취소 시 pose 미저장, 고정 chamfer와 resize impulse 초기화로 자세와 콜라이더를 결정적으로 유지한다.
 - Scope: Home Kinetic과 해당 계약·문서만 변경한다. 공개 PDF와 병행 중인 `scripts/portfolio`, `tmp` 작업물은 수정·배포 범위에 포함하지 않는다.
+
+## 2026-09-07 — Home 완성 연출 중 퍼즐 입력 잠금
+
+- 완성 연출은 10번째 연결이 active drag 도중 생겨도 pointer release/cancel 뒤 graph를 재확인하고 시작한다. 연출이 시작된 뒤 1.78초 동안 로봇 canvas의 새 click·drag·hover·nudge만 무시하고, scroll·touch pan·navigation·CTA·keyboard는 그대로 둔다.
+- 사용자 입력으로 연출을 중간 자세에서 취소하거나 같은 gesture로 관절을 다시 분리하지 않는다. 자연 종료 뒤 다음 gesture부터 조작을 복구하며 hidden·offscreen·resize 등 lifecycle 종료는 최종 raised pose로 안전하게 정리한다.
+- 큰 팔 raise 보간 중에도 chest-rooted port tree를 매 frame 재정렬해 socket과 plug가 시각적으로 벌어지지 않게 한다. 공개 PDF와 `scripts/portfolio`, `tmp` 작업물은 이번 배포 범위에서 제외한다.

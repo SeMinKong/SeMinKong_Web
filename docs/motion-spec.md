@@ -958,3 +958,10 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - Release에서 선택 관절을 15도 detent 또는 좁은 neck/waist endpoint로 정리해 `poseAngle`에 저장한다. `pointercancel`과 세로 touch scroll은 새 자세를 저장하지 않는다.
 - `baseAngle`은 결합 순간 또는 완성 연출 뒤에만 정하는 고정 hard-limit 중심이다. 각 physics substep 뒤 초과 각도를 child branch 단위로 투영하고 port anchor를 다시 일치시켜 반복 조작과 충돌에서도 limit가 표류하거나 관절이 벌어지지 않게 한다.
 - Collider chamfer quality는 모든 배율에서 `4`로 고정한다. Live resize는 body geometry, component 내부 거리, port, constraint anchor와 렌더 scale을 같은 비율로 바꾸고 solver의 constraint·collision warm-start impulse를 비운 뒤 component 단위로 viewport 안에 맞춘다.
+
+## 2026-09-07 — Completion celebration input lock
+
+- 마지막 snap이 active drag의 physics substep에서 감지되어도 완성 연출은 해당 pointer의 release/cancel 뒤 완성 graph를 다시 확인한 다음 시작한다. 연출 시작 시 active pointer와 drag constraint가 동시에 남아서는 안 된다.
+- 1.78초 완성 연출 중 canvas의 새 pointerdown, hover와 facade nudge는 무시한다. 같은 입력으로 연출을 건너뛰거나 부품 회전·drag·관절 pose 저장·연결 해제를 시작하지 않으며, 자연 종료 뒤 다음 pointer gesture부터 조작을 다시 허용한다.
+- 페이지 scroll, touch pan, pinch, navigation, CTA와 keyboard focus는 잠그지 않는다. Hero 이탈, hidden, pagehide, resize, context loss와 destroy는 기존 lifecycle 안전 계약대로 효과를 정리하고 가능한 경우 raised final pose로 수렴한다.
+- 완성 pose 보간의 각 frame은 chest에서 시작해 socket→plug tree의 위치를 다시 계산한다. 큰 오른팔 raise의 중간 각도에서도 모든 관절 anchor가 붙어 있어야 하며 Matter constraint의 다음 tick에 의존해 벌어진 관절을 복구하지 않는다.

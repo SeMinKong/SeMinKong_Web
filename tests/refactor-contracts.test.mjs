@@ -104,6 +104,7 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(kineticRuntime, /const PHYSICS_SUBSTEPS = 2/);
   assert.match(kineticRuntime, /Engine\.update\(engine, PHYSICS_SUBSTEP\)/);
   assert.match(kineticRuntime, /interpolatePose\(state\.previous, state\.current, alpha\)/);
+  assert.match(kineticRuntime, /alignPosePositionToPort/);
   assert.doesNotMatch(kineticRuntime, /handwritten-wordmark__letter/);
   assert.doesNotMatch(kineticRuntime, /getTextFragmentRects/);
   assert.doesNotMatch(kineticRuntime, /hero-story__actions \.button/);
@@ -133,7 +134,7 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(kineticRuntime, /pointer\.flexConnection = pointer\.breakCandidate\s+\? null\s+: getFlexConnection\(pointer\.body, pointer\.localPoint\)/);
   assert.match(kineticRuntime, /connection\?\.angular\?\.plugBody === body/);
   assert.doesNotMatch(kineticRuntime, /pointer\.flexConnection = pointer\.breakCandidate\?\.connection/);
-  assert.match(kineticRuntime, /if \(!applyGesture \|\| pointer\.phase === 'scrolling'\) return;\s+if \(pointer\.phase === 'dragging' && pointer\.flexConnection\) \{\s+settleFlexPose\(pointer\);/);
+  assert.match(kineticRuntime, /if \(!applyGesture \|\| pointer\.phase === 'scrolling'\) \{\s+if \(isPuzzleComplete\(\)\) startCelebration\(\);\s+return;\s+\}\s+if \(pointer\.phase === 'dragging' && pointer\.flexConnection\) \{\s+settleFlexPose\(pointer\);/);
   assert.match(kineticRuntime, /dragConstraint\.bodyB = pointer\.flexConnection \? null : pointer\.body/);
   assert.match(kineticRuntime, /applyFlexGesture\(activePointer, point\)/);
   assert.match(kineticRuntime, /Engine\.update\(engine, PHYSICS_SUBSTEP\);\s+projectJointLimits\(\);/);
@@ -152,6 +153,15 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(kineticRuntime, /canvas\.addEventListener\('pointermove', handleHoverPointerMove, \{ passive: true \}\)/);
   assert.match(kineticRuntime, /webglcontextlost/);
   assert.match(kineticRuntime, /webglcontextrestored/);
+  const snapBlock = kineticRuntime.match(/const trySnap = \(movingRoot\) => \{[\s\S]*?\n  \};/)?.[0] ?? '';
+  const pointerDownBlock = kineticRuntime.match(/const handlePointerDown = \(event\) => \{[\s\S]*?\n  \};/)?.[0] ?? '';
+  const hoverBlock = kineticRuntime.match(/const handleHoverPointerMove = \(event\) => \{[\s\S]*?\n  \};/)?.[0] ?? '';
+  assert.doesNotMatch(snapBlock, /startCelebration\(/);
+  assert.match(pointerDownBlock, /if \(destroyed \|\| celebration \|\| activePointer/);
+  assert.doesNotMatch(pointerDownBlock, /finishCelebration\(/);
+  assert.match(hoverBlock, /destroyed \|\| celebration \|\| activePointer/);
+  assert.match(kineticRuntime, /if \(hasCelebrated \|\| celebration \|\| activePointer \|\| !isPuzzleComplete\(\)\) return;/);
+  assert.match(kineticRuntime, /Body\.setPosition\(edge\.body, aligned\)/);
   assert.doesNotMatch(kineticRuntime, /setPointerCapture|requestAnimationFrame/);
   assert.doesNotMatch(kineticRuntime, /handlePointer(?:Down|Move|Up|Cancel)[\s\S]{0,700}preventDefault\(/);
   assert.match(kineticStyles, /height: 100svh/);

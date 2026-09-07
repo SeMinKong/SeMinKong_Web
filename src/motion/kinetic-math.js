@@ -51,6 +51,16 @@ export const solveMovingPortPose = (movingPose, movingPort, targetPose, targetPo
   };
 };
 
+export const alignPosePositionToPort = (movingPose, movingPort, targetPose, targetPort) => {
+  const target = worldPort(targetPose, targetPort);
+  const offset = rotatePoint(movingPort, movingPose?.angle ?? 0);
+  return {
+    x: target.x - offset.x,
+    y: target.y - offset.y,
+    angle: movingPose?.angle ?? 0
+  };
+};
+
 export const calculateJointServo = ({
   parentAngle = 0,
   childAngle = 0,

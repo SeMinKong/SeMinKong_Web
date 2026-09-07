@@ -1154,3 +1154,12 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify`: 테스트 34개, 소스 경로 11개·스타일 경계 12개, production modules 773개·배포 entry 23개가 통과했다. Home 전용 runtime chunk는 257.79 kB raw / 75.79 kB gzip이며 초기 공통 번들에는 포함되지 않는다.
 - [ ] 실제 터치 하드웨어의 gesture 경쟁, OS forced-colors, 10개 관절 전체 수동 조립의 장시간 완성 연출은 이번 자동화·데스크톱 검증 범위 밖이다.
 - [x] 커밋 `3e73aa8`의 GitHub Pages run `34081083859` 성공 후 공개 Home을 1280px 실제 브라우저에서 확인했다. 11개 authored 부품과 runtime canvas가 로드되고, puzzle 상태 `scattered`·연결 0·horizontal overflow 0이며 사이트 자체 warning/error는 없다.
+
+## 2026-09-07 Home 완성 연출 입력 잠금 검수
+
+- [x] 마지막 snap은 active drag 안에서 즉시 축하를 시작하지 않고 release/cancel 뒤 10개 연결 graph를 다시 확인한다. 시작 guard는 active pointer를 허용하지 않으며 연출 중 새 pointerdown·hover·nudge가 pose, connection, elapsed를 변경하지 않는다.
+- [x] 완성 target 보간 뒤 chest-rooted tree로 각 child port를 다시 맞춘다. 120도 이상의 shoulder·elbow 예제에서도 두 단계 socket↔plug anchor 오차가 각각 `1e-9` 미만이고 목표 각도는 유지된다.
+- [x] `npm.cmd run verify`: 테스트 35개, 소스 경로 11개·스타일 경계 12개, production modules 773개·배포 entry 23개가 통과했다. Home 전용 runtime chunk는 258.28 kB raw / 75.91 kB gzip이며 초기 공통 번들에는 포함되지 않는다.
+- [x] 현재 변경은 runtime 입력·완성 pose 계산과 계약 테스트에 한정되고 DOM·CSS·breakpoint는 바꾸지 않았다. 직전 동일 Home geometry의 390·768·1280px 검수 결과를 유지하며, 현재 1425×722 Chrome에서도 11개 authored 부품·runtime canvas·horizontal overflow 0과 정상 pointer 회전을 다시 확인했다.
+- [x] 연출 중 pointerdown 블록에는 중간 종료 경로가 없고 `celebration` guard가 먼저 반환한다. hover·facade nudge도 같은 잠금을 사용하며, release/cancel 뒤 완성 graph를 재확인하는 source contract와 120도 이상 2-link anchor 정렬 수치 테스트가 회귀를 막는다.
+- [ ] 실제 터치 하드웨어 gesture 경쟁, OS forced-colors와 10개 관절 전체를 수동 조립한 상태에서의 장시간 반복 입력은 이번 데스크톱 자동화 범위 밖이다.

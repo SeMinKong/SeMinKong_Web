@@ -3,6 +3,7 @@ import Matter from 'matter-js';
 import test from 'node:test';
 import {
   WORLD_LIGHT_ANCHOR,
+  alignPosePositionToPort,
   calculateJointServo,
   capVectorMagnitude,
   evaluatePortSnap,
@@ -230,6 +231,42 @@ test('snap solving aligns ports across the negative-pi boundary', () => {
   assert.ok(Math.abs(wrapAngle(Math.PI + 0.02) - (-Math.PI + 0.02)) < 1e-9);
   assert.ok(Math.hypot(targetWorld.x - solvedWorld.x, targetWorld.y - solvedWorld.y) < 1e-9);
   assert.ok(Math.abs(wrapAngle(solvedWorld.normal - targetWorld.normal - Math.PI)) < 1e-9);
+});
+
+test('completion pose alignment keeps articulated anchors joined at large angles', () => {
+  const shoulderSocket = { x: 30, y: -12, normal: 0 };
+  const shoulderPlug = { x: 0, y: -44, normal: -Math.PI / 2 };
+  const elbowSocket = { x: 0, y: 44, normal: Math.PI / 2 };
+  const elbowPlug = { x: 0, y: -43, normal: -Math.PI / 2 };
+  const chest = { x: 240, y: 210, angle: -0.04 };
+  const upperArm = alignPosePositionToPort(
+    { x: 0, y: 0, angle: -2.62 },
+    shoulderPlug,
+    chest,
+    shoulderSocket
+  );
+  const forearm = alignPosePositionToPort(
+    { x: 0, y: 0, angle: -2.92 },
+    elbowPlug,
+    upperArm,
+    elbowSocket
+  );
+
+  const shoulderAnchor = worldPort(chest, shoulderSocket);
+  const upperShoulderAnchor = worldPort(upperArm, shoulderPlug);
+  const elbowAnchor = worldPort(upperArm, elbowSocket);
+  const forearmElbowAnchor = worldPort(forearm, elbowPlug);
+
+  assert.ok(Math.hypot(
+    shoulderAnchor.x - upperShoulderAnchor.x,
+    shoulderAnchor.y - upperShoulderAnchor.y
+  ) < 1e-9);
+  assert.ok(Math.hypot(
+    elbowAnchor.x - forearmElbowAnchor.x,
+    elbowAnchor.y - forearmElbowAnchor.y
+  ) < 1e-9);
+  assert.equal(upperArm.angle, -2.62);
+  assert.equal(forearm.angle, -2.92);
 });
 
 test('Matter constraints preserve aligned ports on rotated bodies', () => {

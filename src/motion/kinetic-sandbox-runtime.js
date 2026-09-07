@@ -8,6 +8,7 @@ import shinAssetUrl from '../assets/kinetic-robot/shin.svg?url';
 import thighAssetUrl from '../assets/kinetic-robot/thigh.svg?url';
 import upperArmAssetUrl from '../assets/kinetic-robot/upper-arm.svg?url';
 import {
+  alignPosePositionToPort,
   calculateJointServo,
   clamp,
   evaluatePortSnap,
@@ -839,6 +840,26 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       Body.setVelocity(body, { x: 0, y: 0 });
       Body.setAngularVelocity(body, 0);
     }
+    const root = idToBody.get('chest');
+    const visited = new Set(root ? [root] : []);
+    const queue = root ? [root] : [];
+    while (queue.length) {
+      const parent = queue.shift();
+      for (const connection of connections) {
+        if (connection.bodyA !== parent && connection.bodyB !== parent) continue;
+        const edge = connectionEdge(connection, parent);
+        if (visited.has(edge.body)) continue;
+        const aligned = alignPosePositionToPort(
+          { x: edge.body.position.x, y: edge.body.position.y, angle: edge.body.angle },
+          edge.toPort,
+          { x: parent.position.x, y: parent.position.y, angle: parent.angle },
+          edge.fromPort
+        );
+        Body.setPosition(edge.body, aligned);
+        visited.add(edge.body);
+        queue.push(edge.body);
+      }
+    }
     updatePoseStatesFromBodies();
   };
 
@@ -869,7 +890,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   };
 
   const startCelebration = () => {
-    if (hasCelebrated || celebration || !isPuzzleComplete()) return;
+    if (hasCelebrated || celebration || activePointer || !isPuzzleComplete()) return;
     hasCelebrated = true;
     const startTargets = new Map(dynamicBodies.map((body) => [body, {
       x: body.position.x,
@@ -1277,7 +1298,6 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     syncPortMarkers();
     updatePuzzleState();
     resetPoseStates();
-    if (isPuzzleComplete()) startCelebration();
     return true;
   };
 
@@ -1422,10 +1442,14 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     dragConstraint.angularStiffness = 0.88;
     activePointer = null;
     canvas.style.cursor = 'default';
-    if (!applyGesture || pointer.phase === 'scrolling') return;
+    if (!applyGesture || pointer.phase === 'scrolling') {
+      if (isPuzzleComplete()) startCelebration();
+      return;
+    }
     if (pointer.phase === 'dragging' && pointer.flexConnection) {
       settleFlexPose(pointer);
       wakeComponent(body);
+      if (isPuzzleComplete()) startCelebration();
       start();
       return;
     }
@@ -1457,15 +1481,15 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       }
     }
     if (snapped) wakeComponent(body);
+    if (isPuzzleComplete()) startCelebration();
     start();
   };
 
   const handlePointerDown = (event) => {
-    if (destroyed || activePointer || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    if (destroyed || celebration || activePointer || (event.pointerType === 'mouse' && event.button !== 0)) return;
     const point = toWorldPoint(event.clientX, event.clientY);
     const body = findBody(point);
     if (!body) return;
-    if (celebration) finishCelebration(false);
 
     const localPoint = rotatePoint(Vector.sub(point, body.position), -body.angle);
     activePointer = {
@@ -1530,7 +1554,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   };
 
   const handleHoverPointerMove = (event) => {
-    if (destroyed || activePointer || event.pointerType === 'touch') return;
+    if (destroyed || celebration || activePointer || event.pointerType === 'touch') return;
     const point = toWorldPoint(event.clientX, event.clientY);
     canvas.style.cursor = findBody(point) ? 'grab' : 'default';
   };
@@ -1681,7 +1705,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   canvas.addEventListener('webglcontextrestored', handleContextRestored);
 
   const nudgeAt = (clientX, clientY) => {
-    if (destroyed) return;
+    if (destroyed || celebration) return;
     const point = toWorldPoint(clientX, clientY);
     let body = findBody(point);
     if (!body) {
