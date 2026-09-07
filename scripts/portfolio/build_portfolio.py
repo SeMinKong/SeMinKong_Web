@@ -1,4 +1,4 @@
-"""Editable 18-page landscape portfolio focused on engineering decisions.
+"""Editable 20-page landscape portfolio with an introduction for each project.
 
 Run from the repository root. --sample makes a three-page layout check;
 --publish copies the fully reviewed final bytes to the web download location.
@@ -29,7 +29,7 @@ from reportlab.graphics import renderPDF
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / 'src/assets/projects'
 FIGURES = ROOT / 'scripts/portfolio/assets'
-PAGE_COUNT = 18
+PAGE_COUNT = 20
 PHOTO_IMAGES = {
     'thing/integrated-robot-hand-portrait.webp',
     'thing/jetson-mediapipe-hands-test-1600.webp',
@@ -341,12 +341,12 @@ def about(b):
 def project_index(b):
     b.start('프로젝트', '장비 연동과 실물 제어를 중심으로, 입력과 출력의 품질을 다룬 작업을 소개합니다.', key='projects')
     rows = [
-        ('4 - 7', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '검출 시점과 집기 순서 / 예외 입력', 'aqis'),
-        ('8 - 11', 'THING', '6인 팀 / 구동·기구 통합', '장력·권취 방향 / 초기 위치와 정지', 'thing'),
+        ('4 - 7', 'THING', '6인 팀 / 구동·기구 통합', '장력·권취 방향 / 초기 위치와 정지', 'thing'),
+        ('8 - 11', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '검출 시점과 집기 순서 / 예외 입력', 'aqis'),
         ('12 - 13', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 반복 제거와 정보 보존', 'briefit'),
         ('14 - 15', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '학습 형식 변환 / 평가 데이터 분리', 'mri'),
-        ('16', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '서버 기준 상태 / 입력 검증', 'alkkagi'),
-        ('17', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 대화 상태 / 수정 흐름', 'prompt'),
+        ('16 - 17', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 대화 상태 / 수정 흐름', 'prompt'),
+        ('18 - 19', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '서버 기준 상태 / 입력 검증', 'alkkagi'),
     ]
     b.label('쪽', M, 139)
     b.label('프로젝트', 112, 139)
@@ -575,9 +575,25 @@ def mri_method(b):
     b.end([('전처리·학습', MRI_REF+'src/training/train.py'), ('통합 추론', MRI_REF+'src/testing/test.py'),
            ('BRISC 원문', 'https://arxiv.org/html/2506.14318v5')])
 
+def alkkagi_overview(b):
+    b.start('Alkkagi.io · 실시간 알까기',
+            '여러 플레이어가 같은 보드에서 돌을 밀어내며 대전하는 웹 게임', key='alkkagi')
+    b.meta([('기간', '2026.03 - 04'), ('팀·역할', '개인 프로젝트<br/>웹 UI·서버·물리 계산'),
+            ('사용 기술', 'React / TypeScript<br/>Node.js / Socket.IO')])
+    b.image('@alkkagi-video-aim-0007.png', 233, 137, 320, 320,
+            caption='실제 플레이 영상의 한 장면 / 돌을 조준하는 화면',
+            caption_size=9.2, caption_leading=14)
+    b.section('프로젝트 개요', '돌을 드래그해 방향과 세기를 정하고 상대의 돌을 보드 밖으로 밀어냅니다. 점수가 오르면 돌의 크기와 질량도 변합니다.', 583, 137, 220, 10, keep_words=True)
+    b.section('직접 맡은 일', '조준 UI, 실시간 통신과 서버 물리를 구현했습니다. 충돌·마찰·위치 보정을 TypeScript로 작성했습니다.', 583, 270, 220, 10, keep_words=True)
+    b.section('핵심 구현', '서버가 게임의 기준 상태와 입력 제한을 관리하고, 모든 플레이어에게 같은 계산 결과를 전달하도록 구성했습니다.', 583, 403, 220, 10, keep_words=True)
+    b.end([('프로젝트 코드', ALK_REF + 'server/index.ts'),
+           ('실제 플레이 영상', 'https://github.com/user-attachments/assets/20bc9007-97ea-4cc4-948a-e1d901ea8f4b'),
+           ('웹 상세', WEB + 'work/alkkagi/')])
+
+
 def alkkagi_physics(b):
     b.start('Alkkagi.io · 서버 물리와 상태 동기화',
-            '개인 프로젝트 / React · TypeScript · Socket.IO / 기준 상태는 서버 메모리에 유지합니다.', key='alkkagi')
+            '개인 프로젝트 / React · TypeScript · Socket.IO / 기준 상태는 서버 메모리에 유지합니다.', key='alkkagi-physics')
     b.image('@architecture/returned/alkkagi.png', M, 129, 500, 366)
     b.para('서버가 유일한 기준 상태를 가지므로, 브라우저마다 다른 충돌 결과를 확정하지 않습니다.', M, 498, 500, 9.5, 15)
     b.section('기준 상태의 소유', '클라이언트는 발사 입력을 보내고 서버가 위치·충돌·마찰을 계산합니다. 같은 계산 결과를 모든 플레이어에게 전달하도록 책임을 모았습니다.', 570, 137, 233, 9.5, keep_words=True)
@@ -587,9 +603,23 @@ def alkkagi_physics(b):
     b.end([('서버·입력 제한', ALK_REF+'server/index.ts'), ('물리 구현', ALK_REF+'server/physics.ts'),
            ('실제 플레이 영상', 'https://github.com/user-attachments/assets/20bc9007-97ea-4cc4-948a-e1d901ea8f4b')])
 
+def prompt_overview(b):
+    b.start('Prompt Generator · 프로젝트 설계 도우미',
+            '아이디어를 영역별 질문으로 구체화하고 결과를 하나의 문서로 모으는 도구', key='prompt')
+    b.meta([('기간', '2026'), ('팀·역할', '개인 프로젝트<br/>대화 서버·상태 관리<br/>웹 UI'),
+            ('사용 기술', 'Python / FastAPI<br/>WebSocket / LangChain<br/>Solar Pro')])
+    b.image('@prompt-design-flow.png', 233, 137, 570, 256,
+            caption='프로젝트 아이디어를 여섯 설계 영역으로 나누는 원본 흐름도',
+            caption_size=9.2, caption_leading=14)
+    b.section('프로젝트 개요', '프로젝트 아이디어를 입력하고 화면·API·데이터 등 영역별 질문에 답하며 설계를 구체화합니다. 완료된 영역도 추가 대화로 수정할 수 있습니다.', 233, 438, 275, 9.8, keep_words=True)
+    b.section('직접 맡은 일', '영역별 대화 이력과 진행 상태를 분리하고, 질문·상태를 웹 화면에 전달하는 서버와 결과를 문서로 모으는 흐름을 구현했습니다.', 533, 438, 270, 9.8, keep_words=True)
+    b.end([('원본 설계 흐름', PROMPT_REF + 'README.md'), ('대화 서버', PROMPT_REF + 'server/app.py'),
+           ('영역별 상태', PROMPT_REF + 'state.py')])
+
+
 def prompt_generator(b):
     b.start('Prompt Generator · 영역별 설계 대화',
-            '개인 프로젝트 / 2026 / FastAPI · WebSocket · LangChain · Solar Pro', key='prompt')
+            '개인 프로젝트 / 2026 / FastAPI · WebSocket · LangChain · Solar Pro', key='prompt-architecture')
     b.image('@architecture/returned/prompt.png', M, 129, 490, 372)
     b.para('영역마다 대화 이력·진행 상태·결과를 따로 유지합니다.', M, 515, 490, 9.5, 15)
     b.section('문제와 선택', '화면, 데이터와 배포 질문이 뒤섞이면 필요한 조건을 빠뜨리기 쉽습니다. 기본 여섯 영역의 첫 질문을 병렬로 시작하고, 각 영역의 답변을 따로 누적하게 했습니다.', 560, 137, 243, 9.5, keep_words=True)
@@ -621,9 +651,9 @@ def contact(b):
     b.end()
 
 
-PAGES = [introduction, about, project_index, aqis_overview, aqis_mock, aqis_coordinates, aqis_verification,
-         thing_overview, thing_architecture, thing_control, thing_result, briefit_overview, briefit_data,
-         mri_overview, mri_method, alkkagi_physics, prompt_generator, contact]
+PAGES = [introduction, about, project_index, thing_overview, thing_architecture, thing_control, thing_result,
+         aqis_overview, aqis_mock, aqis_coordinates, aqis_verification, briefit_overview, briefit_data,
+         mri_overview, mri_method, prompt_overview, prompt_generator, alkkagi_overview, alkkagi_physics, contact]
 assert len(PAGES) == PAGE_COUNT
 
 

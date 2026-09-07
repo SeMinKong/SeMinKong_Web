@@ -46,3 +46,12 @@
 - [x] Home의 기본 390/768 lite·static, 1280 full·interactive 및 가로 overflow 0을 확인했다. localhost reduced override에서 flat·canvas 숨김과 모바일 완성형 로봇을 확인했다. 로봇 동작 코드는 이번 변경 대상이 아니며 실물 touch 기기·OS forced-colors 전환은 별도로 검증하지 않았다.
 
 배포는 이 검증 파일만 선별해 기존 Pages workflow로 수행한다. 별도 진행 중인 아키텍처 SVG·아이콘 변경과 임시 렌더 파일은 포함하지 않는다.
+
+## 2026-09-07 프로젝트 순서와 소개 페이지
+
+- [x] PDF 20쪽 전체를 렌더 검수했다. 순서는 THING → AQIS → Briefit → MRI → Prompt → Alkkagi이며 목차 링크 6개가 소개 페이지 4·8·12·14·16·18쪽을 가리킨다. 북마크 20개, 외부 링크 66개, 겹침 0, 캡션 정렬 7개, 문단 끝줄 11개, 최소 글자 크기 8.8pt를 확인했다.
+- [x] Prompt 소개는 원본 설계 흐름도, Alkkagi 소개는 실제 게임 영상 프레임을 사용한다. 기존 17개 비목차 페이지는 쪽번호 외 본문·외부 링크·이미지 데이터를 이전 공개본과 대조했고 모두 동일하다. 원본 구조도 5개의 RGB·alpha·해시도 일치한다.
+- [x] 최종 PDF와 공개 사본은 15,243,761 bytes, SHA-256 `FF19E6A3660DFE595D96DA4B3D5885CCCFDF808C54E0FC0D04DF725A10586838`로 일치한다. Resume의 20쪽·15.2MB·2026.09.07 표시와 바이트/해시 계약을 동기화했다.
+- [x] `npm.cmd run verify` 통과: 49개 테스트, 11개 route·28개 module·12개 stylesheet 경계, production build·22개 배포 entry. `git diff --check` 통과.
+- [x] 실제 Chromium에서 Home·Resume의 390×844·768×1024·1280×900 레이아웃과 가로 overflow 0을 확인했다. Resume 다운로드/미리보기 링크, Skip link의 2px focus와 Enter 본문 이동, PDF 링크의 2px focus outline, console warning/error 0을 확인했다.
+- [x] Home의 기본 lite/static·full/interactive와 localhost reduced override의 flat·canvas 숨김을 확인했다. 모션 코드는 변경하지 않았으며 실물 touch 기기·OS forced-colors 전환은 별도로 검증하지 않았다.

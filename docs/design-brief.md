@@ -16,7 +16,7 @@
 
 경로와 entry의 기준은 `config/site-routes.js`다. 프로젝트 사실과 자료 출처는 [포트폴리오 근거](portfolio-evidence.md), [시각자료 출처](portfolio-visual-sources.md)를 따른다.
 
-정적 PDF는 18쪽으로 구성한다. AQIS의 장비 연동·집기 순서·예외 입력, THING의 기구 편차·제어 조건, Briefit의 정보 보존을 중심에 두며 MRI·Alkkagi·Prompt는 보조 사례로 압축한다. 사소한 테스트 개수와 합성 입력 예시는 대표 성과로 쓰지 않는다. 확인된 구현, 후속 Mock 재현, 실물 시연과 미검증 조건을 구분한다. 원본 구조도와 수상 자료는 보존한다.
+정적 PDF는 20쪽으로 구성한다. 프로젝트 순서는 THING → AQIS → Briefit → MRI → Prompt → Alkkagi이며, 여섯 프로젝트 모두 소개 페이지로 시작한 뒤 구현 구조와 상세 내용을 설명한다. THING의 기구 편차·제어 조건, AQIS의 장비 연동·집기 순서·예외 입력, Briefit의 정보 보존을 중심에 두며 MRI·Prompt·Alkkagi는 보조 사례로 정리한다. 사소한 테스트 개수와 합성 입력 예시는 대표 성과로 쓰지 않는다. 확인된 구현, 후속 Mock 재현, 실물 시연과 미검증 조건을 구분한다. 원본 구조도와 수상 자료는 보존한다.
 
 ## 시각 언어
 

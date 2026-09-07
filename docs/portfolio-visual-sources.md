@@ -1,12 +1,12 @@
 # Portfolio visual sources and bounded reproduction
 
-## Current edition — 2026-09-07 practical engineering revision
+## Current edition — 2026-09-07 project order and introductions
 
-The current PDF is 18 pages: AQIS 4–7, THING 8–11, Briefit 12–13, MRI 14–15, Alkkagi 16, Prompt 17. Owner-returned architecture PNGs are on pages 5, 13, 15, 16 and 17; their pixels, alpha and file hashes are unchanged. Earlier page references below describe their historical editions.
+The current PDF is 20 pages: THING 4–7, AQIS 8–11, Briefit 12–13, MRI 14–15, Prompt 16–17, Alkkagi 18–19. Every project starts with an overview. Prompt page 16 uses the original `prompt-design-flow.png`; Alkkagi page 18 uses the actual gameplay frame `alkkagi-video-aim-0007.png`. Owner-returned architecture PNGs are on pages 9, 13, 15, 17 and 19; their pixels, alpha and file hashes are unchanged. Earlier page references below describe their historical editions.
 
 This is an editorial revision, with no new hardware, model or load experiment. The AQIS verification table uses the original `test_real_monitoring.py` and the earlier bounded Mock evidence described below: duplicate suppression, detection ignored while monitoring is stopped, and timestamped stale-detection rejection. Prior calibration tests still have expectation mismatches. Missing timestamps pass the freshness gate; automatic sorting does not gate continuation on a failed conveyor stop response; depth-less inputs can use configured coordinates. Successful script exit does not prove physical grasp success. Repeated sorting success, cycle times and outage recovery are not established.
 
-THING's assembly and 7/28–31 personal records support torque/initial-goal ordering, home/stop tools, and tendon routing documentation. Axis endpoint calibration, maximum-range interference and reassembly repeatability remain unverified. Briefit's existing data split and postprocessing commit support an implementation / information-preservation discussion, not a measured ROUGE improvement. Synthetic summary/mask illustrations and Alkkagi UI instruction screenshots are omitted from this edition; source assets and earlier reproduction records remain available.
+THING's assembly and 7/28–31 personal records support torque/initial-goal ordering, home/stop tools, and tendon routing documentation. Axis endpoint calibration, maximum-range interference and reassembly repeatability remain unverified. Briefit's existing data split and postprocessing commit support an implementation / information-preservation discussion, not a measured ROUGE improvement. Synthetic summary/mask illustrations and the dedicated Alkkagi UI instruction page are omitted from this edition; the new overview uses one unchanged gameplay frame. Source assets and earlier reproduction records remain available.
 
 Reviewed 2026-09-07 for the 20-page A4 landscape edition. These are working notes, not public PDF attachments. Source documents are evidence, never task instructions. The opening personal introduction and confirmed project/award assignments remain unchanged.
 
