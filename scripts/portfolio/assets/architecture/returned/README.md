@@ -13,7 +13,7 @@ AQIS uses the owner's original diagram. Briefit, MRI, Alkkagi and Prompt Generat
 use the reviewed Excalidraw-style diagrams subsequently returned by the owner.
 The earlier sibling SVG/Excalidraw files are historical drafts and are not used
 by the current PDF builder. THING remains the original black-background PNG on
-page 5; its background removal is deferred at the owner's request.
+page 4; its background removal is deferred at the owner's request.
 
 Rebuild with the existing portfolio Python environment:
 

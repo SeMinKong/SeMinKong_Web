@@ -1,6 +1,12 @@
 # Portfolio visual sources and bounded reproduction
 
-## Current edition — 2026-09-07 source-backed technical explanations
+## Current edition — 2026-09-08 additive technical diagrams
+
+The current PDF is 24 pages: THING 3–7, AQIS 8–11, Briefit 12–14, MRI 15–17, Prompt 18–20, Alkkagi 21–23, contact 24. All original eighteen pages are preserved, with updated index ranges and footer page numbers. Original architecture images remain on pages 4/9/13/16/19/22. The five owner-returned RGBA PNGs retain all pixels, alpha, proportions and source hashes; only destination page numbers change in the manifest.
+
+New pages 5/10/14/17/20/23 use `technical_pages.py` to draw searchable native PDF vectors, equations and clearly labeled equivalent pseudocode. Hand landmark topology, a polygon contour and collision circles are schematic representations, not new camera captures, model outputs or experiments. Each page links to at least three implementation files pinned to commits. No raster source image is edited or replaced.
+
+## Previous 18-page edition — 2026-09-07 source-backed technical explanations
 
 Pages 4, 8, 11, 13, 15 and 17 pair the unchanged source diagram with three technical paragraphs and an input → processing → output subtitle. The text explains actual algorithms, data formats and state transitions; footer links are pinned to implementation commits and functions. Personal/team scope and evaluation limits remain below each diagram. The other twelve pages retain their existing content and layout. No new model, hardware or load experiment was run.
 

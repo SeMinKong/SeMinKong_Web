@@ -1,14 +1,14 @@
 # Static portfolio evidence register
 
-Reviewed 2026-09-07. This is an editorial working record. Bounded local reproductions are documented below; neither the diagrams nor local smoke tests establish hardware, model-quality or production-performance claims.
+Reviewed 2026-09-08. This is an editorial working record. Bounded local reproductions are documented below; neither the diagrams nor local smoke tests establish hardware, model-quality or production-performance claims.
 
 ## Editorial structure
 
-A4 landscape, 18 pages: personal introduction / index (1–2); THING overview, architecture, physical control and demonstration / award (3–6); AQIS overview, adapter boundary and combined coordinate / execution conditions (7–9); Briefit overview / three awards and collection / long-input summarization (10–11); MRI overview and label conversion / independent inference (12–13); Prompt overview and domain state transitions (14–15); Alkkagi overview and collision / server input handling (16–17); contact (18). The owner requested this exact project order and an introduction page at the start of every project. The cover remains personal; education details stay available in the linked Resume. Publication follows the standing GitHub Pages authorization after PDF and website verification.
+A4 landscape, 24 pages: introduction / index (1–2); THING (3–7); AQIS (8–11); Briefit (12–14); MRI (15–17); Prompt (18–20); Alkkagi (21–23); contact (24). All eighteen prior pages remain; only the index page ranges and footer page numbers change. New vector technical plates follow the existing technical explanations on pages 5, 10, 14, 17, 20 and 23. The owner requested this exact project order and an introduction page at the start of every project. The cover remains personal; education details stay available in the linked Resume. Publication follows the standing GitHub Pages authorization after PDF and website verification.
 
 The owner selected practical engineering evidence over minor counts or toy demonstrations. Remove the synthetic summary and mask demonstration pages and the Alkkagi instruction page. Prompt's overview uses its original design flow; Alkkagi's overview uses one actual gameplay frame with project, role and implementation context. Keep source imagery unchanged. No planned experiment, benchmark setting, synthetic check, or repository-reported score becomes a measured achievement. New offline / hardware / model experiments were not run for this editorial revision.
 
-The compact revision removes the standalone education / learning-interests page and merges the AQIS input-check table into its execution flow. Introductory pages define the product and owner role; details explain distinct implementation choices. Image-guide numbers, repeated role / stack descriptions and the Briefit field-name / split-count footnote are removed. Captions identify the artifact and provenance only. Essential unresolved behavior remains visible without repeating the same caution across pages.
+The earlier compact revision removed the standalone education / learning-interests page and merges the AQIS input-check table into its execution flow. Introductory pages define the product and owner role; details explain distinct implementation choices. Image-guide numbers, repeated role / stack descriptions and the Briefit field-name / split-count footnote are removed. Captions identify the artifact and provenance only. Essential unresolved behavior remains visible without repeating the same caution across pages.
 
 Use warm paper, near-black text, one vermilion accent, compact 38pt margins, thin rules and real project artifacts. Metadata rails, two/three-column explanations and implementation notes create dense technical pages. Use a readable Korean body face instead of stretching the website's display face into long paragraphs. No synthetic project screenshots, skill percentages, invented impact numbers or decorative terminal windows. References inform hierarchy, not copied layout or branding.
 
@@ -30,7 +30,16 @@ Use warm paper, near-black text, one vermilion accent, compact 38pt margins, thi
 - Isolated local tests were run during the visual revision: 26 passed and two existing calibration-expectation tests failed. See reproduction scope below. Do not infer physical stop confirmation, classification success rate, cycle time, Nav2 completion or persistent database implementation. Demo contains speed-up segments.
 - Current PDF verification table covers duplicate detections, STOPPED monitoring and timestamped stale input, supported by original tests plus prior bounded Mock reproduction. A missing timestamp passes freshness checking; the automatic path does not gate the next stage on conveyor stop failure; missing depth can use fixed coordinates. Process exit code zero is the resume condition, not sensed grasp success. Hardware cycle time, repeated sorting success and outage recovery remain unmeasured. See pinned source `9f6530a2acffa0555f9df2eb628b40e4d01b6341`.
 
-## Source-backed technical pages — 2026-09-07
+## Added vector technical plates — 2026-09-08
+
+The owner explicitly requested additions without removing existing content. The new plates show the hand landmark topology and motor-call sequence, camera/robot coordinate conversion, seq2seq training versus generation, mask/polygon representation, dialogue states, and collision position/impulse calculations. Equations and short pseudocode are derived from the pinned sources below; hand/contour/collision drawings are explanatory schematics, not captured inputs, predictions or experimental measurements.
+
+- AQIS u/v are the detection center rescaled to the depth grid; d is in metres. X/Y and optional Z use affine coefficients before metre→millimetre conversion and millimetre offsets. Camera Z is not used directly as the robot height.
+- Briefit generation uses the postprocessing version at da4ea1b: inputs of at most 1024 tokens take one generation call; longer inputs use paragraph grouping, per-chunk generation, concatenation and generation again. `_clean_tail` is applied inside every generation call, including partial summaries.
+- Prompt incomplete success stays in_progress. Only handled errors return to pending with the prior round; prior generated results are not cleared. At least one generated result permits synthesis regardless of completion status.
+- Alkkagi equations cover distinct centres (D > 0). Equal-half positional correction precedes the separating-velocity check. Diagram arrows show the normal and position correction, not measured velocities. Inverse mass affects impulses; ten substeps and 60Hz remain settings.
+
+## Earlier source-backed technical pages — 2026-09-07
 
 Pages 4/8/11/13/15/17 replace the previous architecture commentary within the same 18-page edition. The implementation sources were re-read at the pinned commits; no training, LLM, hardware or load run was added.
 

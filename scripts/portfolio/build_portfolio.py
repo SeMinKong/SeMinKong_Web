@@ -1,4 +1,4 @@
-"""Editable 18-page landscape portfolio focused on implementation decisions.
+"""Editable 24-page landscape portfolio with implementation diagrams.
 
 Run from the repository root. --sample makes a three-page layout check;
 --publish copies the fully reviewed final bytes to the web download location.
@@ -12,6 +12,8 @@ import hashlib
 import json
 import shutil
 from urllib.parse import quote
+
+import technical_pages
 
 from PIL import Image
 from reportlab.pdfgen import canvas
@@ -29,7 +31,7 @@ from reportlab.graphics import renderPDF
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / 'src/assets/projects'
 FIGURES = ROOT / 'scripts/portfolio/assets'
-PAGE_COUNT = 18
+PAGE_COUNT = 24
 PHOTO_IMAGES = {
     'thing/integrated-robot-hand-portrait.webp',
     'thing/jetson-mediapipe-hands-test-1600.webp',
@@ -42,7 +44,7 @@ M, CW = 38, W - 76
 BOTTOM = 535
 INK, MUTED, PAPER, LINE, ACCENT, TINT = map(
     HexColor, ['#171512', '#625e56', '#f7f5ef', '#d4d0c5', '#a73524', '#eeeae1'])
-VERSION = '2026.09.07'
+VERSION = '2026.09.08'
 pdfmetrics.registerFont(TTFont('Korean', 'C:/Windows/Fonts/NanumGothic-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('KoreanBold', 'C:/Windows/Fonts/NanumGothic-Bold.ttf'))
 pdfmetrics.registerFontFamily('Korean', normal='Korean', bold='KoreanBold')
@@ -323,12 +325,12 @@ def introduction(b):
 def project_index(b):
     b.start('프로젝트', '장비 연동과 실물 제어를 중심으로, 입력과 출력의 품질을 다룬 작업을 소개합니다.', key='projects')
     rows = [
-        ('3 - 6', 'THING', '6인 팀 / 구동·기구 통합', '기구 편차 / 초기 목표와 토크 순서', 'thing'),
-        ('7 - 9', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '장비 연결 분리 / 좌표 갱신과 집기', 'aqis'),
-        ('10 - 11', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 요약과 정보 보존', 'briefit'),
-        ('12 - 13', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '라벨 변환 / 분류·분할 결합', 'mri'),
-        ('14 - 15', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 이력 / 수정 흐름', 'prompt'),
-        ('16 - 17', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '충돌·겹침 보정 / 서버 입력 제한', 'alkkagi'),
+        ('3 - 7', 'THING', '6인 팀 / 구동·기구 통합', '기구 편차 / 초기 목표와 토크 순서', 'thing'),
+        ('8 - 11', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '장비 연결 분리 / 좌표 갱신과 집기', 'aqis'),
+        ('12 - 14', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 요약과 정보 보존', 'briefit'),
+        ('15 - 17', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '라벨 변환 / 분류·분할 결합', 'mri'),
+        ('18 - 20', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 이력 / 수정 흐름', 'prompt'),
+        ('21 - 23', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '충돌·겹침 보정 / 서버 입력 제한', 'alkkagi'),
     ]
     b.label('쪽', M, 139)
     b.label('프로젝트', 112, 139)
@@ -616,9 +618,13 @@ def contact(b):
     b.end()
 
 
-PAGES = [introduction, project_index, thing_overview, thing_architecture, thing_control, thing_result,
-         aqis_overview, aqis_mock, aqis_coordinates, briefit_overview, briefit_data,
-         mri_overview, mri_method, prompt_overview, prompt_generator, alkkagi_overview, alkkagi_physics, contact]
+PAGES = [introduction, project_index, thing_overview, thing_architecture,
+         lambda b: technical_pages.thing(b, THING_REF), thing_control, thing_result,
+         aqis_overview, aqis_mock, lambda b: technical_pages.aqis(b, AQIS_REF), aqis_coordinates,
+         briefit_overview, briefit_data, lambda b: technical_pages.briefit(b, BRIEF),
+         mri_overview, mri_method, lambda b: technical_pages.mri(b, MRI_REF),
+         prompt_overview, prompt_generator, lambda b: technical_pages.prompt(b, PROMPT_REF),
+         alkkagi_overview, alkkagi_physics, lambda b: technical_pages.alkkagi(b, ALK_REF), contact]
 assert len(PAGES) == PAGE_COUNT
 
 
