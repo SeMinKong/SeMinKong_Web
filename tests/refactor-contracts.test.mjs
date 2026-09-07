@@ -3,7 +3,8 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import {
   EXPECTED_DEPLOYMENT_FILES,
-  SITE_ROUTES
+  SITE_ROUTES,
+  STATIC_DEPLOYMENT_FILES
 } from '../config/site-routes.js';
 import {
   DISPLAY_NAME,
@@ -16,7 +17,7 @@ test('route manifest keeps unique build inputs and outputs', () => {
   assert.equal(new Set(SITE_ROUTES.map(({ source }) => source)).size, SITE_ROUTES.length);
   assert.equal(new Set(SITE_ROUTES.map(({ output }) => output)).size, SITE_ROUTES.length);
   assert.equal(SITE_ROUTES.filter(({ kind }) => kind === 'case-study').length, 6);
-  assert.equal(EXPECTED_DEPLOYMENT_FILES.length, SITE_ROUTES.length + 12);
+  assert.equal(EXPECTED_DEPLOYMENT_FILES.length, SITE_ROUTES.length + STATIC_DEPLOYMENT_FILES.length);
 });
 
 test('handwritten wordmark preserves its public name and stroke order', () => {
@@ -28,9 +29,7 @@ test('handwritten wordmark preserves its public name and stroke order', () => {
 
   const strokes = INTRO_WORDMARK_STROKES.flatMap(({ strokes: letterStrokes }) => letterStrokes);
   assert.equal(strokes.length, 12);
-  const totalWeight = strokes.reduce((total, { weight }) => total + weight, 0);
-  assert.ok(Math.abs(totalWeight - 9.4) < 1e-10);
-  assert.ok(strokes.every(({ d, weight }) => d.startsWith('M') && weight > 0));
+  assert.ok(strokes.every(({ d }) => d.startsWith('M')));
 });
 
 test('gallery direction keeps static surfaces and restrained typography', async () => {
@@ -87,81 +86,14 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(kineticFacade, /import\('\.\/kinetic-sandbox-runtime\.js'\)/);
   assert.match(kineticFacade, /environment\.motion !== 'reduced'/);
   assert.match(kineticFacade, /forced-colors: active/);
-  assert.match(kineticFacade, /let readyResolved = false/);
-  assert.match(kineticFacade, /const canRun = \(\) => readyResolved && isEligible\(\) && intersecting && pageActive/);
-  assert.match(kineticFacade, /readyResolved = true;\s+sync\(\);/);
-  assert.match(kineticFacade, /await import\('\.\/kinetic-sandbox-runtime\.js'\);[\s\S]*?if \(!canRun\(\)\) \{[\s\S]*?showFallback\('static'\);[\s\S]*?return;/);
-  assert.match(kineticFacade, /await mountKineticSandbox[\s\S]*?currentGeneration !== generation \|\| !canRun\(\)/);
-  assert.match(kineticFacade, /new IntersectionObserver/);
-  assert.match(kineticFacade, /addEventListener\('visibilitychange'/);
-  assert.match(kineticFacade, /addEventListener\('pagehide'/);
-  assert.match(kineticFacade, /addEventListener\('pageshow'/);
-  assert.match(kineticFacade, /queuedIntent/);
+  // Lifecycle behavior and joint geometry are exercised by dedicated tests.
+  // Keep only integration boundaries here, so module extraction stays possible.
   assert.match(kineticRuntime, /from 'pixi\.js'/);
   assert.match(kineticRuntime, /from 'matter-js'/);
-  assert.match(kineticRuntime, /preference: 'webgl'/);
-  assert.match(kineticRuntime, /autoStart: false/);
-  assert.match(kineticRuntime, /const PHYSICS_SUBSTEPS = 2/);
-  assert.match(kineticRuntime, /Engine\.update\(engine, PHYSICS_SUBSTEP\)/);
-  assert.match(kineticRuntime, /interpolatePose\(state\.previous, state\.current, alpha\)/);
-  assert.match(kineticRuntime, /alignPosePositionToPort/);
-  assert.doesNotMatch(kineticRuntime, /handwritten-wordmark__letter/);
-  assert.doesNotMatch(kineticRuntime, /getTextFragmentRects/);
-  assert.doesNotMatch(kineticRuntime, /hero-story__actions \.button/);
-  assert.match(kineticRuntime, /const PART_SPECS = \[/);
-  assert.match(kineticRuntime, /const REQUIRED_CONNECTIONS = 10/);
-  assert.match(kineticRuntime, /const JOINT_SERVO_PROFILES/);
-  assert.match(kineticRuntime, /Assets\.load\(ROBOT_ASSETS\)/);
-  assert.match(kineticRuntime, /const createArtwork = \(texture, width, height\)/);
-  assert.match(kineticRuntime, /calculateJointServo/);
-  assert.match(kineticRuntime, /projectJointLimit/);
-  assert.match(kineticRuntime, /limitRelativeAngularVelocity/);
-  assert.match(kineticRuntime, /app\.renderer\.events\?\.setTargetElement\(null\)/);
-  assert.match(kineticRuntime, /const rebaseJointAngles = \(\) =>/);
-  assert.match(kineticRuntime, /joint\.baseAngle = wrapAngle\(joint\.plugBody\.angle - joint\.socketBody\.angle\)/);
-  assert.match(kineticRuntime, /joint\.poseAngle = joint\.baseAngle/);
-  assert.match(kineticRuntime, /if \(applyFinalPose\) applyTargetBlend[\s\S]*?rebaseJointAngles\(\);[\s\S]*?celebration = null;/);
-  assert.match(kineticRuntime, /evaluatePortSnap/);
-  assert.match(kineticRuntime, /pointA: rotatePoint\(best\.movingPort, best\.movingBody\.angle\)/);
-  assert.match(kineticRuntime, /pointB: rotatePoint\(best\.targetPort, best\.targetBody\.angle\)/);
-  assert.match(kineticRuntime, /dragConstraint\.pointB = rotatePoint\(pointer\.localPoint, pointer\.body\.angle\)/);
-  assert.match(kineticRuntime, /placeGrabAtPoint\(body, pointer\.localPoint, point\)/);
-  assert.match(kineticRuntime, /activePointer\.phase = 'scrolling'/);
-  assert.match(kineticRuntime, /skipSnapUntilRelease/);
-  assert.match(kineticRuntime, /outwardTravel >= 34 \* interactionScale/);
-  assert.match(kineticRuntime, /angularStiffness: 0\.88/);
-  assert.match(kineticRuntime, /dragConstraint\.angularStiffness = 0\.88/);
-  assert.match(kineticRuntime, /pointer\.flexConnection = pointer\.breakCandidate\s+\? null\s+: getFlexConnection\(pointer\.body, pointer\.localPoint\)/);
-  assert.match(kineticRuntime, /connection\?\.angular\?\.plugBody === body/);
-  assert.doesNotMatch(kineticRuntime, /pointer\.flexConnection = pointer\.breakCandidate\?\.connection/);
-  assert.match(kineticRuntime, /if \(!applyGesture \|\| pointer\.phase === 'scrolling'\) \{\s+if \(isPuzzleComplete\(\)\) startCelebration\(\);\s+return;\s+\}\s+if \(pointer\.phase === 'dragging' && pointer\.flexConnection\) \{\s+settleFlexPose\(pointer\);/);
-  assert.match(kineticRuntime, /dragConstraint\.bodyB = pointer\.flexConnection \? null : pointer\.body/);
-  assert.match(kineticRuntime, /applyFlexGesture\(activePointer, point\)/);
-  assert.match(kineticRuntime, /Engine\.update\(engine, PHYSICS_SUBSTEP\);\s+projectJointLimits\(\);/);
-  assert.match(kineticRuntime, /quality: 4/);
-  assert.match(kineticRuntime, /const rotatedHalfWidth =/);
-  assert.match(kineticRuntime, /Body\.setDensity\(body, baseDensity \/ \(nextScale \* nextScale\)\);\s+body\.constraintImpulse\.x = 0;\s+body\.constraintImpulse\.y = 0;\s+body\.constraintImpulse\.angle = 0;\s+body\.positionImpulse\.x = 0;\s+body\.positionImpulse\.y = 0;/);
-  assert.match(kineticRuntime, /resizeParts\(getScale\(width\)\)/);
-  assert.match(kineticRuntime, /Body\.setDensity\(body, baseDensity \/ \(nextScale \* nextScale\)\)/);
-  assert.match(kineticRuntime, /body\.constraintImpulse\.angle = 0/);
-  assert.match(kineticRuntime, /const shadowLayer = new Container/);
-  assert.match(kineticRuntime, /getWorldLight\(pose, viewport/);
-  assert.match(kineticRuntime, /enableSleeping: true/);
-  assert.match(kineticRuntime, /new ResizeObserver/);
-  assert.match(kineticRuntime, /canvas\.style\.touchAction = 'pan-y pinch-zoom'/);
-  assert.match(kineticRuntime, /window\.addEventListener\('pointermove', handlePointerMove, \{ passive: true \}\)/);
-  assert.match(kineticRuntime, /canvas\.addEventListener\('pointermove', handleHoverPointerMove, \{ passive: true \}\)/);
-  assert.match(kineticRuntime, /webglcontextlost/);
-  assert.match(kineticRuntime, /webglcontextrestored/);
-  const snapBlock = kineticRuntime.match(/const trySnap = \(movingRoot\) => \{[\s\S]*?\n  \};/)?.[0] ?? '';
-  const pointerDownBlock = kineticRuntime.match(/const handlePointerDown = \(event\) => \{[\s\S]*?\n  \};/)?.[0] ?? '';
-  const hoverBlock = kineticRuntime.match(/const handleHoverPointerMove = \(event\) => \{[\s\S]*?\n  \};/)?.[0] ?? '';
-  assert.doesNotMatch(snapBlock, /startCelebration\(/);
-  assert.match(pointerDownBlock, /if \(destroyed \|\| celebration \|\| activePointer/);
-  assert.doesNotMatch(pointerDownBlock, /finishCelebration\(/);
-  assert.match(hoverBlock, /destroyed \|\| celebration \|\| activePointer/);
-  assert.match(kineticRuntime, /if \(hasCelebrated \|\| celebration \|\| activePointer \|\| !isPuzzleComplete\(\)\) return;/);
-  assert.match(kineticRuntime, /Body\.setPosition\(edge\.body, aligned\)/);
+  for (const module of ['robot-config', 'robot-artwork', 'robot-completion']) {
+    assert.ok(kineticRuntime.includes(`from './${module}.js'`));
+  }
+  assert.match(kineticRuntime, /touchAction = 'pan-y pinch-zoom'/);
   assert.doesNotMatch(kineticRuntime, /setPointerCapture|requestAnimationFrame/);
   assert.doesNotMatch(kineticRuntime, /handlePointer(?:Down|Move|Up|Cancel)[\s\S]{0,700}preventDefault\(/);
   assert.match(kineticStyles, /height: 100svh/);

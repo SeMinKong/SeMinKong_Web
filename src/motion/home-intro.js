@@ -8,7 +8,6 @@ const SIGNATURE_DURATION = 1500;
 const getNavigationType = () => performance.getEntriesByType?.('navigation')?.[0]?.type;
 
 export const initHomeIntro = (environment) => {
-  const root = document.documentElement;
   const heroName = document.querySelector('.hero-identity__name');
   mountHeroWordmark(heroName);
 
@@ -62,8 +61,6 @@ export const initHomeIntro = (environment) => {
       timeline = null;
       removeListeners();
       cleanupStyles();
-      root.classList.remove('home-intro-pending', 'home-intro-active', 'home-intro-locked');
-      window.dispatchEvent(new CustomEvent('portfolio:home-intro-complete'));
       resolveFinished?.({ deferSmoothScroll: event?.type === 'pagehide' });
     }
   }

@@ -289,15 +289,13 @@ test('progressive navigation and motion remain optional and non-blocking', async
     'shin-a',
     'shin-b'
   ]);
-  const { ROBOT_GEOMETRY, getRobotAssembly } = await import('../src/motion/robot-kit.js');
-  const partSpecs = kineticRuntime.match(/const PART_SPECS = \[([\s\S]*?)\n\]\.map/)?.[1] ?? '';
-  const runtimePieceIds = [...partSpecs.matchAll(/\bid: '([^']+)', asset:/g)]
-    .map(([, id]) => id);
-  assert.deepEqual(runtimePieceIds, puzzlePieceIds);
+  const { getRobotAssembly } = await import('../src/motion/robot-kit.js');
+  const { PART_SPECS, REQUIRED_CONNECTIONS } = await import('../src/motion/robot-config.js');
+  assert.deepEqual(PART_SPECS.map(({ id }) => id), puzzlePieceIds);
+  assert.equal(REQUIRED_CONNECTIONS, puzzlePieceIds.length - 1);
 
   const portCounts = new Map();
-  const runtimeAssets = [...partSpecs.matchAll(/\basset: '([^']+)'/g)].map(([, asset]) => asset);
-  for (const { family, polarity } of runtimeAssets.flatMap((asset) => ROBOT_GEOMETRY[asset].ports)) {
+  for (const { family, polarity } of PART_SPECS.flatMap(({ ports }) => ports)) {
     const counts = portCounts.get(family) ?? { PLUG: 0, SOCKET: 0 };
     counts[polarity.toUpperCase()] += 1;
     portCounts.set(family, counts);
@@ -324,12 +322,6 @@ test('progressive navigation and motion remain optional and non-blocking', async
   }
   assert.match(kineticFacade, /Promise\.resolve\(ready\)/);
   assert.match(kineticFacade, /environment\.motion !== 'reduced'/);
-  assert.match(kineticRuntime, /PART_SPECS/);
-  assert.match(kineticRuntime, /REQUIRED_CONNECTIONS = 10/);
-  assert.match(kineticRuntime, /JOINT_SERVO_PROFILES/);
-  assert.match(kineticRuntime, /Assets\.load\(ROBOT_ASSETS\)/);
-  assert.match(kineticRuntime, /const createArtwork = \(texture, width, height\)/);
-  assert.match(kineticRuntime, /calculateJointServo/);
   assert.match(kineticStyles, /--part-shape:/);
   assert.match(kineticStyles, /--part-art:\s*url\('\.\.\/assets\/kinetic-robot\/head\.svg'\)/);
   assert.match(kineticStyles, /\.kinetic-stage__fallback-layout/);

@@ -24,29 +24,39 @@ Each route loads only the entry and stylesheet layers it owns. Shared page behav
 
 | Route | Entry | Page styles |
 | --- | --- | --- |
-| Home | `src/entries/home.js` | `portfolio-shared.css`, `home.css` |
+| Home | `src/entries/home.js` | `portfolio-shared.css`, `home.css`, `kinetic-home.css` |
 | Work | `src/entries/work.js` | `portfolio-shared.css`, `work.css` |
 | Six case studies | `src/entries/case-study.js` | `case-study.css` |
 | About | `src/entries/about.js` | `about.css` |
 | Resume | `src/entries/resume.js` | `resume.css` |
 | Copyright | `src/entries/legal.js` | `legal.css` |
 
-`config/site-routes.js` is the source of truth for Vite inputs and deployment verification. `npm.cmd run verify` checks route/entry/style boundaries, builds production assets, and validates every local deployment reference.
+`config/site-routes.js` is the source of truth for Vite inputs and deployment verification. `npm.cmd run verify` runs behavior tests, checks route/import/style boundaries and unused source files, builds production assets, and validates local deployment references.
 
-## GitHub Flow
+The Home robot lives in `src/motion/`:
 
-1. Create a short-lived branch from `main`.
-2. Implement one coherent change and update `CHANGELOG.md` when it affects a release.
-3. Open a pull request to `main`.
-4. Merge only after the `CI / build` check succeeds.
-5. A merge to `main` builds `dist/` and deploys it through GitHub Pages.
+| Module | Responsibility |
+| --- | --- |
+| `kinetic-sandbox.js` | Lazy loading, capability changes, visibility and fallback |
+| `kinetic-sandbox-runtime.js` | Scene lifecycle, input, puzzle connections and simulation |
+| `robot-config.js` | Part configuration, physics settings and responsive scatter |
+| `robot-kit.js` | Geometry, ports and static assembly |
+| `robot-artwork.js` | Textures, shadows and interaction hints |
+| `robot-completion.js` | Connected completion poses and celebration graphics |
+| `kinetic-math.js` | Pure geometry, snap, interpolation and joint calculations |
 
-The detailed release and versioning procedure is documented in [docs/release-process.md](docs/release-process.md).
+`home.css` owns the Home navigation and sections below the Hero. `kinetic-home.css` owns the entire Hero, signature and robot fallback. Continuous effects use the shared runtime and automatically pause or simplify with the page environment.
+
+## Working guide
+
+Read [design-brief.md](docs/design-brief.md) for the current design, [motion-spec.md](docs/motion-spec.md) for interaction rules and [decisions.md](docs/decisions.md) for implementation boundaries. Use [qa-checklist.md](docs/qa-checklist.md) before publishing. Prior specifications and verification records are kept in [docs/history/](docs/history/).
+
+`scripts/portfolio/` contains the retained source tooling for the approved static portfolio PDF. Its evidence is documented in [portfolio-evidence.md](docs/portfolio-evidence.md), with publication rules in `AGENTS.md`. `tmp/` is ignored local scratch space; generated `dist/` and `node_modules/` are never edited directly.
 
 ## Deployment
 
-The repository uses GitHub Actions to deploy the generated `dist/` artifact. The expected project-site URL is:
+The repository uses GitHub Actions to deploy the generated `dist/` artifact:
 
-`https://seminkong.github.io/SeMinKong_Web/`
+[seminkong.github.io/SeMinKong_Web](https://seminkong.github.io/SeMinKong_Web/)
 
-GitHub Pages must use **GitHub Actions** as its source. Private-repository Pages availability depends on the GitHub plan; repository visibility should be changed only after an explicit decision.
+Follow `AGENTS.md`: requested website changes are verified and deployed through the existing Pages workflow, using only the scoped commits and pushes needed for that release. Create pull requests only when explicitly requested. See [release-process.md](docs/release-process.md) for versioning and release records.

@@ -1,210 +1,27 @@
-import { animate } from 'animejs';
-import { ROBOT_GEOMETRY, localRobotPort } from './robot-kit.js';
-import { Application, Assets, Container, Graphics, Rectangle, Sprite } from 'pixi.js';
+import { Application, Container, Rectangle } from 'pixi.js';
 import Matter from 'matter-js';
-import chestAssetUrl from '../assets/kinetic-robot/chest.svg?url';
-import forearmAssetUrl from '../assets/kinetic-robot/forearm.svg?url';
-import headAssetUrl from '../assets/kinetic-robot/head.svg?url';
-import pelvisAssetUrl from '../assets/kinetic-robot/pelvis.svg?url';
-import shinAssetUrl from '../assets/kinetic-robot/shin.svg?url';
-import thighAssetUrl from '../assets/kinetic-robot/thigh.svg?url';
-import upperArmAssetUrl from '../assets/kinetic-robot/upper-arm.svg?url';
+import { localRobotPort } from './robot-kit.js';
 import {
-  alignPosePositionToPort,
-  calculateJointServo,
-  clamp,
-  evaluatePortSnap,
-  getWorldLight,
-  interpolatePose,
-  limitRelativeAngularVelocity,
-  pointInRotatedRect,
-  projectJointLimit,
-  rotatePoint,
-  smoothThrowVelocity,
-  solveMovingPortPose,
-  worldPort,
-  wrapAngle
+  calculateJointServo, clamp, evaluatePortSnap, interpolatePose, limitRelativeAngularVelocity,
+  pointInRotatedRect, projectJointLimit, rotatePoint, smoothThrowVelocity, solveMovingPortPose,
+  worldPort, wrapAngle
 } from './kinetic-math.js';
+import {
+  CELEBRATION_DURATION, DETENT_STEP, FIXED_STEP, JOINT_SERVO_PROFILES, MAX_CATCH_UP,
+  MAX_FRAME_DELTA, MAX_THROW_SPEED, PART_SPECS, PHYSICS_SUBSTEPS, PHYSICS_SUBSTEP, PORT,
+  POSE_GRIP_DIRECTION, POSE_JOINT_PRIORITIES, REQUIRED_CONNECTIONS, ROTATION_STEP,
+  SETTLE_DURATION, WALL_THICKNESS, getInitialRobotPose, getRobotBodyOptions, getRobotDensity, getScale
+} from './robot-config.js';
+import {
+  ROBOT_TEXTURE_ALIASES, createPortHints, createRobotView, loadRobotTextures, updateViewLighting
+} from './robot-artwork.js';
+import {
+  applyCompletionBlend, buildCompletionTargets, createCelebrationEffects, easeInOutCubic, easeOutCubic
+} from './robot-completion.js';
 
 const { Body, Bodies, Composite, Constraint, Engine, Sleeping, Vector } = Matter;
 
-const FIXED_STEP = 1000 / 60;
-const PHYSICS_SUBSTEPS = 2;
-const PHYSICS_SUBSTEP = FIXED_STEP / PHYSICS_SUBSTEPS;
-const MAX_CATCH_UP = FIXED_STEP * 3;
-const MAX_FRAME_DELTA = 50;
-const WALL_THICKNESS = 160;
-const MAX_THROW_SPEED = 11.5;
-const SETTLE_DURATION = 760;
-const ROTATION_STEP = Math.PI / 6;
-const REQUIRED_CONNECTIONS = 10;
-const CELEBRATION_DURATION = 1780;
-const BOARD = 0xded6ca;
-const PAPER = 0xf1eee6;
-const INK = 0x24211d;
-const SIGNAL = 0xa73524;
-const SHADOW = 0x171512;
-const PORT = Object.freeze({ PLUG: 'plug', SOCKET: 'socket' });
-const DETENT_STEP = Math.PI / 12;
-const POSE_JOINT_PRIORITIES = Object.freeze({
-  head: Object.freeze(['neck']),
-  chest: Object.freeze([]),
-  pelvis: Object.freeze(['waist', 'hip']),
-  'upper-arm': Object.freeze(['shoulder', 'elbow']),
-  forearm: Object.freeze(['elbow']),
-  thigh: Object.freeze(['hip', 'knee']),
-  shin: Object.freeze(['knee'])
-});
-const POSE_GRIP_DIRECTION = Object.freeze({
-  head: -1,
-  pelvis: 1,
-  'upper-arm': 1,
-  forearm: 1,
-  thigh: 1,
-  shin: 1
-});
-
-const ROBOT_TEXTURE_ALIASES = Object.freeze({
-  head: 'kinetic-robot/head',
-  chest: 'kinetic-robot/chest',
-  pelvis: 'kinetic-robot/pelvis',
-  'upper-arm': 'kinetic-robot/upper-arm',
-  forearm: 'kinetic-robot/forearm',
-  thigh: 'kinetic-robot/thigh',
-  shin: 'kinetic-robot/shin'
-});
-
-const ROBOT_ASSETS = Object.freeze([
-  ['head', headAssetUrl], ['chest', chestAssetUrl], ['pelvis', pelvisAssetUrl],
-  ['upper-arm', upperArmAssetUrl], ['forearm', forearmAssetUrl],
-  ['thigh', thighAssetUrl], ['shin', shinAssetUrl]
-].map(([asset, src]) => ({
-  alias: ROBOT_TEXTURE_ALIASES[asset], src,
-  data: { width: ROBOT_GEOMETRY[asset].width, height: ROBOT_GEOMETRY[asset].height, resolution: 3, parseAsGraphicsContext: false }
-})));
-
-let robotTexturesPromise;
-const loadRobotTextures = () => {
-  if (!robotTexturesPromise) {
-    robotTexturesPromise = Assets.load(ROBOT_ASSETS).catch((error) => {
-      robotTexturesPromise = null;
-      throw error;
-    });
-  }
-  return robotTexturesPromise;
-};
-
-const JOINT_SERVO_PROFILES = Object.freeze({
-  neck: { softLimit: 0.24, centerStrength: 0.012, dragHoldStrength: 0.026, limitStrength: 0.038, damping: 0.24, maxCorrection: 0.016, maxRelativeVelocity: 0.05 },
-  waist: { softLimit: 0.18, centerStrength: 0.013, dragHoldStrength: 0.028, limitStrength: 0.04, damping: 0.26, maxCorrection: 0.017, maxRelativeVelocity: 0.045 },
-  shoulder: { softLimit: 1.05, centerStrength: 0.0045, dragHoldStrength: 0.011, limitStrength: 0.026, damping: 0.19, maxCorrection: 0.018, maxRelativeVelocity: 0.07 },
-  elbow: { softLimit: 1.22, centerStrength: 0.005, dragHoldStrength: 0.012, limitStrength: 0.03, damping: 0.21, maxCorrection: 0.019, maxRelativeVelocity: 0.075 },
-  hip: { softLimit: 0.66, centerStrength: 0.0055, dragHoldStrength: 0.013, limitStrength: 0.032, damping: 0.21, maxCorrection: 0.019, maxRelativeVelocity: 0.065 },
-  knee: { softLimit: 0.96, centerStrength: 0.0055, dragHoldStrength: 0.013, limitStrength: 0.032, damping: 0.22, maxCorrection: 0.019, maxRelativeVelocity: 0.07 }
-});
-
-const PART_SPECS = [
-  { id: 'head', asset: 'head', x: 0.1, y: 0.22, angle: Math.PI / 3 },
-  { id: 'chest', asset: 'chest', x: 0.82, y: 0.22, angle: -Math.PI / 6 },
-  { id: 'pelvis', asset: 'pelvis', x: 0.91, y: 0.42, angle: Math.PI / 6 },
-  { id: 'upper-arm-a', asset: 'upper-arm', x: 0.07, y: 0.49, angle: -Math.PI / 3 },
-  { id: 'upper-arm-b', asset: 'upper-arm', x: 0.86, y: 0.61, angle: Math.PI * 2 / 3 },
-  { id: 'forearm-a', asset: 'forearm', x: 0.2, y: 0.65, angle: Math.PI / 6 },
-  { id: 'forearm-b', asset: 'forearm', x: 0.68, y: 0.83, angle: -Math.PI * 2 / 3 },
-  { id: 'thigh-a', asset: 'thigh', x: 0.1, y: 0.82, angle: Math.PI / 3 },
-  { id: 'thigh-b', asset: 'thigh', x: 0.57, y: 0.21, angle: -Math.PI / 6 },
-  { id: 'shin-a', asset: 'shin', x: 0.34, y: 0.86, angle: Math.PI * 2 / 3 },
-  { id: 'shin-b', asset: 'shin', x: 0.91, y: 0.79, angle: -Math.PI / 3 }
-].map((spec) => ({ ...spec, ...ROBOT_GEOMETRY[spec.asset], role: spec.asset, kind: spec.asset }));
-
-const COMPACT_SCATTER = {
-  head: [0.16, 0.19], chest: [0.78, 0.21], pelvis: [0.53, 0.33],
-  'upper-arm-a': [0.17, 0.34], 'upper-arm-b': [0.83, 0.34],
-  'forearm-a': [0.16, 0.77], 'forearm-b': [0.67, 0.90],
-  'thigh-a': [0.22, 0.90], 'thigh-b': [0.44, 0.17],
-  'shin-a': [0.50, 0.78], 'shin-b': [0.84, 0.77]
-};
-const TABLET_SCATTER = {
-  pelvis: [0.91, 0.35], 'upper-arm-b': [0.86, 0.72],
-  'forearm-a': [0.20, 0.72], 'thigh-b': [0.47, 0.21]
-};
-
-const ROBOT_MATERIAL = { elevation: 6, shadowAlpha: 0.14 };
-
-const getScale = (width) => clamp(1.55 + (width - 390) * (0.45 / 890), 1.5, 2.06);
-const createArtwork = (texture, width, height) => {
-  const artwork = new Sprite(texture);
-  artwork.anchor.set(0.5);
-  artwork.scale.set(width / texture.width, height / texture.height);
-  return artwork;
-};
-
-// Artwork owns the bearings. These rings exist only as contextual interaction feedback.
-const createPortMarker = (port, scale) => {
-  const marker = new Graphics()
-    .circle(0, 0, 6 * scale)
-    .stroke({ color: SIGNAL, alpha: 0.86, width: 1.05 * scale });
-  marker.position.set(port.x, port.y);
-  marker.alpha = 0;
-  return marker;
-};
-
-const createView = (spec, width, height, ports, scale, texture) => {
-  const root = new Container();
-  // The same alpha silhouette preserves the open rails and gripper gaps in every layer.
-  const farShadow = createArtwork(texture, width, height);
-  const nearShadow = createArtwork(texture, width, height);
-  const artwork = createArtwork(texture, width, height);
-  farShadow.tint = SHADOW;
-  nearShadow.tint = SHADOW;
-  const portMarkers = new Map();
-  farShadow.alpha = 0;
-  nearShadow.alpha = 0;
-  root.addChild(artwork);
-  for (const port of ports) {
-    const marker = createPortMarker(port, scale);
-    portMarkers.set(port.id, marker);
-    root.addChild(marker);
-  }
-  return { farShadow, height, material: ROBOT_MATERIAL, nearShadow, portMarkers, root, spec, width };
-};
-
-const updateViewLighting = (view, pose, viewport) => {
-  const light = getWorldLight(pose, viewport, view.material.elevation);
-  view.farShadow.position.set(pose.x + light.farShadow.x, pose.y + light.farShadow.y);
-  view.nearShadow.position.set(pose.x + light.nearShadow.x, pose.y + light.nearShadow.y);
-  view.farShadow.rotation = pose.angle;
-  view.nearShadow.rotation = pose.angle;
-  view.farShadow.alpha = view.material.shadowAlpha * 0.28 * light.intensity;
-  view.nearShadow.alpha = view.material.shadowAlpha * 0.62 * light.intensity;
-  view.root.position.set(pose.x, pose.y);
-  view.root.rotation = pose.angle;
-};
-
-const createBody = (spec, x, y, width, height, scale) => Bodies.rectangle(x, y, width, height, {
-  label: `kinetic:part:${spec.id}`,
-  angle: spec.angle,
-  density: (spec.role === 'chest' || spec.role === 'pelvis' ? 0.0032 : 0.0024) / (scale * scale),
-  friction: 0.18,
-  frictionAir: 0.032,
-  frictionStatic: 0.25,
-  restitution: 0.28,
-  sleepThreshold: 72,
-  slop: 0.025,
-  chamfer: {
-    radius: Math.min(width, height) * 0.14,
-    quality: 4
-  }
-});
-
 const portKey = (body, port) => `${body.id}:${port.id}`;
-const easeOutCubic = (value) => 1 - Math.pow(1 - clamp(value, 0, 1), 3);
-const easeInOutCubic = (value) => {
-  const progress = clamp(value, 0, 1);
-  return progress < 0.5
-    ? 4 * progress * progress * progress
-    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-};
 
 export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = {}) => {
   const canvas = stage.querySelector('[data-kinetic-canvas]');
@@ -258,6 +75,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   engine.gravity.y = 0;
   engine.gravity.scale = 0;
 
+  // One scene owns the mutable puzzle graph, gesture and simulation clock.
   const bodyMeta = new Map();
   const bodyToView = new Map();
   const idToBody = new Map();
@@ -283,10 +101,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   const shadowLayer = new Container();
   const objectLayer = new Container();
   const effectLayer = new Container();
-  const ambientGlow = new Graphics();
-  const jointEffects = new Graphics();
-  ambientLayer.addChild(ambientGlow);
-  effectLayer.addChild(jointEffects);
+  const celebrationEffects = createCelebrationEffects(ambientLayer, effectLayer);
+  const completionModel = { dynamicBodies, bodyMeta, idToBody, connections };
   app.stage.addChild(ambientLayer, shadowLayer, objectLayer, effectLayer);
 
   const getTopBoundary = () => {
@@ -297,44 +113,22 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       : 0;
   };
 
-  const getInitialPose = (spec) => {
-    const inset = coarsePointer ? 14 : width <= 1000 ? 22 : 30;
-    const [scatterX, scatterY] = (width <= 720 ? COMPACT_SCATTER : width <= 1000 ? TABLET_SCATTER : {})[spec.id]
-      ?? [spec.x, spec.y];
-    const bodyWidth = spec.width * scale;
-    const bodyHeight = spec.height * scale;
-    const rotatedHalfWidth = (
-      Math.abs(Math.cos(spec.angle)) * bodyWidth
-      + Math.abs(Math.sin(spec.angle)) * bodyHeight
-    ) / 2;
-    const rotatedHalfHeight = (
-      Math.abs(Math.sin(spec.angle)) * bodyWidth
-      + Math.abs(Math.cos(spec.angle)) * bodyHeight
-    ) / 2;
-    const edgeSafety = 8;
-    const topBoundary = getTopBoundary();
-    const x = clamp(
-      width * scatterX,
-      inset + edgeSafety + rotatedHalfWidth,
-      width - inset - edgeSafety - rotatedHalfWidth
-    );
-    const y = clamp(
-      height * scatterY,
-      topBoundary + inset + edgeSafety + rotatedHalfHeight,
-      height - inset - edgeSafety - rotatedHalfHeight
-    );
-    return { x, y, angle: spec.angle };
-  };
+  const getInitialPose = (spec) => getInitialRobotPose(spec, {
+    width, height, scale, coarsePointer, topBoundary: getTopBoundary()
+  });
 
   for (const spec of PART_SPECS) {
     const bodyWidth = spec.width * scale;
     const bodyHeight = spec.height * scale;
     const { x, y } = getInitialPose(spec);
-    const body = createBody(spec, x, y, bodyWidth, bodyHeight, scale);
+    const body = Bodies.rectangle(
+      x, y, bodyWidth, bodyHeight,
+      getRobotBodyOptions(spec, bodyWidth, bodyHeight, scale)
+    );
     const ports = spec.ports.map((port) => localRobotPort(spec, port, scale));
     const texture = robotTextures[ROBOT_TEXTURE_ALIASES[spec.asset]];
     if (!texture) throw new Error(`The ${spec.asset} robot artwork failed to load.`);
-    const view = createView(spec, bodyWidth, bodyHeight, ports, scale, texture);
+    const view = createRobotView(bodyWidth, bodyHeight, ports, scale, texture);
     Body.setVelocity(body, { x: 0, y: 0 });
     Body.setAngularVelocity(body, 0);
     dynamicBodies.push(body);
@@ -375,6 +169,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
   };
 
+  // Connections define the branches that move, rotate and collide together.
   const getComponent = (startBody, excludedConnection = null) => {
     const found = new Set([startBody]);
     const queue = [startBody];
@@ -444,30 +239,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
   };
 
-  let hintedMarkers = new Set();
-  const hintAnimations = new Map();
-  const renderHints = () => { if (!destroyed && !running) app.render(); };
-  const setPortHints = (entries = [], intent = 'none', immediate = false) => {
-    const next = new Set(entries.map(([body, port]) => bodyToView.get(body)?.portMarkers.get(port.id)).filter(Boolean));
-    if (stage.dataset.kineticIntent !== intent) stage.dataset.kineticIntent = intent;
-    for (const marker of new Set([...hintedMarkers, ...next])) {
-      if (!immediate && hintedMarkers.has(marker) === next.has(marker)) continue;
-      hintAnimations.get(marker)?.cancel();
-      hintAnimations.delete(marker);
-      const alpha = next.has(marker) ? 1 : 0;
-      if (immediate) marker.alpha = alpha;
-      else hintAnimations.set(marker, animate(marker, {
-        alpha, duration: 140, ease: 'outQuad', onUpdate: renderHints,
-        onComplete: () => hintAnimations.delete(marker)
-      }));
-    }
-    hintedMarkers = next;
-    if (immediate) {
-      for (const [marker, animation] of hintAnimations) { animation.cancel(); marker.alpha = 0; }
-      hintAnimations.clear();
-      renderHints();
-    }
-  };
+  const setPortHints = createPortHints(stage, bodyToView, () => {
+    if (!destroyed && !running) app.render();
+  });
   const syncPortMarkers = () => setPortHints([], 'none', true);
 
   const isPuzzleComplete = () => connections.length === REQUIRED_CONNECTIONS
@@ -518,164 +292,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
   };
 
-  const connectionEdge = (connection, fromBody) => connection.bodyA === fromBody
-    ? { body: connection.bodyB, fromPort: connection.portA, toPort: connection.portB }
-    : { body: connection.bodyA, fromPort: connection.portB, toPort: connection.portA };
-
-  const getBranch = (parentBranch, parentBody, fromPort, childBody) => {
-    if (parentBody === idToBody.get('chest') && fromPort.id === 'shoulder-left') return 'left-arm';
-    if (parentBody === idToBody.get('chest') && fromPort.id === 'shoulder-right') return 'right-arm';
-    if (parentBody === idToBody.get('pelvis') && fromPort.id === 'hip-left') return 'left-leg';
-    if (parentBody === idToBody.get('pelvis') && fromPort.id === 'hip-right') return 'right-leg';
-    if (bodyMeta.get(childBody).spec.role === 'head') return 'head';
-    if (bodyMeta.get(childBody).spec.role === 'pelvis') return 'pelvis';
-    return parentBranch;
-  };
-
-  const targetAngleFor = (role, branch, raised) => {
-    if (role === 'chest') return -0.04;
-    if (role === 'head') return 0.09;
-    if (role === 'pelvis') return 0.02;
-    if (role === 'upper-arm') {
-      if (branch === 'left-arm') return 0.17;
-      return raised ? -2.62 : -0.17;
-    }
-    if (role === 'forearm') {
-      if (branch === 'left-arm') return -0.02;
-      return raised ? -2.92 : 0.02;
-    }
-    if (role === 'thigh') return branch === 'left-leg' ? 0.055 : -0.055;
-    if (role === 'shin') return branch === 'left-leg' ? -0.025 : 0.025;
-    return 0;
-  };
-
-  const placePoseTargets = (targets) => {
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-    for (const [body, pose] of targets) {
-      const meta = bodyMeta.get(body);
-      const radius = Math.hypot(meta.width, meta.height) / 2;
-      minX = Math.min(minX, pose.x - radius);
-      maxX = Math.max(maxX, pose.x + radius);
-      minY = Math.min(minY, pose.y - radius);
-      maxY = Math.max(maxY, pose.y + radius);
-    }
-    const poseWidth = maxX - minX;
-    const poseHeight = maxY - minY;
-    const margin = width <= 720 ? 14 : 26;
-    const topBoundary = getTopBoundary();
-    const desiredCenterX = width - margin - poseWidth / 2;
-    const desiredCenterY = width <= 820
-      ? height - margin - poseHeight / 2
-      : topBoundary + (height - topBoundary) * 0.55;
-    const currentCenterX = (minX + maxX) / 2;
-    const currentCenterY = (minY + maxY) / 2;
-    const dx = clamp(desiredCenterX - currentCenterX, margin - minX, width - margin - maxX);
-    const dy = clamp(
-      desiredCenterY - currentCenterY,
-      topBoundary + margin - minY,
-      height - margin - maxY
-    );
-    for (const pose of targets.values()) {
-      pose.x += dx;
-      pose.y += dy;
-    }
-    return targets;
-  };
-
-  const buildCompletionTargets = (raised = false) => {
-    const chest = idToBody.get('chest');
-    const targets = new Map([[chest, {
-      x: 0,
-      y: 0,
-      angle: targetAngleFor('chest', 'root', raised)
-    }]]);
-    const branchByBody = new Map([[chest, 'root']]);
-    const queue = [chest];
-    while (queue.length) {
-      const parent = queue.shift();
-      const parentPose = targets.get(parent);
-      const parentBranch = branchByBody.get(parent);
-      for (const connection of connections) {
-        if (connection.bodyA !== parent && connection.bodyB !== parent) continue;
-        const edge = connectionEdge(connection, parent);
-        if (targets.has(edge.body)) continue;
-        const branch = getBranch(parentBranch, parent, edge.fromPort, edge.body);
-        const childMeta = bodyMeta.get(edge.body);
-        const angle = targetAngleFor(childMeta.spec.role, branch, raised);
-        const anchor = worldPort(parentPose, edge.fromPort);
-        const childOffset = rotatePoint(edge.toPort, angle);
-        targets.set(edge.body, {
-          x: anchor.x - childOffset.x,
-          y: anchor.y - childOffset.y,
-          angle
-        });
-        branchByBody.set(edge.body, branch);
-        queue.push(edge.body);
-      }
-    }
-    return placePoseTargets(targets);
-  };
-
-  const createCelebrationParticles = () => Array.from({ length: 12 }, (_, index) => {
-    const angle = -Math.PI * 0.88 + index / 11 * Math.PI * 0.76;
-    const speed = 38 + (index % 4) * 9;
-    const size = 2.4 + (index % 3) * 0.7;
-    const graphic = new Graphics()
-      .poly([0, -size, size * 0.72, 0, 0, size, -size * 0.72, 0])
-      .fill({ color: [SIGNAL, INK, BOARD][index % 3], alpha: 0.92 });
-    graphic.visible = false;
-    effectLayer.addChild(graphic);
-    return {
-      graphic,
-      spin: (index % 2 ? -1 : 1) * (1.7 + index * 0.07),
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed
-    };
-  });
-
-  const clearEffects = () => {
-    ambientGlow.clear();
-    jointEffects.clear();
-    if (!celebration) return;
-    for (const particle of celebration.particles) particle.graphic.destroy();
-  };
-
+  // Completion owns the clock here; pose solving and drawing live in robot-completion.
   const applyTargetBlend = (fromTargets, toTargets, progress) => {
-    for (const body of dynamicBodies) {
-      const from = fromTargets.get(body);
-      const to = toTargets.get(body);
-      if (!from || !to) continue;
-      Body.setPosition(body, {
-        x: from.x + (to.x - from.x) * progress,
-        y: from.y + (to.y - from.y) * progress
-      });
-      Body.setAngle(body, from.angle + wrapAngle(to.angle - from.angle) * progress);
-      Body.setVelocity(body, { x: 0, y: 0 });
-      Body.setAngularVelocity(body, 0);
-    }
-    const root = idToBody.get('chest');
-    const visited = new Set(root ? [root] : []);
-    const queue = root ? [root] : [];
-    while (queue.length) {
-      const parent = queue.shift();
-      for (const connection of connections) {
-        if (connection.bodyA !== parent && connection.bodyB !== parent) continue;
-        const edge = connectionEdge(connection, parent);
-        if (visited.has(edge.body)) continue;
-        const aligned = alignPosePositionToPort(
-          { x: edge.body.position.x, y: edge.body.position.y, angle: edge.body.angle },
-          edge.toPort,
-          { x: parent.position.x, y: parent.position.y, angle: parent.angle },
-          edge.fromPort
-        );
-        Body.setPosition(edge.body, aligned);
-        visited.add(edge.body);
-        queue.push(edge.body);
-      }
-    }
+    applyCompletionBlend(completionModel, fromTargets, toTargets, progress);
     updatePoseStatesFromBodies();
   };
 
@@ -692,7 +311,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     if (!celebration) return;
     if (applyFinalPose) applyTargetBlend(celebration.raisedTargets, celebration.raisedTargets, 1);
     rebaseJointAngles();
-    clearEffects();
+    celebrationEffects.clear();
     celebration = null;
     settledDuration = SETTLE_DURATION;
     for (const body of dynamicBodies) {
@@ -714,13 +333,14 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       y: body.position.y,
       angle: body.angle
     }]));
+    const viewport = { width, height, topBoundary: getTopBoundary() };
     celebration = {
       elapsed: 0,
-      neutralTargets: buildCompletionTargets(false),
-      particles: createCelebrationParticles(),
-      raisedTargets: buildCompletionTargets(true),
+      neutralTargets: buildCompletionTargets(completionModel, viewport, false),
+      raisedTargets: buildCompletionTargets(completionModel, viewport, true),
       startTargets
     };
+    celebrationEffects.start();
     for (const body of dynamicBodies) {
       Body.setVelocity(body, { x: 0, y: 0 });
       Body.setAngularVelocity(body, 0);
@@ -741,45 +361,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       );
     }
 
-    const chest = idToBody.get('chest');
-    const head = idToBody.get('head');
-    const glowProgress = clamp((elapsed - 180) / 620, 0, 1);
-    const fade = 1 - clamp((elapsed - 1160) / 500, 0, 1);
-    ambientGlow.clear();
-    if (glowProgress > 0 && fade > 0) {
-      ambientGlow
-        .circle(chest.position.x, chest.position.y, 36 + glowProgress * 48)
-        .fill({ color: PAPER, alpha: 0.075 * fade });
-    }
-
-    jointEffects.clear();
-    connections.forEach((connection, index) => {
-      const pulse = clamp((elapsed - 260 - index * 48) / 260, 0, 1);
-      if (pulse <= 0 || pulse >= 1) return;
-      const anchor = worldPort({
-        x: connection.bodyA.position.x,
-        y: connection.bodyA.position.y,
-        angle: connection.bodyA.angle
-      }, connection.portA);
-      jointEffects.circle(anchor.x, anchor.y, 4 + Math.sin(pulse * Math.PI) * 4.5).stroke({
-        color: SIGNAL,
-        alpha: Math.sin(pulse * Math.PI) * 0.4,
-        width: 1.5
-      });
-    });
-
-    const particleTime = (elapsed - 720) / 1000;
-    for (const particle of celebration.particles) {
-      const visible = particleTime >= 0 && particleTime <= 1;
-      particle.graphic.visible = visible;
-      if (!visible) continue;
-      particle.graphic.position.set(
-        head.position.x + particle.vx * particleTime,
-        head.position.y - 12 * scale + particle.vy * particleTime + 42 * particleTime * particleTime
-      );
-      particle.graphic.rotation = particle.spin * particleTime;
-      particle.graphic.alpha = 1 - easeOutCubic(particleTime);
-    }
+    celebrationEffects.update(elapsed, idToBody.get('chest'), idToBody.get('head'), connections, scale);
     if (elapsed >= CELEBRATION_DURATION) finishCelebration(true);
   };
 
@@ -816,6 +398,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     app.start();
   };
 
+  // Keep joint response, hard limits and fixed-step ordering together.
   const applyJointServos = () => {
     const draggedComponent = activePointer?.phase === 'dragging'
       ? new Set(getComponent(activePointer.body))
@@ -979,6 +562,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   stage.dataset.kineticPieceCount = String(PART_SPECS.length);
   setStageState('ready');
 
+  // Native pointer gestures: body movement, port snapping, joint posing and release.
   const toWorldPoint = (clientX, clientY) => {
     const rect = canvas.getBoundingClientRect();
     return {
@@ -1182,9 +766,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const getFlexConnection = (body, localPoint) => {
     const meta = bodyMeta.get(body);
-    const gripDirection = POSE_GRIP_DIRECTION[meta.spec.role];
+    const gripDirection = POSE_GRIP_DIRECTION[meta.spec.asset];
     if (!gripDirection || localPoint.y * gripDirection < meta.height * 0.12) return null;
-    const priorities = POSE_JOINT_PRIORITIES[meta.spec.role] ?? [];
+    const priorities = POSE_JOINT_PRIORITIES[meta.spec.asset] ?? [];
     for (const family of priorities) {
       for (const port of meta.ports) {
         if (port.family !== family) continue;
@@ -1423,6 +1007,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   window.addEventListener('pointerup', handlePointerUp, { passive: true });
   window.addEventListener('pointercancel', handlePointerCancel, { passive: true });
 
+  // Resize each connected assembly as a unit before fitting it inside the stage.
   const fitComponentInsideViewport = (component) => {
     let minX = Infinity;
     let minY = Infinity;
@@ -1481,10 +1066,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
         port.x *= ratio;
         port.y *= ratio;
       }
-      const baseDensity = meta.spec.role === 'chest' || meta.spec.role === 'pelvis'
-        ? 0.0032
-        : 0.0024;
-      Body.setDensity(body, baseDensity / (nextScale * nextScale));
+      Body.setDensity(body, getRobotDensity(meta.spec.asset, nextScale));
       body.constraintImpulse.x = 0;
       body.constraintImpulse.y = 0;
       body.constraintImpulse.angle = 0;

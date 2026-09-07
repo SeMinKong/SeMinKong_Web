@@ -28,7 +28,7 @@ export const ROBOT_GEOMETRY = Object.freeze({
   shin: { width: 28, height: 58, ports: [port('knee', 'knee', 'plug', 14, 7, up)] }
 });
 
-export const ROBOT_ASSEMBLY = [
+const ROBOT_ASSEMBLY = [
   { id: 'chest', asset: 'chest', x: 0, y: 0, angle: 0 },
   { id: 'head', asset: 'head', parent: 'chest', socket: 'neck', plug: 'neck', angle: 0 },
   { id: 'pelvis', asset: 'pelvis', parent: 'chest', socket: 'waist', plug: 'waist', angle: 0 },

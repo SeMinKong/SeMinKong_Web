@@ -1,11 +1,9 @@
 node_modules/
 dist/
-.pnpm-store/
 .vite/
 .private/
 /output/pdf/
-/tmp/pdfs/portfolio/
-/tmp/portfolio-visuals/
+/tmp/
 /scripts/portfolio/__pycache__/
 
 .env

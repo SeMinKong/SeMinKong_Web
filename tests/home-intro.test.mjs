@@ -62,22 +62,17 @@ const fixture = ({ motion = 'full', hash = '', hidden = false, scrollY = 0, navi
     setTimeout(fn) { timers.set(++nextTimer, fn); return nextTimer; },
     clearTimeout(id) { timers.delete(id); }
   });
-  const rootClasses = new Set(['home-intro-pending', 'home-intro-active', 'home-intro-locked']);
   const document = Object.assign(eventTarget(), {
     hidden,
-    documentElement: { classList: { remove: (...names) => names.forEach((name) => rootClasses.delete(name)) } },
     querySelector: () => hero
   });
   let cancelled = 0;
   let completed = 0;
   let setupCount = 0;
   let timeline;
-  const completionListener = () => { completed++; };
-  window.addEventListener('portfolio:home-intro-complete', completionListener);
   const init = runInNewContext(`${controllerSource}\ninitHomeIntro;`, {
     window, document,
     performance: { getEntriesByType: () => [{ type: navigation }] },
-    CustomEvent: class { constructor(type) { this.type = type; } },
     mountHeroWordmark: () => {},
     createDrawable(elements) {
       setupCount++;
@@ -102,8 +97,9 @@ const fixture = ({ motion = 'full', hash = '', hidden = false, scrollY = 0, navi
     }
   });
   const ready = init({ motion });
+  ready.then(() => { completed++; });
   return {
-    ready, paths, hero, window, document, timers, rootClasses,
+    ready, paths, hero, window, document, timers,
     get timeline() { return timeline; },
     get cancelled() { return cancelled; },
     get completed() { return completed; },
@@ -114,10 +110,9 @@ const fixture = ({ motion = 'full', hash = '', hidden = false, scrollY = 0, navi
         assert.equal(path.style.cssText, '');
       }
       assert.equal(hero.style.cssText, '');
-      assert.equal(rootClasses.size, 0);
       assert.equal(timers.size, 0);
       assert.equal(completed, 1);
-      assert.deepEqual([...window.listeners.keys()], ['portfolio:home-intro-complete']);
+      assert.equal(window.listeners.size, 0);
       assert.equal(document.listeners.size, 0);
     }
   };

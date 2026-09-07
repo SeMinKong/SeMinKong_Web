@@ -4,6 +4,12 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Changed
+
+- Split the Home robot's configuration, artwork and completion poses from its scene controller, preserving the existing design and interactions.
+- Consolidated Hero styles, removed unused Home CSS and orphaned motion code, and replaced obsolete source checks with route import-graph validation.
+- Separated current design, motion and QA guidance from historical records; removed stale Sites hosting metadata and the unused worker while retaining the existing GitHub Pages deployment.
+
 ## [2.1.0] - 2026-09-04
 
 ### Added
