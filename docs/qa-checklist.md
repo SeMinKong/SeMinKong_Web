@@ -1162,4 +1162,5 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] `npm.cmd run verify`: 테스트 35개, 소스 경로 11개·스타일 경계 12개, production modules 773개·배포 entry 23개가 통과했다. Home 전용 runtime chunk는 258.28 kB raw / 75.91 kB gzip이며 초기 공통 번들에는 포함되지 않는다.
 - [x] 현재 변경은 runtime 입력·완성 pose 계산과 계약 테스트에 한정되고 DOM·CSS·breakpoint는 바꾸지 않았다. 직전 동일 Home geometry의 390·768·1280px 검수 결과를 유지하며, 현재 1425×722 Chrome에서도 11개 authored 부품·runtime canvas·horizontal overflow 0과 정상 pointer 회전을 다시 확인했다.
 - [x] 연출 중 pointerdown 블록에는 중간 종료 경로가 없고 `celebration` guard가 먼저 반환한다. hover·facade nudge도 같은 잠금을 사용하며, release/cancel 뒤 완성 graph를 재확인하는 source contract와 120도 이상 2-link anchor 정렬 수치 테스트가 회귀를 막는다.
+- [x] 구현 커밋 `d208e07`의 GitHub Pages run `34083141343`이 성공했다. 공개 Home은 HTTP 200, `data-kinetic-stage`를 포함하고 새 `kinetic-sandbox-runtime-C1fvyZu2.js`를 258,282 bytes로 제공한다.
 - [ ] 실제 터치 하드웨어 gesture 경쟁, OS forced-colors와 10개 관절 전체를 수동 조립한 상태에서의 장시간 반복 입력은 이번 데스크톱 자동화 범위 밖이다.
