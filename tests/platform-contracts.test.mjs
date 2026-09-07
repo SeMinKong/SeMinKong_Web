@@ -289,17 +289,17 @@ test('progressive navigation and motion remain optional and non-blocking', async
     'shin-a',
     'shin-b'
   ]);
-  const partSpecs = kineticRuntime.match(/const PART_SPECS = \[([\s\S]*?)\n\];/)?.[1] ?? '';
-  const runtimePieceIds = [...partSpecs.matchAll(/\bid: '([^']+)', role:/g)]
+  const { ROBOT_GEOMETRY, getRobotAssembly } = await import('../src/motion/robot-kit.js');
+  const partSpecs = kineticRuntime.match(/const PART_SPECS = \[([\s\S]*?)\n\]\.map/)?.[1] ?? '';
+  const runtimePieceIds = [...partSpecs.matchAll(/\bid: '([^']+)', asset:/g)]
     .map(([, id]) => id);
   assert.deepEqual(runtimePieceIds, puzzlePieceIds);
 
   const portCounts = new Map();
-  for (const [, family, polarity] of partSpecs.matchAll(
-    /family: '([^']+)', polarity: PORT\.(PLUG|SOCKET)/g
-  )) {
+  const runtimeAssets = [...partSpecs.matchAll(/\basset: '([^']+)'/g)].map(([, asset]) => asset);
+  for (const { family, polarity } of runtimeAssets.flatMap((asset) => ROBOT_GEOMETRY[asset].ports)) {
     const counts = portCounts.get(family) ?? { PLUG: 0, SOCKET: 0 };
-    counts[polarity] += 1;
+    counts[polarity.toUpperCase()] += 1;
     portCounts.set(family, counts);
   }
   assert.deepEqual(Object.fromEntries(portCounts), {
@@ -316,7 +316,12 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.match(kineticStyles, /\.kinetic-stage \{[\s\S]*?position: absolute/);
   assert.match(kineticStyles, /\.kinetic-stage__canvas \{[\s\S]*?touch-action: pan-y pinch-zoom/);
   assert.match(kineticStyles, /html\[data-motion="reduced"\] \.kinetic-part\s*\{[\s\S]*?--part-angle:\s*var\(--complete-angle\)/);
-  assert.match(kineticStyles, /--complete-y:\s*132\.5px/);
+  for (const piece of getRobotAssembly()) {
+    const rule = kineticStyles.match(new RegExp(`\\.kinetic-part--${piece.id} \\{([^}]+)\\}`))?.[1] ?? '';
+    assert.ok(Math.abs(Number(rule.match(/--complete-x:\s*([\d.-]+)px/)?.[1]) - piece.x) < 1e-5, `${piece.id} static x`);
+    assert.ok(Math.abs(Number(rule.match(/--complete-y:\s*([\d.-]+)px/)?.[1]) - piece.y) < 1e-5, `${piece.id} static y`);
+    assert.ok(Math.abs(Number(rule.match(/--complete-angle:\s*([\d.-]+)deg/)?.[1]) - piece.angle * 180 / Math.PI) < 1e-5, `${piece.id} static angle`);
+  }
   assert.match(kineticFacade, /Promise\.resolve\(ready\)/);
   assert.match(kineticFacade, /environment\.motion !== 'reduced'/);
   assert.match(kineticRuntime, /PART_SPECS/);

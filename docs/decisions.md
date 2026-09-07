@@ -953,3 +953,11 @@
 - 완성 연출은 10번째 연결이 active drag 도중 생겨도 pointer release/cancel 뒤 graph를 재확인하고 시작한다. 연출이 시작된 뒤 1.78초 동안 로봇 canvas의 새 click·drag·hover·nudge만 무시하고, scroll·touch pan·navigation·CTA·keyboard는 그대로 둔다.
 - 사용자 입력으로 연출을 중간 자세에서 취소하거나 같은 gesture로 관절을 다시 분리하지 않는다. 자연 종료 뒤 다음 gesture부터 조작을 복구하며 hidden·offscreen·resize 등 lifecycle 종료는 최종 raised pose로 안전하게 정리한다.
 - 큰 팔 raise 보간 중에도 chest-rooted port tree를 매 frame 재정렬해 socket과 plug가 시각적으로 벌어지지 않게 한다. 공개 PDF와 `scripts/portfolio`, `tmp` 작업물은 이번 배포 범위에서 제외한다.
+
+## 2026-09-07 — Approved research kit design implementation
+
+- Decision: 승인된 콘셉트를 7종 authored SVG로 구현한다. 단일 센서 케이스, 넓은 분할 흉곽, 열린 상완, 넓은 대퇴, 분명한 gripper와 foot plate를 사용하고 warm shell·graphite·metal·sparse vermilion을 유지한다. 생성 이미지는 방향 참고용이며 배포 자산에 포함하지 않는다.
+- Geometry: robot-kit.js가 SVG 치수와 14개 master bearing 중심의 기준이다. Runtime 11개 부품과 정적 assembly CSS는 같은 좌표를 사용한다. 빨간 외부 port와 불투명한 generic underplate를 제거해 기계 구조와 연결 축, 열린 부분의 그림자가 일치한다.
+- Interaction: 가까운 호환 port pair와 연결된 말단 pose parent에만 140ms ring을 표시한다. 실제 조작 분기와 같은 조건을 사용하고 sleeping hover는 renderer만 갱신한다. Fine snap은 inboard port의 회전 접촉 여유를 위해 28에서 30으로 조정한다. Touch pan·reduced/forced fallback·완성 입력 잠금·고정 광원은 유지한다.
+- Responsive: 작은 화면의 초기 부품을 본문 위·아래 여백으로 옮긴다. 사용자가 조작하기 전에는 resize 시 화면별 배치를 적용하고, 조작 후에는 pose와 connection을 유지한다. Full/lite 전환은 기존 또는 로딩 중인 WebGL 인스턴스를 유지하고 resolution만 조정해 동일 canvas의 destroy/remount 경합을 피한다. Reduced/forced 전환은 정적 fallback을 유지한다.
+- Scope: Home robot 자산·runtime·fallback·검증·문서만 배포한다. 기존 scripts/portfolio 변경, 생성 콘셉트, tmp 작업물과 별도 worktree는 release에 포함하지 않는다.

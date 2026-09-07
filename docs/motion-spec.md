@@ -965,3 +965,13 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - 1.78초 완성 연출 중 canvas의 새 pointerdown, hover와 facade nudge는 무시한다. 같은 입력으로 연출을 건너뛰거나 부품 회전·drag·관절 pose 저장·연결 해제를 시작하지 않으며, 자연 종료 뒤 다음 pointer gesture부터 조작을 다시 허용한다.
 - 페이지 scroll, touch pan, pinch, navigation, CTA와 keyboard focus는 잠그지 않는다. Hero 이탈, hidden, pagehide, resize, context loss와 destroy는 기존 lifecycle 안전 계약대로 효과를 정리하고 가능한 경우 raised final pose로 수렴한다.
 - 완성 pose 보간의 각 frame은 chest에서 시작해 socket→plug tree의 위치를 다시 계산한다. 큰 오른팔 raise의 중간 각도에서도 모든 관절 anchor가 붙어 있어야 하며 Matter constraint의 다음 tick에 의존해 벌어진 관절을 복구하지 않는다.
+
+## 2026-09-07 — Integrated bearings and contextual manipulation hints
+
+- 새 7종 SVG의 내장 bearing 중심을 robot-kit.js에서 물리 port로 변환한다. 목·허리·어깨·팔꿈치·엉덩이·무릎의 연결 규칙, 11개 body, 10개 관절과 pose-hold 동작은 유지한다.
+- Fine snap 반경은 30 × interactionScale, coarse는 기존 34 × interactionScale이다. 안쪽으로 옮긴 port가 허용 각도 끝에서도 rectangle collision에 막히기 전에 결합할 수 있도록 실제 chamfer support geometry로 검증한다.
+- Drag 중 연결 조건을 만족하는 가장 가까운 pair에만 ring을 표시한다. 접근 반경은 fine 52 / coarse 58 × interactionScale이며 허용 각도·family·polarity·occupied/component 제외 규칙은 실제 snap과 공유한다.
+- 연결된 말단 hover는 분리 grip을 우선 제외한 뒤 실제 pose parent 관절을 강조하고 crosshair cursor를 제공한다. Body grip은 grab cursor를 유지한다.
+- Hint의 140ms opacity만 Anime.js로 보간한다. 물리를 깨우지 않고 sleeping renderer를 명시적으로 갱신하며, release/cancel·leave·stop·resize·완성 연출 시작·destroy에서 취소하고 지운다. 상시 pulse와 새 animation loop는 만들지 않는다.
+- Generic solid underplate를 제거한다. SVG 자체의 얕은 bevel과 alpha 형태를 따르는 두 Sprite shadow가 열린 프레임·집게 틈을 보존하며 fixed upper-left light·offscreen/hidden gate는 유지한다.
+- Full/lite breakpoint 전환에서 controller와 로딩 중인 mount를 유지한다. 새 모드의 resolution과 pointer 기준은 재초기화 없이 반영하며 antialias는 최초 context 설정을 유지한다. 사용자가 움직인 부품과 조립 관절은 resize 시 비율·viewport 경계만 보정한다. 조작하지 않은 초기 scatter는 모바일·태블릿 전용 배치를 다시 적용한다.

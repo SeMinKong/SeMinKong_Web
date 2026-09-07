@@ -1,3 +1,5 @@
+import { animate } from 'animejs';
+import { ROBOT_GEOMETRY, localRobotPort } from './robot-kit.js';
 import { Application, Assets, Container, Graphics, Rectangle, Sprite } from 'pixi.js';
 import Matter from 'matter-js';
 import chestAssetUrl from '../assets/kinetic-robot/chest.svg?url';
@@ -73,14 +75,13 @@ const ROBOT_TEXTURE_ALIASES = Object.freeze({
 });
 
 const ROBOT_ASSETS = Object.freeze([
-  { alias: ROBOT_TEXTURE_ALIASES.head, src: headAssetUrl, data: { width: 38, height: 42, resolution: 3, parseAsGraphicsContext: false } },
-  { alias: ROBOT_TEXTURE_ALIASES.chest, src: chestAssetUrl, data: { width: 58, height: 64, resolution: 3, parseAsGraphicsContext: false } },
-  { alias: ROBOT_TEXTURE_ALIASES.pelvis, src: pelvisAssetUrl, data: { width: 52, height: 28, resolution: 3, parseAsGraphicsContext: false } },
-  { alias: ROBOT_TEXTURE_ALIASES['upper-arm'], src: upperArmAssetUrl, data: { width: 21, height: 44, resolution: 3, parseAsGraphicsContext: false } },
-  { alias: ROBOT_TEXTURE_ALIASES.forearm, src: forearmAssetUrl, data: { width: 20, height: 43, resolution: 3, parseAsGraphicsContext: false } },
-  { alias: ROBOT_TEXTURE_ALIASES.thigh, src: thighAssetUrl, data: { width: 24, height: 48, resolution: 3, parseAsGraphicsContext: false } },
-  { alias: ROBOT_TEXTURE_ALIASES.shin, src: shinAssetUrl, data: { width: 22, height: 49, resolution: 3, parseAsGraphicsContext: false } }
-]);
+  ['head', headAssetUrl], ['chest', chestAssetUrl], ['pelvis', pelvisAssetUrl],
+  ['upper-arm', upperArmAssetUrl], ['forearm', forearmAssetUrl],
+  ['thigh', thighAssetUrl], ['shin', shinAssetUrl]
+].map(([asset, src]) => ({
+  alias: ROBOT_TEXTURE_ALIASES[asset], src,
+  data: { width: ROBOT_GEOMETRY[asset].width, height: ROBOT_GEOMETRY[asset].height, resolution: 3, parseAsGraphicsContext: false }
+})));
 
 let robotTexturesPromise;
 const loadRobotTextures = () => {
@@ -103,164 +104,34 @@ const JOINT_SERVO_PROFILES = Object.freeze({
 });
 
 const PART_SPECS = [
-  {
-    id: 'head', role: 'head', kind: 'head', asset: 'head', x: 0.1, y: 0.22,
-    width: 38, height: 42, angle: Math.PI / 3,
-    ports: [{ id: 'neck', family: 'neck', polarity: PORT.PLUG, x: 0, y: 0.5, normal: Math.PI / 2 }]
-  },
-  {
-    id: 'chest', role: 'chest', kind: 'chest', asset: 'chest', x: 0.82, y: 0.22,
-    width: 58, height: 64, angle: -Math.PI / 6,
-    ports: [
-      { id: 'neck', family: 'neck', polarity: PORT.SOCKET, x: 0, y: -0.5, normal: -Math.PI / 2 },
-      { id: 'waist', family: 'waist', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 },
-      { id: 'shoulder-left', family: 'shoulder', polarity: PORT.SOCKET, x: -0.5, y: -0.2, normal: Math.PI },
-      { id: 'shoulder-right', family: 'shoulder', polarity: PORT.SOCKET, x: 0.5, y: -0.2, normal: 0 }
-    ]
-  },
-  {
-    id: 'pelvis', role: 'pelvis', kind: 'pelvis', asset: 'pelvis', x: 0.91, y: 0.42,
-    width: 52, height: 28, angle: Math.PI / 6,
-    ports: [
-      { id: 'waist', family: 'waist', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
-      { id: 'hip-left', family: 'hip', polarity: PORT.SOCKET, x: -0.27, y: 0.5, normal: Math.PI / 2 },
-      { id: 'hip-right', family: 'hip', polarity: PORT.SOCKET, x: 0.27, y: 0.5, normal: Math.PI / 2 }
-    ]
-  },
-  {
-    id: 'upper-arm-a', role: 'upper-arm', kind: 'upper-limb', asset: 'upper-arm', x: 0.07, y: 0.49,
-    width: 21, height: 44, angle: -Math.PI / 3,
-    ports: [
-      { id: 'shoulder', family: 'shoulder', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
-      { id: 'elbow', family: 'elbow', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 }
-    ]
-  },
-  {
-    id: 'upper-arm-b', role: 'upper-arm', kind: 'upper-limb', asset: 'upper-arm', x: 0.86, y: 0.61,
-    width: 21, height: 44, angle: Math.PI * 2 / 3,
-    ports: [
-      { id: 'shoulder', family: 'shoulder', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
-      { id: 'elbow', family: 'elbow', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 }
-    ]
-  },
-  {
-    id: 'forearm-a', role: 'forearm', kind: 'forearm', asset: 'forearm', x: 0.2, y: 0.65,
-    width: 20, height: 43, angle: Math.PI / 6,
-    ports: [{ id: 'elbow', family: 'elbow', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
-  },
-  {
-    id: 'forearm-b', role: 'forearm', kind: 'forearm', asset: 'forearm', x: 0.68, y: 0.83,
-    width: 20, height: 43, angle: -Math.PI * 2 / 3,
-    ports: [{ id: 'elbow', family: 'elbow', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
-  },
-  {
-    id: 'thigh-a', role: 'thigh', kind: 'upper-limb', asset: 'thigh', x: 0.1, y: 0.82,
-    width: 24, height: 48, angle: Math.PI / 3,
-    ports: [
-      { id: 'hip', family: 'hip', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
-      { id: 'knee', family: 'knee', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 }
-    ]
-  },
-  {
-    id: 'thigh-b', role: 'thigh', kind: 'upper-limb', asset: 'thigh', x: 0.57, y: 0.21,
-    width: 24, height: 48, angle: -Math.PI / 6,
-    ports: [
-      { id: 'hip', family: 'hip', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 },
-      { id: 'knee', family: 'knee', polarity: PORT.SOCKET, x: 0, y: 0.5, normal: Math.PI / 2 }
-    ]
-  },
-  {
-    id: 'shin-a', role: 'shin', kind: 'shin', asset: 'shin', x: 0.34, y: 0.86,
-    width: 22, height: 49, angle: Math.PI * 2 / 3,
-    ports: [{ id: 'knee', family: 'knee', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
-  },
-  {
-    id: 'shin-b', role: 'shin', kind: 'shin', asset: 'shin', x: 0.91, y: 0.79,
-    width: 22, height: 49, angle: -Math.PI / 3,
-    ports: [{ id: 'knee', family: 'knee', polarity: PORT.PLUG, x: 0, y: -0.5, normal: -Math.PI / 2 }]
-  }
-];
+  { id: 'head', asset: 'head', x: 0.1, y: 0.22, angle: Math.PI / 3 },
+  { id: 'chest', asset: 'chest', x: 0.82, y: 0.22, angle: -Math.PI / 6 },
+  { id: 'pelvis', asset: 'pelvis', x: 0.91, y: 0.42, angle: Math.PI / 6 },
+  { id: 'upper-arm-a', asset: 'upper-arm', x: 0.07, y: 0.49, angle: -Math.PI / 3 },
+  { id: 'upper-arm-b', asset: 'upper-arm', x: 0.86, y: 0.61, angle: Math.PI * 2 / 3 },
+  { id: 'forearm-a', asset: 'forearm', x: 0.2, y: 0.65, angle: Math.PI / 6 },
+  { id: 'forearm-b', asset: 'forearm', x: 0.68, y: 0.83, angle: -Math.PI * 2 / 3 },
+  { id: 'thigh-a', asset: 'thigh', x: 0.1, y: 0.82, angle: Math.PI / 3 },
+  { id: 'thigh-b', asset: 'thigh', x: 0.57, y: 0.21, angle: -Math.PI / 6 },
+  { id: 'shin-a', asset: 'shin', x: 0.34, y: 0.86, angle: Math.PI * 2 / 3 },
+  { id: 'shin-b', asset: 'shin', x: 0.91, y: 0.79, angle: -Math.PI / 3 }
+].map((spec) => ({ ...spec, ...ROBOT_GEOMETRY[spec.asset], role: spec.asset, kind: spec.asset }));
 
-const ROBOT_MATERIAL = { elevation: 6, shadowAlpha: 0.14, edgeAlpha: 0.28 };
+const COMPACT_SCATTER = {
+  head: [0.16, 0.19], chest: [0.78, 0.21], pelvis: [0.53, 0.33],
+  'upper-arm-a': [0.17, 0.34], 'upper-arm-b': [0.83, 0.34],
+  'forearm-a': [0.16, 0.77], 'forearm-b': [0.67, 0.90],
+  'thigh-a': [0.22, 0.90], 'thigh-b': [0.44, 0.17],
+  'shin-a': [0.50, 0.78], 'shin-b': [0.84, 0.77]
+};
+const TABLET_SCATTER = {
+  pelvis: [0.91, 0.35], 'upper-arm-b': [0.86, 0.72],
+  'forearm-a': [0.20, 0.72], 'thigh-b': [0.47, 0.21]
+};
+
+const ROBOT_MATERIAL = { elevation: 6, shadowAlpha: 0.14 };
 
 const getScale = (width) => clamp(1.55 + (width - 390) * (0.45 / 890), 1.5, 2.06);
-const tracePart = (graphics, spec, width, height) => {
-  if (spec.kind === 'head') {
-    return graphics.poly([
-      -width * 0.34, -height / 2,
-      width * 0.2, -height / 2,
-      width * 0.46, -height * 0.24,
-      width * 0.43, height * 0.27,
-      width * 0.23, height / 2,
-      -width * 0.32, height / 2,
-      -width * 0.48, height * 0.2,
-      -width * 0.48, -height * 0.24
-    ]);
-  }
-  if (spec.kind === 'chest') {
-    return graphics.poly([
-      -width * 0.32, -height / 2,
-      width * 0.32, -height / 2,
-      width / 2, -height * 0.32,
-      width * 0.38, height * 0.34,
-      width * 0.22, height / 2,
-      -width * 0.22, height / 2,
-      -width * 0.38, height * 0.34,
-      -width / 2, -height * 0.32
-    ]);
-  }
-  if (spec.kind === 'pelvis') {
-    return graphics.poly([
-      -width * 0.24, -height / 2,
-      width * 0.24, -height / 2,
-      width * 0.45, -height * 0.2,
-      width / 2, height * 0.34,
-      width * 0.33, height / 2,
-      -width * 0.33, height / 2,
-      -width / 2, height * 0.34,
-      -width * 0.45, -height * 0.2
-    ]);
-  }
-  if (spec.kind === 'forearm') {
-    return graphics.poly([
-      -width * 0.32, -height / 2,
-      width * 0.32, -height / 2,
-      width * 0.38, height * 0.24,
-      width / 2, height / 2,
-      width * 0.16, height / 2,
-      width * 0.06, height * 0.34,
-      -width * 0.06, height * 0.34,
-      -width * 0.16, height / 2,
-      -width / 2, height / 2,
-      -width * 0.38, height * 0.24
-    ]);
-  }
-  if (spec.kind === 'shin') {
-    return graphics.poly([
-      -width * 0.34, -height / 2,
-      width * 0.34, -height / 2,
-      width * 0.28, height * 0.18,
-      width / 2, height * 0.38,
-      width * 0.46, height / 2,
-      -width * 0.46, height / 2,
-      -width / 2, height * 0.38,
-      -width * 0.28, height * 0.18
-    ]);
-  }
-  return graphics.poly([
-    -width / 2, -height / 2,
-    width / 2, -height / 2,
-    width * 0.34, height / 2,
-    -width * 0.34, height / 2
-  ]);
-};
-
-const drawFilledPart = (spec, width, height, color, alpha = 1) => {
-  const graphics = new Graphics();
-  tracePart(graphics, spec, width, height).fill({ color, alpha });
-  return graphics;
-};
-
 const createArtwork = (texture, width, height) => {
   const artwork = new Sprite(texture);
   artwork.anchor.set(0.5);
@@ -268,109 +139,38 @@ const createArtwork = (texture, width, height) => {
   return artwork;
 };
 
+// Artwork owns the bearings. These rings exist only as contextual interaction feedback.
 const createPortMarker = (port, scale) => {
-  const marker = new Container();
-  const face = new Graphics();
-  const glyph = new Graphics();
-  const radius = Math.max(3.1, 4.15 * scale);
-  const normal = { x: Math.cos(port.normal), y: Math.sin(port.normal) };
-  const tangent = { x: -normal.y, y: normal.x };
+  const marker = new Graphics()
+    .circle(0, 0, 6 * scale)
+    .stroke({ color: SIGNAL, alpha: 0.86, width: 1.05 * scale });
   marker.position.set(port.x, port.y);
-
-  if (port.polarity === PORT.SOCKET) {
-    face
-      .circle(0, 0, radius + 0.7 * scale)
-      .fill({ color: INK, alpha: 0.88 })
-      .circle(0, 0, radius)
-      .stroke({ color: SIGNAL, alpha: 0.95, width: Math.max(1.2, 1.55 * scale) })
-      .circle(0, 0, radius * 0.48)
-      .fill({ color: BOARD, alpha: 1 });
-  } else {
-    face
-      .moveTo(-normal.x * radius * 0.45, -normal.y * radius * 0.45)
-      .lineTo(normal.x * radius * 1.65, normal.y * radius * 1.65)
-      .stroke({ color: INK, alpha: 0.82, width: Math.max(2.5, 3.1 * scale) })
-      .circle(0, 0, radius)
-      .fill({ color: SIGNAL, alpha: 0.88 })
-      .stroke({ color: PAPER, alpha: 0.62, width: 1 });
-  }
-
-  const glyphColor = port.polarity === PORT.SOCKET ? INK : PAPER;
-  const glyphWidth = Math.max(0.75, scale * 0.9);
-  const line = (ax, ay, bx, by) => glyph.moveTo(ax, ay).lineTo(bx, by);
-  if (port.family === 'neck') {
-    line(-normal.x * radius * 0.45, -normal.y * radius * 0.45, normal.x * radius * 0.45, normal.y * radius * 0.45);
-  } else if (port.family === 'waist') {
-    for (const offset of [-1, 1]) {
-      line(
-        tangent.x * radius * 0.52 + normal.x * offset,
-        tangent.y * radius * 0.52 + normal.y * offset,
-        -tangent.x * radius * 0.52 + normal.x * offset,
-        -tangent.y * radius * 0.52 + normal.y * offset
-      );
-    }
-  } else if (port.family === 'shoulder') {
-    line(-radius * 0.48, 0, radius * 0.48, 0);
-    line(0, -radius * 0.48, 0, radius * 0.48);
-  } else if (port.family === 'elbow') {
-    line(-tangent.x * radius * 0.52, -tangent.y * radius * 0.52, tangent.x * radius * 0.52, tangent.y * radius * 0.52);
-  } else if (port.family === 'hip') {
-    glyph
-      .circle(0, 0, radius * 0.54)
-      .stroke({ color: glyphColor, alpha: 0.88, width: glyphWidth });
-  } else if (port.family === 'knee') {
-    glyph
-      .rect(-radius * 0.35, -radius * 0.35, radius * 0.7, radius * 0.7)
-      .stroke({ color: glyphColor, alpha: 0.88, width: glyphWidth });
-  }
-  if (port.family !== 'hip' && port.family !== 'knee') {
-    glyph.stroke({ color: glyphColor, alpha: 0.9, width: glyphWidth });
-  }
-  marker.addChild(face, glyph);
+  marker.alpha = 0;
   return marker;
 };
 
 const createView = (spec, width, height, ports, scale, texture) => {
   const root = new Container();
-  const farShadow = drawFilledPart(spec, width, height, SHADOW);
-  const nearShadow = drawFilledPart(spec, width, height, SHADOW);
-  const underplate = drawFilledPart(spec, width, height, INK);
+  // The same alpha silhouette preserves the open rails and gripper gaps in every layer.
+  const farShadow = createArtwork(texture, width, height);
+  const nearShadow = createArtwork(texture, width, height);
   const artwork = createArtwork(texture, width, height);
-  const highlight = new Graphics()
-    .moveTo(-width * 0.24, -height * 0.34)
-    .lineTo(width * 0.18, -height * 0.34)
-    .stroke({ color: 0xffffff, alpha: 1, width: 1.2 });
+  farShadow.tint = SHADOW;
+  nearShadow.tint = SHADOW;
   const portMarkers = new Map();
-  farShadow.scale.set(1.035);
   farShadow.alpha = 0;
   nearShadow.alpha = 0;
-  underplate.scale.set(0.965);
-  underplate.position.set(1.2 * scale, 1.8 * scale);
-  highlight.alpha = 0;
-  root.addChild(underplate, artwork, highlight);
-
+  root.addChild(artwork);
   for (const port of ports) {
     const marker = createPortMarker(port, scale);
     portMarkers.set(port.id, marker);
     root.addChild(marker);
   }
-  return {
-    farShadow,
-    height,
-    highlight,
-    material: ROBOT_MATERIAL,
-    nearShadow,
-    portMarkers,
-    root,
-    spec,
-    width
-  };
+  return { farShadow, height, material: ROBOT_MATERIAL, nearShadow, portMarkers, root, spec, width };
 };
 
 const updateViewLighting = (view, pose, viewport) => {
   const light = getWorldLight(pose, viewport, view.material.elevation);
-  const localLight = rotatePoint(light.toward, -pose.angle);
-  const offset = Math.min(view.width, view.height) * 0.12;
   view.farShadow.position.set(pose.x + light.farShadow.x, pose.y + light.farShadow.y);
   view.nearShadow.position.set(pose.x + light.nearShadow.x, pose.y + light.nearShadow.y);
   view.farShadow.rotation = pose.angle;
@@ -379,8 +179,6 @@ const updateViewLighting = (view, pose, viewport) => {
   view.nearShadow.alpha = view.material.shadowAlpha * 0.62 * light.intensity;
   view.root.position.set(pose.x, pose.y);
   view.root.rotation = pose.angle;
-  view.highlight.position.set(localLight.x * offset, localLight.y * offset);
-  view.highlight.alpha = view.material.edgeAlpha * light.intensity;
 };
 
 const createBody = (spec, x, y, width, height, scale) => Bodies.rectangle(x, y, width, height, {
@@ -394,9 +192,7 @@ const createBody = (spec, x, y, width, height, scale) => Bodies.rectangle(x, y, 
   sleepThreshold: 72,
   slop: 0.025,
   chamfer: {
-    radius: spec.kind === 'head'
-      ? Math.min(width, height) * 0.42
-      : Math.min(width, height) * 0.14,
+    radius: Math.min(width, height) * 0.14,
     quality: 4
   }
 });
@@ -417,8 +213,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   if (initialRect.width < 2 || initialRect.height < 2) throw new Error('The kinetic stage has no renderable area.');
 
   const app = new Application();
-  const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
-  const resolution = Math.min(window.devicePixelRatio || 1, mode === 'full' && !coarsePointer ? 1.5 : 1);
+  let coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+  let resolution = Math.min(window.devicePixelRatio || 1, mode === 'full' && !coarsePointer ? 1.5 : 1);
   let robotTextures;
   try {
     robotTextures = await loadRobotTextures();
@@ -479,6 +275,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   let settledDuration = 0;
   let walls = [];
   let width = initialRect.width;
+  let hasInteracted = false;
 
   let scale = getScale(width);
   let interactionScale = clamp(scale, 1, 1.4);
@@ -500,8 +297,10 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       : 0;
   };
 
-  const inset = coarsePointer ? 14 : width <= 1000 ? 22 : 30;
-  for (const spec of PART_SPECS) {
+  const getInitialPose = (spec) => {
+    const inset = coarsePointer ? 14 : width <= 1000 ? 22 : 30;
+    const [scatterX, scatterY] = (width <= 720 ? COMPACT_SCATTER : width <= 1000 ? TABLET_SCATTER : {})[spec.id]
+      ?? [spec.x, spec.y];
     const bodyWidth = spec.width * scale;
     const bodyHeight = spec.height * scale;
     const rotatedHalfWidth = (
@@ -515,21 +314,24 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     const edgeSafety = 8;
     const topBoundary = getTopBoundary();
     const x = clamp(
-      width * spec.x,
+      width * scatterX,
       inset + edgeSafety + rotatedHalfWidth,
       width - inset - edgeSafety - rotatedHalfWidth
     );
     const y = clamp(
-      height * spec.y,
+      height * scatterY,
       topBoundary + inset + edgeSafety + rotatedHalfHeight,
       height - inset - edgeSafety - rotatedHalfHeight
     );
+    return { x, y, angle: spec.angle };
+  };
+
+  for (const spec of PART_SPECS) {
+    const bodyWidth = spec.width * scale;
+    const bodyHeight = spec.height * scale;
+    const { x, y } = getInitialPose(spec);
     const body = createBody(spec, x, y, bodyWidth, bodyHeight, scale);
-    const ports = spec.ports.map((port) => ({
-      ...port,
-      x: port.x * bodyWidth,
-      y: port.y * bodyHeight
-    }));
+    const ports = spec.ports.map((port) => localRobotPort(spec, port, scale));
     const texture = robotTextures[ROBOT_TEXTURE_ALIASES[spec.asset]];
     if (!texture) throw new Error(`The ${spec.asset} robot artwork failed to load.`);
     const view = createView(spec, bodyWidth, bodyHeight, ports, scale, texture);
@@ -642,17 +444,31 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
   };
 
-  const syncPortMarkers = () => {
-    for (const [body, view] of bodyToView) {
-      const meta = bodyMeta.get(body);
-      for (const port of meta.ports) {
-        const marker = view.portMarkers.get(port.id);
-        const occupied = occupiedPorts.has(portKey(body, port));
-        marker.alpha = occupied ? 0.96 : 0.78;
-        marker.scale.set(occupied ? 0.92 : 1);
-      }
+  let hintedMarkers = new Set();
+  const hintAnimations = new Map();
+  const renderHints = () => { if (!destroyed && !running) app.render(); };
+  const setPortHints = (entries = [], intent = 'none', immediate = false) => {
+    const next = new Set(entries.map(([body, port]) => bodyToView.get(body)?.portMarkers.get(port.id)).filter(Boolean));
+    if (stage.dataset.kineticIntent !== intent) stage.dataset.kineticIntent = intent;
+    for (const marker of new Set([...hintedMarkers, ...next])) {
+      if (!immediate && hintedMarkers.has(marker) === next.has(marker)) continue;
+      hintAnimations.get(marker)?.cancel();
+      hintAnimations.delete(marker);
+      const alpha = next.has(marker) ? 1 : 0;
+      if (immediate) marker.alpha = alpha;
+      else hintAnimations.set(marker, animate(marker, {
+        alpha, duration: 140, ease: 'outQuad', onUpdate: renderHints,
+        onComplete: () => hintAnimations.delete(marker)
+      }));
+    }
+    hintedMarkers = next;
+    if (immediate) {
+      for (const [marker, animation] of hintAnimations) { animation.cancel(); marker.alpha = 0; }
+      hintAnimations.clear();
+      renderHints();
     }
   };
+  const syncPortMarkers = () => setPortHints([], 'none', true);
 
   const isPuzzleComplete = () => connections.length === REQUIRED_CONNECTIONS
     && getComponent(idToBody.get('chest')).length === PART_SPECS.length;
@@ -891,6 +707,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const startCelebration = () => {
     if (hasCelebrated || celebration || activePointer || !isPuzzleComplete()) return;
+    setPortHints([], 'none', true);
     hasCelebrated = true;
     const startTargets = new Map(dynamicBodies.map((body) => [body, {
       x: body.position.x,
@@ -967,7 +784,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   };
 
   const stop = () => {
-    if (destroyed || !running) return;
+    if (destroyed) return;
+    setPortHints([], 'none', true);
+    if (!running) return;
     if (activePointer) {
       dragConstraint.bodyB = null;
       dragConstraint.pointB = { x: 0, y: 0 };
@@ -982,6 +801,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     settledDuration = 0;
     resetPoseStates();
     syncViews(1);
+    app.render();
     setStageState(dynamicBodies.every((body) => body.isSleeping) ? 'sleeping' : 'paused');
   };
 
@@ -1115,6 +935,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
         activePointer.snappedDuringDrag = trySnap(activePointer.body);
       }
     }
+    updateDragHints();
     updatePoseStatesFromBodies();
   };
 
@@ -1227,12 +1048,10 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
   };
 
-  const trySnap = (movingRoot) => {
+  const findSnapCandidate = (movingRoot, maxDistance, maxAngle) => {
     const component = getComponent(movingRoot);
     const componentSet = new Set(component);
     let best = null;
-    const maxDistance = (coarsePointer ? 34 : 28) * interactionScale;
-    const maxAngle = coarsePointer ? Math.PI / 6 : Math.PI / 8;
     for (const movingBody of component) {
       const movingMeta = bodyMeta.get(movingBody);
       for (const movingPort of movingMeta.ports) {
@@ -1259,7 +1078,31 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
         }
       }
     }
+    return best;
+  };
+
+  const updateDragHints = () => {
+    if (!activePointer) return;
+    if (activePointer.phase !== 'dragging' || celebration
+      || activePointer.skipSnapUntilRelease || activePointer.snappedDuringDrag) {
+      setPortHints();
+      return;
+    }
+    if (activePointer.flexConnection) {
+      const joint = activePointer.flexConnection.angular;
+      setPortHints([[joint.plugBody, getConnectionPort(activePointer.flexConnection, joint.plugBody)]], 'pose');
+      return;
+    }
+    const best = findSnapCandidate(activePointer.body,
+      (coarsePointer ? 58 : 52) * interactionScale, coarsePointer ? Math.PI / 6 : Math.PI / 8);
+    setPortHints(best ? [[best.movingBody, best.movingPort], [best.targetBody, best.targetPort]] : [], best ? 'connect' : 'move');
+  };
+
+  const trySnap = (movingRoot) => {
+    const best = findSnapCandidate(movingRoot, (coarsePointer ? 34 : 30) * interactionScale,
+      coarsePointer ? Math.PI / 6 : Math.PI / 8);
     if (!best) return false;
+    const component = getComponent(movingRoot);
 
     alignComponent(component, best.movingBody, best.movingPort, best.targetBody, best.targetPort);
     const constraint = Constraint.create({
@@ -1441,6 +1284,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     dragConstraint.pointB = { x: 0, y: 0 };
     dragConstraint.angularStiffness = 0.88;
     activePointer = null;
+    setPortHints([], 'none', true);
     canvas.style.cursor = 'default';
     if (!applyGesture || pointer.phase === 'scrolling') {
       if (isPuzzleComplete()) startCelebration();
@@ -1490,8 +1334,10 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     const point = toWorldPoint(event.clientX, event.clientY);
     const body = findBody(point);
     if (!body) return;
+    hasInteracted = true;
 
     const localPoint = rotatePoint(Vector.sub(point, body.position), -body.angle);
+    setPortHints([], 'none', true);
     activePointer = {
       body,
       breakCandidate: getBreakCandidate(body, localPoint),
@@ -1556,13 +1402,18 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   const handleHoverPointerMove = (event) => {
     if (destroyed || celebration || activePointer || event.pointerType === 'touch') return;
     const point = toWorldPoint(event.clientX, event.clientY);
-    canvas.style.cursor = findBody(point) ? 'grab' : 'default';
+    const body = findBody(point);
+    if (!body) { canvas.style.cursor = 'default'; setPortHints(); return; }
+    const localPoint = rotatePoint(Vector.sub(point, body.position), -body.angle);
+    const flex = getBreakCandidate(body, localPoint) ? null : getFlexConnection(body, localPoint);
+    canvas.style.cursor = flex ? 'crosshair' : 'grab';
+    setPortHints(flex ? [[body, getConnectionPort(flex, body)]] : [], flex ? 'pose' : 'move');
   };
 
   const handlePointerUp = (event) => releasePointer(event, true);
   const handlePointerCancel = (event) => releasePointer(event, false);
   const handlePointerLeave = () => {
-    if (!activePointer) canvas.style.cursor = 'default';
+    if (!activePointer) { canvas.style.cursor = 'default'; setPortHints([], 'none', true); }
   };
 
   canvas.addEventListener('pointerdown', handlePointerDown, { passive: true });
@@ -1669,6 +1520,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       activePointer = null;
     }
     canvas.style.cursor = 'default';
+    setPortHints([], 'none', true);
     if (celebration) finishCelebration(true);
     width = nextWidth;
     height = nextHeight;
@@ -1676,6 +1528,16 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     app.renderer.resize(width, height, resolution);
     app.stage.hitArea = new Rectangle(0, 0, width, height);
     rebuildWalls();
+
+    if (!hasInteracted && connections.length === 0) {
+      for (const body of dynamicBodies) {
+        const pose = getInitialPose(bodyMeta.get(body).spec);
+        Body.setPosition(body, pose);
+        Body.setAngle(body, pose.angle);
+        Body.setVelocity(body, { x: 0, y: 0 });
+        Body.setAngularVelocity(body, 0);
+      }
+    }
 
     const visited = new Set();
     for (const body of dynamicBodies) {
@@ -1692,6 +1554,15 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(stage);
 
+  const setMode = (nextMode) => {
+    if (destroyed) return;
+    coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    resolution = Math.min(window.devicePixelRatio || 1, nextMode === 'full' && !coarsePointer ? 1.5 : 1);
+    resize();
+    app.renderer.resize(width, height, resolution);
+    if (!running) app.render();
+  };
+
   const handleContextLost = (event) => {
     event.preventDefault();
     stop();
@@ -1706,6 +1577,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const nudgeAt = (clientX, clientY) => {
     if (destroyed || celebration) return;
+    hasInteracted = true;
     const point = toWorldPoint(clientX, clientY);
     let body = findBody(point);
     if (!body) {
@@ -1733,6 +1605,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   return {
     nudgeAt,
     resize,
+    setMode,
     start,
     stop,
     destroy() {
@@ -1768,6 +1641,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       delete stage.dataset.kineticLight;
       delete stage.dataset.kineticPieceCount;
       delete stage.dataset.kineticPuzzle;
+      delete stage.dataset.kineticIntent;
       stage.dataset.kineticState = 'static';
     }
   };

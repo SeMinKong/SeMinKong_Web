@@ -86,6 +86,7 @@ export const initKineticSandbox = (environment, { ready } = {}) => {
         return;
       }
 
+      nextController.setMode(environment.motion);
       controller = nextController;
       loading = false;
 
@@ -151,6 +152,12 @@ export const initKineticSandbox = (environment, { ready } = {}) => {
 
   const handleEnvironmentChange = () => {
     retryCount = 0;
+    if (isEligible()) {
+      // Full/lite changes only affect quality. Keep the puzzle and WebGL context.
+      controller?.setMode(environment.motion);
+      sync();
+      return;
+    }
     destroyController();
     showFallback('static');
     sync();

@@ -142,16 +142,7 @@
 }
 
 .kinetic-part {
-  --part-angle: 0deg;
-  --part-shape: polygon(0 0, 100% 0, 84% 100%, 16% 100%);
-  --part-height: clamp(31.68px, 3.4375vw, 46.64px);
-  --part-width: clamp(15.12px, 1.640625vw, 22.26px);
-  --part-x: 50%;
-  --part-y: 50%;
-  --part-art: none;
-  --complete-angle: 0deg;
-  --complete-x: 50%;
-  --complete-y: 50%;
+  --part-shape: polygon(20% 0, 80% 0, 100% 18%, 88% 100%, 12% 100%, 0 18%);
   position: absolute;
   display: block;
   box-sizing: border-box;
@@ -170,225 +161,156 @@
   box-sizing: border-box;
   border: 0;
   background: var(--part-art) center / 100% 100% no-repeat;
-  filter: drop-shadow(2px 3px 2px rgba(23, 21, 18, 0.14));
+  filter: drop-shadow(1.5px 2px 1px rgba(23, 21, 18, 0.17));
 }
 
-.kinetic-part::before,
-.kinetic-part::after {
-  position: absolute;
-  left: 50%;
-  z-index: 2;
-  width: 8px;
-  height: 8px;
-  border: 1px solid rgba(241, 238, 230, 0.76);
-  border-radius: 50%;
-  background: #a73524;
-  box-shadow: 0 0 0 1px rgba(36, 33, 29, 0.76);
-  content: "";
-  translate: -50% -50%;
-}
-
-.kinetic-part::before {
-  top: 0;
-}
-
-.kinetic-part::after {
-  top: 100%;
-  border: 2px solid #a73524;
-  background: #ded6ca;
-  box-shadow: 0 0 0 1px rgba(36, 33, 29, 0.82);
-}
+/* Bearing artwork and these complete poses share robot-kit.js SVG-space anchors. */
 
 .kinetic-part--head {
+  --part-shape: polygon(12% 0, 78% 0, 100% 18%, 100% 65%, 69% 100%, 31% 100%, 0 65%, 0 18%);
   --part-art: url('../assets/kinetic-robot/head.svg');
   --part-angle: 60deg;
-  --part-shape: polygon(16% 0, 70% 0, 96% 26%, 93% 77%, 73% 100%, 18% 100%, 2% 70%, 2% 26%);
-  --part-height: 42px;
-  --part-width: 38px;
-  --part-x: 10%;
+  --part-height: 34px;
+  --part-width: 32px;
+  --part-x: clamp(calc(12px + 22.7224px * var(--part-scale)), 10%, calc(100% - 12px - 22.7224px * var(--part-scale)));
   --part-y: 22%;
-  --complete-angle: 0deg;
-  --complete-x: 0px;
-  --complete-y: -53px;
-}
-
-.kinetic-part--head::before {
-  display: none;
-}
-
-.kinetic-part--head::after {
-  border: 1px solid rgba(241, 238, 230, 0.76);
-  background: #a73524;
+  --complete-angle: 0.000000deg;
+  --complete-x: 0.000000px;
+  --complete-y: -37.000000px;
 }
 
 .kinetic-part--chest {
+  --part-shape: polygon(16% 6%, 42% 0, 58% 0, 84% 6%, 100% 25%, 86% 55%, 78% 88%, 60% 100%, 40% 100%, 22% 88%, 14% 55%, 0 25%);
   --part-art: url('../assets/kinetic-robot/chest.svg');
   --part-angle: -30deg;
-  --part-shape: polygon(18% 0, 82% 0, 100% 18%, 88% 84%, 72% 100%, 28% 100%, 12% 84%, 0 18%);
   --part-height: 64px;
-  --part-width: 58px;
-  --part-x: 82%;
+  --part-width: 68px;
+  --part-x: clamp(calc(12px + 45.4449px * var(--part-scale)), 82%, calc(100% - 12px - 45.4449px * var(--part-scale)));
   --part-y: 22%;
-  --complete-angle: 0deg;
-  --complete-x: 0px;
-  --complete-y: 0px;
-}
-
-.kinetic-part--chest::before {
-  display: none;
-}
-
-.kinetic-part--chest::after {
-  inset: -5px;
-  width: auto;
-  height: auto;
-  border: 0;
-  border-radius: 0;
-  background:
-    radial-gradient(circle 4px at 50% 5px, #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px),
-    radial-gradient(circle 4px at 5px 30%, #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px),
-    radial-gradient(circle 4px at calc(100% - 5px) 30%, #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px),
-    radial-gradient(circle 4px at 50% calc(100% - 5px), #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px);
-  box-shadow: none;
-  translate: none;
+  --complete-angle: 0.000000deg;
+  --complete-x: 0.000000px;
+  --complete-y: 0.000000px;
 }
 
 .kinetic-part--pelvis {
+  --part-shape: polygon(6% 15%, 34% 20%, 42% 0, 58% 0, 66% 20%, 94% 15%, 100% 40%, 88% 100%, 12% 100%, 0 40%);
   --part-art: url('../assets/kinetic-robot/pelvis.svg');
   --part-angle: 30deg;
-  --part-shape: polygon(26% 0, 74% 0, 95% 30%, 100% 84%, 83% 100%, 17% 100%, 0 84%, 5% 30%);
   --part-height: 28px;
-  --part-width: 52px;
-  --part-x: 91%;
+  --part-width: 48px;
+  --part-x: clamp(calc(12px + 27.7846px * var(--part-scale)), 91%, calc(100% - 12px - 27.7846px * var(--part-scale)));
   --part-y: 42%;
-  --complete-angle: 0deg;
-  --complete-x: 0px;
-  --complete-y: 46px;
-}
-
-.kinetic-part--pelvis::before {
-  top: 0;
-}
-
-.kinetic-part--pelvis::after {
-  inset: -5px;
-  width: auto;
-  height: auto;
-  border: 0;
-  border-radius: 0;
-  background:
-    radial-gradient(circle 4px at 36% calc(100% - 5px), #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px),
-    radial-gradient(circle 4px at 64% calc(100% - 5px), #ded6ca 0 1.6px, #a73524 2px 3.2px, #24211d 3.6px 4px, transparent 4.3px);
-  box-shadow: none;
-  translate: none;
-}
-
-.kinetic-part--upper-arm-a,
-.kinetic-part--upper-arm-b {
-  --part-art: url('../assets/kinetic-robot/upper-arm.svg');
-  --part-height: 44px;
-  --part-width: 21px;
-  --complete-y: 9.2px;
+  --complete-angle: 0.000000deg;
+  --complete-x: 0.000000px;
+  --complete-y: 34.000000px;
 }
 
 .kinetic-part--upper-arm-a {
+  --part-art: url('../assets/kinetic-robot/upper-arm.svg');
   --part-angle: -60deg;
-  --part-x: 7%;
+  --part-height: 44px;
+  --part-width: 22px;
+  --part-x: clamp(calc(12px + 24.5526px * var(--part-scale)), 7%, calc(100% - 12px - 24.5526px * var(--part-scale)));
   --part-y: 49%;
-  --complete-angle: 0deg;
-  --complete-x: -29px;
+  --complete-angle: 9.740283deg;
+  --complete-x: -30.537735px;
+  --complete-y: -1.216228px;
 }
 
 .kinetic-part--upper-arm-b {
+  --part-art: url('../assets/kinetic-robot/upper-arm.svg');
   --part-angle: 120deg;
-  --part-x: 86%;
+  --part-height: 44px;
+  --part-width: 22px;
+  --part-x: clamp(calc(12px + 24.5526px * var(--part-scale)), 86%, calc(100% - 12px - 24.5526px * var(--part-scale)));
   --part-y: 61%;
-  --complete-angle: 0deg;
-  --complete-x: 29px;
-}
-
-.kinetic-part--forearm-a,
-.kinetic-part--forearm-b {
-  --part-art: url('../assets/kinetic-robot/forearm.svg');
-  --part-shape: polygon(18% 0, 82% 0, 88% 74%, 100% 100%, 66% 100%, 56% 84%, 44% 84%, 34% 100%, 0 100%, 12% 74%);
-  --part-height: 43px;
-  --part-width: 20px;
-  --complete-y: 53px;
+  --complete-angle: -9.740283deg;
+  --complete-x: 30.537735px;
+  --complete-y: -1.216228px;
 }
 
 .kinetic-part--forearm-a {
+  --part-shape: polygon(20% 0, 80% 0, 90% 16%, 75% 66%, 100% 80%, 90% 100%, 70% 96%, 80% 82%, 62% 72%, 38% 72%, 20% 82%, 30% 96%, 10% 100%, 0 80%, 25% 66%, 10% 16%);
+  --part-art: url('../assets/kinetic-robot/forearm.svg');
   --part-angle: 30deg;
-  --part-x: 20%;
+  --part-height: 50px;
+  --part-width: 24px;
+  --part-x: clamp(calc(12px + 22.8923px * var(--part-scale)), 20%, calc(100% - 12px - 22.8923px * var(--part-scale)));
   --part-y: 65%;
-  --complete-angle: 0deg;
-  --complete-x: -34px;
+  --complete-angle: 0.000000deg;
+  --complete-x: -33.075470px;
+  --complete-y: 31.567543px;
 }
 
 .kinetic-part--forearm-b {
+  --part-shape: polygon(20% 0, 80% 0, 90% 16%, 75% 66%, 100% 80%, 90% 100%, 70% 96%, 80% 82%, 62% 72%, 38% 72%, 20% 82%, 30% 96%, 10% 100%, 0 80%, 25% 66%, 10% 16%);
+  --part-art: url('../assets/kinetic-robot/forearm.svg');
   --part-angle: -120deg;
-  --part-x: 68%;
-  --part-y: 83%;
-  --complete-angle: 0deg;
-  --complete-x: 34px;
-}
-
-.kinetic-part--thigh-a,
-.kinetic-part--thigh-b {
-  --part-art: url('../assets/kinetic-robot/thigh.svg');
-  --part-height: 48px;
+  --part-height: 50px;
   --part-width: 24px;
-  --complete-y: 84px;
+  --part-x: clamp(calc(12px + 27.6506px * var(--part-scale)), 68%, calc(100% - 12px - 27.6506px * var(--part-scale)));
+  --part-y: 83%;
+  --complete-angle: 0.000000deg;
+  --complete-x: 33.075470px;
+  --complete-y: 31.567543px;
 }
 
 .kinetic-part--thigh-a {
+  --part-art: url('../assets/kinetic-robot/thigh.svg');
   --part-angle: 60deg;
-  --part-x: 10%;
+  --part-height: 50px;
+  --part-width: 30px;
+  --part-x: clamp(calc(12px + 29.1506px * var(--part-scale)), 10%, calc(100% - 12px - 29.1506px * var(--part-scale)));
   --part-y: 82%;
-  --complete-angle: 0deg;
-  --complete-x: -14px;
+  --complete-angle: 0.000000deg;
+  --complete-x: -16.000000px;
+  --complete-y: 59.000000px;
 }
 
 .kinetic-part--thigh-b {
+  --part-art: url('../assets/kinetic-robot/thigh.svg');
   --part-angle: -30deg;
-  --part-x: 57%;
+  --part-height: 50px;
+  --part-width: 30px;
+  --part-x: clamp(calc(12px + 25.4904px * var(--part-scale)), 57%, calc(100% - 12px - 25.4904px * var(--part-scale)));
   --part-y: 21%;
-  --complete-angle: 0deg;
-  --complete-x: 14px;
-}
-
-.kinetic-part--shin-a,
-.kinetic-part--shin-b {
-  --part-art: url('../assets/kinetic-robot/shin.svg');
-  --part-shape: polygon(16% 0, 84% 0, 78% 68%, 100% 88%, 96% 100%, 4% 100%, 0 88%, 22% 68%);
-  --part-height: 49px;
-  --part-width: 22px;
-  --complete-y: 132.5px;
+  --complete-angle: 0.000000deg;
+  --complete-x: 16.000000px;
+  --complete-y: 59.000000px;
 }
 
 .kinetic-part--shin-a {
+  --part-shape: polygon(30% 0, 70% 0, 90% 14%, 75% 74%, 100% 90%, 100% 100%, 0 100%, 0 90%, 25% 74%, 10% 14%);
+  --part-art: url('../assets/kinetic-robot/shin.svg');
   --part-angle: 120deg;
-  --part-x: 34%;
+  --part-height: 58px;
+  --part-width: 28px;
+  --part-x: clamp(calc(12px + 32.1147px * var(--part-scale)), 34%, calc(100% - 12px - 32.1147px * var(--part-scale)));
   --part-y: 86%;
-  --complete-angle: 0deg;
-  --complete-x: -15px;
+  --complete-angle: 0.000000deg;
+  --complete-x: -16.000000px;
+  --complete-y: 99.000000px;
 }
 
 .kinetic-part--shin-b {
+  --part-shape: polygon(30% 0, 70% 0, 90% 14%, 75% 74%, 100% 90%, 100% 100%, 0 100%, 0 90%, 25% 74%, 10% 14%);
+  --part-art: url('../assets/kinetic-robot/shin.svg');
   --part-angle: -60deg;
-  --part-x: 91%;
+  --part-height: 58px;
+  --part-width: 28px;
+  --part-x: clamp(calc(12px + 32.1147px * var(--part-scale)), 91%, calc(100% - 12px - 32.1147px * var(--part-scale)));
   --part-y: 79%;
-  --complete-angle: 0deg;
-  --complete-x: 15px;
-}
-
-.kinetic-part--forearm-a::after,
-.kinetic-part--forearm-b::after,
-.kinetic-part--shin-a::after,
-.kinetic-part--shin-b::after {
-  display: none;
+  --complete-angle: 0.000000deg;
+  --complete-x: 16.000000px;
+  --complete-y: 99.000000px;
 }
 
 @media (max-width: 1000px) {
+  .kinetic-part--pelvis { --part-y: 35%; }
+  .kinetic-part--upper-arm-b { --part-y: 72%; }
+  .kinetic-part--forearm-a { --part-y: 72%; }
+  .kinetic-part--thigh-b { --part-x: 47%; }
+
   .kinetic-stage__fallback {
     --assembly-scale: 1.75;
     --part-scale: 1.75;
@@ -446,20 +368,17 @@
     --part-scale: 1.55;
   }
 
-  .kinetic-part--head,
-  .kinetic-part--upper-arm-a,
-  .kinetic-part--thigh-a {
-    --part-x: 15%;
-  }
-
-  .kinetic-part--pelvis,
-  .kinetic-part--upper-arm-b {
-    --part-x: 82%;
-  }
-
-  .kinetic-part--shin-b {
-    --part-x: 84%;
-  }
+  .kinetic-part--head { --part-x: 16%; --part-y: 19%; }
+  .kinetic-part--chest { --part-x: 74%; --part-y: 21%; }
+  .kinetic-part--pelvis { --part-x: 53%; --part-y: 33%; }
+  .kinetic-part--upper-arm-a { --part-x: 17%; --part-y: 34%; }
+  .kinetic-part--upper-arm-b { --part-x: 83%; --part-y: 34%; }
+  .kinetic-part--forearm-a { --part-x: 16%; --part-y: 77%; }
+  .kinetic-part--forearm-b { --part-x: 67%; --part-y: 90%; }
+  .kinetic-part--thigh-a { --part-x: 22%; --part-y: 90%; }
+  .kinetic-part--thigh-b { --part-x: 44%; --part-y: 17%; }
+  .kinetic-part--shin-a { --part-x: 50%; --part-y: 78%; }
+  .kinetic-part--shin-b { --part-x: 84%; --part-y: 77%; }
 
   .home-page .hero-story,
   .home-page .hero-story[data-scroll-story-active] {
@@ -575,40 +494,6 @@
     forced-color-adjust: none;
   }
 
-  .kinetic-part::before {
-    border-color: Canvas;
-    background: CanvasText;
-    box-shadow: none;
-    forced-color-adjust: none;
-  }
-
-  .kinetic-part::after {
-    border: 2px solid CanvasText;
-    background: Canvas;
-    box-shadow: none;
-    forced-color-adjust: none;
-  }
-
-  .kinetic-part--head::after {
-    border: 1px solid Canvas;
-    background: CanvasText;
-  }
-
-  .kinetic-part--chest::after {
-    border: 0;
-    background:
-      radial-gradient(circle 4px at 50% 5px, Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px),
-      radial-gradient(circle 4px at 5px 30%, Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px),
-      radial-gradient(circle 4px at calc(100% - 5px) 30%, Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px),
-      radial-gradient(circle 4px at 50% calc(100% - 5px), Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px);
-  }
-
-  .kinetic-part--pelvis::after {
-    border: 0;
-    background:
-      radial-gradient(circle 4px at 36% calc(100% - 5px), Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px),
-      radial-gradient(circle 4px at 64% calc(100% - 5px), Canvas 0 1.6px, CanvasText 2px 4px, transparent 4.3px);
-  }
 }
 
 html[data-motion="reduced"] .kinetic-stage__canvas {

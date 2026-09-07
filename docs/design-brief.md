@@ -1,5 +1,15 @@
 # Design brief
 
+## 2026-09-07 — Approved warm research kit redesign
+
+사용자가 승인한 콘셉트는 따뜻한 외장 안으로 정밀한 기계 구조가 드러나는 연구용 로봇이다. 작은 비대칭 단일 센서 헤드, 넓은 분할 흉곽, 내부가 열린 상완, 넓은 외장의 대퇴, 열린 집게와 분명한 발판으로 7종 부품을 외곽선부터 구분한다. 11조각 퍼즐과 좌우 교환은 유지한다.
+
+- SVG는 넓고 차분한 면과 2~3단계 bevel 음영, 얇은 이음선만 사용한다. 주홍색은 작은 actuator와 부분 bearing collar에 집중한다. 색상·얼굴/HUD/문자 금지 계약은 유지한다.
+- `src/motion/robot-kit.js`의 SVG 좌표계 bearing 중심을 물리 port와 일치시킨다. 부품 밖의 빨간 plug/socket 표시는 제거하고 연결 하우징을 자산 안에 통합한다. 동일 자산의 alpha silhouette를 그림자에도 사용해 열린 rail과 gripper 틈을 보존한다.
+- 정적 완성형은 같은 bearing 좌표에서 child 중심을 유도한다. SVG 부위 크기, 정적 CSS 좌표와 실제 관절의 일치를 검증한다. 강제 색상은 역할별 단순 외곽선을 유지한다.
+- 연결 가능한 가까운 두 port만 얇은 주홍 ring으로 강조한다. 연결된 말단의 pose grip에서는 해당 parent 관절과 crosshair cursor로 회전 가능성을 알린다. 설명문·새 버튼·상시 pulse는 추가하지 않는다.
+- 모바일·태블릿의 초기 부품 배치는 이름·설명·CTA 주변을 비워 실루엣과 본문의 가독성을 함께 지킨다. 사용자가 직접 움직인 위치와 조립 상태는 화면 크기를 바꿔도 유지한다.
+
 ## 2026-09-07 — Authored research robot kit
 
 Home의 11조각 퍼즐은 추상 도형이 아니라 실제 교육·연구용 조립 로봇 키트처럼 읽혀야 한다. 머리, 흉곽, 골반, 상완, 전완, 대퇴, 하퇴의 7개 SVG master를 좌우 대칭 부품에 재사용하고 각 부품은 silhouette와 기능 디테일로 구분한다. warm shell `#DED6CA`, graphite `#24211D`, metal `#B8AFA2`, vermilion actuator `#A73524`만 사용한다.

@@ -1,28 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="52" height="28" viewBox="0 0 52 28" fill="none">
-  <g id="underplate">
-    <path d="M13 2H39L49 8L51 21L43 27H9L1 21L3 8L13 2Z" fill="#24211D"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="28" viewBox="0 0 48 28" fill="none">
   <g id="frame">
-    <path d="M23 1H29L33 22L26 27L19 22L23 1Z" fill="#24211D"/>
-    <path d="M12 8L26 22L40 8" stroke="#B8AFA2" stroke-width="3" stroke-linejoin="bevel"/>
+    <path d="M5 8L17 10L20 2H28L31 10L43 8L46 19L43 26H36L30 23H18L12 26H5L2 19L5 8Z" fill="#24211D"/>
+    <path d="M8 12L16 16H32L40 12M18 6H30" stroke="#B8AFA2" stroke-width="2" stroke-linejoin="bevel"/>
   </g>
-  <g id="shell">
-    <path d="M13 2H23L21 20L10 25L3 20L5 9L13 2Z" fill="#DED6CA" stroke="#24211D" stroke-opacity=".54" stroke-width="1.2" stroke-linejoin="bevel"/>
-    <path d="M39 2H29L31 20L42 25L49 20L47 9L39 2Z" fill="#DED6CA" stroke="#24211D" stroke-opacity=".54" stroke-width="1.2" stroke-linejoin="bevel"/>
-    <path d="M8 9H20L19 17L10 21L6 18L8 9ZM44 9H32L33 17L42 21L46 18L44 9Z" fill="#E9E3D9"/>
+  <g id="shell" stroke="#24211D" stroke-width=".8" stroke-linejoin="bevel">
+    <path d="M5 6L15 8L19 13H29L33 8L43 6L45 11L36 14L32 25H16L12 14L3 11L5 6Z" fill="#DED6CA"/>
+    <path d="M5 6L15 8L18 11L6 9L3 11L5 6ZM33 8L43 6L45 11L42 9L30 11L33 8Z" fill="white" fill-opacity=".34" stroke="none"/>
+    <path d="M16 21H32L30.5 25H17.5L16 21Z" fill="#B8AFA2" stroke="none"/>
+    <path d="M15 14L18 22H30L33 14M20 15H28" stroke-opacity=".28" stroke-width=".55"/>
   </g>
   <g id="mechanism">
-    <circle cx="14" cy="21" r="5" fill="#24211D"/>
-    <circle cx="14" cy="21" r="2.7" fill="#B8AFA2"/>
-    <circle cx="38" cy="21" r="5" fill="#24211D"/>
-    <circle cx="38" cy="21" r="2.7" fill="#B8AFA2"/>
-    <path d="M8 8H20M32 8H44" stroke="#24211D" stroke-opacity=".38" stroke-width="1"/>
+    <circle data-joint="waist" cx="24" cy="6" r="4.9" fill="#24211D"/>
+    <circle cx="24" cy="6" r="3.55" fill="#B8AFA2"/>
+    <circle cx="24" cy="6" r="2.15" fill="#24211D"/>
+    <circle data-joint="hip-left" cx="8" cy="21" r="4.9" fill="#24211D"/>
+    <circle cx="8" cy="21" r="3.55" fill="#B8AFA2"/>
+    <circle cx="8" cy="21" r="2.15" fill="#24211D"/>
+    <circle data-joint="hip-right" cx="40" cy="21" r="4.9" fill="#24211D"/>
+    <circle cx="40" cy="21" r="3.55" fill="#B8AFA2"/>
+    <circle cx="40" cy="21" r="2.15" fill="#24211D"/>
   </g>
   <g id="actuator">
-    <path d="M20 7L24 11M32 7L28 11" stroke="#A73524" stroke-width="1.6" stroke-linecap="round"/>
-    <path d="M8 23H11M41 23H44" stroke="#A73524" stroke-width="1.5"/>
+    <path d="M20.6 3.9A4 4 0 0 1 24 2" stroke="#A73524" stroke-width="1" stroke-linecap="round"/>
   </g>
   <g id="rim">
-    <path d="M13 4H21M31 4H39" stroke="#F1EEE6" stroke-opacity=".78" stroke-width=".7"/>
+    <path d="M5.5 6.8L14.5 8.7M33.5 8.7L42.5 6.8M5 20A3.2 3.2 0 0 1 8.6 17.8M37 20A3.2 3.2 0 0 1 40.6 17.8" stroke="white" stroke-opacity=".46" stroke-width=".6"/>
   </g>
 </svg>

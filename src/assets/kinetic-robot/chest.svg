@@ -1,30 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="58" height="64" viewBox="0 0 58 64" fill="none">
-  <g id="underplate">
-    <path d="M18 2H40L56 14L50 51L39 62H19L8 51L2 14L18 2Z" fill="#24211D"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="68" height="64" viewBox="0 0 68 64" fill="none">
   <g id="frame">
-    <path d="M25 4H33L35 55L29 62L23 55L25 4Z" fill="#24211D"/>
-    <path d="M7 12L15 6H43L51 12L47 20H11L7 12Z" fill="#B8AFA2" stroke="#24211D" stroke-opacity=".52" stroke-width="1.2" stroke-linejoin="bevel"/>
-    <path d="M5 14H17L20 23H9L5 14ZM53 14H41L38 23H49L53 14Z" fill="#24211D"/>
+    <path d="M5 11H23L27 4H41L45 11H63V21L47 24L43 50L40 59H28L25 50L21 24L5 21V11Z" fill="#24211D"/>
+    <path d="M28 9H40V51H28V9Z" fill="#B8AFA2"/>
+    <path d="M31 10H37V53H31V10Z" fill="#24211D"/>
+    <path d="M29 12V49M39 12V49M10 16H23M45 16H58" stroke="#DED6CA" stroke-opacity=".5" stroke-width="1"/>
   </g>
-  <g id="shell">
-    <path d="M17 3H25L23 57H18L9 49L4 17L12 9L17 3Z" fill="#DED6CA" stroke="#24211D" stroke-opacity=".54" stroke-width="1.3" stroke-linejoin="bevel"/>
-    <path d="M41 3H33L35 57H40L49 49L54 17L46 9L41 3Z" fill="#DED6CA" stroke="#24211D" stroke-opacity=".54" stroke-width="1.3" stroke-linejoin="bevel"/>
-    <path d="M15 8H23L21.5 26H9L7 18L15 8ZM43 8H35L36.5 26H49L51 18L43 8Z" fill="#E9E3D9"/>
-    <path d="M10 30H22L20 53H17L12 47L10 30ZM48 30H36L38 53H41L46 47L48 30Z" fill="#CFC5B7"/>
+  <g id="shell" stroke="#24211D" stroke-width=".85" stroke-linejoin="bevel">
+    <path d="M12 10L25 3L29 10V48L23 53L15 50L12 35L7 30V18L12 10Z" fill="#DED6CA"/>
+    <path d="M56 10L43 3L39 10V48L45 53L53 50L56 35L61 30V18L56 10Z" fill="#DED6CA"/>
+    <path d="M12 10L25 3L28.2 10V17L8.2 13.8L12 10Z" fill="white" fill-opacity=".3" stroke="none"/>
+    <path d="M56 10L43 3L39.8 10V17L59.8 13.8L56 10Z" fill="white" fill-opacity=".3" stroke="none"/>
+    <path d="M7 24L10 30L15 34L18 48L23 51L28.5 47.7L23 53L15 50L12 35L7 30V24Z" fill="#B8AFA2" stroke="none"/>
+    <path d="M61 18V30L56 35L53 50L45 53L39.5 48L45 50.5L50 48L53 33L58 29V17.5L61 18Z" fill="#B8AFA2" stroke="none"/>
+    <path d="M8 15L28 18.5M40 18.5L60 15M15.4 42L19 42.8M49 42.8L52.6 42" stroke-opacity=".3" stroke-width=".6"/>
   </g>
   <g id="mechanism">
-    <path d="M12 27H23M35 27H46M14 45L21 50M44 45L37 50" stroke="#24211D" stroke-opacity=".4" stroke-width="1.05" stroke-linecap="square"/>
-    <path d="M29 8V54" stroke="#B8AFA2" stroke-width="2"/>
-    <path d="M16 12H21V14H16V12ZM37 12H42V14H37V12Z" fill="#24211D" fill-opacity=".62"/>
+    <path d="M30 21H38V28H30V21ZM30 42H38V52H30V42Z" fill="#24211D"/>
+    <path d="M33 22V26M33 43V50" stroke="#B8AFA2" stroke-opacity=".58" stroke-width="1.2"/>
+    <circle cx="34" cy="35" r="6.25" fill="#24211D"/>
+    <circle cx="34" cy="35" r="4.7" fill="#B8AFA2"/>
+    <circle cx="34" cy="35" r="3.1" fill="#24211D"/>
+    <circle cx="34" cy="35" r="1.45" stroke="#B8AFA2" stroke-opacity=".6" stroke-width=".7"/>
+    <circle data-joint="neck" cx="34" cy="6" r="4.9" fill="#24211D"/>
+    <circle cx="34" cy="6" r="3.55" fill="#B8AFA2"/>
+    <circle cx="34" cy="6" r="2.15" fill="#24211D"/>
+    <circle data-joint="waist" cx="34" cy="58" r="4.9" fill="#24211D"/>
+    <circle cx="34" cy="58" r="3.55" fill="#B8AFA2"/>
+    <circle cx="34" cy="58" r="2.15" fill="#24211D"/>
+    <circle data-joint="shoulder-left" cx="6" cy="16" r="4.9" fill="#24211D"/>
+    <circle cx="6" cy="16" r="3.55" fill="#B8AFA2"/>
+    <circle cx="6" cy="16" r="2.15" fill="#24211D"/>
+    <circle data-joint="shoulder-right" cx="62" cy="16" r="4.9" fill="#24211D"/>
+    <circle cx="62" cy="16" r="3.55" fill="#B8AFA2"/>
+    <circle cx="62" cy="16" r="2.15" fill="#24211D"/>
   </g>
   <g id="actuator">
-    <circle cx="29" cy="33" r="6.4" fill="#24211D"/>
-    <circle cx="29" cy="33" r="4.25" fill="#A73524"/>
-    <path d="M29 28.75V37.25M24.75 33H33.25" stroke="#F1EEE6" stroke-opacity=".72" stroke-width="1"/>
-    <path d="M29 21V26M29 40V48" stroke="#A73524" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M28.8 35A5.2 5.2 0 0 1 36.6 30.5" stroke="#A73524" stroke-width="1.25" stroke-linecap="round"/>
   </g>
   <g id="rim">
-    <path d="M17 5H23M35 5H41M8 18L12 11M50 18L46 11" stroke="#F1EEE6" stroke-opacity=".78" stroke-width=".75"/>
+    <path d="M12.5 10.5L24.7 3.8M43.3 3.8L55.5 10.5M31 57A3.2 3.2 0 0 1 34.6 54.8M31 5A3.2 3.2 0 0 1 34.6 2.8M3 15A3.2 3.2 0 0 1 6.6 12.8M59 15A3.2 3.2 0 0 1 62.6 12.8" stroke="white" stroke-opacity=".46" stroke-width=".6"/>
   </g>
 </svg>
