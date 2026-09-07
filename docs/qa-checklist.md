@@ -55,3 +55,13 @@
 - [x] `npm.cmd run verify` 통과: 49개 테스트, 11개 route·28개 module·12개 stylesheet 경계, production build·22개 배포 entry. `git diff --check` 통과.
 - [x] 실제 Chromium에서 Home·Resume의 390×844·768×1024·1280×900 레이아웃과 가로 overflow 0을 확인했다. Resume 다운로드/미리보기 링크, Skip link의 2px focus와 Enter 본문 이동, PDF 링크의 2px focus outline, console warning/error 0을 확인했다.
 - [x] Home의 기본 lite/static·full/interactive와 localhost reduced override의 flat·canvas 숨김을 확인했다. 모션 코드는 변경하지 않았으며 실물 touch 기기·OS forced-colors 전환은 별도로 검증하지 않았다.
+
+## 2026-09-07 간결한 구현 중심 18쪽 편집
+
+- [x] 18쪽 전체 렌더와 마지막 수정 쪽의 재렌더를 검수했다. 소개 → THING → AQIS → Briefit → MRI → Prompt → Alkkagi → 연락처 순서이며 목차의 여섯 링크는 소개 페이지 3·7·10·12·14·16쪽으로 연결된다.
+- [x] 겹침 0, 외부 링크 63개·목차 링크 6개, 북마크 18개, 캡션 정렬 7개, 문단 끝줄 12개, 최소 글자 크기 9pt를 확인했다. 사진 번호 안내를 제거했고 원본 구조도 PNG 5개의 RGB·alpha·해시는 모두 일치한다. 수상 4건의 연결도 유지했다.
+- [x] 독립 검토에서 THING의 개인/팀 기여·토크 순서, AQIS 정지·누락 입력 조건, Briefit 원본 부분 요약·재요약, MRI 라벨 손실·분리 평가, Prompt 오류 시 상태 변경, Alkkagi 위치·충격량·마찰 계산을 확인했다. 새 실물·모델·부하 성능을 주장하지 않는다.
+- [x] 최종 PDF와 공개 사본: 15,226,870 bytes, SHA-256 `86505E93CB6408DA3859613007B888F5A79AB887188DAEA2EB84FC7005404C8A`. Resume의 18쪽·15.2MB·2026.09.07 및 바이트/해시 계약을 동기화했다.
+- [x] `npm.cmd run verify` 통과: 49개 테스트, 11개 route·28개 module·12개 stylesheet 경계, production build·22개 배포 entry.
+- [x] 실제 Chromium의 Resume 390×844·768×1024·1280×900에서 설명·메타정보·PDF 링크·가로 overflow 0을 확인했다. Skip link의 2px focus·Enter 본문 이동, PDF 링크의 2px focus outline과 console warning/error 0을 확인했다.
+- [x] Home의 세 화면 크기에서 기본 lite/static·full/interactive와 가로 overflow 0을 확인했다. localhost reduced override는 flat·canvas 숨김이며 경고·오류는 0이다. 이번 변경은 문서·다운로드 설명이며 실물 touch·OS forced-colors는 별도 검증하지 않았다.
