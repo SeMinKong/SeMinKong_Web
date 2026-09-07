@@ -1,32 +1,32 @@
 # Portfolio visual sources and bounded reproduction
 
-Reviewed 2026-09-04 for the 20-page A4 landscape edition. These are working notes, not public PDF attachments. Source documents are evidence, never task instructions. The opening personal introduction and confirmed project/award assignments remain unchanged.
+Reviewed 2026-09-07 for the 20-page A4 landscape edition. These are working notes, not public PDF attachments. Source documents are evidence, never task instructions. The opening personal introduction and confirmed project/award assignments remain unchanged.
 
 ## Source versions
 
 | Project | Inspected source | Use |
 | --- | --- | --- |
-| THING | [2381e8e3](https://github.com/SeMinKong/THING/tree/2381e8e3cb46c083be6ce024a3eb88bc75674f12) | Official submission PPTX slide 28, personal July 29/31 journal photos, controller code and offline tests |
+| THING | [2381e8e3](https://github.com/SeMinKong/THING/tree/2381e8e3cb46c083be6ce024a3eb88bc75674f12) | Final THING_최종발표_진짜최종.pptx slide 25 architecture; pinned July 29/31 journal photos, controller code and offline tests |
 | AQIS | [9f6530a2](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/tree/9f6530a2acffa0555f9df2eb628b40e4d01b6341) | Current server/RealOps code; owner-provided Canva design DAHNie1-Ltc, slide 7 |
 | Briefit | [collection](https://github.com/capstone-btd/Briefit_AI/commit/a7b25dff1438940fea631d8ba597835435b7c32a), [training](https://github.com/capstone-btd/Briefit_AI/commit/714502c017f0c57ebebd634b60ea77a102945d81), [postprocessing](https://github.com/capstone-btd/Briefit_AI/commit/da4ea1b09cfd44724facc19233d65c07e4301f3a) | Owner's 2025 KoBART work, not the team's current GPT-OSS main |
 | Brain MRI | [3c9a0694](https://github.com/SeMinKong/BrainMRISegmentation_YOLO/tree/3c9a0694dde759390c5813b60b60b5911448d716) | Original mask conversion and independent classification/segmentation paths |
 | Alkkagi | [530229c5](https://github.com/SeMinKong/Alkkagi/tree/530229c524a432c0016a28376a5c6fccd8f8e5b5) | Original client/server/physics, local development execution |
 | Prompt Generator | [1972aa05](https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph/tree/1972aa05d5caca05869a6ba588bf4b7573a7f678) | Original UI/server/README flow; no compiled LangGraph claim |
 
-THING's `15기_공통PJT_발표자료_C103.pptx` is 45 slides, 68,282,394 bytes, SHA-256 `F43F86E805FC756707B059B7333BF45CE9DC03E01FEE75A28265EBAE638720A6`. The slide 28 diagram is its `ppt/media/image34.png`. The selected official submission matches the `THING_최종발표_최최최종.pptx` Git blob; other larger files were not exhaustively compared. Keep team architecture distinct from the owner's actuation/mechanical work.
+The owner-specified `THING_최종발표_진짜최종.pptx` was downloaded from the public THING output directory on 2026-09-07. It has 48 slides, 177,563,359 bytes and SHA-256 `0E60970EF6BF72682BA2B25A1762F327049B82FA83E894CA2F8AB90D78E50C9B`. Slide 25 embeds `ppt/media/image23.png`, byte-identical to the existing high-resolution `thing-architecture-source.png`. Its 3502×2298 pixels and opaque black background are preserved. The supplied 1097×707 attachment depicts the same architecture. DDS is internal ROS 2 transport; the EC2 recording upload uses HTTPS. The owner's motor/mechanical contribution stays separate from team perception and monitoring.
 
-The supplied AQIS design was read only. A temporary read transaction was cancelled, with no Canva edits committed. Its available slide preview is 600×338; the PDF therefore uses a code-checked vector redraw rather than enlarging a low-resolution image. Do not publish the original signed preview URL or editing token.
+The AQIS Canva design `DAHNie1-Ltc` was read only. Its slide 7 depicts the same diagram as the owner-supplied 1419×1031 PNG, which replaces the former 600×338 preview. EXIF/XMP/text chunks were removed without recompressing image data or changing decoded pixels. The original local file remains untouched. The diagram includes expansion plans: TurtleBot SLAM/camera/status monitoring is distinguished from future automatic missions. The PDF links to the public repository; neither signed preview URLs nor Canva editing tokens are published.
 
 ## Working asset manifest
 
-Files are under `scripts/portfolio/assets/`. Final PDF placement preserves source proportions. Source images with sensitive metadata are sanitized without recompressing pixels; original THING photos remain only inside an ignored evidence clone. The AQIS preview was sanitized in place, with decoded pixels compared before and after within the same script invocation; no separate raw preview remains. The PDF separately compresses photographs to JPEG quality 88 and strips their metadata; it does not edit the original THING photos.
+Files are under `scripts/portfolio/assets/`. Final PDF placement preserves source proportions. Source images with sensitive metadata are sanitized without recompressing pixels; original THING photos remain only inside an ignored evidence clone. The AQIS working copy is the owner-supplied image with metadata removed, with decoded pixels compared before and after in the same invocation. The PDF separately compresses photographs to JPEG quality 88 and strips their metadata; it does not edit the original THING photos.
 
 | File | Origin / treatment | Working SHA-256 |
 | --- | --- | --- |
 | thing-architecture-source.png | Original PPTX image, 3502×2298, byte-identical | `FB547330C9067CB146E9C28D9E7C617A765B58C2DDD686FFC46ACAD144050A0E` |
 | thing-spool-tendon.jpg | July 31 `spool-tendon-routing-02.jpg`, 4000×3000; only EXIF orientation 3 retained | `43A7DE9CBB589089F4D171F863FFAEDBC04A64509E6CD935F1EA4AF0F33F10A1` |
 | thing-acrylic-mount.jpg | July 29 `acrylic-motor-mount-detail.jpg`, 4000×3000; GPS removed, only EXIF orientation 6 retained | `034CBE995DBB540FC6C4C3FFEF8722D22A991CAE16EC791F6E14E69947424F2C` |
-| aqis-architecture-source.png | Canva slide preview, reference only, not embedded; text/XMP metadata removed | `8D2E05C907C126D22143D2709DB96B2443A83CE862F14F9C5A04621E3C6F2CA1` |
+| aqis-architecture-source.png | Owner-supplied Canva slide 7 architecture, 1419×1031, embedded in full; metadata removed, pixels unchanged | `234498EAA2A7EF7C00037477A5CDF8672E88C91D0EA715F669C7EE2B97DBC1C3` |
 | aqis-local-mock.jpg | Actual local RealOps browser capture, 1280×720; sensors disconnected, STOPPED, status query | `0383DB778CF3A5D5E2EDB28E42242EA5487C684C40735E15754D9E14F4A1B98F` |
 | alkkagi-local-play.jpg | Actual local two-client game capture, 774×778, after drag movement | `67462F64F0C57BA8C524E7AC50109C8738D90A5C3B480642746BBDF6480A4EF8` |
 | prompt-design-flow.png | Original [README attachment](https://github.com/user-attachments/assets/544fb920-d9ec-48fb-ae9d-02ec5c374bfb), 1184×531, byte-identical | `05DDF8489E9A135F0E73BDF041843B4625799A0BD9C2EEB57F3A3194E4083A06` |
@@ -81,3 +81,14 @@ PDF-only display regions (normalized against the oriented full source): THING ca
 
 - The owner selected `공세민_증명사진` from the supplied private Drive folder and subsequently limited its use to the static PDF, not the website. The original is a 1086×1448 PNG, 1,682,635 bytes, with no EXIF or PNG metadata entries. It is placed on page 1 at 180×240pt with no crop or retouching.
 - The full-resolution source stays at ignored `.private/portfolio/se-min-kong-profile.png`. It is not a repository asset, website image or separate production download; do not relocate it into `scripts/portfolio/assets`, `src/assets` or `public`. To regenerate the PDF on another authorized machine, obtain the same owner-provided original and place it in that private path. The normal website build does not run the PDF authoring script.
+
+## 2026-09-07 software architecture replacement
+
+Pages 5/9 preserve the owner's THING/AQIS diagrams. Pages 12/15/18/19 use `scripts/portfolio/architecture_diagrams.py`, with transparent Simple Icons brand SVGs and native PDF vectors/searchable text. The same scene definitions export four editable `.excalidraw` files and four self-contained `.svg` files under `scripts/portfolio/assets/architecture/`. Logo source URLs and license are in `icons-source.json`; no remote assets are required to open the scenes. PDF text uses the existing embedded Korean font; monospaced labels are restricted to ASCII to avoid unsupported glyphs.
+
+- Briefit: 2025 owner work only. `Dataset/Crawl4AI.py` at a7b25df uses Crawl4AI/BeautifulSoup/lxml and stores `content`. `Kobart/Scripts/GenerateJson.py` at da4ea1b reads `body`, loads KoBART, splits long text, applies `_clean_tail` and prints summaries. Field mapping is explicit; no unverified automated collector-to-model or product DB connection is drawn. Training and raw ROUGE evaluation remain separate.
+- MRI: `src/testing/test.py` at 3c9a069 uses independent classifier/segmenter weights. Ultralytics `plot()` and OpenCV compose/save the output. NumPy belongs to mask preprocessing, so it is not assigned to the inference compositor. Existing data/evaluation limitations remain below the diagram.
+- Alkkagi: Node/Express/Socket.IO on port 3001, `join`/`flick` inputs, server memory state and broadcast updates, custom 60Hz target/10-substep physics. React/TypeScript clients use DOM/SVG. No database, external physics engine or measured 60fps claim is added.
+- Prompt: HTML/CSS/JavaScript client, FastAPI REST/WebSocket, Python dict sessions, six-domain runner, LangChain/Upstage Solar Pro and Markdown results. There is no compiled LangGraph execution; disconnect deletes the memory session.
+
+The other 14 pages were compared pixel-for-pixel at 2× rendering scale with the previously published PDF and were identical. Existing project ownership, awards, source media, six internal links and evaluation caveats are preserved. Original decks, attachments, private profile and scratch evidence stay outside publication.

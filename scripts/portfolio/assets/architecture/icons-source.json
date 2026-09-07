@@ -1,0 +1,72 @@
+{
+  "package": "simple-icons",
+  "version": "16.28.0",
+  "license": "CC0-1.0",
+  "source": "https://github.com/simple-icons/simple-icons",
+  "icons": [
+    {
+      "name": "Python",
+      "source": "https://www.python.org/community/logos/"
+    },
+    {
+      "name": "React",
+      "source": "https://github.com/facebook/create-react-app/blob/282c03f9525fdf8061ffa1ec50dce89296d916bd/test/fixtures/relative-paths/src/logo.svg"
+    },
+    {
+      "name": "Typescript",
+      "source": "https://www.typescriptlang.org/branding"
+    },
+    {
+      "name": "Nodedotjs",
+      "source": "https://nodejs.org/en/about/branding"
+    },
+    {
+      "name": "Express",
+      "source": "https://github.com/openjs-foundation/artwork/blob/3816245ebbf4707bdafde748350ac8476b6b5b62/projects/express/express-icon-black.svg"
+    },
+    {
+      "name": "Socketdotio",
+      "source": "https://socket.io"
+    },
+    {
+      "name": "Pytorch",
+      "source": "https://github.com/pytorch/pytorch.github.io/blob/8f083bd12192ca12d5e1c1f3d236f4831d823d8f/assets/images/logo.svg"
+    },
+    {
+      "name": "Opencv",
+      "source": "https://opencv.org/resources/media-kit/"
+    },
+    {
+      "name": "Ultralytics",
+      "source": "https://www.ultralytics.com"
+    },
+    {
+      "name": "Huggingface",
+      "source": "https://huggingface.co/brand"
+    },
+    {
+      "name": "Fastapi",
+      "source": "https://github.com/tiangolo/fastapi/blob/ffb4f77a11f83132b521ba0aac6c95792c19e797/docs/en/docs/img/icon-white.svg"
+    },
+    {
+      "name": "Langchain",
+      "source": "https://www.langchain.com/langchain"
+    },
+    {
+      "name": "Html5",
+      "source": "https://www.w3.org/html/logo/"
+    },
+    {
+      "name": "Css",
+      "source": "https://github.com/CSS-Next/logo.css/blob/bacc20878227204b283c68a6b935f8279e06b0cd/css.svg"
+    },
+    {
+      "name": "Javascript",
+      "source": "https://github.com/voodootikigod/logo.js/blob/1544bdeed6d618a6cfe4f0650d04ab8d9cfa76d9/js.svg"
+    },
+    {
+      "name": "Markdown",
+      "source": "https://github.com/dcurtis/markdown-mark/tree/360a3657fef7f6ad0b303296a95ad52985caa0d3"
+    }
+  ]
+}

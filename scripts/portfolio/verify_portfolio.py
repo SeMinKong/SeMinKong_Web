@@ -31,6 +31,7 @@ def verify(path):
             assert footer.strip() == str(index), f'Page number missing: {index}'
             texts.append(text)
             for char in page.chars:
+                assert 'ZapfDingbats' not in char.get('fontname', ''), f'Unsupported glyph on page {index}'
                 assert char['x0'] >= 0 and char['x1'] <= page.width + .1
                 assert char['top'] >= 0 and char['bottom'] <= page.height + .1
                 sizes.append(char['size'])
@@ -49,6 +50,7 @@ def verify(path):
                 uri = str(action['/URI'])
                 assert uri.isascii() and urlsplit(uri).scheme in {'https', 'mailto'}
                 assert 'drive.google.com' not in uri
+                assert 'canva.com' not in uri, 'Do not publish a Canva editing/share token'
                 external.append(uri)
     intro = '\n'.join(texts[:2])
     assert 'Suwon,' in texts[0] and 'Republic of Korea' in texts[0]
@@ -64,6 +66,13 @@ def verify(path):
     assert all(label in texts[7] for label in ['검사 대상과 검출 영역', '판정과 작업 대기열', '로봇·컨베이어 동작'])
     assert '후처리 미적용' in texts[11]
     assert '종양 분류' in texts[14] and '영역 분할' in texts[14]
+    for page, labels in {
+        12: ['Crawl4AI', 'BeautifulSoup', 'content 필드', 'body 필드', 'KoBART', 'ROUGE'],
+        15: ['LOCAL INFERENCE', 'classifier', 'segmenter', 'OpenCV', 'plot()'],
+        18: ['Socket.IO', 'DOM / SVG', 'IN-MEMORY GAME STATE', '60Hz', '10 substeps'],
+        19: ['FastAPI', 'LangChain', 'Solar Pro', 'MEMORY SESSION', 'Markdown'],
+    }.items():
+        assert all(label in texts[page-1] for label in labels), f'Incomplete architecture on page {page}'
     assert all(label in texts[16] for label in ['내 돌', '방향·세기', '상대 돌'])
     assert '모터와 함께 돌며 텐던을 감습니다' in texts[5]
     assert '원통형 물체를 감싸 쥐는' in texts[6]

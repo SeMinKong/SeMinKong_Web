@@ -1000,3 +1000,9 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - Remove the repeated uppercase name/section-path running header, project ordinals, `PORTFOLIO / date` footer and redundant guidance about how the document is organized. Use a single unobtrusive page number beside useful source links.
 - Use readable, neutral Korean labels for factual metadata. Remove decorative section numbering and the numbers on Briefit's three independent processing paths. Preserve image-to-legend markers, actual sequential processing steps, quantitative values, dates of education/work/awards, project index links and citations.
 - Keep the 20-page structure, fonts, centered PDF-only portrait, project media, diagram geometry, personal/team ownership, synthetic-example labels and implementation/evaluation limitations. Deploy the reviewed download and synchronize the existing private Drive PDF without changing website layout or sharing.
+
+## 2026-09-07 — 정적 PDF 원본 아키텍처와 SVG 도식
+
+- 사용자가 제공한 Excalidraw 스타일을 기준으로 THING·AQIS 원본 구조도를 5·9쪽에 복원한다. THING은 지정 최종 PPTX 25쪽의 고해상도 PNG와 바이트 동일함을 확인했고, AQIS는 첨부한 1419×1031 PNG의 픽셀을 유지하며 메타데이터만 제거했다. 원본 도형·로고·색상·연결을 임의로 다시 그리지 않는다.
+- 나머지 Briefit·MRI·Alkkagi·Prompt 네 프로젝트는 코드에 근거한 소프트웨어 경계·데이터·통신 흐름을 배경 없는 SVG 기술 아이콘, 얇은 둥근 테두리와 단색 화살표로 표현한다. 같은 장면 정의에서 PDF 벡터와 독립 SVG·편집 가능한 Excalidraw 파일을 생성한다.
+- 20쪽 구성, 직접 담당한 범위, 수상, 기술적 한계와 기존 사진은 유지한다. 원본의 설계 범위와 실제 구현 범위는 본문에서 구분하고, Canva 편집 URL은 공개 PDF나 저장소에 넣지 않는다. 웹은 PDF 다운로드 파일과 용량·날짜 안내만 갱신한다.

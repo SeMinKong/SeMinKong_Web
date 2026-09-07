@@ -1106,3 +1106,12 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] HTML/CSS/JS와 PDF 바이트에 변화가 없어 직전 390/768/1280px·키보드·모션·콘솔 및 PDF 렌더 검수를 그대로 적용한다. 이번 릴리스 준비는 PDF 재생성이나 Drive 업로드를 수행하지 않는다. public PDF 크기/해시 계약은 8,818,945 bytes 및 `5DDF97C453E4F5AC00BDB0A67B6E831C946C3A121F176FAF4305AD9D7A99F747`다.
 - [x] 릴리스 첨부는 검수된 public PDF 한 파일로 제한한다. 원본 이력서의 소유자 승인 공개 범위를 유지하며 비공개 사진·tmp·output·dist를 Git staging하거나 작업 폴더 전체를 압축하지 않는다.
 - [ ] 릴리스 메타데이터 커밋의 Pages 성공과 live 확인 후 같은 커밋에 annotated tag/Release를 만들고 태그 대상·릴리스 본문·PDF 첨부 해시를 재조회한다.
+
+## 2026-09-07 정적 PDF 아키텍처 교체 검수
+
+- [x] 최종 20쪽 PDF 중 5·9·12·15·18·19쪽의 2배 렌더를 직접 확인했다. THING·AQIS 원본 전체가 잘림/왜곡 없이 보이며 새 구조도 네 개는 SVG 아이콘·텍스트·화살표를 선명하게 표시한다. 한글 monospace 누락을 수정하고 unsupported glyph 회귀 검사를 추가했다.
+- [x] 독립 감사에서 다른 14쪽은 기존 public PDF와 픽셀 동일하고 해당 페이지의 외부 링크 및 여섯 내부 목차 링크의 대상·영역이 동일했다. 새 그림의 코드 경계와 역할·수상·평가 한계를 검토했다. URI64·내부링크6·책갈피20·레이아웃겹침0·최소폰트8.5pt·사진캡션5·문단끝줄11 검사를 통과했다.
+- [x] 공식 Excalidraw 0.18.1을 localhost에서 실행해 네 장면을 loadFromBlob으로 불러오고 실제 캔버스 텍스트를 수정·복원했다. 요소/텍스트/이미지/화살표 개수 보존, SVG 전부 로드, 실행 오류0·외부 요청0, 네 편집기 화면 육안 검수를 확인했다. 공개 Excalidraw 사이트로 자료를 전송하지 않았다.
+- [x] 최종 PDF는 11,020,297 bytes, SHA-256 `FB9A131053F0472E7368C8435BF4A70029C7FA433DFBDEE8B6D08A47E8E4A2AE`. 재생성과 output/public/dist 세 사본이 동일하며 다운로드 안내를 11.0MB·20쪽·2026.09.07로 갱신했다.
+- [x] `npm.cmd run verify`: 테스트28·소스경로11·스타일경계12·production 모듈766·배포entry23 통과. 실제 Chrome에서 production Resume를 390·768·1280px로 확인해 overflow0·44px 링크·키보드 포커스2px·정상 파일명/새 탭 속성·실제 다운로드 해시 일치를 검증했다. 기본 lite/static·full/interactive, reduced/flat, JavaScript 미사용 폴백과 콘솔 warning/error0을 확인하고 검수 브라우저를 종료했다.
+- [ ] GitHub Pages workflow 성공과 공개 PDF의 크기·해시/메타데이터 확인은 푸시 후 기록한다. 실물 터치·OS PDF viewer·전체 외부 링크 HTTP·로봇 하드웨어 재실행은 이번 범위 밖이다.

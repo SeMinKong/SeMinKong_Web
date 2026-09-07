@@ -900,3 +900,10 @@
 - 사용자가 현재 버전을 다음 release에 반영하도록 요청했다. 최신 v2.0.1 이후 Kinetic Home, 상장 모달, 정적 PDF 다운로드가 추가됐으므로 호환 가능한 기능 추가의 minor 버전 v2.1.0으로 묶는다. Suwon을 반영한 c9f8fe1의 웹/PDF 콘텐츠를 그대로 유지하며 이번에는 버전·변경 이력·릴리스 노트만 추가한다.
 - package와 lockfile 버전을 맞추고 누락된 누적 변경을 최종 상태 기준으로 정리한다. 기존 main 배포 경로를 이용해 검증한 정확한 커밋에 annotated tag를 붙이고 GitHub Release를 발행한다. PR이나 새 호스팅 경로는 만들지 않는다.
 - 릴리스 첨부는 이미 공개·검수된 PDF 한 파일로 제한한다. PDF를 재생성하거나 Drive 파일/공유 권한을 변경하지 않으며 원본 사진·tmp·초안은 포함하지 않는다.
+
+## 2026-09-07 — 정적 포트폴리오 아키텍처 교체
+
+- 사용자가 THING·AQIS의 직접 그린 구조도를 사용하고 나머지도 같은 SVG 아이콘/Excalidraw 스타일로 그리도록 요청했다. 5·9쪽은 원본을 비율 유지해 배치하고 12·15·18·19쪽은 실제 코드 경계에 맞춘 새 아키텍처로 교체한다. THING 최종 발표자료 25쪽의 3502×2298 원본은 기존 working PNG와 바이트 동일하며, AQIS 첨부본은 메타데이터만 제거했다.
+- 새 그림은 투명 SVG 기술 로고, 둥근 경계선, 명시적인 데이터·통신 화살표로 구성하고 같은 Python 장면 정의에서 native PDF·SVG·Excalidraw v2를 생성한다. 로고는 Simple Icons 16.28.0의 벡터 경로이며 svglib 2.2.0으로 PDF에 벡터 삽입한다. 편집 파일은 저장소 작업 원본으로 제공하되 웹 public에는 승인된 PDF 한 파일만 둔다.
+- Briefit은 2025 Crawl4AI/KoBART 코드와 수집 content→추론 body 매핑 필요, 독립 평가 경로를 유지한다. MRI는 독립 모델과 Ultralytics plot()/OpenCV 합성, Alkkagi는 Socket.IO·DOM/SVG·메모리 상태, Prompt는 FastAPI·LangChain·Solar Pro·연결 종료 시 세션 삭제를 표시한다. 구현되지 않은 DB·외부 물리 엔진·compiled LangGraph를 넣지 않는다.
+- THING의 DDS와 EC2 HTTPS 업로드를 구분하고 AQIS의 TurtleBot 자동 임무는 후속 과제로 남긴다. Canva 자료는 읽기 전용으로 확인했으며 편집 토큰/서명 URL을 공개하지 않는다. 전체 20쪽·소개·수상·기존 사진·평가 한계와 목차 링크를 보존한다. 다른 작업에서 진행 중인 Home Kinetic 변경은 이번 커밋·배포 범위에서 제외한다.
