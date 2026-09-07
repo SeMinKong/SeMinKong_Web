@@ -133,113 +133,186 @@
   opacity: 0;
 }
 
-.kinetic-object {
-  --kinetic-shadow-x: 9px;
-  --kinetic-shadow-y: 13px;
-  --kinetic-shadow-blur: 14px;
-  --kinetic-shadow-alpha: 0.15;
+.kinetic-part {
+  --part-angle: 0deg;
+  --part-fill: #ded6ca;
+  --part-height: clamp(30px, 3.2vw, 42px);
+  --part-width: clamp(15px, 1.5vw, 20px);
+  --part-x: 50%;
+  --part-y: 50%;
   position: absolute;
   display: block;
   box-sizing: border-box;
-  filter: drop-shadow(
-    var(--kinetic-shadow-x)
-    var(--kinetic-shadow-y)
-    var(--kinetic-shadow-blur)
-    rgba(23, 21, 18, var(--kinetic-shadow-alpha))
-  );
-  transform-origin: center;
-}
-
-.kinetic-object--stone {
-  top: 18%;
-  left: 8%;
-  width: clamp(70px, 7.2vw, 96px);
-  aspect-ratio: 1;
-  border: 2px solid rgba(241, 238, 230, 0.42);
-  border-radius: 50%;
-  background: radial-gradient(circle at 24% 18%, #514c45 0%, #2d2924 34%, #24211d 62%, #171512 100%);
-}
-
-.kinetic-object--signal {
-  top: 67%;
-  left: 82%;
-  width: clamp(62px, 5.8vw, 82px);
-  aspect-ratio: 1;
-  border: 2px solid rgba(255, 248, 237, 0.38);
-  border-radius: 50%;
-  --kinetic-shadow-x: 11px;
-  --kinetic-shadow-y: 15px;
-  --kinetic-shadow-alpha: 0.17;
-  background: radial-gradient(circle at 24% 18%, #d66f5c 0%, var(--signal-on-light) 42%, #7f2118 100%);
-}
-
-.kinetic-object--glass {
-  top: 15%;
-  left: 76%;
-  width: clamp(86px, 8vw, 116px);
-  aspect-ratio: 1;
-  border: clamp(12px, 1.2vw, 17px) solid rgba(255, 255, 255, 0.52);
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(23, 21, 18, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.68);
-  backdrop-filter: blur(3px);
-  --kinetic-shadow-x: 13px;
-  --kinetic-shadow-y: 17px;
-  --kinetic-shadow-alpha: 0.1;
-}
-
-.kinetic-object--paper {
-  top: 71%;
-  left: 12%;
-  width: clamp(86px, 8vw, 118px);
-  height: clamp(62px, 5.8vw, 84px);
-  border: 1px solid rgba(23, 21, 18, 0.2);
-  border-radius: 5px;
-  --kinetic-shadow-x: 6px;
-  --kinetic-shadow-y: 9px;
-  --kinetic-shadow-alpha: 0.11;
-  background: linear-gradient(145deg, #fffef9 0%, #fffaf0 54%, #e2dacc 100%);
-  transform: rotate(-12deg);
-}
-
-.kinetic-object--bar {
-  top: 33%;
-  left: 89%;
-  width: clamp(96px, 9vw, 138px);
-  height: clamp(25px, 2.4vw, 34px);
-  border-radius: 3px;
-  --kinetic-shadow-x: 8px;
-  --kinetic-shadow-y: 11px;
-  --kinetic-shadow-alpha: 0.15;
-  background: linear-gradient(145deg, #6d6760 0%, #4d4943 45%, #302d29 100%);
-  transform: rotate(69deg);
-}
-
-.kinetic-object--capsule {
-  top: 79%;
-  left: 58%;
-  width: clamp(88px, 8vw, 120px);
-  height: clamp(36px, 3.4vw, 48px);
-  border: 1px solid rgba(23, 21, 18, 0.26);
+  top: var(--part-y);
+  left: var(--part-x);
+  width: var(--part-width);
+  height: var(--part-height);
+  border: 1px solid rgba(36, 33, 29, 0.3);
   border-radius: 999px;
-  --kinetic-shadow-x: 11px;
-  --kinetic-shadow-y: 15px;
-  --kinetic-shadow-alpha: 0.16;
-  background: radial-gradient(ellipse at 25% 18%, #f0d898 0%, #d8b46b 48%, #a77b36 100%);
-  transform: rotate(14deg);
+  background: var(--part-fill);
+  filter: drop-shadow(7px 10px 10px rgba(23, 21, 18, 0.14));
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(var(--part-angle));
 }
 
-.kinetic-object--tile {
-  top: 42%;
-  left: 3%;
-  width: clamp(54px, 5vw, 72px);
-  aspect-ratio: 1;
-  border: 2px solid rgba(23, 21, 18, 0.2);
-  border-radius: 6px;
-  --kinetic-shadow-x: 9px;
-  --kinetic-shadow-y: 13px;
-  --kinetic-shadow-alpha: 0.14;
-  background: linear-gradient(145deg, #9ab2a6 0%, #779386 48%, #4f6d61 100%);
-  transform: rotate(45deg);
+.kinetic-part::before,
+.kinetic-part::after {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1px solid rgba(255, 248, 237, 0.7);
+  border-radius: 50%;
+  background: var(--signal-on-light);
+  content: "";
+  translate: -50% -50%;
+}
+
+.kinetic-part::before {
+  top: 0;
+}
+
+.kinetic-part::after {
+  top: 100%;
+}
+
+.kinetic-part--head {
+  --part-angle: 60deg;
+  --part-height: clamp(32px, 3vw, 40px);
+  --part-width: clamp(28px, 2.7vw, 36px);
+  --part-x: 10%;
+  --part-y: 24%;
+  border-radius: 48% 48% 42% 42%;
+}
+
+.kinetic-part--head::before {
+  display: none;
+}
+
+.kinetic-part--chest {
+  --part-angle: -30deg;
+  --part-fill:
+    radial-gradient(circle at 50% 1px, #a73524 0 3px, transparent 3.5px),
+    radial-gradient(circle at 1px 30%, #a73524 0 3px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 1px) 30%, #a73524 0 3px, transparent 3.5px),
+    radial-gradient(circle at 50% calc(100% - 1px), #a73524 0 3px, transparent 3.5px),
+    #24211d;
+  --part-height: clamp(46px, 4.2vw, 58px);
+  --part-width: clamp(40px, 3.7vw, 50px);
+  --part-x: 82%;
+  --part-y: 22%;
+  border-color: rgba(241, 238, 230, 0.34);
+  border-radius: 9px 9px 5px 5px;
+}
+
+.kinetic-part--chest::before {
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 0 5px rgba(167, 53, 36, 0.14);
+}
+
+.kinetic-part--chest::after {
+  display: none;
+}
+
+.kinetic-part--pelvis {
+  --part-angle: 30deg;
+  --part-fill:
+    radial-gradient(circle at 50% 1px, #a73524 0 3px, transparent 3.5px),
+    #ded6ca;
+  --part-height: clamp(21px, 1.9vw, 26px);
+  --part-width: clamp(39px, 3.6vw, 48px);
+  --part-x: 91%;
+  --part-y: 41%;
+  border-radius: 7px;
+}
+
+.kinetic-part--pelvis::before,
+.kinetic-part--pelvis::after {
+  top: 50%;
+}
+
+.kinetic-part--pelvis::before {
+  left: 28%;
+}
+
+.kinetic-part--pelvis::after {
+  left: 72%;
+}
+
+.kinetic-part--upper-arm-a {
+  --part-angle: -60deg;
+  --part-x: 7%;
+  --part-y: 50%;
+}
+
+.kinetic-part--upper-arm-b {
+  --part-angle: 120deg;
+  --part-fill: #24211d;
+  --part-x: 86%;
+  --part-y: 61%;
+}
+
+.kinetic-part--forearm-a {
+  --part-angle: 30deg;
+  --part-height: clamp(32px, 3vw, 40px);
+  --part-fill: #24211d;
+  --part-x: 20%;
+  --part-y: 65%;
+}
+
+.kinetic-part--forearm-b {
+  --part-angle: -120deg;
+  --part-height: clamp(32px, 3vw, 40px);
+  --part-x: 68%;
+  --part-y: 83%;
+}
+
+.kinetic-part--thigh-a,
+.kinetic-part--thigh-b {
+  --part-height: clamp(36px, 3.5vw, 45px);
+  --part-width: clamp(17px, 1.7vw, 22px);
+}
+
+.kinetic-part--thigh-a {
+  --part-angle: 60deg;
+  --part-fill: #24211d;
+  --part-x: 10%;
+  --part-y: 82%;
+}
+
+.kinetic-part--thigh-b {
+  --part-angle: -30deg;
+  --part-x: 57%;
+  --part-y: 21%;
+}
+
+.kinetic-part--shin-a,
+.kinetic-part--shin-b {
+  --part-height: clamp(37px, 3.6vw, 46px);
+  --part-width: clamp(15px, 1.5vw, 19px);
+}
+
+.kinetic-part--shin-a {
+  --part-angle: 120deg;
+  --part-fill: #ded6ca;
+  --part-x: 34%;
+  --part-y: 86%;
+}
+
+.kinetic-part--shin-b {
+  --part-angle: -60deg;
+  --part-fill: #24211d;
+  --part-x: 91%;
+  --part-y: 79%;
+}
+
+.kinetic-part--forearm-a::after,
+.kinetic-part--forearm-b::after,
+.kinetic-part--shin-a::after,
+.kinetic-part--shin-b::after {
+  display: none;
 }
 
 @media (max-width: 1000px) {
@@ -287,9 +360,6 @@
     margin-top: 28px;
   }
 
-  .kinetic-object--bar {
-    left: 87%;
-  }
 }
 
 @media (max-width: 720px) {
@@ -336,45 +406,22 @@
     padding-inline: 14px;
   }
 
-  .kinetic-object--stone {
-    top: 17%;
-    left: -5%;
-    width: 70px;
+  .kinetic-part {
+    scale: 0.88;
   }
 
-  .kinetic-object--signal {
-    top: 79%;
-    left: 76%;
-    width: 64px;
+  .kinetic-part--head { --part-x: 8%; --part-y: 21%; }
+  .kinetic-part--chest { --part-x: 86%; --part-y: 22%; }
+  .kinetic-part--pelvis { --part-x: 91%; --part-y: 43%; }
+  .kinetic-part--upper-arm-a { --part-x: 6%; --part-y: 47%; }
+  .kinetic-part--upper-arm-b { --part-x: 91%; --part-y: 62%; }
+  .kinetic-part--forearm-a { --part-x: 13%; --part-y: 68%; }
+  .kinetic-part--forearm-b { --part-x: 72%; --part-y: 84%; }
+  .kinetic-part--thigh-a { --part-x: 7%; --part-y: 84%; }
+  .kinetic-part--thigh-b { --part-x: 59%; --part-y: 18%; }
+  .kinetic-part--shin-a { --part-x: 35%; --part-y: 88%; }
+  .kinetic-part--shin-b { --part-x: 93%; --part-y: 82%; }
   }
-
-  .kinetic-object--glass {
-    top: 14%;
-    left: 75%;
-    width: 82px;
-    border-width: 12px;
-  }
-
-  .kinetic-object--paper {
-    top: 77%;
-    left: 5%;
-    width: 82px;
-    height: 58px;
-  }
-
-  .kinetic-object--capsule {
-    top: 42%;
-    left: 84%;
-    width: 84px;
-    height: 34px;
-    transform: rotate(72deg);
-  }
-
-  .kinetic-object--bar,
-  .kinetic-object--tile {
-    display: none;
-  }
-}
 
 @media (max-width: 720px) and (max-height: 700px) {
   .home-page .hero-story,
@@ -402,15 +449,105 @@
   }
 
   .kinetic-stage__fallback {
+    --model-x: 85%;
+    --model-y: 48%;
     opacity: 1 !important;
     transition: none;
   }
 
+  .kinetic-part--head {
+    --part-angle: 5deg;
+    --part-x: var(--model-x);
+    --part-y: calc(var(--model-y) - 49px);
+  }
+
+  .kinetic-part--chest {
+    --part-angle: -2deg;
+    --part-x: var(--model-x);
+    --part-y: var(--model-y);
+  }
+
+  .kinetic-part--pelvis {
+    --part-angle: 1deg;
+    --part-x: var(--model-x);
+    --part-y: calc(var(--model-y) + 41px);
+  }
+
+  .kinetic-part--upper-arm-a {
+    --part-angle: 10deg;
+    --part-x: calc(var(--model-x) - 29px);
+    --part-y: calc(var(--model-y) + 9px);
+  }
+
+  .kinetic-part--upper-arm-b {
+    --part-angle: -10deg;
+    --part-x: calc(var(--model-x) + 29px);
+    --part-y: calc(var(--model-y) + 9px);
+  }
+
+  .kinetic-part--forearm-a {
+    --part-angle: -1deg;
+    --part-x: calc(var(--model-x) - 33px);
+    --part-y: calc(var(--model-y) + 50px);
+  }
+
+  .kinetic-part--forearm-b {
+    --part-angle: 1deg;
+    --part-x: calc(var(--model-x) + 33px);
+    --part-y: calc(var(--model-y) + 50px);
+  }
+
+  .kinetic-part--thigh-a {
+    --part-angle: 3deg;
+    --part-x: calc(var(--model-x) - 14px);
+    --part-y: calc(var(--model-y) + 76px);
+  }
+
+  .kinetic-part--thigh-b {
+    --part-angle: -3deg;
+    --part-x: calc(var(--model-x) + 14px);
+    --part-y: calc(var(--model-y) + 76px);
+  }
+
+  .kinetic-part--shin-a {
+    --part-angle: -1deg;
+    --part-x: calc(var(--model-x) - 15px);
+    --part-y: calc(var(--model-y) + 121px);
+  }
+
+  .kinetic-part--shin-b {
+    --part-angle: 1deg;
+    --part-x: calc(var(--model-x) + 15px);
+    --part-y: calc(var(--model-y) + 121px);
+  }
+}
+
+@media (max-width: 720px) and (prefers-reduced-motion: reduce),
+  (max-width: 720px) and (forced-colors: active) {
+  .kinetic-stage__fallback {
+    --model-x: 82%;
+    --model-y: 23%;
+  }
 }
 
 @media (forced-colors: active) {
-  .kinetic-object {
+  .kinetic-part {
+    border: 2px solid CanvasText;
+    background: Canvas;
     filter: none;
+    forced-color-adjust: none;
+  }
+
+  .kinetic-part::before,
+  .kinetic-part::after,
+  .kinetic-part--chest::before {
+    border-color: Canvas;
+    background: CanvasText;
+    box-shadow: none;
+  }
+
+  .kinetic-part--chest {
+    background: CanvasText;
   }
 }
 
@@ -419,6 +556,81 @@ html[data-motion="reduced"] .kinetic-stage__canvas {
 }
 
 html[data-motion="reduced"] .kinetic-stage__fallback {
+  --model-x: 85%;
+  --model-y: 48%;
   opacity: 1 !important;
   transition: none;
+}
+
+html[data-motion="reduced"] .kinetic-part--head {
+  --part-angle: 5deg;
+  --part-x: var(--model-x);
+  --part-y: calc(var(--model-y) - 49px);
+}
+
+html[data-motion="reduced"] .kinetic-part--chest {
+  --part-angle: -2deg;
+  --part-x: var(--model-x);
+  --part-y: var(--model-y);
+}
+
+html[data-motion="reduced"] .kinetic-part--pelvis {
+  --part-angle: 1deg;
+  --part-x: var(--model-x);
+  --part-y: calc(var(--model-y) + 41px);
+}
+
+html[data-motion="reduced"] .kinetic-part--upper-arm-a {
+  --part-angle: 10deg;
+  --part-x: calc(var(--model-x) - 29px);
+  --part-y: calc(var(--model-y) + 9px);
+}
+
+html[data-motion="reduced"] .kinetic-part--upper-arm-b {
+  --part-angle: -10deg;
+  --part-x: calc(var(--model-x) + 29px);
+  --part-y: calc(var(--model-y) + 9px);
+}
+
+html[data-motion="reduced"] .kinetic-part--forearm-a {
+  --part-angle: -1deg;
+  --part-x: calc(var(--model-x) - 33px);
+  --part-y: calc(var(--model-y) + 50px);
+}
+
+html[data-motion="reduced"] .kinetic-part--forearm-b {
+  --part-angle: 1deg;
+  --part-x: calc(var(--model-x) + 33px);
+  --part-y: calc(var(--model-y) + 50px);
+}
+
+html[data-motion="reduced"] .kinetic-part--thigh-a {
+  --part-angle: 3deg;
+  --part-x: calc(var(--model-x) - 14px);
+  --part-y: calc(var(--model-y) + 76px);
+}
+
+html[data-motion="reduced"] .kinetic-part--thigh-b {
+  --part-angle: -3deg;
+  --part-x: calc(var(--model-x) + 14px);
+  --part-y: calc(var(--model-y) + 76px);
+}
+
+html[data-motion="reduced"] .kinetic-part--shin-a {
+  --part-angle: -1deg;
+  --part-x: calc(var(--model-x) - 15px);
+  --part-y: calc(var(--model-y) + 121px);
+}
+
+html[data-motion="reduced"] .kinetic-part--shin-b {
+  --part-angle: 1deg;
+  --part-x: calc(var(--model-x) + 15px);
+  --part-y: calc(var(--model-y) + 121px);
+}
+
+@media (max-width: 720px) {
+  html[data-motion="reduced"] .kinetic-stage__fallback {
+    --model-x: 82%;
+    --model-y: 23%;
+  }
 }

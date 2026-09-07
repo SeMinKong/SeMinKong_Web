@@ -270,15 +270,54 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.doesNotMatch(homeHtml, /Flagship/i);
   assert.match(heroSection, /data-kinetic-stage/);
   assert.equal(heroSection.match(/data-kinetic-canvas/g)?.length, 1);
-  assert.equal(heroSection.match(/class="kinetic-object /g)?.length, 7);
+  const puzzlePieceIds = [...heroSection.matchAll(/data-puzzle-piece="([^"]+)"/g)]
+    .map(([, id]) => id);
+  assert.deepEqual(puzzlePieceIds, [
+    'head',
+    'chest',
+    'pelvis',
+    'upper-arm-a',
+    'upper-arm-b',
+    'forearm-a',
+    'forearm-b',
+    'thigh-a',
+    'thigh-b',
+    'shin-a',
+    'shin-b'
+  ]);
+  const partSpecs = kineticRuntime.match(/const PART_SPECS = \[([\s\S]*?)\n\];/)?.[1] ?? '';
+  const runtimePieceIds = [...partSpecs.matchAll(/\bid: '([^']+)', role:/g)]
+    .map(([, id]) => id);
+  assert.deepEqual(runtimePieceIds, puzzlePieceIds);
+
+  const portCounts = new Map();
+  for (const [, family, polarity] of partSpecs.matchAll(
+    /family: '([^']+)', polarity: PORT\.(PLUG|SOCKET)/g
+  )) {
+    const counts = portCounts.get(family) ?? { PLUG: 0, SOCKET: 0 };
+    counts[polarity] += 1;
+    portCounts.set(family, counts);
+  }
+  assert.deepEqual(Object.fromEntries(portCounts), {
+    neck: { PLUG: 1, SOCKET: 1 },
+    waist: { PLUG: 1, SOCKET: 1 },
+    shoulder: { PLUG: 2, SOCKET: 2 },
+    hip: { PLUG: 2, SOCKET: 2 },
+    elbow: { PLUG: 2, SOCKET: 2 },
+    knee: { PLUG: 2, SOCKET: 2 }
+  });
   assert.doesNotMatch(heroSection, /THING|Signal Lab|signal-lab|data-hero-proof|<fieldset|<input|<button/i);
   assert.doesNotMatch(heroSection, /GRAB|THROW|RESET|PAUSE|SCATTER/i);
   assert.match(kineticStyles, /place-items: center/);
   assert.match(kineticStyles, /\.kinetic-stage \{[\s\S]*?position: absolute/);
   assert.match(kineticStyles, /\.kinetic-stage__canvas \{[\s\S]*?touch-action: pan-y pinch-zoom/);
+  assert.match(kineticStyles, /html\[data-motion="reduced"\] \.kinetic-part--head/);
+  assert.match(kineticStyles, /html\[data-motion="reduced"\] \.kinetic-part--shin-b/);
   assert.match(kineticFacade, /Promise\.resolve\(ready\)/);
   assert.match(kineticFacade, /environment\.motion !== 'reduced'/);
-  assert.match(kineticRuntime, /OBJECT_SPECS/);
+  assert.match(kineticRuntime, /PART_SPECS/);
+  assert.match(kineticRuntime, /REQUIRED_CONNECTIONS = 10/);
+  assert.doesNotMatch(kineticRuntime, /handwritten-wordmark__letter|getTextFragmentRects|hero-story__actions \.button/);
   assert.match(kineticRuntime, /gravity\.scale = 0/);
   assert.doesNotMatch(homeHtml, /data-home-intro|__homeIntroGate|aria-busy/);
   assert.doesNotMatch(homeIntro, /preventDefault|stopImmediatePropagation|setAttribute\('inert'/);

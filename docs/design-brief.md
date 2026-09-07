@@ -1006,3 +1006,15 @@ Visual acceptance: the cube does not freeze when the Hero reaches its final scro
 - 사용자가 제공한 Excalidraw 스타일을 기준으로 THING·AQIS 원본 구조도를 5·9쪽에 복원한다. THING은 지정 최종 PPTX 25쪽의 고해상도 PNG와 바이트 동일함을 확인했고, AQIS는 첨부한 1419×1031 PNG의 픽셀을 유지하며 메타데이터만 제거했다. 원본 도형·로고·색상·연결을 임의로 다시 그리지 않는다.
 - 나머지 Briefit·MRI·Alkkagi·Prompt 네 프로젝트는 코드에 근거한 소프트웨어 경계·데이터·통신 흐름을 배경 없는 SVG 기술 아이콘, 얇은 둥근 테두리와 단색 화살표로 표현한다. 같은 장면 정의에서 PDF 벡터와 독립 SVG·편집 가능한 Excalidraw 파일을 생성한다.
 - 20쪽 구성, 직접 담당한 범위, 수상, 기술적 한계와 기존 사진은 유지한다. 원본의 설계 범위와 실제 구현 범위는 본문에서 구분하고, Canva 편집 URL은 공개 PDF나 저장소에 넣지 않는다. 웹은 PDF 다운로드 파일과 용량·날짜 안내만 갱신한다.
+
+## 2026-09-07 — Home articulated figure Easter egg override
+
+이 항목은 `Centered Kinetic field override`의 일곱 추상 재료, 콘텐츠 collision과 720px 이하 다섯 오브제 규칙을 대체한다. 중앙 이름·인사·CTA와 Projects 이하의 구조는 변경하지 않는다.
+
+- Home 배경은 얼굴 없는 전신 관절 연구 모형을 분해한 11조각 퍼즐이다. 구성은 머리, 흉곽, 골반, 좌우 상완·전완·대퇴·하퇴이며 어떠한 viewport에서도 조각을 숨기지 않는다.
+- 형태는 미술용 종이 마네킹과 작은 기계 관절 사이에 둔다. 머리는 눈·입이 없는 달걀형, 흉곽과 골반은 서로 다른 사다리꼴, 팔다리는 끝 폭이 조금 다른 절단형 조각으로 그린다. 로봇 얼굴, chrome, visor, PCB 선, cyan/green LED와 HUD는 사용하지 않는다.
+- 색은 warm board `#ded6ca`, ink `#24211d`, joint·core의 vermilion `#a73524` 세 계열로 제한한다. 낮은 우하단 그림자와 가는 먹선만 사용하고 glossy bevel이나 neon bloom은 넣지 않는다.
+- 흉곽의 목·양어깨·허리 네 socket, 골반의 허리·양엉덩이 세 접점, 상완·대퇴의 양끝과 나머지 조각의 한 접점이 보이게 한다. Plug는 채운 주홍 점, socket은 주홍 고리로 구분하며 설명문, 번호, 진행률, reset 버튼은 추가하지 않는다.
+- 조각과 연결 묶음은 이름, 인사와 CTA를 충돌면으로 취급하지 않고 그 뒤를 통과한다. 조각끼리와 viewport/navigation 경계는 계속 충돌하며, DOM copy와 link가 canvas보다 앞에서 읽기·클릭·focus를 소유한다.
+- 완성 시 오른쪽 가장자리의 작은 전신 비율로 자세를 정리하고 머리 기울임과 한 팔 들기를 보여 준다. 피드백은 주홍 관절 pulse, 짧은 밝기 상승과 머리 주변의 작은 paper/ink/vermilion 조각만 사용하며 축하 문구와 소리는 없다.
+- 정적 HTML/CSS fallback도 동일한 11개 part를 source of truth로 가진다. Normal no-JS 첫 화면은 분해 배치, reduced motion과 forced colors는 완성된 정적 실루엣을 제공한다. Canvas는 계속 `aria-hidden`, `tabindex=-1`이며 퍼즐 완성은 정보나 navigation을 해제하지 않는다.

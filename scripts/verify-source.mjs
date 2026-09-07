@@ -169,8 +169,17 @@ for (const contract of [
   "preference: 'webgl'",
   'Engine.update(engine, PHYSICS_SUBSTEP)',
   "canvas.style.touchAction = 'pan-y pinch-zoom'",
-  'handwritten-wordmark__letter',
-  'getTextFragmentRects',
+  'const PART_SPECS = [',
+  'const REQUIRED_CONNECTIONS = 10',
+  'evaluatePortSnap',
+  'pointA: rotatePoint(best.movingPort, best.movingBody.angle)',
+  'pointB: rotatePoint(best.targetPort, best.targetBody.angle)',
+  'dragConstraint.pointB = rotatePoint(pointer.localPoint, pointer.body.angle)',
+  'placeGrabAtPoint(body, pointer.localPoint, point)',
+  "activePointer.phase = 'scrolling'",
+  "window.addEventListener('pointermove', handlePointerMove, { passive: true })",
+  'outwardTravel >= 34 * scale',
+  'body.constraintImpulse.angle = 0',
   "stage.dataset.kineticLight = 'fixed-upper-left'",
   'new ResizeObserver',
   'webglcontextlost',
@@ -178,6 +187,16 @@ for (const contract of [
 ]) {
   if (!kineticRuntime.includes(contract)) {
     throw new Error(`Home Kinetic runtime contract is missing: ${contract}.`);
+  }
+}
+
+for (const retiredCollision of [
+  'handwritten-wordmark__letter',
+  'getTextFragmentRects',
+  "hero-story__actions .button"
+]) {
+  if (kineticRuntime.includes(retiredCollision)) {
+    throw new Error(`Home Kinetic copy collision was restored: ${retiredCollision}.`);
   }
 }
 

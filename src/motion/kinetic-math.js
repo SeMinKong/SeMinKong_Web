@@ -1,5 +1,65 @@
 export const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
+export const wrapAngle = (angle) => {
+  const turn = Math.PI * 2;
+  return ((angle + Math.PI) % turn + turn) % turn - Math.PI;
+};
+
+export const rotatePoint = ({ x = 0, y = 0 }, angle = 0) => ({
+  x: x * Math.cos(angle) - y * Math.sin(angle),
+  y: x * Math.sin(angle) + y * Math.cos(angle)
+});
+
+export const worldPort = (pose, port) => {
+  const offset = rotatePoint(port, pose?.angle ?? 0);
+  return {
+    x: (pose?.x ?? 0) + offset.x,
+    y: (pose?.y ?? 0) + offset.y,
+    normal: wrapAngle((pose?.angle ?? 0) + (port?.normal ?? 0))
+  };
+};
+
+export const evaluatePortSnap = (
+  movingPose,
+  movingPort,
+  targetPose,
+  targetPort,
+  { maxDistance = 18, maxAngle = Math.PI / 9 } = {}
+) => {
+  const moving = worldPort(movingPose, movingPort);
+  const target = worldPort(targetPose, targetPort);
+  const distance = Math.hypot(moving.x - target.x, moving.y - target.y);
+  const angleError = Math.abs(wrapAngle(moving.normal - target.normal - Math.PI));
+  return {
+    eligible: distance <= maxDistance && angleError <= maxAngle,
+    distance,
+    angleError,
+    moving,
+    target
+  };
+};
+
+export const solveMovingPortPose = (movingPose, movingPort, targetPose, targetPort) => {
+  const target = worldPort(targetPose, targetPort);
+  const angle = wrapAngle(target.normal + Math.PI - (movingPort?.normal ?? 0));
+  const offset = rotatePoint(movingPort, angle);
+  return {
+    x: target.x - offset.x,
+    y: target.y - offset.y,
+    angle,
+    deltaAngle: wrapAngle(angle - (movingPose?.angle ?? 0))
+  };
+};
+
+export const pointInRotatedRect = (point, pose, width, height, padding = 0) => {
+  const local = rotatePoint({
+    x: (point?.x ?? 0) - (pose?.x ?? 0),
+    y: (point?.y ?? 0) - (pose?.y ?? 0)
+  }, -(pose?.angle ?? 0));
+  return Math.abs(local.x) <= width / 2 + padding
+    && Math.abs(local.y) <= height / 2 + padding;
+};
+
 const normalise = ({ x, y }, fallback = { x: -0.58, y: -0.82 }) => {
   const magnitude = Math.hypot(x, y);
   return magnitude > 0.0001
@@ -53,15 +113,6 @@ export const getWorldLight = (position, viewport, elevation = 8) => {
     farShadow: { x: away.x * projectedLength * 1.32, y: away.y * projectedLength * 1.32 }
   };
 };
-
-export const toStageCollisionRects = (clientRects, stageRect, padding = 0) => clientRects
-  .map((rect) => ({
-    x: rect.left - stageRect.left + rect.width / 2,
-    y: rect.top - stageRect.top + rect.height / 2,
-    width: rect.width + padding * 2,
-    height: rect.height + padding * 2
-  }))
-  .filter(({ width, height }) => width >= 4 && height >= 4);
 
 export const smoothThrowVelocity = (
   samples,

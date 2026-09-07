@@ -1115,3 +1115,14 @@ This section supersedes the current-behavior interpretation of earlier checked i
 - [x] 최종 PDF는 11,020,297 bytes, SHA-256 `FB9A131053F0472E7368C8435BF4A70029C7FA433DFBDEE8B6D08A47E8E4A2AE`. 재생성과 output/public/dist 세 사본이 동일하며 다운로드 안내를 11.0MB·20쪽·2026.09.07로 갱신했다.
 - [x] `npm.cmd run verify`: 테스트28·소스경로11·스타일경계12·production 모듈766·배포entry23 통과. 실제 Chrome에서 production Resume를 390·768·1280px로 확인해 overflow0·44px 링크·키보드 포커스2px·정상 파일명/새 탭 속성·실제 다운로드 해시 일치를 검증했다. 기본 lite/static·full/interactive, reduced/flat, JavaScript 미사용 폴백과 콘솔 warning/error0을 확인하고 검수 브라우저를 종료했다.
 - [ ] GitHub Pages workflow 성공과 공개 PDF의 크기·해시/메타데이터 확인은 푸시 후 기록한다. 실물 터치·OS PDF viewer·전체 외부 링크 HTTP·로봇 하드웨어 재실행은 이번 범위 밖이다.
+
+## 2026-09-07 Home 관절형 마네킹 이스터에그 검수
+
+- [x] HTML 폴백과 런타임의 11개 부품 ID·순서가 정확히 일치한다. neck/waist는 plug·socket 각 1개, shoulder/elbow/hip/knee는 각 2개로 전체 10개 관절을 구성하며 중복 ID가 없다.
+- [x] 회전된 body의 시각 포트와 Matter constraint 앵커를 같은 좌표계로 맞췄다. 10 tick 통합 회귀 테스트에서 neck 포트 오차가 0.01px 미만을 유지하며, 드래그 앵커도 회전 보정을 사용한다. 총 31개 자동 테스트가 통과한다.
+- [x] 실제 production 화면을 390×844, 768×1024, 1280×720에서 확인했다. 세 폭 모두 11개 부품, 수평 overflow 0, 읽을 수 있는 이름·문장·CTA, 44px 이상 CTA를 유지한다. 390px 키보드 순서에서 캔버스는 제외되고 skip link→내비게이션→CTA로 이동한다.
+- [x] 실제 브라우저에서 부품 클릭 회전과 드래그, 부품 간 충돌, 이름/문장 위 통과, CTA 위에서도 이어지는 window pointer 경로, 캔버스 위 페이지 스크롤과 화면 밖 lifecycle 정지를 확인했다. warning/error 로그는 0이다.
+- [x] `?motion=reduced`의 390px·1280px에서 canvas display none, 정적 완성형 11부품, depth flat, overflow 0을 확인했다. 모바일 완성형은 본문을 가리지 않도록 이름 위 우측 여백에 둔다.
+- [x] `npm.cmd run verify` 전 단계로 build 766 modules, source 11 routes·12 stylesheet boundaries, dist 23 deployment entries가 통과한다. Home runtime은 route-local dynamic chunk 209.37 kB raw / 61.94 kB gzip이다.
+- [ ] 실제 터치 하드웨어의 세로/가로 gesture 경쟁, OS 강제 색상 전환, 사용자가 10개 관절을 전부 조립하는 장시간 세션과 완성 연출의 육안 검수는 자동화·데스크톱 포인터 검증 범위 밖이다. 스냅·완성 그래프·감소 모션 계약은 자동 테스트와 소스 계약으로 확인했다.
+- [ ] GitHub Pages 배포 성공과 공개 Home 반영은 푸시 후 이 항목에 추가한다.

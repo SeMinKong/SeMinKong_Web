@@ -924,3 +924,17 @@ banhmivietnam.xyz류의 챕터형 스크롤 스토리텔링을 두 곳에 도입
 - 기존 wheel·pointerdown·touchstart·keydown에 실제 `scroll`과 `hashchange`를 추가한다. 모든 입력은 소비하지 않으며, 완료 알림과 ready Promise는 한 번만 처리한다. Pagehide의 smooth-scroll 초기화 지연 계약은 유지한다.
 - Hidden, BFCache 복귀, reduced 전환, watchdog, destroy, 정적 진입과 일부 drawable/timeline setup 실패도 동일한 복구 경로를 사용한다. 늦은 callback이 미완성 상태를 다시 적용해서는 안 된다.
 - 기존 총 1500ms, 길이 비례 획순·easing, SVG geometry, Kinetic ready gate와 레이아웃은 변경하지 않는다.
+
+## 2026-09-07 — Home 관절 모형 퍼즐 override
+
+이 항목은 Home Kinetic의 7개 추상 오브제, 짧은 tap impulse, 이름·인사말·CTA collision body 계약을 대체한다. Facade의 지연 import, WebGL fail-open, fixed-step 보간, fixed world light와 lifecycle gate는 유지한다.
+
+- Runtime은 머리·흉곽·골반·상완 2·전완 2·대퇴 2·하퇴 2의 11개 body와 목·허리·어깨 2·팔꿈치 2·엉덩이 2·무릎 2의 10개 port pair를 만든다. 좌우 팔과 다리는 같은 family 안에서 서로 바꿔 끼울 수 있다.
+- 결합은 미사용 plug/socket의 family, world anchor 거리와 서로 마주 보는 normal 각도가 모두 맞을 때만 발생한다. Drag 중 허용 범위에 들어오면 잡은 connected component 전체를 한 번에 정렬하고 단일점 Matter constraint로 연결한다. 연결된 component 내부 collision만 음수 group으로 끄고, 서로 다른 조각·component와 네 viewport wall의 collision은 유지한다.
+- 이름 SVG, greeting copy와 CTA는 더 이상 Matter body가 아니다. 조각은 세 콘텐츠를 시각적으로 통과하고 DOM이 canvas 위에서 계속 읽기·pointer·keyboard ownership을 가진다. Navigation 아래의 top wall은 유지한다.
+- Fine pointer와 horizontal-dominant touch drag는 조각 또는 연결 묶음을 움직인다. 최근 100ms throw velocity는 component 전체에 적용한다. 짧은 click/tap은 30° 단위로 component를 회전한다. 결합된 port 가까이에서 일정 거리 이상 당기면 연결을 끊으며 같은 gesture 안에서 즉시 재결합하지 않는다.
+- Coarse pointer는 8px 전까지 drag constraint를 연결하지 않는다. 세로 우세 이동은 `scrolling`으로 분류하고 native pan과 `pointercancel`에 맡긴다. Passive listener, `touch-action: pan-y pinch-zoom`, no capture와 gesture handler의 no-`preventDefault` 계약은 유지한다.
+- 마지막 연결은 1회성 완성 연출을 시작한다. 약 620ms 동안 모형을 안정된 자세로 정렬한 뒤 520ms 동안 머리를 기울이고 오른팔을 들며, 10개 관절의 주홍 ring pulse와 머리 위 12개 이하의 작은 paper/ink/vermilion particle을 총 1.78초 안에 끝낸다. 문구·소리·neon bloom은 사용하지 않는다.
+- 완성 연출 중 Matter body를 source of truth로 직접 보간하고 particle은 render-only Pixi layer에 둔다. 연출 종료, hidden, pagehide, context loss와 destroy는 particle을 제거하고 body를 sleep시킨다. 같은 mount에서 재진입·resize로 축하를 다시 재생하지 않는다.
+- Resize는 active drag를 취소하고 connected component별 공통 translation으로 viewport 안에 맞춘다. 각 body를 따로 clamp해 관절이 찢어지는 동작은 금지한다.
+- Reduced motion과 forced colors는 runtime을 만들지 않는 기존 계약을 유지한다. CSS fallback은 11조각의 완성된 정적 연구 모형을 표시하고 pose recovery, joint pulse와 particle을 만들지 않는다.
