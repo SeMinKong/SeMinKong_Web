@@ -32,6 +32,6 @@
 - [x] Home CSS는 합계 2717→1549줄로 줄였으며 실제 Chromium 390×844·768×1024·1280×900에서 이전 공개 페이지와 192개 main 요소의 display·크기·폰트·margin·padding·grid 열이 모두 일치한다. 세 크기 모두 수평 overflow 0, 기본 lite/static 및 full/interactive, 11부품과 서명·CTA 가독성을 확인했다. Desktop/mobile Contact 하단도 정상이다.
 - [x] 390px localhost reduced override에서 depth flat, canvas none, 정적 완성형 11부품, 서명 12획을 확인했다. Skip link는 Tab으로 focus outline이 표시되고 Enter로 main-content에 진입한다. 검수 페이지의 warning/error는 0이다. Touch-action은 pan-y pinch-zoom을 유지한다.
 - [x] 배포 제외 개발 fixture에서 10관절 완성, 완료 중 입력 잠금, 오른팔 올리기를 검증했다. 연출 전체 최대 anchor 오차는 2.28e-13px 미만이다. 실제 말단 drag 후 포즈와 연결 유지, sleeping 상태의 관절 hint 1개, 접근 hint 2개, cancel 시 intent none을 확인했다. 수치 테스트는 연결 순서·방향을 바꾼 조립, 반응형 질량 유지와 회전된 초기 배치 경계도 검증한다.
-- [ ] 배포 성공과 공개 페이지 확인
+- [x] 구현 커밋 `f02199a`의 GitHub Pages run `34088579312`에서 build·deploy 모두 성공했다. 공개 Home에서 새 `portfolio-CjyuSrh-.js`와 `portfolio-CVdpmLl9.css`, full/interactive, 11부품 sleeping, overflow 0, warning/error 0을 확인했다. 캐시 구분 query로 새 배포를 확인한 뒤 기본 주소로 복귀했다. Work는 1280px의 6개 프로젝트와 390px의 정적 목록·overflow 0을 확인했다.
 
 이전 로봇 디자인 검수는 이력 첫 항목에 기록되어 있다. 이번 작업은 동일 동작의 구조 정리이며 실물 터치 기기와 OS forced-colors 전환은 별도 검증 대상이다.
