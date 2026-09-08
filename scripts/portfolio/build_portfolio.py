@@ -341,35 +341,25 @@ def introduction(b):
 
 
 def stack_languages(b):
-    items = [('C++', 'cplusplus'), ('Python', 'python')]
-    icon_size, font_size = 48, 32
-    item_gap, icon_gap, top = 64, 12, 130
+    icon_size, gap, top = 72, 80, 132
     b.para('사용 언어', M, 101, CW, 12.5, 18, bold=True, align='center')
-    row_width = sum(icon_size + icon_gap + pdfmetrics.stringWidth(label, 'KoreanBold', font_size) for label, _ in items) + item_gap
-    x = (W - row_width) / 2
-    text_top = top + (icon_size - font_size) / 2 - .25
-    for label, icon in items:
-        b.svg(icon, x, top, icon_size)
-        b.text(label, x + icon_size + icon_gap, text_top, font_size, 'KoreanBold')
-        x += icon_size + icon_gap + pdfmetrics.stringWidth(label, 'KoreanBold', font_size) + item_gap
+    start = (W - 2 * icon_size - gap) / 2
+    for index, icon in enumerate(['cplusplus', 'python']):
+        b.svg(icon, start + index * (icon_size + gap), top, icon_size)
 
 
 def tech_stack(b):
     b.start('학습 스택', key='tech-stack')
     stack_languages(b)
     groups = [
-        ('로봇·시뮬레이션', [('ROS 2', 'ros'), ('Isaac Sim', 'nvidia'), ('Isaac Lab', 'nvidia')],
-         'ROS 2 통신·관절 제어<br/>센서 오차·접촉·마찰과 sim-to-real'),
-        ('AI·에이전트', [('PyTorch', 'pytorch'), ('LangChain', 'langchain')],
-         '모델 학습·추론<br/>LLM 응용·대화 상태 관리'),
-        ('로컬 추론·API', [('Ollama', 'ollama'), ('llama.cpp', 'llamacpp'), ('FastAPI', 'fastapi')],
-         '양자화·문맥 길이·메모리 사용량<br/>로컬 모델 실행·API 연결'),
-        ('개발 환경', [('Ubuntu', 'ubuntu'), ('Git', 'git'), ('Docker', 'docker')],
-         'Linux 개발 환경·버전 관리<br/>컨테이너 실행 환경'),
+        ('로봇·시뮬레이션', [('ROS 2', 'ros'), ('Isaac Sim', 'nvidia'), ('Isaac Lab', 'nvidia')]),
+        ('AI·에이전트', [('PyTorch', 'pytorch'), ('LangChain', 'langchain')]),
+        ('로컬 추론·API', [('Ollama', 'ollama'), ('llama.cpp', 'llamacpp'), ('FastAPI', 'fastapi')]),
+        ('개발 환경', [('Ubuntu', 'ubuntu'), ('Git', 'git'), ('Docker', 'docker')]),
     ]
     gap = 48
     width = (CW - gap) / 2
-    for i, (title, tools, focus) in enumerate(groups):
+    for i, (title, tools) in enumerate(groups):
         x = M + (i % 2) * (width + gap)
         top = 225 + (i // 2) * 155
         b.rule(top, x, width)
@@ -378,9 +368,9 @@ def tech_stack(b):
         tile_start = x + (width - tile_width * len(tools)) / 2
         for j, (label, icon) in enumerate(tools):
             tile_x = tile_start + j * tile_width
-            b.svg(icon, tile_x + (tile_width - 24) / 2, top + 40, 24)
-            b.para(label, tile_x, top + 75, tile_width, 10.5, 16, align='center')
-        b.para(focus, x, top + 101, width, 10.4, 17, MUTED, align='center')
+            b.svg(icon, tile_x + (tile_width - 44) / 2, top + 52, 44)
+            if icon == 'nvidia':
+                b.para(label, tile_x, top + 108, tile_width, 10.5, 16, align='center')
     b.end([('학습 관심사', WEB + 'about/#questions-title'), ('GitHub', 'https://github.com/SeMinKong')])
 
 

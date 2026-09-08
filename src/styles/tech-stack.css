@@ -8,8 +8,9 @@
 .tech-stack-card {
   min-width: 0;
   display: grid;
-  grid-template-rows: auto auto 1fr;
-  gap: 24px;
+  min-height: 250px;
+  align-content: start;
+  gap: 36px;
   padding: 28px 8px;
   border-top: 1px solid var(--line);
 }
@@ -27,8 +28,8 @@
 .tech-stack-tools {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 18px 8px;
+  flex-wrap: nowrap;
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -43,33 +44,43 @@
   gap: 12px;
   color: var(--text-soft);
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   line-height: 1.5;
   text-align: center;
 }
 
 .tech-stack-tools img {
-  width: 32px;
-  height: 32px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
 }
 
-.tech-stack-card .tech-stack-tools {
-  flex-wrap: nowrap;
+.tech-stack-tool {
+  position: relative;
+  padding-bottom: 34px;
 }
 
-.tech-stack-card > p {
-  width: 100%;
-  max-width: 34em;
-  margin-inline: auto;
-  color: var(--text-soft);
-  font-family: var(--font-body);
-  font-size: 0.94rem;
-  line-height: 1.85;
-  text-align: center;
-  text-wrap: pretty;
-  word-break: keep-all;
-  overflow-wrap: break-word;
+.tech-stack-tool summary {
+  list-style: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.tech-stack-tool summary::-webkit-details-marker {
+  display: none;
+}
+
+.tech-stack-tool summary:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 6px;
+}
+
+.tech-stack-tool > span {
+  position: absolute;
+  top: calc(100% - 22px);
+  left: 50%;
+  width: max-content;
+  transform: translateX(-50%);
 }
 
 .tech-stack-languages {
@@ -78,7 +89,7 @@
   justify-items: center;
   align-content: center;
   gap: 24px;
-  padding-block: 32px 48px;
+  padding-block: 24px 32px;
 }
 
 .tech-stack-languages h3 {
@@ -90,25 +101,16 @@
 
 .tech-stack-languages .tech-stack-tools {
   flex-wrap: nowrap;
-  gap: clamp(24px, 6vw, 80px);
+  gap: clamp(40px, 6vw, 80px);
 }
 
 .tech-stack-languages .tech-stack-tools li {
   flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: clamp(10px, 1.5vw, 18px);
-  color: var(--text);
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-  font-weight: var(--weight-display);
-  line-height: 1.15;
-  white-space: nowrap;
 }
 
 .tech-stack-languages img {
-  width: 64px;
-  height: 64px;
-  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
 }
 
 @media (max-width: 700px) {
@@ -118,17 +120,12 @@
   }
 
   .tech-stack-card {
+    min-height: 218px;
     padding-inline: 12px;
   }
 
   .tech-stack-languages img {
-    width: 48px;
-    height: 48px;
-  }
-}
-
-@media (max-width: 360px) {
-  .tech-stack-languages .tech-stack-tools {
-    gap: 16px;
+    width: 80px;
+    height: 80px;
   }
 }

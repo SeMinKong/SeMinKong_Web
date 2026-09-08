@@ -47,7 +47,7 @@ def verify(path):
             assert abs(page.width - 841.89) < .1 and abs(page.height - 595.28) < .1
             assert not page.rotation
             text = page.extract_text() or ''
-            assert len(text) > 100 and '\ufffd' not in text
+            assert (index == 2 or len(text) > 100) and '\ufffd' not in text
             footer = page.crop((page.width - 60, 550, page.width - 37, 578)).extract_text()
             assert footer.strip() == str(index), f'Page number missing: {index}'
             # Preserve authored paragraph order for editorial checks; spatial
@@ -77,7 +77,7 @@ def verify(path):
                 assert 'canva.com' not in uri, 'Do not publish a Canva editing/share token'
                 external.append(uri)
     stack = texts[1]
-    assert all(label in stack for label in ['학습 스택', '사용 언어', 'C++', 'Python', 'ROS 2', 'Isaac Sim', 'Isaac Lab', 'PyTorch', 'Ollama', 'llama.cpp', 'LangChain', 'FastAPI', 'Git', 'Ubuntu', 'Docker'])
+    assert all(label in stack for label in ['학습 스택', '사용 언어', '로봇·시뮬레이션', 'AI·에이전트', '로컬 추론·API', '개발 환경', 'Isaac Sim', 'Isaac Lab'])
     assert not reader.pages[1]['/Resources'].get('/XObject'), 'Stack icons must stay vector-only'
     intro = texts[0]
     assert 'Suwon,' in texts[0] and 'Republic of Korea' in texts[0]
@@ -126,8 +126,12 @@ def verify(path):
     overlaps = []
     elements = layout['elements']
     assert len([e for e in elements if e['page'] == 2 and e['kind'] == 'svg']) == 13
+    assert sorted(e['text'] for e in elements if e['page'] == 2 and e['kind'] == 'svg') == sorted([
+        'cplusplus', 'python', 'ros', 'nvidia', 'nvidia', 'pytorch', 'langchain',
+        'ollama', 'llamacpp', 'fastapi', 'ubuntu', 'git', 'docker',
+    ])
     languages = [e for e in elements if e['page'] == 2 and 95 <= e['top'] < 225]
-    assert {e['text'] for e in languages} == {'사용 언어', 'C++', 'Python', 'cplusplus', 'python'}
+    assert {e['text'] for e in languages} == {'사용 언어', 'cplusplus', 'python'}
     language_items = [e for e in languages if e['text'] != '사용 언어']
     assert abs((min(e['x'] for e in language_items) + max(e['x'] + e['width'] for e in language_items)) / 2 - 841.89 / 2) < .02
     figure_root = ROOT / 'scripts/portfolio/assets/architecture/returned'
