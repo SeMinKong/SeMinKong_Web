@@ -146,14 +146,14 @@ def verify(path):
                    if '/A' in a.get_object()]
         assert sum(bool(re.search(r'/blob/[0-9a-f]{40}/', u)) for u in sources) >= 3, f'Page {page}: source pins missing'
         assert len([e for e in page_elements if e['x'] == 515 and e['height'] >= 45]) == 3
-    # Added plates contain searchable vector explanations, not screenshots of code.
+    # Added pages explain source conditions and calculations as searchable vectors.
     plate_labels = {
-        5: ['의사코드', 'read_present_position', '7축', '팀 구현', '독립 점검'],
-        10: ['깊이 격자', 'z_mm', '1000', '정지 실패', '정상 종료 시 재개'],
-        14: ['1024 tokens', '이하 입력', '부분 요약·후처리', '재요약·후처리', 'labels'],
+        5: ['acos', 'radians(125)', '0.65', '0.35', '0.08', '3020', '명령 수신 3회', '20Hz', '50Hz', '250ms', '실측 보장', '팀 구현'],
+        10: ['8초', '0.5', '70px', '시각·위치를 갱신', '중복 판정보다 먼저', '0.6', 'max_age=3', 'and xs', '정지 응답 실패', 'z_mm', '종료 코드 0'],
+        14: ['384', '256', '1024', '512', '128', 'length_penalty', 'labels', '각 부분 요약에도', 'ROUGE', '거치지 않으므로'],
         17: ['mask > 1', '외부 윤곽', '0.001', 'x_norm', 'y_norm', '독립'],
-        20: ['in_progress 유지', '[GENERATE_PROMPT]', 'round - 1', '1개 이상', '연결 종료 시 삭제'],
-        23: ['overlap / 2', 'vn > 0', '1/m1+1/m2', 'D > 0', '개념도'],
+        20: ['in_progress를 유지', '[GENERATE_PROMPT]', 'round -= 1', '1개 이상', '연결 종료 시 삭제', '이전 generated_prompt는 남으므로'],
+        23: ['overlap/2', 'vn > 0', '1/m1+1/m2', '0<D<r1+r2', '500ms', '0.45', '0.8**0.1', '계산 예시'],
     }
     for page, labels in plate_labels.items():
         normalized = re.sub(r'\s+', '', texts[page-1])

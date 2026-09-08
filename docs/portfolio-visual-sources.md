@@ -110,3 +110,7 @@ Pages 5/9 preserve the owner's THING/AQIS diagrams. Pages 12/15/18/19 use `scrip
 - Prompt: HTML/CSS/JavaScript client, FastAPI REST/WebSocket, Python dict sessions, six-domain runner, LangChain/Upstage Solar Pro and Markdown results. There is no compiled LangGraph execution; disconnect deletes the memory session.
 
 The other 14 pages were compared pixel-for-pixel at 2× rendering scale with the previously published PDF and were identical. Existing project ownership, awards, source media, six internal links and evaluation caveats are preserved. Original decks, attachments, private profile and scratch evidence stay outside publication.
+
+## 2026-09-08 — 원리·계산·실행 조건 페이지
+
+5·10·14·17·20·23쪽은 문제/방법 본문과 계산식·의사코드 패널을 세 행으로 대응시킨 PDF 벡터 조판이다. 새 이미지나 생성 미디어를 사용하지 않았다. 수식·상수·분기는 고정된 원본 소스에서 축약하며 개인/팀 기여와 설정/실측 경계를 명시한다. 기존18쪽의 레이아웃 데이터와105dpi 렌더 픽셀은 직전24쪽 판과 정확히 같고 원본 구조도5개 RGBA도 유지한다.
