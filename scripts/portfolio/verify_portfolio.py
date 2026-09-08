@@ -126,9 +126,10 @@ def verify(path):
     overlaps = []
     elements = layout['elements']
     assert len([e for e in elements if e['page'] == 2 and e['kind'] == 'svg']) == 13
-    languages = [e for e in elements if e['page'] == 2 and 97 <= e['top'] < 133]
+    languages = [e for e in elements if e['page'] == 2 and 95 <= e['top'] < 225]
     assert {e['text'] for e in languages} == {'사용 언어', 'C++', 'Python', 'cplusplus', 'python'}
-    assert abs((min(e['x'] for e in languages) + max(e['x'] + e['width'] for e in languages)) / 2 - 841.89 / 2) < .02
+    language_items = [e for e in languages if e['text'] != '사용 언어']
+    assert abs((min(e['x'] for e in language_items) + max(e['x'] + e['width'] for e in language_items)) / 2 - 841.89 / 2) < .02
     figure_root = ROOT / 'scripts/portfolio/assets/architecture/returned'
     figures = json.loads((figure_root / 'manifest.json').read_text(encoding='utf-8'))['figures']
     assert {f['page'] for f in figures} == {10, 16, 19, 22, 25}

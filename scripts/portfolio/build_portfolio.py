@@ -340,23 +340,23 @@ def introduction(b):
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/')])
 
 
-def stack_icon_row(b, title, items, top, icon_size=18, font_size=9.5):
-    heading_width = pdfmetrics.stringWidth(title, 'KoreanBold', font_size)
-    item_gap, icon_gap = 24, 8
-    row_width = heading_width + 28 + sum(icon_size + icon_gap + pdfmetrics.stringWidth(label, 'Korean', font_size) for label, _ in items) + item_gap * (len(items) - 1)
+def stack_languages(b):
+    items = [('C++', 'cplusplus'), ('Python', 'python')]
+    icon_size, font_size = 48, 32
+    item_gap, icon_gap, top = 64, 12, 130
+    b.para('사용 언어', M, 101, CW, 12.5, 18, bold=True, align='center')
+    row_width = sum(icon_size + icon_gap + pdfmetrics.stringWidth(label, 'KoreanBold', font_size) for label, _ in items) + item_gap
     x = (W - row_width) / 2
     text_top = top + (icon_size - font_size) / 2 - .25
-    b.text(title, x, text_top, font_size, 'KoreanBold', MUTED)
-    x += heading_width + 28
     for label, icon in items:
         b.svg(icon, x, top, icon_size)
-        b.text(label, x + icon_size + icon_gap, text_top, font_size)
-        x += icon_size + icon_gap + pdfmetrics.stringWidth(label, 'Korean', font_size) + item_gap
+        b.text(label, x + icon_size + icon_gap, text_top, font_size, 'KoreanBold')
+        x += icon_size + icon_gap + pdfmetrics.stringWidth(label, 'KoreanBold', font_size) + item_gap
 
 
 def tech_stack(b):
     b.start('학습 스택', key='tech-stack')
-    stack_icon_row(b, '사용 언어', [('C++', 'cplusplus'), ('Python', 'python')], 97, 28, 12)
+    stack_languages(b)
     groups = [
         ('로봇·시뮬레이션', [('ROS 2', 'ros'), ('Isaac Sim', 'nvidia'), ('Isaac Lab', 'nvidia')],
          'ROS 2 통신·관절 제어<br/>센서 오차·접촉·마찰과 sim-to-real'),
@@ -371,16 +371,16 @@ def tech_stack(b):
     width = (CW - gap) / 2
     for i, (title, tools, focus) in enumerate(groups):
         x = M + (i % 2) * (width + gap)
-        top = 133 + (i // 2) * 184
+        top = 225 + (i // 2) * 155
         b.rule(top, x, width)
         b.para(title, x, top + 12, width, 13.5, 21, bold=True, align='center')
         tile_width = width / 3
         tile_start = x + (width - tile_width * len(tools)) / 2
         for j, (label, icon) in enumerate(tools):
             tile_x = tile_start + j * tile_width
-            b.svg(icon, tile_x + (tile_width - 28) / 2, top + 46, 28)
-            b.para(label, tile_x, top + 84, tile_width, 10.5, 16, align='center')
-        b.para(focus, x, top + 117, width, 10.4, 17, MUTED, align='center')
+            b.svg(icon, tile_x + (tile_width - 24) / 2, top + 40, 24)
+            b.para(label, tile_x, top + 75, tile_width, 10.5, 16, align='center')
+        b.para(focus, x, top + 101, width, 10.4, 17, MUTED, align='center')
     b.end([('학습 관심사', WEB + 'about/#questions-title'), ('GitHub', 'https://github.com/SeMinKong')])
 
 
