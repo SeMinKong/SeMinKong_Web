@@ -1,6 +1,6 @@
 # Motion specification
 
-현재 구현 기준: 2026-09-07. 과거에 폐기·대체된 연출은 [모션 이력](history/motion-spec.md)에 보관한다.
+현재 구현 기준: 2026-09-08. 과거에 폐기·대체된 연출은 [모션 이력](history/motion-spec.md)에 보관한다.
 
 ## 공통 원칙과 소유권
 
@@ -12,7 +12,7 @@
 - Lenis: full desktop의 page scroll. Touch는 native vertical pan과 pinch를 유지한다.
 - 같은 요소의 transform/opacity를 두 모션 시스템이 동시에 소유하지 않는다.
 - Hidden/offscreen에서는 연속 모션과 미디어를 멈춘다. 기능 실패 시 읽을 수 있는 정적 콘텐츠로 돌아간다.
-- 수동 Motion/Depth 버튼, 커서 follower, magnetic effect, 전역 fluid, Three.js는 사용하지 않는다.
+- 수동 Motion/Depth 버튼, 커서 follower, 버튼·링크를 끌어당기는 magnetic effect, 전역 fluid, Three.js는 사용하지 않는다. 로봇 조인트의 국소적인 결합 보정은 아래 명세를 따른다.
 
 About·Resume 학습 스택은 고정된 위치에서 읽을 수 있도록 대상 reveal을 적용하지 않는다. 최초 `#now-title`·`#skills-title` 진입만 상단 intro를 생략하고, load 이후 폰트 준비와 다음 프레임을 기다려 `scroll-padding-top` 기준으로 한 번 위치를 맞춘다. 기존 `smoothScrollAfter`로 이 정렬 뒤 Lenis를 시작한다. 사용자 조작·다른 해시·페이지 이탈 시 취소하고, 뒤로/앞으로 복원에는 적용하지 않는다.
 
@@ -52,7 +52,15 @@ Full/lite 전환에서는 로딩 중이거나 이미 생성된 controller를 유
 
 ## 연결 hint와 완성 연출
 
-가장 가까운 호환 pair만 접근 hint를 표시한다. Fine/coarse hint 반경은 52/58 × interactionScale, 실제 snap은 30/34 × interactionScale이다. 허용 각도·family·polarity·occupied/component 제외 조건은 실제 snap과 공유한다.
+호환되는 조인트 한 쌍만 접근 hint를 표시한다. Fine/coarse hint 반경은 52/58 × interactionScale, 허용 각도는 45°/50°다. 실제 결합 반경은 38/42 × interactionScale, 각도는 35°/40°다. 실제 결합이 가능한 후보를 먼저 고르고 그 안에서 이전 pair를 유지한다. family·polarity·occupied/component 제외 조건은 hint와 결합이 공유한다.
+
+같은 후보 곁에서 80ms 동안 포인터 이동이 10 × interactionScale 이내면 180ms 결합 보정을 시작한다. 정상 release는 표시한 후보를 다시 검증해 즉시 보정을 시작하거나 진행 중인 보정을 끝낸다. 빠른 통과·분리 직후 gesture·포즈 조작에서는 자동 결합하지 않는다. 후보가 사라지면 대기 시간을 초기화한다.
+
+위치와 각도는 고정 물리 clock에서 ease-out으로 보정한다. 이미 연결된 이동 부품은 시작 자세의 강체 묶음으로 변환하고, 해당 묶음의 drag·servo 제어를 잠시 분리한다. 맞물리는 두 묶음 사이의 충돌만 임시로 해제하며 다른 부품·벽과의 충돌은 유지한다. 회전 경로가 화면 경계를 넘으면 보정을 시작하지 않는다. 완료 직전에 포트·연결 상태를 확인하고 한 번만 graph를 갱신한 뒤 현재 포인터 기준으로 drag를 다시 연결한다.
+
+포인터가 결합 범위에서 10 × interactionScale 이상 벗어나거나, 목표가 시작 위치에서 같은 거리 또는 10° 이상 움직이면 보정을 취소한다. 목표 이탈 검사는 release 이후에도 유지한다. 분리·새 입력·cancel·stop·resize·mode 변경·destroy에서 보정과 임시 충돌 그룹을 정리한다. 마지막 연결이 release 뒤 완성되면 commit에서 완성 연출을 시작한다.
+
+보정 중 연결부 사이에 낮은 불투명도의 vermilion 곡선 하나를 표시하고 결합 후 160ms 동안 작은 링을 한 번 펼친다. 효과는 보간된 실제 관절 좌표를 따라가며 지속적인 점멸·소리·반복 입자는 없다. Reduced/forced-colors는 기존 정적 완성형을 유지한다.
 
 말단 hover는 분리 grip을 먼저 제외한 뒤 실제 parent 관절 ring과 crosshair를 표시한다. Body grip은 grab이다. Hint opacity만 Anime.js로 140ms 보간하며 sleeping 물리는 깨우지 않는다. Release, cancel, leave, stop, resize, 완성 시작과 destroy에서 hint를 지운다.
 

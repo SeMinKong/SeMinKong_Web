@@ -2,7 +2,7 @@ import { Application, Container, Rectangle } from 'pixi.js';
 import Matter from 'matter-js';
 import { localRobotPort } from './robot-kit.js';
 import {
-  calculateJointServo, clamp, evaluatePortSnap, interpolatePose, limitRelativeAngularVelocity,
+  calculateJointServo, clamp, interpolatePose, limitRelativeAngularVelocity,
   pointInRotatedRect, projectJointLimit, rotatePoint, smoothThrowVelocity, solveMovingPortPose,
   worldPort, wrapAngle
 } from './kinetic-math.js';
@@ -10,11 +10,13 @@ import {
   CELEBRATION_DURATION, DETENT_STEP, FIXED_STEP, JOINT_SERVO_PROFILES, MAX_CATCH_UP,
   MAX_FRAME_DELTA, MAX_THROW_SPEED, PART_SPECS, PHYSICS_SUBSTEPS, PHYSICS_SUBSTEP, PORT,
   POSE_GRIP_DIRECTION, POSE_JOINT_PRIORITIES, REQUIRED_CONNECTIONS, ROTATION_STEP,
-  SETTLE_DURATION, WALL_THICKNESS, getInitialRobotPose, getRobotBodyOptions, getRobotDensity, getScale
+  SETTLE_DURATION, WALL_THICKNESS, getInitialRobotPose, getRobotBodyOptions, getRobotDensity, getScale,
+  getSnapTuning
 } from './robot-config.js';
 import {
-  ROBOT_TEXTURE_ALIASES, createPortHints, createRobotView, loadRobotTextures, updateViewLighting
+  ROBOT_TEXTURE_ALIASES, createMagnetEffects, createPortHints, createRobotView, loadRobotTextures, updateViewLighting
 } from './robot-artwork.js';
+import { createRobotSnap } from './robot-snap.js';
 import {
   applyCompletionBlend, buildCompletionTargets, createCelebrationEffects, easeInOutCubic, easeOutCubic
 } from './robot-completion.js';
@@ -102,6 +104,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   const objectLayer = new Container();
   const effectLayer = new Container();
   const celebrationEffects = createCelebrationEffects(ambientLayer, effectLayer);
+  const magnetEffects = createMagnetEffects(effectLayer);
   const completionModel = { dynamicBodies, bodyMeta, idToBody, connections };
   app.stage.addChild(ambientLayer, shadowLayer, objectLayer, effectLayer);
 
@@ -278,6 +281,10 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
         : { x: body.position.x, y: body.position.y, angle: body.angle };
       updateViewLighting(view, pose, { width, height });
     }
+    magnetEffects.draw((body) => {
+      const state = poseStates.get(body);
+      return interpolatePose(state.previous, state.current, alpha);
+    });
   };
 
   const updatePoseStatesFromBodies = () => {
@@ -325,7 +332,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   };
 
   const startCelebration = () => {
-    if (hasCelebrated || celebration || activePointer || !isPuzzleComplete()) return;
+    if (hasCelebrated || celebration || activePointer || snap.active || !isPuzzleComplete()) return;
+    snap.reset();
+    magnetEffects.clear();
     setPortHints([], 'none', true);
     hasCelebrated = true;
     const startTargets = new Map(dynamicBodies.map((body) => [body, {
@@ -367,6 +376,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const stop = () => {
     if (destroyed) return;
+    snap.reset();
+    magnetEffects.clear();
     setPortHints([], 'none', true);
     if (!running) return;
     if (activePointer) {
@@ -406,6 +417,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     for (const connection of connections) {
       const joint = connection.angular;
       if (!joint || (joint.socketBody.isSleeping && joint.plugBody.isSleeping)) continue;
+      if (snap.controls(joint.socketBody) || snap.controls(joint.plugBody)) continue;
       const profile = JOINT_SERVO_PROFILES[joint.family];
       if (!profile) continue;
       const relativeVelocity = joint.plugBody.angularVelocity - joint.socketBody.angularVelocity;
@@ -455,6 +467,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       const joint = connection.angular;
       const profile = joint && JOINT_SERVO_PROFILES[joint.family];
       if (!joint || !profile) continue;
+      if (snap.controls(joint.socketBody) || snap.controls(joint.plugBody)) continue;
       const projection = projectJointLimit({
         parentAngle: joint.socketBody.angle,
         childAngle: joint.plugBody.angle,
@@ -504,7 +517,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       state.previous.angle = state.current.angle;
     }
     for (let index = 0; index < PHYSICS_SUBSTEPS; index += 1) {
-      if (activePointer?.phase === 'dragging') {
+      if (activePointer?.phase === 'dragging' && !snap.active) {
         const response = 1 - Math.exp(-42 * (PHYSICS_SUBSTEP / 1000));
         dragConstraint.pointA.x += (activePointer.target.x - dragConstraint.pointA.x) * response;
         dragConstraint.pointA.y += (activePointer.target.y - dragConstraint.pointA.y) * response;
@@ -512,11 +525,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       applyJointServos();
       Engine.update(engine, PHYSICS_SUBSTEP);
       projectJointLimits();
-      if (activePointer?.phase === 'dragging'
-        && !activePointer.snappedDuringDrag
-        && !activePointer.skipSnapUntilRelease) {
-        activePointer.snappedDuringDrag = trySnap(activePointer.body);
-      }
+      snap.update(PHYSICS_SUBSTEP);
+      if (celebration) break;
     }
     updateDragHints();
     updatePoseStatesFromBodies();
@@ -525,6 +535,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   const handleTick = (ticker) => {
     try {
       const frameDelta = clamp(ticker.deltaMS, 0, MAX_FRAME_DELTA);
+      magnetEffects.update(frameDelta);
       if (celebration) {
         updateCelebration(frameDelta);
         syncViews(1);
@@ -536,7 +547,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
         }
         syncViews(accumulator / FIXED_STEP);
       }
-      const settled = !celebration
+      const settled = !celebration && !snap.active
         && !activePointer
         && jointServosSettled()
         && dynamicBodies.every((body) => body.isSleeping || (body.speed < 0.035 && Math.abs(body.angularSpeed) < 0.012));
@@ -614,9 +625,6 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     resetPoseStates();
   };
 
-  const compatiblePorts = (portA, portB) => portA.family === portB.family
-    && portA.polarity !== portB.polarity;
-
   const alignComponent = (component, movingBody, movingPort, targetBody, targetPort) => {
     const movingPose = { x: movingBody.position.x, y: movingBody.position.y, angle: movingBody.angle };
     const targetPose = { x: targetBody.position.x, y: targetBody.position.y, angle: targetBody.angle };
@@ -632,39 +640,6 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     }
   };
 
-  const findSnapCandidate = (movingRoot, maxDistance, maxAngle) => {
-    const component = getComponent(movingRoot);
-    const componentSet = new Set(component);
-    let best = null;
-    for (const movingBody of component) {
-      const movingMeta = bodyMeta.get(movingBody);
-      for (const movingPort of movingMeta.ports) {
-        if (occupiedPorts.has(portKey(movingBody, movingPort))) continue;
-        for (const targetBody of dynamicBodies) {
-          if (componentSet.has(targetBody)) continue;
-          const targetMeta = bodyMeta.get(targetBody);
-          for (const targetPort of targetMeta.ports) {
-            if (occupiedPorts.has(portKey(targetBody, targetPort))) continue;
-            if (!compatiblePorts(movingPort, targetPort)) continue;
-            const result = evaluatePortSnap(
-              { x: movingBody.position.x, y: movingBody.position.y, angle: movingBody.angle },
-              movingPort,
-              { x: targetBody.position.x, y: targetBody.position.y, angle: targetBody.angle },
-              targetPort,
-              { maxDistance, maxAngle }
-            );
-            if (!result.eligible) continue;
-            const score = result.distance + result.angleError * 16;
-            if (!best || score < best.score) {
-              best = { movingBody, movingPort, score, targetBody, targetPort };
-            }
-          }
-        }
-      }
-    }
-    return best;
-  };
-
   const updateDragHints = () => {
     if (!activePointer) return;
     if (activePointer.phase !== 'dragging' || celebration
@@ -677,16 +652,12 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       setPortHints([[joint.plugBody, getConnectionPort(activePointer.flexConnection, joint.plugBody)]], 'pose');
       return;
     }
-    const best = findSnapCandidate(activePointer.body,
-      (coarsePointer ? 58 : 52) * interactionScale, coarsePointer ? Math.PI / 6 : Math.PI / 8);
+    const best = snap.hint;
     setPortHints(best ? [[best.movingBody, best.movingPort], [best.targetBody, best.targetPort]] : [], best ? 'connect' : 'move');
   };
 
-  const trySnap = (movingRoot) => {
-    const best = findSnapCandidate(movingRoot, (coarsePointer ? 34 : 30) * interactionScale,
-      coarsePointer ? Math.PI / 6 : Math.PI / 8);
-    if (!best) return false;
-    const component = getComponent(movingRoot);
+  const connectPorts = (best) => {
+    const component = getComponent(best.movingBody);
 
     alignComponent(component, best.movingBody, best.movingPort, best.targetBody, best.targetPort);
     const constraint = Constraint.create({
@@ -725,8 +696,48 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     syncPortMarkers();
     updatePuzzleState();
     resetPoseStates();
-    return true;
+    if (activePointer) {
+      activePointer.snappedDuringDrag = true;
+      activePointer.breakCandidate = null;
+      rebindDrag(true);
+    }
+    magnetEffects.connect(best);
+    if (!activePointer && isPuzzleComplete()) startCelebration();
   };
+
+  const rebindDrag = (preservePosition = false) => {
+    const pointer = activePointer;
+    if (!pointer || pointer.phase !== 'dragging') return;
+    if (preservePosition) pointer.localPoint = rotatePoint(
+      Vector.sub(pointer.target, pointer.body.position), -pointer.body.angle
+    );
+    dragConstraint.bodyB = pointer.body;
+    dragConstraint.angleB = pointer.body.angle;
+    dragConstraint.pointA = { ...pointer.target };
+    dragConstraint.pointB = rotatePoint(pointer.localPoint, pointer.body.angle);
+  };
+
+  const snap = createRobotSnap({
+    dynamicBodies, bodyMeta, occupiedPorts, getComponent,
+    getTuning: () => getSnapTuning(coarsePointer, interactionScale),
+    getPointer: () => activePointer,
+    canPlace: (poses) => {
+      const top = getTopBoundary();
+      for (const [body, pose] of poses) {
+        for (const vertex of body.vertices) {
+          const point = rotatePoint(Vector.sub(vertex, body.position), pose.angle - body.angle);
+          const x = point.x + pose.x;
+          const y = point.y + pose.y;
+          if (x < 1 || x > width - 1 || y < top + 1 || y > height - 1) return false;
+        }
+      }
+      return true;
+    },
+    onStart: () => { dragConstraint.bodyB = null; },
+    onConnect: connectPorts,
+    onCancel: () => rebindDrag(),
+    onProgress: (state) => magnetEffects.progress(state)
+  });
 
   const removeConnection = (connection) => {
     const index = connections.indexOf(connection);
@@ -871,7 +882,16 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     setPortHints([], 'none', true);
     canvas.style.cursor = 'default';
     if (!applyGesture || pointer.phase === 'scrolling') {
+      snap.reset();
+      magnetEffects.clear();
       if (isPuzzleComplete()) startCelebration();
+      return;
+    }
+    // A normal release lets an in-flight capture finish. It must not relocate
+    // the assembly to the old grab point or apply a throw/rotation afterward.
+    if (snap.active || pointer.snappedDuringDrag) {
+      if (isPuzzleComplete()) startCelebration();
+      start();
       return;
     }
     if (pointer.phase === 'dragging' && pointer.flexConnection) {
@@ -889,10 +909,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     let snapped = false;
     if (pointer.phase === 'pending' || travel < 7) {
       rotateComponent(body);
-      snapped = trySnap(body);
+      snapped = snap.request(body);
     } else if (pointer.phase === 'dragging') {
-      snapped = pointer.snappedDuringDrag
-        || (!pointer.skipSnapUntilRelease && trySnap(body));
+      snapped = !pointer.skipSnapUntilRelease && snap.request(body);
       if (!snapped) {
         const velocity = smoothThrowVelocity(pointer.samples, body.velocity, {
           fixedStep: FIXED_STEP,
@@ -915,6 +934,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const handlePointerDown = (event) => {
     if (destroyed || celebration || activePointer || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    snap.reset();
+    magnetEffects.clear();
     const point = toWorldPoint(event.clientX, event.clientY);
     const body = findBody(point);
     if (!body) return;
@@ -963,6 +984,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     if (breakCandidate
       && outwardTravel >= 34 * interactionScale
       && outwardTravel >= crossTravel * 0.72) {
+      snap.reset();
+      magnetEffects.clear();
       removeConnection(breakCandidate.connection);
       activePointer.breakCandidate = null;
       activePointer.flexConnection = null;
@@ -984,7 +1007,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   };
 
   const handleHoverPointerMove = (event) => {
-    if (destroyed || celebration || activePointer || event.pointerType === 'touch') return;
+    if (destroyed || celebration || snap.active || activePointer || event.pointerType === 'touch') return;
     const point = toWorldPoint(event.clientX, event.clientY);
     const body = findBody(point);
     if (!body) { canvas.style.cursor = 'default'; setPortHints(); return; }
@@ -1095,6 +1118,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     const nextHeight = Math.max(2, Math.round(rect.height));
     if (nextWidth === Math.round(width) && nextHeight === Math.round(height)) return;
 
+    snap.reset();
+    magnetEffects.clear();
     if (activePointer) {
       dragConstraint.bodyB = null;
       dragConstraint.pointB = { x: 0, y: 0 };
@@ -1138,6 +1163,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const setMode = (nextMode) => {
     if (destroyed) return;
+    snap.reset();
+    magnetEffects.clear();
     coarsePointer = window.matchMedia('(pointer: coarse)').matches;
     resolution = Math.min(window.devicePixelRatio || 1, nextMode === 'full' && !coarsePointer ? 1.5 : 1);
     resize();
@@ -1159,6 +1186,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const nudgeAt = (clientX, clientY) => {
     if (destroyed || celebration) return;
+    snap.reset();
+    magnetEffects.clear();
     hasInteracted = true;
     const point = toWorldPoint(clientX, clientY);
     let body = findBody(point);

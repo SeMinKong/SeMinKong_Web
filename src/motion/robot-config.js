@@ -20,6 +20,16 @@ export const SIGNAL = 0xa73524;
 export const SHADOW = 0x171512;
 export const PORT = Object.freeze({ PLUG: 'plug', SOCKET: 'socket' });
 export const DETENT_STEP = Math.PI / 12;
+export const SNAP_DWELL = 80;
+export const SNAP_DURATION = 180;
+export const getSnapTuning = (coarsePointer, interactionScale) => ({
+  distance: (coarsePointer ? 42 : 38) * interactionScale,
+  angle: (coarsePointer ? 40 : 35) * Math.PI / 180,
+  hintDistance: (coarsePointer ? 58 : 52) * interactionScale,
+  hintAngle: (coarsePointer ? 50 : 45) * Math.PI / 180,
+  steadyTravel: 10 * interactionScale,
+  exitMargin: 10 * interactionScale
+});
 export const POSE_JOINT_PRIORITIES = Object.freeze({
   head: Object.freeze(['neck']),
   chest: Object.freeze([]),

@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import Matter from 'matter-js';
 import { ROBOT_GEOMETRY, getRobotAssembly, localRobotPort } from '../src/motion/robot-kit.js';
 import { evaluatePortSnap, rotatePoint, worldPort } from '../src/motion/kinetic-math.js';
+import { getSnapTuning } from '../src/motion/robot-config.js';
 
 test('the authored bearing centers coincide with the physical joint axes', async () => {
   for (const [asset, geometry] of Object.entries(ROBOT_GEOMETRY)) {
@@ -36,8 +37,9 @@ test('inset bearing pairs are reachable before rectangle collisions block the sn
   const pieces = getRobotAssembly();
   const byId = new Map(pieces.map((piece) => [piece.id, piece]));
   for (const scale of [1.55, 1.75, 2, 2.06]) {
-    for (const child of pieces.filter((piece) => piece.parent)) {
-      for (const angleError of [0, -Math.PI / 8, Math.PI / 8]) {
+    for (const coarse of [false, true]) for (const child of pieces.filter((piece) => piece.parent)) {
+      const tuning = getSnapTuning(coarse, Math.min(scale, 1.4));
+      for (const angleError of [0, -tuning.angle, tuning.angle]) {
         const parent = byId.get(child.parent);
         const socket = localRobotPort(parent, parent.ports.find((p) => p.id === child.socket), scale);
         const plug = localRobotPort(child, child.ports.find((p) => p.id === child.plug), scale);
@@ -54,7 +56,7 @@ test('inset bearing pairs are reachable before rectangle collisions block the sn
         const gap = targetInset + movingInset + 0.5;
         const movingPose = { x: socket.x - movingOffset.x + normal.x * gap, y: socket.y - movingOffset.y + normal.y * gap, angle };
         const result = evaluatePortSnap(movingPose, plug, { x: 0, y: 0, angle: 0 }, socket,
-          { maxDistance: 30 * Math.min(scale, 1.4), maxAngle: Math.PI / 8 + 1e-9 });
+          { maxDistance: tuning.distance, maxAngle: tuning.angle + 1e-9 });
         assert.ok(result.eligible, `${child.id} at scale ${scale}, angle ${angleError}: ${result.distance.toFixed(2)}px before contact`);
       }
     }
