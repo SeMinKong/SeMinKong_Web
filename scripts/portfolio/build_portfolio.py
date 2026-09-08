@@ -176,7 +176,7 @@ class Book:
         self.c.restoreState()
         if caption:
             return self.para(caption, ix, top + dh + caption_gap, dw,
-                             caption_size, caption_leading, MUTED, keep_words=True)
+                             caption_size, caption_leading, MUTED, keep_words=True, align='center')
         return top + dh
 
     def badge(self, number, x, top, target=None):
@@ -247,11 +247,11 @@ class Book:
         self.c.drawPath(head, fill=1, stroke=0)
         self.c.restoreState()
 
-    def start(self, title, subtitle='', key=None):
+    def start(self, title, subtitle='', key=None, title_align='left'):
         self.n += 1
         self.c.setFillColor(PAPER)
         self.c.rect(0, 0, W, H, fill=1, stroke=0)
-        self.para(title, M, 57, CW, 23, 30, bold=True)
+        self.para(title, M, 57, CW, 23, 30, bold=True, align=title_align)
         if subtitle:
             self.para(subtitle, M, 97, CW, 10.4, 16, MUTED)
         key = key or f'p{self.n}'
@@ -349,7 +349,7 @@ def stack_languages(b):
 
 
 def tech_stack(b):
-    b.start('학습 스택', key='tech-stack')
+    b.start('학습 스택', key='tech-stack', title_align='center')
     stack_languages(b)
     groups = [
         ('로봇·시뮬레이션', [('ROS 2', 'ros'), ('Isaac Sim', 'nvidia'), ('Isaac Lab', 'nvidia')]),
@@ -377,12 +377,12 @@ def tech_stack(b):
 def project_index(b):
     b.start('프로젝트', '장비 연동과 실물 제어를 중심으로, 입력과 출력의 품질을 다룬 작업을 소개합니다.', key='projects')
     rows = [
-        ('4 - 8', 'THING', '6인 팀 / 구동·기구 통합', '기구 편차 / 초기 목표와 토크 순서', 'thing'),
-        ('9 - 14', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '검사·분류 / 가상 공정·SLAM 관제', 'aqis'),
-        ('15 - 17', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 요약과 정보 보존', 'briefit'),
-        ('18 - 20', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '라벨 변환 / 분류·분할 결합', 'mri'),
-        ('21 - 23', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 이력 / 수정 흐름', 'prompt'),
-        ('24 - 26', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '충돌·겹침 보정 / 서버 입력 제한', 'alkkagi'),
+        ('3 - 7', 'THING', '6인 팀 / 구동·기구 통합', '기구 편차 / 초기 목표와 토크 순서', 'thing'),
+        ('8 - 13', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '검사·분류 / 가상 공정·SLAM 관제', 'aqis'),
+        ('14 - 16', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 요약과 정보 보존', 'briefit'),
+        ('17 - 19', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '라벨 변환 / 분류·분할 결합', 'mri'),
+        ('20 - 22', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 이력 / 수정 흐름', 'prompt'),
+        ('23 - 25', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '충돌·겹침 보정 / 서버 입력 제한', 'alkkagi'),
     ]
     b.label('쪽', M, 139)
     b.label('프로젝트', 112, 139)
@@ -405,8 +405,8 @@ def thing_overview(b):
     b.meta([('기간', '2026.07 - 08'), ('팀·역할', '6인 팀<br/>모터 제어·기구 통합'),
             ('사용 도구', 'DYNAMIXEL / U2D2<br/>모터 점검·제어 스크립트'),
             ('팀 기술', 'ROS 2 / MediaPipe<br/>OpenCV / Jetson<br/>Raspberry Pi 5')])
-    b.image('thing/integrated-robot-hand-portrait.webp', 233, 137, 215, 286)
-    b.para('통합 조립', 233, 433, 215, 9.2, 14, MUTED)
+    b.image('thing/integrated-robot-hand-portrait.webp', 233, 137, 215, 286,
+            caption='통합 조립', caption_size=9.2, caption_leading=14)
     b.section('프로젝트 개요',
               '카메라로 읽은 사람의 손동작을 텐던 로봇손으로 재현합니다. 손동작 인식부터 ROS 2 제어, 모터 구동과 관제까지 연결한 팀 프로젝트입니다.',
               476, 137, 327)
@@ -473,8 +473,8 @@ def thing_result(b):
 def aqis_overview(b):
     b.start('AQIS · 스마트 팩토리',
             '실제 검사·Dobot 분류, RoboDK 가상 공정, TurtleBot SLAM·로봇 상태 관제를 연결', key='aqis')
-    b.image('@aqis-video-inspection-0010.jpg', M, 137, 508, 286)
-    b.para('RealOps · 실제 장비 시연', M, 433, 508, 9.2, 15, MUTED)
+    b.image('@aqis-video-inspection-0010.jpg', M, 137, 508, 286,
+            caption='RealOps · 실제 장비 시연', caption_size=9.2, caption_leading=15)
     b.para('2026.05 기획 / 06 본 개발<br/><b>2인 팀 · 팀장</b><br/>Full-stack & Robot Integration', 576, 137, 227, 10.1, 18)
     b.rule(208,576,227)
     b.section('프로젝트 개요', '카메라 검사에 따라 Dobot이 제품을 분류합니다. RoboDK 가상 공정과 TurtleBot SLAM·상태 관제를 함께 만들고, 공통 서버로 웹 화면과 연결했습니다.', 576, 225, 227, 10, keep_words=True)
@@ -670,14 +670,14 @@ def contact(b):
     b.end()
 
 
-PAGES = [introduction, tech_stack, project_index, thing_overview, thing_architecture,
+PAGES = [introduction, project_index, thing_overview, thing_architecture,
          lambda b: technical_pages.thing(b, THING_REF), thing_control, thing_result,
          aqis_overview, aqis_mock, lambda b: technical_pages.aqis(b, AQIS_REF), aqis_coordinates,
          lambda b: aqis_pages.twin(b, AQIS_EXPANDED_REF), lambda b: aqis_pages.telemetry(b, AQIS_EXPANDED_REF),
          briefit_overview, briefit_data, lambda b: technical_pages.briefit(b, BRIEF),
          mri_overview, mri_method, lambda b: technical_pages.mri(b, MRI_REF),
          prompt_overview, prompt_generator, lambda b: technical_pages.prompt(b, PROMPT_REF),
-         alkkagi_overview, alkkagi_physics, lambda b: technical_pages.alkkagi(b, ALK_REF), contact]
+         alkkagi_overview, alkkagi_physics, lambda b: technical_pages.alkkagi(b, ALK_REF), contact, tech_stack]
 assert len(PAGES) == PAGE_COUNT
 
 

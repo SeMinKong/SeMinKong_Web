@@ -6,8 +6,8 @@ from technical_pages import (section, chip, rect, line, dot, text, equation, par
 def twin(b, ref):
     b.start('AQIS · RoboDK 디지털 트윈',
         'RoboDK 공정·Simulation Dashboard: 팀원 담당 / 본인: 서버·명령·이벤트 연결과 실제 장비 통합',key='aqis-twin')
-    b.image('@aqis-simulation.png',38,137,432,243)
-    para(b,'공개 시연 · Simulation Dashboard와 RoboDK 공장 장면',38,391,432,9.3,13,MUTED)
+    b.image('@aqis-simulation.png',38,137,432,243,
+            caption='공개 시연 · Simulation Dashboard와 RoboDK 공장 장면',caption_size=9.3,caption_leading=13)
     section(b,'검사·집기·운반 시뮬레이션',137,x=500,w=303)
     para(b,'하드웨어 준비 전, 검사·집기·운반 순서와 웹 인터페이스를 먼저 연결했습니다.',500,174,303,10.5,15)
     conveyor=chip(b,'컨베이어','x += speed × dt / 이름·위치로 검출',500,218,303,54)
@@ -29,8 +29,8 @@ def twin(b, ref):
 def telemetry(b, ref):
     b.start('AQIS · SLAM·로봇 상태 관제',
         '외부 ROS 패키지·SLAM 시연은 팀 결과 / 본인: ROS bridge·FastAPI·RealOps·Dobot 관절 뷰어',key='aqis-telemetry')
-    b.image('@aqis-slam.png',38,137,432,243)
-    para(b,'공개 시연 · 왼쪽 RealOps, 오른쪽 RViz 지도·실물 TurtleBot',38,391,432,9.3,13,MUTED)
+    b.image('@aqis-slam.png',38,137,432,243,
+            caption='공개 시연 · 왼쪽 RealOps, 오른쪽 RViz 지도·실물 TurtleBot',caption_size=9.3,caption_leading=13)
     section(b,'지도와 로봇 위치 수집',137,x=500,w=303)
     para(b,'<b>/map → map_update</b><br/>OccupancyGrid → PNG·해상도·원점.<br/>지도 이벤트의 2초 이내 재발행 억제.',500,173,303,9.8,14)
     line(b,[(500,225),(803,225)])

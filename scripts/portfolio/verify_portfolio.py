@@ -47,7 +47,7 @@ def verify(path):
             assert abs(page.width - 841.89) < .1 and abs(page.height - 595.28) < .1
             assert not page.rotation
             text = page.extract_text() or ''
-            assert (index == 2 or len(text) > 100) and '\ufffd' not in text
+            assert (index == 27 or len(text) > 100) and '\ufffd' not in text
             footer = page.crop((page.width - 60, 550, page.width - 37, 578)).extract_text()
             assert footer.strip() == str(index), f'Page number missing: {index}'
             # Preserve authored paragraph order for editorial checks; spatial
@@ -76,37 +76,37 @@ def verify(path):
                 assert 'drive.google.com' not in uri
                 assert 'canva.com' not in uri, 'Do not publish a Canva editing/share token'
                 external.append(uri)
-    stack = texts[1]
+    stack = texts[26]
     assert all(label in stack for label in ['학습 스택', '사용 언어', '로봇·시뮬레이션', 'AI·에이전트', '로컬 추론·API', '개발 환경', 'Isaac Sim', 'Isaac Lab'])
-    assert not reader.pages[1]['/Resources'].get('/XObject'), 'Stack icons must stay vector-only'
+    assert not reader.pages[26]['/Resources'].get('/XObject'), 'Stack icons must stay vector-only'
     intro = texts[0]
     assert 'Suwon,' in texts[0] and 'Republic of Korea' in texts[0]
     assert 'Seoul' not in intro
     assert not re.search(r'\b(THING|AQIS|Briefit|Alkkagi|KoBART)\b', intro)
     assert not any(value in intro for value in ['우수상', '장려상', '금상'])
-    assert 'SSAFY 공통 프로젝트 우수상' in texts[7] and 'THING' in texts[7]
+    assert 'SSAFY 공통 프로젝트 우수상' in texts[6] and 'THING' in texts[6]
     for title in ['IT대학 소프트웨어 공모전 금상', '숭실 캡스톤디자인 경진대회 장려상', 'IT 프로젝트 프로리그 장려상']:
-        assert title in texts[14], f'Missing Briefit award: {title}'
-    assert 'Briefit' in texts[14]
-    assert all(label in texts[8] for label in ['프로젝트 개요', '직접 맡은 일', '협업'])
+        assert title in texts[13], f'Missing Briefit award: {title}'
+    assert 'Briefit' in texts[13]
+    assert all(label in texts[7] for label in ['프로젝트 개요', '직접 맡은 일', '협업'])
     # Architecture labels now live in the owner's unchanged PNGs. Check the
     # searchable explanation here and verify all image/alpha bytes below.
     for page, labels in {
-        5: ['21개 landmark', '굴곡 5축', '대립·외전 2축', '저역통과 필터', 'Sync Write', '팀 구현', '본인은 모터 점검'],
-        10: ['마지막 3일', '초기 계획', 'Mock', '공통 API', '자동 임무'],
-        12: ['스크립트 정상 종료 시 재개', '파지 성공', '센서', 'timestamp', '정지 명령의 실패 응답', 'Mock', '기대값 불일치', '고정 좌표'],
-        7: ['현재 위치 읽기', '토크 ON', '가까운 중앙각', '끝점 보정', '후속 과제'],
-        16: ['URL 집합', '부분 요약', '재요약', '잘릴 수', 'ROUGE', '후처리 전 생성문', '정보 손실'],
-        19: ['같은 MRI를 두 모델에 각각', 'polygon label', 'closing·opening', '너비/높이', 'test', 'val', '환자 단위 독립성', '임상 진단 검증', '작은 병변', '내부 구멍'],
-        21: ['프로젝트 개요', '직접 맡은 일', '개인 프로젝트', '초기 설계 흐름'],
-        24: ['프로젝트 개요', '직접 맡은 일', '개인 프로젝트', '실제 플레이'],
-        25: ['서버 메모리', '서버에서 입력 검증', '마찰', '지속 프레임률', '서버 재시작', '절반씩', '소단계'],
-        22: ['여섯 영역', '병렬', '연결 종료 시 삭제', '평가 결과', '호출 성공 뒤', '라운드를 되돌리고'],
+        4: ['21개 landmark', '굴곡 5축', '대립·외전 2축', '저역통과 필터', 'Sync Write', '팀 구현', '본인은 모터 점검'],
+        9: ['마지막 3일', '초기 계획', 'Mock', '공통 API', '자동 임무'],
+        11: ['스크립트 정상 종료 시 재개', '파지 성공', '센서', 'timestamp', '정지 명령의 실패 응답', 'Mock', '기대값 불일치', '고정 좌표'],
+        6: ['현재 위치 읽기', '토크 ON', '가까운 중앙각', '끝점 보정', '후속 과제'],
+        15: ['URL 집합', '부분 요약', '재요약', '잘릴 수', 'ROUGE', '후처리 전 생성문', '정보 손실'],
+        18: ['같은 MRI를 두 모델에 각각', 'polygon label', 'closing·opening', '너비/높이', 'test', 'val', '환자 단위 독립성', '임상 진단 검증', '작은 병변', '내부 구멍'],
+        20: ['프로젝트 개요', '직접 맡은 일', '개인 프로젝트', '초기 설계 흐름'],
+        23: ['프로젝트 개요', '직접 맡은 일', '개인 프로젝트', '실제 플레이'],
+        24: ['서버 메모리', '서버에서 입력 검증', '마찰', '지속 프레임률', '서버 재시작', '절반씩', '소단계'],
+        21: ['여섯 영역', '병렬', '연결 종료 시 삭제', '평가 결과', '호출 성공 뒤', '라운드를 되돌리고'],
     }.items():
         normalized = re.sub(r'\s+', '', texts[page-1])
         assert all(re.sub(r'\s+', '', label) in normalized for label in labels), f'Incomplete explanation on page {page}'
-    assert '캔 파지 시연' in texts[7]
-    assert '임상 진단 검증은 완료하지 않았습니다' in texts[18]
+    assert '캔 파지 시연' in texts[6]
+    assert '임상 진단 검증은 완료하지 않았습니다' in texts[17]
     all_text = '\n'.join(texts)
     assert not any(value in all_text for value in [
         'PORTFOLIO /', 'SE MIN KONG', 'PROJECT AWARD', 'TEAM / ROLE',
@@ -119,24 +119,24 @@ def verify(path):
     assert not any(value in all_text for value in ['LOCAL / MOCK', '로컬 재현', '이번 재현', '원본 시연 00:', '영상 00:', 'LangGraph'])
     assert len(set(u for u in external if '/resume/award-' in u)) == 4
     assert internal == 6
-    assert internal_destinations == [4, 9, 15, 18, 21, 24], 'Index must open each project introduction in owner order'
+    assert internal_destinations == [3, 8, 14, 17, 20, 23], 'Index must open each project introduction in owner order'
     assert 'https://seminkong.github.io/SeMinKong_Web/' in external
     assert 'mailto:semin1224@gmail.com' in external
     layout = json.loads(path.with_suffix('.layout.json').read_text(encoding='utf-8'))
     overlaps = []
     elements = layout['elements']
-    assert len([e for e in elements if e['page'] == 2 and e['kind'] == 'svg']) == 13
-    assert sorted(e['text'] for e in elements if e['page'] == 2 and e['kind'] == 'svg') == sorted([
+    assert len([e for e in elements if e['page'] == 27 and e['kind'] == 'svg']) == 13
+    assert sorted(e['text'] for e in elements if e['page'] == 27 and e['kind'] == 'svg') == sorted([
         'cplusplus', 'python', 'ros', 'nvidia', 'nvidia', 'pytorch', 'langchain',
         'ollama', 'llamacpp', 'fastapi', 'ubuntu', 'git', 'docker',
     ])
-    languages = [e for e in elements if e['page'] == 2 and 95 <= e['top'] < 225]
+    languages = [e for e in elements if e['page'] == 27 and 95 <= e['top'] < 225]
     assert {e['text'] for e in languages} == {'사용 언어', 'cplusplus', 'python'}
     language_items = [e for e in languages if e['text'] != '사용 언어']
     assert abs((min(e['x'] for e in language_items) + max(e['x'] + e['width'] for e in language_items)) / 2 - 841.89 / 2) < .02
     figure_root = ROOT / 'scripts/portfolio/assets/architecture/returned'
     figures = json.loads((figure_root / 'manifest.json').read_text(encoding='utf-8'))['figures']
-    assert {f['page'] for f in figures} == {10, 16, 19, 22, 25}
+    assert {f['page'] for f in figures} == {9, 15, 18, 21, 24}
     for figure in figures:
         source = figure_root / figure['file']
         assert hashlib.sha256(source.read_bytes()).hexdigest() == figure['sha256']
@@ -163,12 +163,12 @@ def verify(path):
     assert all(e['top'] >= 57 for e in elements), 'Decorative running header returned'
     assert not any(e['kind'] == 'annotation' for e in elements), 'Image-guide markers returned'
     assert [entry['key'] for entry in layout['pages']] == [
-        'introduction', 'tech-stack', 'projects', 'thing', 'thing-architecture', 'thing-mechanism', 'thing-control', 'thing-result',
+        'introduction', 'projects', 'thing', 'thing-architecture', 'thing-mechanism', 'thing-control', 'thing-result',
         'aqis', 'aqis-mock', 'aqis-transform', 'aqis-coordinates', 'aqis-twin', 'aqis-telemetry', 'briefit', 'briefit-data', 'briefit-seq2seq',
-        'mri', 'mri-method', 'mri-polygons', 'prompt', 'prompt-architecture', 'prompt-state-machine', 'alkkagi', 'alkkagi-physics', 'alkkagi-collision', 'contact',
+        'mri', 'mri-method', 'mri-polygons', 'prompt', 'prompt-architecture', 'prompt-state-machine', 'alkkagi', 'alkkagi-physics', 'alkkagi-collision', 'contact', 'tech-stack',
     ]
     # Each introduction is followed by one source-backed technical explanation.
-    technical_pages = [5, 10, 16, 19, 22, 25]
+    technical_pages = [4, 9, 15, 18, 21, 24]
     for page in technical_pages:
         page_elements = [e for e in elements if e['page'] == page]
         assert any('→' in e['text'] and e['top'] == 97 for e in page_elements)
@@ -178,12 +178,12 @@ def verify(path):
         assert len([e for e in page_elements if e['x'] == 475 and e['height'] >= 45]) == 3
     # Added pages explain source conditions and calculations as searchable vectors.
     plate_labels = {
-        6: ['acos', '180-theta', '0.65', '0.35', '0.08', '3020', '20Hz', '50Hz', '250ms', '실측 주기 보장 없음', '팀 구현'],
-        11: ['8초', '0.5', '70px', '위치·시각', '중복 판정보다 먼저', '0.6', '3초', '후보가 있을 때 집기 요청', '정지 응답 실패', 'x_mm', '종료 코드 0'],
-        17: ['384', '256', '1024', '512', '128', 'length_penalty', 'labels', '각 부분 요약에도', 'ROUGE', '거치지 않습니다'],
-        20: ['mask > 1', '외부 윤곽', '0.001', 'x_norm', 'y_norm', '독립'],
-        23: ['in_progress 유지', '[GENERATE_PROMPT]', 'round - 1', '1개 이상', '연결 종료 시 삭제', '이전 generated_prompt는 남습니다'],
-        26: ['overlap/2', 'vn>0', '1/m1+1/m2', '0<D<r1+r2', '500ms', '0.45', '0.8**0.1', '계산 예시'],
+        5: ['acos', '180-theta', '0.65', '0.35', '0.08', '3020', '20Hz', '50Hz', '250ms', '실측 주기 보장 없음', '팀 구현'],
+        10: ['8초', '0.5', '70px', '위치·시각', '중복 판정보다 먼저', '0.6', '3초', '후보가 있을 때 집기 요청', '정지 응답 실패', 'x_mm', '종료 코드 0'],
+        16: ['384', '256', '1024', '512', '128', 'length_penalty', 'labels', '각 부분 요약에도', 'ROUGE', '거치지 않습니다'],
+        19: ['mask > 1', '외부 윤곽', '0.001', 'x_norm', 'y_norm', '독립'],
+        22: ['in_progress 유지', '[GENERATE_PROMPT]', 'round - 1', '1개 이상', '연결 종료 시 삭제', '이전 generated_prompt는 남습니다'],
+        25: ['overlap/2', 'vn>0', '1/m1+1/m2', '0<D<r1+r2', '500ms', '0.45', '0.8**0.1', '계산 예시'],
     }
     for page, labels in plate_labels.items():
         normalized = re.sub(r'\s+', '', texts[page-1])
@@ -192,8 +192,8 @@ def verify(path):
         sources = [str(a.get_object()['/A']['/URI']) for a in reader.pages[page-1].get('/Annots', [])]
         assert len(sources) >= 3 and all(re.search(r'/blob/[0-9a-f]{40}/', u) for u in sources)
     for page, labels in {
-        13: ['RoboDK', '팀원 담당', '명령 큐', 'HTTP polling', 'script_id', '기구학'],
-        14: ['SLAM', 'RViz', '지도 PNG 자체는 그리지 않습니다', 'odom', 'JointState', 'URDF', 'Nav2 goal'],
+        12: ['RoboDK', '팀원 담당', '명령 큐', 'HTTP polling', 'script_id', '기구학'],
+        13: ['SLAM', 'RViz', '지도 PNG 자체는 그리지 않습니다', 'odom', 'JointState', 'URDF', 'Nav2 goal'],
     }.items():
         normalized = re.sub(r'\s+', '', texts[page-1])
         assert all(re.sub(r'\s+', '', label) in normalized for label in labels), f'AQIS page {page}: missing scope'
@@ -239,19 +239,24 @@ def verify(path):
             assert abs(start[0]-(sx+sw)-6) < .01 and abs(tx-end[0]-6) < .01
             assert end[0] > start[0]
     figure_captions = [
-        (7, '@thing-spool-tendon.jpg', '구동부 내부:'),
-        (7, '@thing-acrylic-mount.jpg', '전완부 모터 고정부'),
-        (8, '@thing-video-can-0010.jpg', '캔 파지 시연'),
-        (15, 'briefit/cover.webp', '서비스 UI'),
-        (18, '@mri-video-overlay-007733.png', '분류·분할 통합 추론'),
-        (21, '@prompt-design-flow.png', '초기 설계 흐름'),
-        (24, '@alkkagi-video-aim-0007.png', '실제 플레이'),
+        (3, 'thing/integrated-robot-hand-portrait.webp', '통합 조립'),
+        (6, '@thing-spool-tendon.jpg', '구동부 내부:'),
+        (6, '@thing-acrylic-mount.jpg', '전완부 모터 고정부'),
+        (7, '@thing-video-can-0010.jpg', '캔 파지 시연'),
+        (8, '@aqis-video-inspection-0010.jpg', 'RealOps · 실제 장비 시연'),
+        (12, '@aqis-simulation.png', '공개 시연 · Simulation'),
+        (13, '@aqis-slam.png', '공개 시연 · 왼쪽 RealOps'),
+        (14, 'briefit/cover.webp', '서비스 UI'),
+        (17, '@mri-video-overlay-007733.png', '분류·분할 통합 추론'),
+        (20, '@prompt-design-flow.png', '초기 설계 흐름'),
+        (23, '@alkkagi-video-aim-0007.png', '실제 플레이'),
     ]
     for page, image_name, caption_prefix in figure_captions:
         figure = next(e for e in elements if e['page'] == page and e['text'] == image_name)
         caption = next(e for e in elements if e['page'] == page and e['text'].startswith(caption_prefix))
         assert abs(figure['x'] - caption['x']) < .02, f'Page {page}: caption left alignment'
         assert abs(figure['width'] - caption['width']) < .02, f'Page {page}: caption width'
+        assert abs(caption['center_x'] - (figure['x'] + figure['width'] / 2)) < .02, f'Page {page}: caption center'
         gap = caption['top'] - figure['top'] - figure['height']
         assert abs(gap - 10) < .02, f'Page {page}: caption gap is {gap}'
     portrait = [e for e in elements if e['text'] == '@se-min-kong-profile.png']
@@ -265,12 +270,12 @@ def verify(path):
         actual = cover_images[0]
         assert abs((actual['x0'] + actual['x1']) / 2 - (548 + 255 / 2)) < .01
     edited_paragraphs = [
-        (4, '손동작 인식, ROS 2'), (7, '이동 명령에서는'),
-        (7, '다회전 위치에서'), (7, '중앙각 복귀만으로'),
-        (12, '같은 대상이'), (12, '관제가 정지되면'),
-        (12, '설정 시간 대기와'), (12, 'timestamp가 없으면'),
-        (16, '생성 시에는'), (19, '마스크를 이진화하고'),
-        (22, '영역별 라운드'), (25, '중심 거리와'),
+        (3, '손동작 인식, ROS 2'), (6, '이동 명령에서는'),
+        (6, '다회전 위치에서'), (6, '중앙각 복귀만으로'),
+        (11, '같은 대상이'), (11, '관제가 정지되면'),
+        (11, '설정 시간 대기와'), (11, 'timestamp가 없으면'),
+        (15, '생성 시에는'), (18, '마스크를 이진화하고'),
+        (21, '영역별 라운드'), (24, '중심 거리와'),
     ]
     with pdfplumber.open(path) as doc:
         centered_labels = [e for e in elements if 'center_x' in e]

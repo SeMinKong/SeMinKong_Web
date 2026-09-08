@@ -132,7 +132,7 @@ def thing(b,ref):
     line(b,[(gx,py),(px,py),(px,gy)],MUTED,.7,True)
     dot(b,px,py,4)
     text(b,'4300',57,310,9.4); text(b,'1740',57,378,9.4)
-    text(b,'0',96,396,9); text(b,'0.5',178,396,9); text(b,'1',274,396,9)
+    centered(b,'0',gx,396,9); centered(b,'0.5',gx+gw/2,396,9); centered(b,'1',gx+gw,396,9)
     text(b,'pulse',46,334,9.2,MUTED)
     text(b,'3020 pulse',313,311,19,ACCENT,True)
     equation(b,'1740 + 0.5*(4300-1740)',313,342,10.2)
@@ -172,7 +172,7 @@ def aqis(b,ref):
     line(b,[(72,346),(517,346)],MUTED)
     for x,label in [(72,'정지 요청'),(279,'ready_at'),(444,'후속 후보')]:
         dot(b,x,346,4,ACCENT if x<279 else BLUE)
-        centered(b,label,x+9 if x==72 else x,366,9.8,bold=True)
+        centered(b,label,x,366,9.8,bold=True)
     centered(b,'대기 0.6초',175.5,313,10,ACCENT,True)
     centered(b,'timestamp ≥ ready_at',398,313,10,BLUE,True)
     para(b,'대기 중 항상 반환 → 집계 dedupe로 내려가지 않음',72,392,445,9.5,13,MUTED)
@@ -298,7 +298,7 @@ def alkkagi(b,ref):
     for i in range(11):
         h=48*(.8**(i/10))
         rect(b,40+i*25,378-h,16,h,fill=BLUE if i<10 else ACCENT,radius=0)
-    text(b,'v',38,384,10.2,BLUE,True); text(b,'0.8v',274,384,10.2,ACCENT,True)
+    centered(b,'v',48,384,10.2,BLUE,True); centered(b,'0.8v',298,384,10.2,ACCENT,True)
     equation(b,'p += 0.1*v; v *= 0.8**0.1',350,331,11.5)
     para(b,'매 단계: 축 속도 |v|<0.1 → 0 / 충돌 / 득점 후 재배치.<br/>10회 뒤 상태 전송. 충돌·정지 절삭이 없으면 총 0.8배 감쇠.<br/>타이머는 1000/60ms이며 실제 경과 시간으로 보정하지 않습니다.',350,356,453,10,14.5)
 
