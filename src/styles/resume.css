@@ -339,7 +339,8 @@
 
 .resume-block.resume-block--skills {
   grid-template-columns: 1fr;
-  gap: 28px;
+  gap: 12px;
+  padding-block: 24px;
 }
 
 .award-proof {

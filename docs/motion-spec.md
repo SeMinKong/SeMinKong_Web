@@ -14,6 +14,8 @@
 - Hidden/offscreen에서는 연속 모션과 미디어를 멈춘다. 기능 실패 시 읽을 수 있는 정적 콘텐츠로 돌아간다.
 - 수동 Motion/Depth 버튼, 커서 follower, magnetic effect, 전역 fluid, Three.js는 사용하지 않는다.
 
+About·Resume 학습 스택은 고정된 위치에서 읽을 수 있도록 대상 reveal을 적용하지 않는다. 최초 `#now-title`·`#skills-title` 진입만 상단 intro를 생략하고, load 이후 폰트 준비와 다음 프레임을 기다려 `scroll-padding-top` 기준으로 한 번 위치를 맞춘다. 기존 `smoothScrollAfter`로 이 정렬 뒤 Lenis를 시작한다. 사용자 조작·다른 해시·페이지 이탈 시 취소하고, 뒤로/앞으로 복원에는 적용하지 않는다.
+
 ## Home 서명과 project deck
 
 현재 Hero의 12개 SVG 획을 약 1.5초에 걸쳐 그린다. 별도 overlay나 입력 잠금을 만들지 않는다. 사용자 wheel·pointer·touch·keyboard·scroll, 페이지 이탈, 감소 모션 전환은 입력을 소비하지 않고 서명을 완성한다.

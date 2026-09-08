@@ -2,16 +2,16 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px clamp(28px, 5vw, 56px);
+  gap: 8px clamp(28px, 5vw, 56px);
 }
 
 .tech-stack-card {
   min-width: 0;
   display: grid;
-  min-height: 250px;
+  min-height: clamp(168px, 21.5svh, 192px);
   align-content: start;
-  gap: 36px;
-  padding: 28px 8px;
+  gap: 12px;
+  padding: 16px 8px;
   border-top: 1px solid var(--line);
 }
 
@@ -84,12 +84,12 @@
 }
 
 .tech-stack-languages {
-  min-height: clamp(220px, 23vw, 264px);
+  min-height: clamp(184px, 23svh, 208px);
   display: grid;
   justify-items: center;
   align-content: center;
-  gap: 24px;
-  padding-block: 24px 32px;
+  gap: 12px;
+  padding-block: 6px;
 }
 
 .tech-stack-languages h3 {
@@ -97,6 +97,7 @@
   font-family: var(--font-body);
   font-size: 1.05rem;
   font-weight: var(--weight-display);
+  line-height: 1.4;
 }
 
 .tech-stack-languages .tech-stack-tools {
@@ -120,7 +121,6 @@
   }
 
   .tech-stack-card {
-    min-height: 218px;
     padding-inline: 12px;
   }
 

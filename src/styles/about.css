@@ -192,9 +192,13 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
 .about-now {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(32px, 4vw, 48px);
+  gap: 12px;
   align-items: start;
-  padding-block: var(--section-space);
+  padding-block: 24px;
+}
+
+.about-now h2 {
+  margin-top: 0;
 }
 
 .about-now__content {
@@ -249,8 +253,7 @@ html.js .about-questions__list li:not(.is-revealed) .about-questions__topic {
     padding-bottom: 0;
   }
 
-  .about-story,
-  .about-now {
+  .about-story {
     grid-template-columns: 1fr;
     gap: 54px;
   }

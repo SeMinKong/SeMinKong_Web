@@ -8,13 +8,15 @@ import '../styles/motion.css';
 import { createPageRuntime } from '../app/create-page-runtime.js';
 import { initIntro, initReveals } from '../motion/reveal.js';
 import { initAwardProofDialog } from '../ui/award-proof-dialog.js';
+import { initLearningStackAnchor } from '../ui/learning-stack-anchor.js';
 
 const runtime = createPageRuntime();
 const { environment } = runtime;
 
-runtime.start();
+const stackAnchor = runtime.register(initLearningStackAnchor('skills-title'));
+runtime.start({ smoothScrollAfter: stackAnchor?.ready });
 runtime.register(initAwardProofDialog());
-runtime.register(initIntro(environment, '[data-resume-intro]'));
+if (!stackAnchor) runtime.register(initIntro(environment, '[data-resume-intro]'));
 runtime.register(initReveals(environment, '[data-resume-reveal]', { threshold: 0.08 }));
 
 if (import.meta.hot) import.meta.hot.dispose(() => runtime.destroy());
