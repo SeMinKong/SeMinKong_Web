@@ -2,6 +2,17 @@
 
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
+## 2026-09-08 기술 도식 시각화·AQIS 디지털 트윈/관제 확장
+
+- [x] PDF 26쪽 전체 렌더와 변경된 기술 6쪽·AQIS 2쪽을 육안 검수했다. 최종 관절 필드 표기도 재렌더했다. 원래 본문 16쪽의 배치와 105dpi 본문 픽셀은 이전 공개본과 동일하다(목차·AQIS 소개·기술 도식 6쪽 제외, footer 쪽번호 제외).
+- [x] 관절 벡터·보간 그래프·주기, 중복/pending 시간축, 학습 입력/labels 분리, MRI 동일 입력의 두 모델, Prompt 상태 복원, Alkkagi 입력/충돌을 소스와 교차 검토했다. RoboDK 팀 담당, RViz 지도, ROS position→서버 position_rad, 실제/가상 로봇 경계도 확인했다.
+- [x] PDF: 26쪽·북마크 26개, 외부 링크 103개·내부 목차 6개, 겹침 0, 최소 9pt, 캡션 정렬 7개·문단 끝줄 12개, 원본 구조도 5개 RGBA 일치, 벡터 기술 페이지 6개.
+- [x] 최종 PDF·공개 사본: 15,856,271 bytes, SHA-256 `9A54C9D93866A161D431A0923EDF2AC3907B2AFB438694B21155A0805676D5E4`. Resume 26쪽·15.9MB·2026.09.08과 바이트/해시 계약을 동기화했다.
+- [x] 최종 `npm.cmd run verify`: 49 tests, 11 routes·28 reachable modules·12 stylesheet boundaries, production build·22 deployment entries 통과. Resume skip link의 2px 포커스와 Enter 본문 이동, PDF 경로/메타를 실제 브라우저에서 확인했다.
+- [x] AQIS 실제 Chromium 390·768·1280px에서 본문/도식/영상과 가로 overflow 0을 확인했다. 영상 3개 native controls·preload none·자동재생 없음. 공개 GIF에서 변환한 두 MP4의 전체 디코딩과 720×406 비율을 확인했다. 프로덕션 폰트 번들링 정상.
+- [x] 개발 prebundle에서 발견한 Anime 값 파싱 오류는 `npm.cmd run dev -- --force` 재최적화 후 독립 Chrome 자연 스크롤에서 재현되지 않았다. 동일 소스의 프로덕션 preview에서도 새 오류 0·정상 reveal을 확인했다. 모션 소스 변경 없음.
+- [x] Home/Resume 390·768·1280px: 오류·가로 넘침·숨은 reveal 0, 기본 full/interactive·lite/static과 키보드 포커스 정상. AQIS localhost reduced/flat 및 OS reduced motion도 세 폭에서 정상이다. 영상 3개 재생·시간 진행·실제 화면 밖 정지 확인. 숨김 정지는 visibilitychange 이벤트 주입으로 확인했으며 실제 탭 숨김은 headless 제약으로 미검증이다.
+
 ## 2026-09-08 계산·실행 조건 중심의 기술 6쪽 심화
 
 - [x] 5·10·14·17·20·23쪽을 최종 렌더로 육안 검수했다. 문제·방법 설명과 식/의사코드를 세 행으로 대응시키고 본문 10.2pt를 유지한다. 기존 18쪽의 배치 데이터와 105dpi 전체 페이지 픽셀은 직전 공개본과 정확히 일치한다.

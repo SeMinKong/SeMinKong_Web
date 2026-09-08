@@ -1015,6 +1015,428 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
   margin-top: 0;
 }
 
+.aqis-case-body {
+  padding-top: clamp(56px, 7vw, 96px);
+}
+
+.aqis-chapter {
+  padding-bottom: clamp(66px, 8vw, 110px);
+  scroll-margin-top: calc(var(--nav-height) + 76px);
+}
+
+.aqis-chapter + .aqis-chapter {
+  padding-top: clamp(58px, 7vw, 88px);
+  border-top: 1px solid var(--line-strong);
+}
+
+.aqis-chapter__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  gap: 28px clamp(40px, 7vw, 90px);
+  align-items: end;
+}
+
+.aqis-chapter__number,
+.aqis-plate__label,
+.aqis-sync__actor,
+.aqis-observation__source {
+  color: var(--project-accent);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: var(--weight-meta);
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+}
+
+.aqis-chapter__number {
+  margin-bottom: 18px;
+}
+
+.aqis-chapter h2 {
+  color: var(--text);
+  font-size: clamp(1.9rem, 3.3vw, 3rem);
+  font-weight: var(--weight-heading);
+  line-height: 1.22;
+  word-break: keep-all;
+}
+
+.aqis-chapter__intro {
+  display: grid;
+  gap: 20px;
+  color: var(--text-soft);
+  font-size: var(--type-body-lg);
+  line-height: 1.8;
+  word-break: keep-all;
+}
+
+.case-page--aqis .aqis-credit {
+  color: var(--muted);
+  font-size: var(--type-body-sm);
+  line-height: 1.75;
+}
+
+.aqis-demo {
+  width: min(100%, 960px);
+  margin: clamp(32px, 5vw, 54px) auto;
+}
+
+.aqis-demo figcaption {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px 28px;
+  align-items: start;
+  line-height: 1.65;
+}
+
+.aqis-demo figcaption strong {
+  color: var(--text-soft);
+  font-weight: var(--weight-support);
+}
+
+.aqis-demo figcaption span {
+  text-align: right;
+}
+
+.aqis-plate {
+  padding: clamp(22px, 3.2vw, 40px);
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--surface) 75%, transparent);
+  scroll-margin-top: calc(var(--nav-height) + 76px);
+}
+
+.aqis-plate__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 32px;
+}
+
+.aqis-plate h3,
+.aqis-methods h3,
+.aqis-monitor-copy h3 {
+  margin-top: 10px;
+  color: var(--text);
+  font-size: clamp(1.2rem, 1.65vw, 1.65rem);
+  font-weight: var(--weight-heading);
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.aqis-plate__head > p,
+.aqis-flow p,
+.aqis-methods p:not(.aqis-plate__label),
+.aqis-monitor-copy > p:not(.aqis-plate__label),
+.aqis-observation p {
+  color: var(--text-soft);
+  font-size: var(--type-body-sm);
+  line-height: 1.8;
+  word-break: keep-all;
+}
+
+.aqis-case-body code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.aqis-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-strong);
+}
+
+.aqis-flow > li {
+  position: relative;
+  min-width: 0;
+  padding: 24px 22px 12px;
+  border-right: 1px solid var(--line);
+}
+
+.aqis-flow > li:first-child {
+  padding-left: 0;
+}
+
+.aqis-flow > li:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.aqis-flow > li:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: -12px;
+  right: -10px;
+  width: 20px;
+  color: var(--project-accent);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  text-align: center;
+}
+
+.aqis-flow__index {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--project-accent);
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+}
+
+.aqis-flow h4,
+.aqis-observation h4 {
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: var(--weight-heading);
+  line-height: 1.5;
+}
+
+.aqis-flow > li > code,
+.aqis-observation > div > code {
+  display: block;
+  margin-block: 12px;
+  color: var(--project-accent);
+  font-size: 0.75rem;
+  line-height: 1.65;
+}
+
+.aqis-plate__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px 30px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.aqis-plate__foot > p {
+  max-width: 660px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.75;
+}
+
+.aqis-plate__foot .source-link,
+.aqis-chapter__source {
+  flex-shrink: 0;
+  align-self: start;
+  color: var(--text-soft);
+  font-size: 0.76rem;
+  line-height: 1.65;
+}
+
+.aqis-sync {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 50px);
+}
+
+.aqis-sync__actor {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.aqis-sync__step {
+  position: relative;
+  min-height: 134px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding-block: 22px;
+}
+
+.aqis-sync__step--return {
+  border-top: 1px dashed var(--line-strong);
+}
+
+.aqis-sync__step > span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.aqis-sync__step strong {
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: var(--weight-support);
+  line-height: 1.5;
+}
+
+.aqis-sync__step > code {
+  color: var(--text-soft);
+  font-size: 0.73rem;
+  line-height: 1.6;
+}
+
+.aqis-sync__column:not(:last-child) .aqis-sync__step::after {
+  content: "→";
+  position: absolute;
+  top: 51px;
+  right: -27px;
+  color: var(--project-accent);
+  font-size: 1.15rem;
+}
+
+.aqis-sync__column:not(:last-child) .aqis-sync__step--return::after {
+  content: "←";
+}
+
+.aqis-methods,
+.aqis-observation {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 48px);
+}
+
+.aqis-methods {
+  margin-top: 40px;
+}
+
+.aqis-methods h3,
+.aqis-observation h4 {
+  margin-block: 12px;
+}
+
+.aqis-chapter__source {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.aqis-observation > div {
+  min-width: 0;
+  padding-top: 18px;
+  border-top: 2px solid var(--project-accent);
+}
+
+.aqis-monitor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 50px);
+  align-items: center;
+  margin-block: clamp(40px, 5vw, 64px);
+}
+
+.aqis-monitor-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.aqis-monitor-image figcaption {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.aqis-monitor-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.aqis-formula {
+  display: grid;
+  gap: 12px;
+  padding: 20px 0;
+  border-block: 1px solid var(--line-strong);
+}
+
+.aqis-formula > code {
+  color: var(--project-accent);
+  font-size: 0.8rem;
+}
+
+.aqis-formula > span {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.aqis-ownership {
+  border-top: 1px solid var(--line-strong);
+}
+
+@media (max-width: 900px) {
+  .aqis-chapter__head,
+  .aqis-plate__head,
+  .aqis-monitor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .aqis-flow {
+    grid-template-columns: 1fr;
+    border-top: 0;
+  }
+
+  .aqis-flow > li,
+  .aqis-flow > li:first-child,
+  .aqis-flow > li:last-child {
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+    border-right: 0;
+  }
+
+  .aqis-flow > li:not(:last-child)::after {
+    content: "↓";
+    top: auto;
+    right: 0;
+    bottom: -10px;
+  }
+
+  .aqis-flow__index {
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+  }
+
+  .aqis-plate__foot {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .aqis-methods,
+  .aqis-observation {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .aqis-demo figcaption {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .aqis-demo figcaption span {
+    text-align: left;
+  }
+
+  .aqis-sync {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .aqis-sync__step {
+    min-height: 0;
+    gap: 9px;
+    padding-block: 16px;
+  }
+
+  .aqis-sync__column:not(:last-child) .aqis-sync__step::after {
+    content: none;
+  }
+
+  .aqis-plate__head {
+    margin-bottom: 24px;
+  }
+}
+
 @media (min-width: 1021px) and (max-height: 699px) {
   .case-aside {
     position: static;

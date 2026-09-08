@@ -1,4 +1,4 @@
-"""Editable 24-page landscape portfolio with implementation diagrams.
+"""Editable 26-page landscape portfolio with implementation diagrams.
 
 Run from the repository root. --sample makes a three-page layout check;
 --publish copies the fully reviewed final bytes to the web download location.
@@ -14,6 +14,7 @@ import shutil
 from urllib.parse import quote
 
 import technical_pages
+import aqis_pages
 
 from PIL import Image
 from reportlab.pdfgen import canvas
@@ -31,7 +32,7 @@ from reportlab.graphics import renderPDF
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / 'src/assets/projects'
 FIGURES = ROOT / 'scripts/portfolio/assets'
-PAGE_COUNT = 24
+PAGE_COUNT = 26
 PHOTO_IMAGES = {
     'thing/integrated-robot-hand-portrait.webp',
     'thing/jetson-mediapipe-hands-test-1600.webp',
@@ -57,6 +58,7 @@ BRIEF = 'https://github.com/capstone-btd/Briefit_AI/'
 PROMPT = 'https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph/'
 THING_REF = THING + 'blob/2381e8e3cb46c083be6ce024a3eb88bc75674f12/'
 AQIS_REF = AQIS + 'blob/9f6530a2acffa0555f9df2eb628b40e4d01b6341/'
+AQIS_EXPANDED_REF = AQIS + 'blob/60951747fac753eb521fd80efce3fbade0eda101/'
 MRI_REF = MRI + 'blob/3c9a0694dde759390c5813b60b60b5911448d716/'
 ALK_REF = ALK + 'blob/530229c524a432c0016a28376a5c6fccd8f8e5b5/'
 PROMPT_REF = PROMPT + 'blob/1972aa05d5caca05869a6ba588bf4b7573a7f678/'
@@ -326,11 +328,11 @@ def project_index(b):
     b.start('프로젝트', '장비 연동과 실물 제어를 중심으로, 입력과 출력의 품질을 다룬 작업을 소개합니다.', key='projects')
     rows = [
         ('3 - 7', 'THING', '6인 팀 / 구동·기구 통합', '기구 편차 / 초기 목표와 토크 순서', 'thing'),
-        ('8 - 11', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '장비 연결 분리 / 좌표 갱신과 집기', 'aqis'),
-        ('12 - 14', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 요약과 정보 보존', 'briefit'),
-        ('15 - 17', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '라벨 변환 / 분류·분할 결합', 'mri'),
-        ('18 - 20', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 이력 / 수정 흐름', 'prompt'),
-        ('21 - 23', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '충돌·겹침 보정 / 서버 입력 제한', 'alkkagi'),
+        ('8 - 13', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '검사·분류 / 가상 공정·SLAM 관제', 'aqis'),
+        ('14 - 16', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 요약과 정보 보존', 'briefit'),
+        ('17 - 19', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '라벨 변환 / 분류·분할 결합', 'mri'),
+        ('20 - 22', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 이력 / 수정 흐름', 'prompt'),
+        ('23 - 25', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '충돌·겹침 보정 / 서버 입력 제한', 'alkkagi'),
     ]
     b.label('쪽', M, 139)
     b.label('프로젝트', 112, 139)
@@ -420,12 +422,12 @@ def thing_result(b):
 
 def aqis_overview(b):
     b.start('AQIS · 스마트 팩토리',
-            '검사, 컨베이어, Dobot과 RealOps 관제를 연결한 스마트 팩토리 시스템', key='aqis')
+            '실제 검사·Dobot 분류, RoboDK 가상 공정, TurtleBot SLAM·로봇 상태 관제를 연결', key='aqis')
     b.image('@aqis-video-inspection-0010.jpg', M, 137, 508, 286)
     b.para('RealOps · 실제 장비 시연', M, 433, 508, 9.2, 15, MUTED)
     b.para('2026.05 기획 / 06 본 개발<br/><b>2인 팀 · 팀장</b><br/>Full-stack & Robot Integration', 576, 137, 227, 10.1, 18)
     b.rule(208,576,227)
-    b.section('프로젝트 개요', '카메라의 검사 결과로 컨베이어를 제어하고 Dobot이 대상을 집어 분류합니다. RealOps에서 검사·작업 상태와 장비를 함께 관리합니다.', 576, 225, 227, 10, keep_words=True)
+    b.section('프로젝트 개요', '실제 검사·Dobot 분류와 RoboDK 가상 공정, TurtleBot SLAM·상태 관제를 구성했습니다. 공통 서버·이벤트 모델로 실제 장비와 시뮬레이션의 웹 연결을 통합했습니다.', 576, 225, 227, 10, keep_words=True)
     b.section('직접 맡은 일', 'React 관제와 FastAPI·WebSocket 서버, ROS 2 연결, 장비 adapter와 집기 시퀀스를 구현했습니다. 서버에서 검출 이벤트를 장비 명령으로 연결했습니다.', 576, 369, 227, 10, keep_words=True)
     b.para('<b>협업</b> 팀원은 모델 학습·Roboflow·CAD·시뮬레이션을 담당했습니다.', M, 481, 508, 10, 16)
     b.end([('역할·일정', AQIS + 'blob/main/docs/07-roles-and-schedule.md'), ('전체 구조', AQIS + 'blob/main/README.md'),
@@ -621,6 +623,7 @@ def contact(b):
 PAGES = [introduction, project_index, thing_overview, thing_architecture,
          lambda b: technical_pages.thing(b, THING_REF), thing_control, thing_result,
          aqis_overview, aqis_mock, lambda b: technical_pages.aqis(b, AQIS_REF), aqis_coordinates,
+         lambda b: aqis_pages.twin(b, AQIS_EXPANDED_REF), lambda b: aqis_pages.telemetry(b, AQIS_EXPANDED_REF),
          briefit_overview, briefit_data, lambda b: technical_pages.briefit(b, BRIEF),
          mri_overview, mri_method, lambda b: technical_pages.mri(b, MRI_REF),
          prompt_overview, prompt_generator, lambda b: technical_pages.prompt(b, PROMPT_REF),

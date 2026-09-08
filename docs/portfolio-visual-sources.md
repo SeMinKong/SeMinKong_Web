@@ -1,10 +1,26 @@
 # Portfolio visual sources and bounded reproduction
 
-## Current edition — 2026-09-08 additive technical diagrams
+## Current edition — 2026-09-08 visual engineering and AQIS expansion
 
-The current PDF is 24 pages: THING 3–7, AQIS 8–11, Briefit 12–14, MRI 15–17, Prompt 18–20, Alkkagi 21–23, contact 24. All original eighteen pages are preserved, with updated index ranges and footer page numbers. Original architecture images remain on pages 4/9/13/16/19/22. The five owner-returned RGBA PNGs retain all pixels, alpha, proportions and source hashes; only destination page numbers change in the manifest.
+The current PDF is 26 pages: THING 3–7, AQIS 8–13, Briefit 14–16, MRI 17–19, Prompt 20–22, Alkkagi 23–25, contact 26. Original architecture images remain on pages 4/9/15/18/21/24. The five owner-returned RGBA PNGs retain all pixels, alpha, proportions and source hashes; only destination page numbers change in the manifest. Sixteen earlier body pages are preserved; the index and AQIS introduction are updated, six technical plates are visualized and two AQIS pages are added.
 
-New pages 5/10/14/17/20/23 use `technical_pages.py` to draw searchable native PDF vectors, equations and clearly labeled equivalent pseudocode. Hand landmark topology, a polygon contour and collision circles are schematic representations, not new camera captures, model outputs or experiments. Each page links to at least three implementation files pinned to commits. No raster source image is edited or replaced.
+Pages 5/10/16/19/22/25 use `technical_pages.py` for searchable vectors, timing/length plots, equations and state transitions. The diagrams are explanatory representations, not new camera captures, model outputs or experiments. Each page links to at least three pinned implementation sources. `aqis_pages.py` adds RoboDK and SLAM/URDF pages. Existing raster source imagery is unchanged.
+
+### New AQIS public media
+
+Source: `docs/assets/portfolio/` at AQIS commit `60951747fac753eb521fd80efce3fbade0eda101`. Only the published GIF/PNG derivatives are used; private internal originals are excluded.
+
+| Asset | Source / conversion | SHA-256 |
+| --- | --- | --- |
+| simulation-demo.gif | Public 10-second source | `42D052FFA71ACA47F9A913485328D2E0DD8967F4A7CB4B06FF3C5718DA6133B6` |
+| slam-demo.gif | Public 10-second source | `A3117AC3D670D0CF0DCDA79A37A7FE833977D89211B93CF1D21C893F89739AEA` |
+| Web simulation-demo.mp4 | H.264, 720×406, SAR 1:1; 720×405 source padded one bottom pixel | `C75DB0628FE79ACACCA011DE3E3D7D6715E772E742D1E232450AE368E2B9E7CF` |
+| Web slam-demo.mp4 | H.264, 720×406; same one-pixel pad | `BFA6A993AF7131491DF33275207CA458BC3048364E9436C8E53F230AB1C38C9E` |
+| Web slam-navigation.png | Byte-identical public still | `5F266ADC5289684822FADE2A9E54FA78E28C2C65C22016BAD386EFC76D00A0C5` |
+| PDF aqis-simulation.png | RGB pixels of source GIF frame 45; no crop/retouch | `2DF2543B443CD73DF62B4BCCD13EB716B0145006F9A3CF016764E3684CD4542E` |
+| PDF aqis-slam.png | Same RGB pixels as public still | `60AC0EDE982E6FCF743EB59BEB6E9CA98B7489B0B3A729B53431A7BD3CF0B466` |
+
+Web videos use native controls, no autoplay, `preload="none"` and the existing offscreen/hidden pause lifecycle. The simulation poster is a WebP frame derived from the same public GIF. SLAM footage shows RealOps, RViz and a physical robot; the map panel is RViz, not a React map renderer. No fresh robotics or model evaluation was run.
 
 ## Previous 18-page edition — 2026-09-07 source-backed technical explanations
 

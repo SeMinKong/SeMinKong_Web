@@ -4,7 +4,7 @@ Reviewed 2026-09-08. This is an editorial working record. Bounded local reproduc
 
 ## Editorial structure
 
-A4 landscape, 24 pages: introduction / index (1–2); THING (3–7); AQIS (8–11); Briefit (12–14); MRI (15–17); Prompt (18–20); Alkkagi (21–23); contact (24). All eighteen prior pages remain; only the index page ranges and footer page numbers change. New vector technical plates follow the existing technical explanations on pages 5, 10, 14, 17, 20 and 23. The owner requested this exact project order and an introduction page at the start of every project. The cover remains personal; education details stay available in the linked Resume. Publication follows the standing GitHub Pages authorization after PDF and website verification.
+A4 landscape, 26 pages: introduction / index (1–2); THING (3–7); AQIS (8–13); Briefit (14–16); MRI (17–19); Prompt (20–22); Alkkagi (23–25); contact (26). Six technical plates are visualized on pages 5, 10, 16, 19, 22 and 25. AQIS gains RoboDK and SLAM/robot telemetry pages 12–13; its introduction now covers all three project areas. The other sixteen earlier body pages remain unchanged, with shifted footer numbers. The owner requested this exact project order and an introduction page at the start of every project. The cover remains personal; education details stay available in the linked Resume. Publication follows the standing GitHub Pages authorization after PDF and website verification.
 
 The owner selected practical engineering evidence over minor counts or toy demonstrations. Remove the synthetic summary and mask demonstration pages and the Alkkagi instruction page. Prompt's overview uses its original design flow; Alkkagi's overview uses one actual gameplay frame with project, role and implementation context. Keep source imagery unchanged. No planned experiment, benchmark setting, synthetic check, or repository-reported score becomes a measured achievement. New offline / hardware / model experiments were not run for this editorial revision.
 
@@ -31,6 +31,18 @@ Use warm paper, near-black text, one vermilion accent, compact 38pt margins, thi
 - Current PDF verification table covers duplicate detections, STOPPED monitoring and timestamped stale input, supported by original tests plus prior bounded Mock reproduction. A missing timestamp passes freshness checking; the automatic path does not gate the next stage on conveyor stop failure; missing depth can use fixed coordinates. Process exit code zero is the resume condition, not sensed grasp success. Hardware cycle time, repeated sorting success and outage recovery remain unmeasured. See pinned source `9f6530a2acffa0555f9df2eb628b40e4d01b6341`.
 
 ## Added vector technical plates — 2026-09-08
+
+Current visualization revision: angle vectors and calibrated encoder interpolation, asynchronous arrival/20Hz/50Hz timing, dedupe and pending windows, proportional token strips, mask/contour/coordinate conversion, state transitions and collision geometry. Numerical examples and diagram spacing illustrate configured calculations, not measurements. The same MRI enters two independently called models; training articles and decoder labels enter distinct KoBART paths.
+
+## AQIS digital twin and telemetry expansion — 2026-09-08
+
+- Rechecked [60951747](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/tree/60951747fac753eb521fd80efce3fbade0eda101); executable code matches the prior pinned source. RoboDK uses the UR5/AQIS.rdk scene, named-object/position detection, MoveJ targets and object reparenting. AGV motion interpolates nav1–nav6 scene frames. This is kinematic process simulation, not contact-force or autonomous Nav2 validation.
+- Browser REST requests append commands to a queue; the RoboDK script consumes by HTTP polling, then returns status/events for server WebSocket broadcast. `script_id` filters command/event sessions. RoboDK scene/process/Simulation Dashboard belong to the teammate; Kong built server integration and adjusted the AGV path ([personal commit](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/commit/eb5b8a973e26bd6cf9d5a39c26d8806a3e6c6cdb)).
+- ROS `/map` OccupancyGrid is converted to PNG plus origin/resolution with a two-second minimum event gap. React stores map state and displays update time but does not render the PNG. The public composite demonstrates RViz map/sensors alongside RealOps and the physical robot.
+- TF map→base_footprint/base_link is queried at a 0.1s configured interval, with fresh TF/AMCL priority and odom fallback. The fallback is not transformed into the map frame. No custom SLAM or completed automatic Nav2 mission claim.
+- JointState `position` radians become server `position_rad`/degree fields, then dobot_status → WebSocket → React → URDF axis rotation with mimic multiplier/offset. This actual Dobot viewer is separate from RoboDK's simulated UR5. ROS must be enabled; no dynamics or measured delay claim.
+
+## Earlier additive plate source notes
 
 The owner explicitly requested additions without removing existing content. The new plates show the hand landmark topology and motor-call sequence, camera/robot coordinate conversion, seq2seq training versus generation, mask/polygon representation, dialogue states, and collision position/impulse calculations. Equations and short pseudocode are derived from the pinned sources below; hand/contour/collision drawings are explanatory schematics, not captured inputs, predictions or experimental measurements.
 
