@@ -101,13 +101,15 @@ class Book:
         self.c.drawString(x, H - top - size, text)
 
     def para(self, text, x, top, width, size=10.4, leading=16.5, color=INK, bold=False,
-             keep_words=False):
+             keep_words=False, align='left'):
         style = ParagraphStyle('p', fontName='KoreanBold' if bold else 'Korean', fontSize=size,
                                leading=leading, textColor=color, wordWrap=None if keep_words else 'CJK',
-                               splitLongWords=False, spaceAfter=0)
+                               splitLongWords=False, spaceAfter=0, alignment=1 if align == 'center' else 0)
         p = Paragraph(text, style)
         _, height = p.wrap(width, H)
         self.track(text, x, top, width, height)
+        if align == 'center':
+            self.checks[-1]['center_x'] = round(x + width / 2, 2)
         p.drawOn(self.c, x, H - top - height)
         return top + height
 
@@ -288,9 +290,8 @@ class Book:
         for i, (title, detail) in enumerate(items):
             xx = x + i * (col + gap)
             self.rule(top, xx, col, ACCENT, 1.15)
-            self.label(str(i + 1), xx, top + 11)
-            self.para(title, xx, top + 31, col, 11.4, 17, bold=True)
-            self.para(detail.replace('\n', '<br/>'), xx, top + 61, col, 9.5, 15, MUTED)
+            self.para(title, xx, top + 20, col, 11.4, 17, bold=True, align='center')
+            self.para(detail.replace('\n', '<br/>'), xx, top + 50, col, 9.5, 15, MUTED, align='center')
             if i + 1 < len(items):
                 technical_pages.connect(self,(xx,top,col,78),(xx+col+gap,top,col,78),MUTED)
 

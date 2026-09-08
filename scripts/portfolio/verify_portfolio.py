@@ -261,6 +261,16 @@ def verify(path):
         (21, '영역별 라운드'), (24, '중심 거리와'),
     ]
     with pdfplumber.open(path) as doc:
+        centered_labels = [e for e in elements if 'center_x' in e]
+        for e in centered_labels:
+            bounds = (e['x']-.2, e['top']-.2, e['x']+e['width']+.2, e['top']+e['height']+1)
+            lines = {}
+            for word in doc.pages[e['page']-1].crop(bounds).extract_words():
+                lines.setdefault(round(word['top'], 1), []).append(word)
+            assert lines, f"Page {e['page']}: centered label is missing"
+            for words in lines.values():
+                center = (min(w['x0'] for w in words) + max(w['x1'] for w in words)) / 2
+                assert abs(center-e['center_x']) <= .3, f"Page {e['page']}: label is off center: {e['text']}"
         for page, prefix in edited_paragraphs:
             e = next(e for e in elements if e['page'] == page and e['text'].startswith(prefix))
             bounds = (e['x']-.1, e['top']-.1, e['x']+e['width']+.1, e['top']+e['height']+1)
@@ -280,6 +290,7 @@ def verify(path):
                 exact_rgba_architectures=len(figures),
                 vector_technical_plates=len(plate_labels), checked_arrows=len(layout['arrows']),
                 centered_connections=len(layout['connections']),
+                centered_labels=len(centered_labels),
                 sha256=hashlib.sha256(path.read_bytes()).hexdigest().upper())
 
 
