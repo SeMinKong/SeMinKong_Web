@@ -9,6 +9,12 @@
       "sha256": "ec3e351b5fed62ed94d614a5d402c36e5f6a95c4a0c8fda2d8c5db2497c44eba"
     },
     {
+      "file": "cplusplus.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/cplusplus.svg",
+      "sha256": "e214a4b414a0d5b0b6ef81fa268defacbb2c9c40e40facade2d0f8b944518b10"
+    },
+    {
       "file": "docker.svg",
       "kind": "Simple Icons brand mark",
       "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/docker.svg",

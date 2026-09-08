@@ -91,6 +91,7 @@
   text-decoration-color: currentColor;
 }
 
+.tech-stack-languages,
 .tech-stack-environment {
   display: flex;
   justify-content: center;
@@ -101,6 +102,7 @@
   border-top: 1px solid var(--line);
 }
 
+.tech-stack-languages h3,
 .tech-stack-environment h3 {
   color: var(--muted);
   font-family: var(--font-body);
@@ -108,19 +110,27 @@
   font-weight: var(--weight-support);
 }
 
+.tech-stack-languages .tech-stack-tools,
 .tech-stack-environment .tech-stack-tools {
   gap: 24px;
 }
 
+.tech-stack-languages .tech-stack-tools li,
 .tech-stack-environment .tech-stack-tools li {
   flex-basis: auto;
   display: flex;
   align-items: center;
 }
 
+.tech-stack-languages img,
 .tech-stack-environment img {
   width: 24px;
   height: 24px;
+}
+
+.tech-stack-languages {
+  padding-block: 8px 28px;
+  border-top: 0;
 }
 
 .tech-stack-more {

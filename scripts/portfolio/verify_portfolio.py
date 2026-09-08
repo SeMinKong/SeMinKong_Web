@@ -77,7 +77,7 @@ def verify(path):
                 assert 'canva.com' not in uri, 'Do not publish a Canva editing/share token'
                 external.append(uri)
     stack = texts[1]
-    assert all(label in stack for label in ['Tech Stack', 'Python', 'ROS 2', 'DYNAMIXEL', 'PyTorch', 'OpenCV', 'YOLO', 'Transformers', 'FastAPI', 'WebSocket', 'asyncio', 'LangChain', 'React', 'TypeScript', 'Node.js', 'Socket.io', 'Git', 'Ubuntu', 'Docker'])
+    assert all(label in stack for label in ['Tech Stack', '사용 언어', 'C++', 'Python', 'ROS 2', 'DYNAMIXEL', 'PyTorch', 'OpenCV', 'YOLO', 'Transformers', 'FastAPI', 'WebSocket', 'asyncio', 'LangChain', 'React', 'TypeScript', 'Node.js', 'Socket.io', 'Git', 'Ubuntu', 'Docker'])
     assert not reader.pages[1]['/Resources'].get('/XObject'), 'Stack icons must stay vector-only'
     intro = texts[0]
     assert 'Suwon,' in texts[0] and 'Republic of Korea' in texts[0]
@@ -126,7 +126,10 @@ def verify(path):
     layout = json.loads(path.with_suffix('.layout.json').read_text(encoding='utf-8'))
     overlaps = []
     elements = layout['elements']
-    assert len([e for e in elements if e['page'] == 2 and e['kind'] == 'svg']) == 18
+    assert len([e for e in elements if e['page'] == 2 and e['kind'] == 'svg']) == 20
+    languages = [e for e in elements if e['page'] == 2 and 97 <= e['top'] < 133]
+    assert {e['text'] for e in languages} == {'사용 언어', 'C++', 'Python', 'cplusplus', 'python'}
+    assert abs((min(e['x'] for e in languages) + max(e['x'] + e['width'] for e in languages)) / 2 - 841.89 / 2) < .02
     figure_root = ROOT / 'scripts/portfolio/assets/architecture/returned'
     figures = json.loads((figure_root / 'manifest.json').read_text(encoding='utf-8'))['figures']
     assert {f['page'] for f in figures} == {10, 16, 19, 22, 25}

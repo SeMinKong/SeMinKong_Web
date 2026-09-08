@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 
 const root = new URL('../../src/assets/tech-stack/', import.meta.url);
 await mkdir(root, { recursive: true });
-const names = ['Python', 'Ros', 'Pytorch', 'Opencv', 'Ultralytics', 'Huggingface',
+const names = ['Cplusplus', 'Python', 'Ros', 'Pytorch', 'Opencv', 'Ultralytics', 'Huggingface',
   'Fastapi', 'Langchain', 'React', 'Typescript', 'Nodedotjs', 'Socketdotio',
   'Git', 'Ubuntu', 'Docker'];
 const colors = { React: '168DA8', Huggingface: 'A97800', Langchain: '1C3C3C' };

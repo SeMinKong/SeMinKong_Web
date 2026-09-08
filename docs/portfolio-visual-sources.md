@@ -2,7 +2,7 @@
 
 ## Tech Stack SVG sources — 2026-09-08
 
-The website and PDF share 18 transparent SVGs in `src/assets/tech-stack/`, exported by `scripts/portfolio/export_stack_icons.mjs`. Fifteen brand paths come from the installed Simple Icons package (CC0-1.0); their geometry is unchanged. React, Hugging Face and LangChain use darker fills on the warm paper surface. Transformers is represented by the Hugging Face mark and YOLO by the Ultralytics mark. DYNAMIXEL, WebSocket and asyncio use original functional pictograms, not invented official logos. PDF embedding stays vector-only with searchable separate labels; web icons have empty alt text next to visible technology names. See the adjacent `sources.json` for package version, sources and file hashes. Original architecture sources are untouched.
+The website and PDF share 19 transparent SVGs in `src/assets/tech-stack/`, exported by `scripts/portfolio/export_stack_icons.mjs`. Sixteen brand paths come from the installed Simple Icons package (CC0-1.0); their geometry is unchanged. C++ and Python form the centered programming-language row; Python is reused in robotics, giving 20 icon instances per Tech Stack. React, Hugging Face and LangChain use darker fills on the warm paper surface. Transformers is represented by the Hugging Face mark and YOLO by the Ultralytics mark. DYNAMIXEL, WebSocket and asyncio use original functional pictograms, not invented official logos. PDF embedding stays vector-only with searchable separate labels; web icons have empty alt text next to visible technology names. See the adjacent `sources.json` for package version, sources and file hashes. Original architecture sources are untouched.
 
 ## Web architecture copies — 2026-09-08
 

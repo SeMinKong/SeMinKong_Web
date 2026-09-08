@@ -340,8 +340,23 @@ def introduction(b):
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/')])
 
 
+def stack_icon_row(b, title, items, top, icon_size=18):
+    heading_width = pdfmetrics.stringWidth(title, 'KoreanBold', 9.5)
+    item_gap, icon_gap = 24, 8
+    row_width = heading_width + 28 + sum(icon_size + icon_gap + pdfmetrics.stringWidth(label, 'Korean', 9.5) for label, _ in items) + item_gap * (len(items) - 1)
+    x = (W - row_width) / 2
+    text_top = top + (icon_size - 18) / 2 + 4
+    b.text(title, x, text_top, 9.5, 'KoreanBold', MUTED)
+    x += heading_width + 28
+    for label, icon in items:
+        b.svg(icon, x, top, icon_size)
+        b.text(label, x + icon_size + icon_gap, text_top, 9.5)
+        x += icon_size + icon_gap + pdfmetrics.stringWidth(label, 'Korean', 9.5) + item_gap
+
+
 def tech_stack(b):
-    b.start('Tech Stack', '프로젝트에서 직접 사용한 기술과 구현 경험', key='tech-stack')
+    b.start('Tech Stack', key='tech-stack')
+    stack_icon_row(b, '사용 언어', [('C++', 'cplusplus'), ('Python', 'python')], 97, 22)
     groups = [
         ('로봇·장비 제어', [('Python', 'python'), ('ROS 2', 'ros'), ('DYNAMIXEL', 'dynamixel')],
          '모터 검색·초기 위치·정지 점검 스크립트<br/>ROS 메시지와 장비 API 연결',
@@ -376,16 +391,7 @@ def tech_stack(b):
         for label, key in projects:
             link_x += b.link(label, key, link_x, top + 151, 9.5, internal=True) + link_gap
     b.rule(503)
-    environment = [('Git', 'git'), ('Ubuntu', 'ubuntu'), ('Docker', 'docker')]
-    heading_width = pdfmetrics.stringWidth('개발 환경', 'KoreanBold', 9.5)
-    row_width = heading_width + 28 + sum(26 + pdfmetrics.stringWidth(label, 'Korean', 9.5) for label, _ in environment) + 48
-    x = (W - row_width) / 2
-    b.text('개발 환경', x, 517, 9.5, 'KoreanBold', MUTED)
-    x += heading_width + 28
-    for label, icon in environment:
-        b.svg(icon, x, 513, 18)
-        b.text(label, x + 26, 517, 9.5)
-        x += 26 + pdfmetrics.stringWidth(label, 'Korean', 9.5) + 24
+    stack_icon_row(b, '개발 환경', [('Git', 'git'), ('Ubuntu', 'ubuntu'), ('Docker', 'docker')], 513)
     b.end([('기술·도구 더 보기', WEB + 'about/#now-title'), ('프로젝트 코드', 'https://github.com/SeMinKong')])
 
 
