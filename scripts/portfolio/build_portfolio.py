@@ -1,4 +1,4 @@
-"""Editable 26-page landscape portfolio with implementation diagrams.
+"""Editable 27-page landscape portfolio with implementation diagrams.
 
 Run from the repository root. --sample makes a three-page layout check;
 --publish copies the fully reviewed final bytes to the web download location.
@@ -28,11 +28,12 @@ from reportlab.platypus import Paragraph
 from reportlab.graphics.barcode import qr
 from reportlab.graphics.shapes import Drawing
 from reportlab.graphics import renderPDF
+from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / 'src/assets/projects'
 FIGURES = ROOT / 'scripts/portfolio/assets'
-PAGE_COUNT = 26
+PAGE_COUNT = 27
 PHOTO_IMAGES = {
     'thing/integrated-robot-hand-portrait.webp',
     'thing/jetson-mediapipe-hands-test-1600.webp',
@@ -193,6 +194,16 @@ class Book:
         self.c.restoreState()
         self.track(str(number), x, top, 18, 18, 'annotation')
 
+    def svg(self, name, x, top, size):
+        """Use the same transparent SVG source as the website, without rasterizing."""
+        drawing = svg2rlg(str(ROOT / 'src/assets/tech-stack' / f'{name}.svg'))
+        scale = min(size / drawing.width, size / drawing.height)
+        width, height = drawing.width * scale, drawing.height * scale
+        drawing.scale(scale, scale)
+        drawing.width, drawing.height = width, height
+        self.track(name, x, top, width, height, 'svg')
+        renderPDF.draw(drawing, self.c, x, H - top - height)
+
     def legend(self, number, title, detail, x, top, width):
         self.badge(number, x, top)
         self.para(title, x+28, top, width-28, 11, 16, bold=True)
@@ -329,15 +340,64 @@ def introduction(b):
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/')])
 
 
+def tech_stack(b):
+    b.start('Tech Stack', '프로젝트에서 직접 사용한 기술과 구현 경험', key='tech-stack')
+    groups = [
+        ('로봇·장비 제어', [('Python', 'python'), ('ROS 2', 'ros'), ('DYNAMIXEL', 'dynamixel')],
+         '모터 검색·초기 위치·정지 점검 스크립트<br/>ROS 메시지와 장비 API 연결',
+         [('THING', 'thing'), ('AQIS', 'aqis')]),
+        ('비전·언어 모델', [('PyTorch', 'pytorch'), ('OpenCV', 'opencv'), ('YOLO', 'ultralytics'), ('Transformers', 'huggingface')],
+         'MRI 마스크 전처리·분류/분할 추론<br/>KoBART 기사 요약 학습·생성·후처리',
+         [('MRI', 'mri'), ('Briefit', 'briefit')]),
+        ('백엔드·비동기 처리', [('FastAPI', 'fastapi'), ('WebSocket', 'websocket'), ('asyncio', 'asyncio'), ('LangChain', 'langchain')],
+         '장비 상태 전송과 명령 처리<br/>대화 상태 관리·비동기 모델 호출',
+         [('AQIS', 'aqis'), ('Prompt', 'prompt')]),
+        ('웹·실시간 서비스', [('React', 'react'), ('TypeScript', 'typescript'), ('Node.js', 'nodedotjs'), ('Socket.io', 'socketdotio')],
+         '로봇 관제 화면과 장비 상태 표시<br/>서버 기준 게임 상태·충돌 계산·화면 동기화',
+         [('AQIS', 'aqis'), ('Alkkagi', 'alkkagi')]),
+    ]
+    gap = 48
+    width = (CW - gap) / 2
+    for i, (title, tools, experience, projects) in enumerate(groups):
+        x = M + (i % 2) * (width + gap)
+        top = 133 + (i // 2) * 184
+        b.rule(top, x, width)
+        b.para(title, x, top + 12, width, 13.5, 21, bold=True, align='center')
+        tile_width = width / 4
+        tile_start = x + (width - tile_width * len(tools)) / 2
+        for j, (label, icon) in enumerate(tools):
+            tile_x = tile_start + j * tile_width
+            b.svg(icon, tile_x + (tile_width - 23) / 2, top + 46, 23)
+            b.para(label, tile_x, top + 78, tile_width, 9.5, 15, align='center')
+        b.para(experience, x, top + 107, width, 10.4, 17, MUTED, align='center')
+        link_gap = 22
+        total = sum(pdfmetrics.stringWidth(label, 'Korean', 9.5) for label, _ in projects) + link_gap
+        link_x = x + (width - total) / 2
+        for label, key in projects:
+            link_x += b.link(label, key, link_x, top + 151, 9.5, internal=True) + link_gap
+    b.rule(503)
+    environment = [('Git', 'git'), ('Ubuntu', 'ubuntu'), ('Docker', 'docker')]
+    heading_width = pdfmetrics.stringWidth('개발 환경', 'KoreanBold', 9.5)
+    row_width = heading_width + 28 + sum(26 + pdfmetrics.stringWidth(label, 'Korean', 9.5) for label, _ in environment) + 48
+    x = (W - row_width) / 2
+    b.text('개발 환경', x, 517, 9.5, 'KoreanBold', MUTED)
+    x += heading_width + 28
+    for label, icon in environment:
+        b.svg(icon, x, 513, 18)
+        b.text(label, x + 26, 517, 9.5)
+        x += 26 + pdfmetrics.stringWidth(label, 'Korean', 9.5) + 24
+    b.end([('기술·도구 더 보기', WEB + 'about/#now-title'), ('프로젝트 코드', 'https://github.com/SeMinKong')])
+
+
 def project_index(b):
     b.start('프로젝트', '장비 연동과 실물 제어를 중심으로, 입력과 출력의 품질을 다룬 작업을 소개합니다.', key='projects')
     rows = [
-        ('3 - 7', 'THING', '6인 팀 / 구동·기구 통합', '기구 편차 / 초기 목표와 토크 순서', 'thing'),
-        ('8 - 13', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '검사·분류 / 가상 공정·SLAM 관제', 'aqis'),
-        ('14 - 16', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 요약과 정보 보존', 'briefit'),
-        ('17 - 19', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '라벨 변환 / 분류·분할 결합', 'mri'),
-        ('20 - 22', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 이력 / 수정 흐름', 'prompt'),
-        ('23 - 25', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '충돌·겹침 보정 / 서버 입력 제한', 'alkkagi'),
+        ('4 - 8', 'THING', '6인 팀 / 구동·기구 통합', '기구 편차 / 초기 목표와 토크 순서', 'thing'),
+        ('9 - 14', 'AQIS', '2인 팀 / 팀장·서버·장비 통합', '검사·분류 / 가상 공정·SLAM 관제', 'aqis'),
+        ('15 - 17', 'Briefit', '6인 팀 / AI 담당', '입력 정제 / 요약과 정보 보존', 'briefit'),
+        ('18 - 20', 'Brain MRI', '개인 / 전처리·학습·통합 추론', '라벨 변환 / 분류·분할 결합', 'mri'),
+        ('21 - 23', 'Prompt Generator', '개인 / 대화 서버·상태 관리', '영역별 이력 / 수정 흐름', 'prompt'),
+        ('24 - 26', 'Alkkagi.io', '개인 / 클라이언트·서버·물리', '충돌·겹침 보정 / 서버 입력 제한', 'alkkagi'),
     ]
     b.label('쪽', M, 139)
     b.label('프로젝트', 112, 139)
@@ -625,7 +685,7 @@ def contact(b):
     b.end()
 
 
-PAGES = [introduction, project_index, thing_overview, thing_architecture,
+PAGES = [introduction, tech_stack, project_index, thing_overview, thing_architecture,
          lambda b: technical_pages.thing(b, THING_REF), thing_control, thing_result,
          aqis_overview, aqis_mock, lambda b: technical_pages.aqis(b, AQIS_REF), aqis_coordinates,
          lambda b: aqis_pages.twin(b, AQIS_EXPANDED_REF), lambda b: aqis_pages.telemetry(b, AQIS_EXPANDED_REF),

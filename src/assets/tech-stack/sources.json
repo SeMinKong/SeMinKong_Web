@@ -1,0 +1,114 @@
+{
+  "simple_icons_version": "16.28.0",
+  "brand_paths_license": "CC0-1.0",
+  "icons": [
+    {
+      "file": "asyncio.svg",
+      "kind": "original functional pictogram",
+      "source": "scripts/portfolio/export_stack_icons.mjs",
+      "sha256": "ec3e351b5fed62ed94d614a5d402c36e5f6a95c4a0c8fda2d8c5db2497c44eba"
+    },
+    {
+      "file": "docker.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/docker.svg",
+      "sha256": "142d54231e11f6bbec26731a55388fdec65452928b2b2ea5e7916a5c16a0841f"
+    },
+    {
+      "file": "dynamixel.svg",
+      "kind": "original functional pictogram",
+      "source": "scripts/portfolio/export_stack_icons.mjs",
+      "sha256": "97004e02a9bf9d574374653fe742ac5fa3ed4b9881a61388cd9ba847e3b5c275"
+    },
+    {
+      "file": "fastapi.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/fastapi.svg",
+      "sha256": "cd86c7ea7680e917a61efcaf58e066640f483c5ff5d82540e5e4a2802acef60b"
+    },
+    {
+      "file": "git.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/git.svg",
+      "sha256": "67a08f837064a99509cbadb514976665c176b95ee3e06a24b0a4b762f07b01f0"
+    },
+    {
+      "file": "huggingface.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/huggingface.svg",
+      "sha256": "c76fe6d4502d5f7365776cb32e45b01d3cde2eaa27a1d3c3091a3437f129ab92"
+    },
+    {
+      "file": "langchain.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/langchain.svg",
+      "sha256": "e87efce2979f736e3372f95ecb3f1ef4c179880b18307d6932edb297dc72623c"
+    },
+    {
+      "file": "nodedotjs.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/nodedotjs.svg",
+      "sha256": "5e6af20da4b3eed4fb4567023fe60585123a48908e5dd31767425f120371d252"
+    },
+    {
+      "file": "opencv.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/opencv.svg",
+      "sha256": "14df3d84a5423f96e374b5c09bc6e6a5598ed6acd84f0f8f2aa6a83d59efe24e"
+    },
+    {
+      "file": "python.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/python.svg",
+      "sha256": "25b9fb6fe3b9e8f18cdc26ad984a0bea6cd18e8c2123ce91395191dcc9edf3e8"
+    },
+    {
+      "file": "pytorch.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/pytorch.svg",
+      "sha256": "0e01ddf52b98eeb784de109f31386b3accfb2691462fb05ba6bbd6bfe97fcbfe"
+    },
+    {
+      "file": "react.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/react.svg",
+      "sha256": "06f94fb7777c1699adfcd772ee7f91c24d8348f47570b516f46638641d7f9ca1"
+    },
+    {
+      "file": "ros.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/ros.svg",
+      "sha256": "56e943bedc86cf9bf433dd21047e9287ebeb7474a99b355fbfab8d233e81168b"
+    },
+    {
+      "file": "socketdotio.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/socketdotio.svg",
+      "sha256": "f86974f2e70b0379a0429a372f2119a72cd05f1dbacefae48d80e394c5488db3"
+    },
+    {
+      "file": "typescript.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/typescript.svg",
+      "sha256": "1060d1deeb46685047d37b2823626a35a3d42ede485e13b0484b01ba0d1f4534"
+    },
+    {
+      "file": "ubuntu.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/ubuntu.svg",
+      "sha256": "e743243f6ea9415997de1ecfca6f279c16602d0d220badf66494ec2b7a6c3ff3"
+    },
+    {
+      "file": "ultralytics.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/ultralytics.svg",
+      "sha256": "3a222eee259a740369d86426bbbd22b99400624aa2f6d5a429486366d0b0664d"
+    },
+    {
+      "file": "websocket.svg",
+      "kind": "original functional pictogram",
+      "source": "scripts/portfolio/export_stack_icons.mjs",
+      "sha256": "5015b706a21c7831cf0ca4389a4b3d291b6383e6665c820209793fe708df618e"
+    }
+  ]
+}

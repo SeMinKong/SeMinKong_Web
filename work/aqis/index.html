@@ -75,10 +75,10 @@
             <figure class="aqis-plate" id="aqis-pipeline" aria-labelledby="aqis-inspection-flow" data-reveal>
               <figcaption class="aqis-plate__head"><div><p class="aqis-plate__label">Control sequence</p><h3 id="aqis-inspection-flow">컨베이어 정지 요청 뒤 좌표 갱신</h3></div><p>컨베이어 정지 요청 뒤 좌표를 다시 받아 작업 입력을 구성합니다.</p></figcaption>
               <ol class="aqis-flow aqis-flow--four">
-                <li><span class="aqis-flow__index">01</span><h4>검사 이벤트</h4><code>RGB + Depth → detection</code><p>불량 여부와 <code>camera_point_m</code>을 서버 입력으로 정규화합니다.</p></li>
-                <li><span class="aqis-flow__index">02</span><h4>컨베이어 정지</h4><code>defect → stop()</code><p>정지 요청 뒤 대기 구간을 두고 집기에 사용할 후속 이벤트를 기다립니다.</p></li>
-                <li><span class="aqis-flow__index">03</span><h4>좌표 다시 선택</h4><code>fresh event → pick point</code><p>timestamp와 깊이 좌표를 확인해 정지 후 들어온 후보를 선택합니다.</p></li>
-                <li><span class="aqis-flow__index">04</span><h4>Dobot 작업</h4><code>camera → robot → pick</code><p>카메라 좌표를 로봇 작업 좌표로 바꿔 vacuum pick-and-place를 실행합니다.</p></li>
+                <li><h4>검사 이벤트</h4><code>RGB + Depth → detection</code><p>불량 여부와 <code>camera_point_m</code>을 서버 입력으로 정규화합니다.</p></li>
+                <li><h4>컨베이어 정지</h4><code>defect → stop()</code><p>정지 요청 뒤 대기 구간을 두고 집기에 사용할 후속 이벤트를 기다립니다.</p></li>
+                <li><h4>좌표 다시 선택</h4><code>fresh event → pick point</code><p>timestamp와 깊이 좌표를 확인해 정지 후 들어온 후보를 선택합니다.</p></li>
+                <li><h4>Dobot 작업</h4><code>camera → robot → pick</code><p>카메라 좌표를 로봇 작업 좌표로 바꿔 vacuum pick-and-place를 실행합니다.</p></li>
               </ol>
               <div class="aqis-plate__foot"><p>정지 실패 응답으로 다음 단계를 자동 차단하지 않습니다. timestamp 누락은 허용하고 깊이 누락 시 고정 좌표를 사용합니다. 물리 파지 성공을 자동 확인하는 단계는 없습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/main.py#L165" rel="noreferrer">검출·정지 후 처리 소스 ↗</a></div>
             </figure>

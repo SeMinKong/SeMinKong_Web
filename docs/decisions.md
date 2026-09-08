@@ -2,6 +2,14 @@
 
 현재 유효한 결정과 새 변경만 기록한다. 2026-09-07까지의 전체 승인·변경 기록은 [결정 이력](history/decisions.md)에 보관한다.
 
+## 2026-09-08 — SVG Tech Stack과 웹 정렬
+
+- 사용자가 GitHub·웹 스택을 참고한 PDF 적용과 웹 레이아웃 개선, SVG 아이콘 사용을 요청했다. 소개 다음에 Tech Stack 한 쪽을 추가해 총 27쪽으로 만들고, 기존 프로젝트 순서·소개·기술 본문·이전 지정 중앙정렬을 보존한다.
+- 로봇·장비, 비전·언어 모델, 백엔드·비동기, 웹·실시간의 네 분야를 직접 구현한 경험과 연결한다. 개발 환경은 Git·Ubuntu·Docker다. 웹의 기존 추가 목록과 Isaac/로컬 추론 학습 도구는 펼침 영역에 보존한다. About의 THING 문구는 개인 담당인 모터 통신·점검과 기구 조립으로 바로잡는다.
+- 웹과 PDF는 `src/assets/tech-stack/`의 같은 SVG 18개를 사용한다. Simple Icons의 브랜드 형상을 보존하며 DYNAMIXEL·WebSocket·asyncio는 상표를 흉내 내지 않은 기능 픽토그램이다. PDF는 svglib/ReportLab 벡터로 렌더링한다. 아이콘 재생성은 `node scripts/portfolio/export_stack_icons.mjs`, PDF 환경에는 `svglib>=2.2,<3`가 필요하다.
+- Resume 스택의 중첩 열을 해제하고 About의 태블릿 아이콘 열을 줄인다. 짧은 비교 상자·캡션을 중앙정렬하고 원본 구조도와 캡션 폭, THING 모바일 사진 중심을 맞춘다. AQIS 단계 번호를 생략하고 명령·반환 행은 CSS subgrid로 정렬한다. 긴 본문과 기존 모션 동작은 유지한다.
+- 최종 PDF·다운로드 계약을 동기화하고 검증 후 기존 Pages 파이프라인으로 배포한다. 기존 아키텍처 SVG/Excalidraw/아이콘 초안은 이번 변경에 포함하지 않는다.
+
 ## 2026-09-08 — 기술 도식 시각화와 AQIS 범위 확장
 
 - 사용자가 기술 설명을 PPT처럼 직관적으로 시각화하고 웹/PDF 모두 AQIS digital twin·TurtleBot SLAM을 보강하는 방향을 승인했다. 기존 기술 도식 6쪽은 그래프·시간축·토큰 띠·변환/상태/충돌 그림으로 재구성하고 계산식·조건을 함께 둔다.

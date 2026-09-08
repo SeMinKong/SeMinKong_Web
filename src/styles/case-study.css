@@ -784,6 +784,8 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 }
 
 .case-architecture figcaption {
+  max-width: 760px;
+  margin-inline: auto;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -863,9 +865,11 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 
 .case-pair > div {
   display: grid;
+  align-content: center;
   gap: 10px;
-  padding: 20px 0;
+  padding: 20px 16px;
   border-block: 1px solid var(--line-strong);
+  text-align: center;
 }
 
 .case-pair span,
@@ -905,6 +909,8 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 }
 
 .case-technical__body > .case-diagram-caption {
+  max-width: none;
+  text-align: center;
   margin-top: -8px;
   color: var(--muted);
   font-size: 0.8rem;
@@ -1444,6 +1450,11 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
   border-right: 0;
 }
 
+.aqis-flow h4,
+.aqis-flow > li > code {
+  text-align: center;
+}
+
 .aqis-flow > li:not(:last-child)::after {
   content: "→";
   position: absolute;
@@ -1515,10 +1526,20 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
   --sync-gap: clamp(24px, 4vw, 50px);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sync-gap);
+  grid-template-rows: auto auto auto;
+  gap: 0 var(--sync-gap);
+}
+
+.aqis-sync__column {
+  min-width: 0;
+  display: grid;
+  grid-row: 1 / span 3;
+  grid-template-rows: subgrid;
+  row-gap: 0;
 }
 
 .aqis-sync__actor {
+  text-align: center;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--line-strong);
 }
@@ -1527,9 +1548,10 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
   position: relative;
   min-height: 134px;
   display: grid;
-  align-content: start;
+  align-content: center;
   gap: 12px;
   padding-block: 22px;
+  text-align: center;
 }
 
 .aqis-sync__step--return {
@@ -1547,6 +1569,8 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
   font-size: 0.9rem;
   font-weight: var(--weight-support);
   line-height: 1.5;
+  word-break: keep-all;
+  text-wrap: balance;
 }
 
 .aqis-sync__step > code {
@@ -1657,7 +1681,7 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 
   .aqis-flow {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 28px;
     border-top: 0;
   }
 
@@ -1673,7 +1697,7 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
     content: "↓";
     top: auto;
     right: calc(50% - 12px);
-    bottom: -16px;
+    bottom: -22px;
     transform: none;
   }
 
@@ -1706,7 +1730,13 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 
   .aqis-sync {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
     gap: 22px;
+  }
+
+  .aqis-sync__column {
+    grid-row: auto;
+    grid-template-rows: auto auto auto;
   }
 
   .aqis-sync__step {
@@ -1911,7 +1941,7 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 
   .thing-evidence-media--robot {
     width: min(60%, 220px);
-    justify-self: start;
+    justify-self: center;
   }
 
   .case-section--dark::before,

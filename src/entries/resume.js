@@ -1,6 +1,7 @@
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/resume.css';
+import '../styles/tech-stack.css';
 import '../styles/gallery-surface.css';
 import '../styles/motion.css';
 

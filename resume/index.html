@@ -58,7 +58,7 @@
         <h2 class="resume-label" id="portfolio-title">정적 포트폴리오</h2>
         <div class="resume-portfolio__content">
           <p>여섯 프로젝트의 소개·기술 설명·구현 결과와 수상 내역을 담았습니다. 관절각·모터값 변환, 제어 주기와 상태 분기를 도식·계산식으로 설명하고, AQIS의 RoboDK 공정과 SLAM·로봇 관제도 함께 보여줍니다.</p>
-          <p class="resume-portfolio__meta" lang="en">26 pages · A4 landscape · PDF · 15.9 MB · 2026.09.08</p>
+          <p class="resume-portfolio__meta" lang="en">27 pages · A4 landscape · PDF · 15.9 MB · 2026.09.08</p>
           <div class="resume-original__actions" aria-label="정적 포트폴리오 파일">
             <a href="../portfolio/SeMinKong-Portfolio.pdf" download="SeMinKong-Portfolio.pdf">포트폴리오 PDF 다운로드 <span aria-hidden="true">↓</span></a>
             <a href="../portfolio/SeMinKong-Portfolio.pdf" target="_blank" rel="noreferrer">포트폴리오 새 탭에서 보기 <span aria-hidden="true">↗</span></a>
@@ -141,13 +141,83 @@
         </div>
       </section>
 
-      <section class="resume-block resume-block--split" aria-labelledby="skills-title" data-resume-reveal>
-        <h2 class="resume-label" id="skills-title" lang="en">Skills</h2>
+      <section class="resume-block resume-block--skills" aria-labelledby="skills-title" data-resume-reveal>
+        <h2 class="resume-label" id="skills-title" lang="en">Tech Stack</h2>
+        <div>
+          <div class="tech-stack-grid">
+            <article class="tech-stack-card" aria-labelledby="resume-stack-robotics">
+              <h3 id="resume-stack-robotics">로봇·장비 제어</h3>
+              <ul class="tech-stack-tools" aria-label="주요 기술">
+                <li><img src="/src/assets/tech-stack/python.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">Python</span></li>
+                <li><img src="/src/assets/tech-stack/ros.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">ROS 2</span></li>
+                <li><img src="/src/assets/tech-stack/dynamixel.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">DYNAMIXEL</span></li>
+              </ul>
+              <p>THING의 모터 검색·초기 위치·정지 점검 스크립트를 만들고, AQIS의 ROS 메시지와 장비 API를 연결했습니다.</p>
+              <nav class="tech-stack-projects" aria-label="로봇·장비 제어 관련 프로젝트">
+                <a href="../work/thing/" lang="en">THING</a>
+                <a href="../work/aqis/" lang="en">AQIS</a>
+              </nav>
+            </article>
+            <article class="tech-stack-card" aria-labelledby="resume-stack-models">
+              <h3 id="resume-stack-models">비전·언어 모델</h3>
+              <ul class="tech-stack-tools" aria-label="주요 기술">
+                <li><img src="/src/assets/tech-stack/pytorch.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">PyTorch</span></li>
+                <li><img src="/src/assets/tech-stack/opencv.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">OpenCV</span></li>
+                <li><img src="/src/assets/tech-stack/ultralytics.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">YOLO</span></li>
+                <li><img src="/src/assets/tech-stack/huggingface.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">Transformers</span></li>
+              </ul>
+              <p>MRI 마스크 전처리와 분류·분할 추론을 구현하고, Briefit의 KoBART 학습과 요약 생성, 후처리를 담당했습니다.</p>
+              <nav class="tech-stack-projects" aria-label="비전·언어 모델 관련 프로젝트">
+                <a href="../work/brain-tumor-mri/" lang="en">MRI</a>
+                <a href="../work/briefit/" lang="en">Briefit</a>
+              </nav>
+            </article>
+            <article class="tech-stack-card" aria-labelledby="resume-stack-backend">
+              <h3 id="resume-stack-backend">백엔드·비동기 처리</h3>
+              <ul class="tech-stack-tools" aria-label="주요 기술">
+                <li><img src="/src/assets/tech-stack/fastapi.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">FastAPI</span></li>
+                <li><img src="/src/assets/tech-stack/websocket.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">WebSocket</span></li>
+                <li><img src="/src/assets/tech-stack/asyncio.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">asyncio</span></li>
+                <li><img src="/src/assets/tech-stack/langchain.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">LangChain</span></li>
+              </ul>
+              <p>장비 상태 전송과 명령 처리를 구현하고, 대화 상태 관리와 비동기 모델 호출을 연결했습니다.</p>
+              <nav class="tech-stack-projects" aria-label="백엔드·비동기 처리 관련 프로젝트">
+                <a href="../work/aqis/" lang="en">AQIS</a>
+                <a href="../work/project-prompt-generator/" lang="en">Prompt</a>
+              </nav>
+            </article>
+            <article class="tech-stack-card" aria-labelledby="resume-stack-web">
+              <h3 id="resume-stack-web">웹·실시간 서비스</h3>
+              <ul class="tech-stack-tools" aria-label="주요 기술">
+                <li><img src="/src/assets/tech-stack/react.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">React</span></li>
+                <li><img src="/src/assets/tech-stack/typescript.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">TypeScript</span></li>
+                <li><img src="/src/assets/tech-stack/nodedotjs.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">Node.js</span></li>
+                <li><img src="/src/assets/tech-stack/socketdotio.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span lang="en">Socket.io</span></li>
+              </ul>
+              <p>로봇 관제 화면과 장비 상태 표시, 서버 기준 게임 상태, 충돌 계산과 화면 동기화를 구현했습니다.</p>
+              <nav class="tech-stack-projects" aria-label="웹·실시간 서비스 관련 프로젝트">
+                <a href="../work/aqis/" lang="en">AQIS</a>
+                <a href="../work/alkkagi/" lang="en">Alkkagi</a>
+              </nav>
+            </article>
+          </div>
+          <div class="tech-stack-environment">
+            <h3>개발 환경</h3>
+            <ul class="tech-stack-tools">
+                <li><img src="/src/assets/tech-stack/git.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /><span lang="en">Git</span></li>
+                <li><img src="/src/assets/tech-stack/ubuntu.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /><span lang="en">Ubuntu</span></li>
+                <li><img src="/src/assets/tech-stack/docker.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /><span lang="en">Docker</span></li>
+            </ul>
+          </div>
+          <details class="tech-stack-more">
+            <summary>추가 사용·학습 도구</summary>
         <div class="skill-groups">
           <div lang="en"><h3>Languages</h3><p>Python · C++ · TypeScript</p></div>
           <div lang="en"><h3>AI / Vision</h3><p>PyTorch · Ultralytics YOLO · MediaPipe · OpenCV · Transformers · CUDA</p></div>
           <div lang="en"><h3>Robotics</h3><p>ROS 2 · DYNAMIXEL · Intel RealSense · Dobot Magician · RoboDK · NVIDIA Isaac Sim / Isaac Lab</p></div>
           <div lang="en"><h3>Backend / Tools</h3><p>FastAPI · WebSocket · React · Node.js · Socket.io · Git · Docker · Linux</p></div>
+        </div>
+          </details>
         </div>
       </section>
 

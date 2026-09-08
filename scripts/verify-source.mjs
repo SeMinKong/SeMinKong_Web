@@ -5,11 +5,11 @@ import { listSourceFiles, readSourceGraph } from './lib/source-graph.mjs';
 
 // CSS order is part of the cascade; route entries explicitly own their layers.
 const entryStyles = {
-  'about.js': ['tokens.css', 'base.css', 'about.css', 'gallery-surface.css', 'motion.css'],
+  'about.js': ['tokens.css', 'base.css', 'about.css', 'tech-stack.css', 'gallery-surface.css', 'motion.css'],
   'case-study.js': ['tokens.css', 'base.css', 'case-study.css', 'gallery-surface.css', 'motion.css'],
   'home.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'home.css', 'kinetic-home.css', 'gallery-surface.css', 'motion.css'],
   'legal.js': ['tokens.css', 'base.css', 'legal.css', 'gallery-surface.css', 'motion.css'],
-  'resume.js': ['tokens.css', 'base.css', 'resume.css', 'gallery-surface.css', 'motion.css'],
+  'resume.js': ['tokens.css', 'base.css', 'resume.css', 'tech-stack.css', 'gallery-surface.css', 'motion.css'],
   'work.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'work.css', 'gallery-surface.css', 'motion.css']
 };
 const moduleScriptPattern = /<script\b(?=[^>]*\btype=["']module["'])[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi;
