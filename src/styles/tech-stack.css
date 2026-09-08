@@ -129,8 +129,22 @@
 }
 
 .tech-stack-languages {
-  padding-block: 8px 28px;
+  gap: 16px 32px;
+  padding-block: 12px 32px;
   border-top: 0;
+}
+
+.tech-stack-languages h3 {
+  font-size: 1rem;
+}
+
+.tech-stack-languages .tech-stack-tools li {
+  font-size: 1.05rem;
+}
+
+.tech-stack-languages img {
+  width: 36px;
+  height: 36px;
 }
 
 .tech-stack-more {
@@ -178,5 +192,11 @@
 
   .tech-stack-card {
     padding-inline: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tech-stack-languages {
+    flex-direction: column;
   }
 }

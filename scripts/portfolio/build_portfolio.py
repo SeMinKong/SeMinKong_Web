@@ -340,23 +340,23 @@ def introduction(b):
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/')])
 
 
-def stack_icon_row(b, title, items, top, icon_size=18):
-    heading_width = pdfmetrics.stringWidth(title, 'KoreanBold', 9.5)
+def stack_icon_row(b, title, items, top, icon_size=18, font_size=9.5):
+    heading_width = pdfmetrics.stringWidth(title, 'KoreanBold', font_size)
     item_gap, icon_gap = 24, 8
-    row_width = heading_width + 28 + sum(icon_size + icon_gap + pdfmetrics.stringWidth(label, 'Korean', 9.5) for label, _ in items) + item_gap * (len(items) - 1)
+    row_width = heading_width + 28 + sum(icon_size + icon_gap + pdfmetrics.stringWidth(label, 'Korean', font_size) for label, _ in items) + item_gap * (len(items) - 1)
     x = (W - row_width) / 2
-    text_top = top + (icon_size - 18) / 2 + 4
-    b.text(title, x, text_top, 9.5, 'KoreanBold', MUTED)
+    text_top = top + (icon_size - font_size) / 2 - .25
+    b.text(title, x, text_top, font_size, 'KoreanBold', MUTED)
     x += heading_width + 28
     for label, icon in items:
         b.svg(icon, x, top, icon_size)
-        b.text(label, x + icon_size + icon_gap, text_top, 9.5)
-        x += icon_size + icon_gap + pdfmetrics.stringWidth(label, 'Korean', 9.5) + item_gap
+        b.text(label, x + icon_size + icon_gap, text_top, font_size)
+        x += icon_size + icon_gap + pdfmetrics.stringWidth(label, 'Korean', font_size) + item_gap
 
 
 def tech_stack(b):
     b.start('Tech Stack', key='tech-stack')
-    stack_icon_row(b, '사용 언어', [('C++', 'cplusplus'), ('Python', 'python')], 97, 22)
+    stack_icon_row(b, '사용 언어', [('C++', 'cplusplus'), ('Python', 'python')], 97, 28, 12)
     groups = [
         ('로봇·장비 제어', [('Python', 'python'), ('ROS 2', 'ros'), ('DYNAMIXEL', 'dynamixel')],
          '모터 검색·초기 위치·정지 점검 스크립트<br/>ROS 메시지와 장비 API 연결',
