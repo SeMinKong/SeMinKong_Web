@@ -44,11 +44,11 @@
           <p class="case-hero__meta" data-intro>Computer Vision · Personal · 2026</p>
           <h1 data-intro lang="en">Brain Tumor <br /> MRI</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">뇌 MRI의 4-class 분류와 종양 영역 분할을 하나의 학습 파이프라인과 웹 데모로 구현했습니다.</p>
+            <p class="case-hero__lede">뇌 MRI의 종양 종류와 영역을 각각 예측하는 두 YOLO11 모델과 전처리·웹 데모를 구현했습니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#mri-demo">웹 데모 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="Brain Tumor MRI 프로젝트 역할 및 핵심 근거">
-            <div><dt>Role</dt><dd>Model training<br />Data pipeline · Web demo</dd></div>
+            <div><dt>Role</dt><dd>Training scripts<br />Data pipeline · Web demo</dd></div>
             <div><dt>Period</dt><dd>Feb — Apr 2026</dd></div>
             <div><dt>Tasks</dt><dd>Classification<br />Instance segmentation</dd></div>
             <div><dt>Stack</dt><dd>Python · PyTorch<br />YOLO11 · OpenCV</dd></div>
@@ -56,7 +56,7 @@
         </header>
 
         <nav class="case-local-nav" aria-label="Brain Tumor MRI 페이지 안에서 이동">
-          <div class="page-width"><a href="#mri-evidence">Evidence</a><a href="#mri-overview">Model / Data</a><a href="#mri-demo">Demo</a><a href="#mri-validation">Validation</a></div>
+          <div class="page-width"><a href="#mri-evidence">Evidence</a><a href="#mri-overview">Architecture</a><a href="#mri-labels">Mask labels</a><a href="#mri-inference">Inference</a><a href="#mri-demo">Demo</a><a href="#mri-validation">Validation</a></div>
         </nav>
 
         <figure class="case-media case-media--image page-width" id="mri-evidence" data-reveal="media">
@@ -64,37 +64,84 @@
           <figcaption>Classification demo · 10 samples</figcaption>
         </figure>
 
-        <div class="case-body page-width">
-          <section class="case-section" id="mri-overview" data-reveal>
-            <h2>Model / Data</h2>
+        <div class="case-body case-body--technical page-width">
+          <section class="case-section" id="mri-overview" data-reveal="group">
+            <h2>종양의 종류와 위치를<br />함께 확인</h2>
             <div class="case-section__copy">
-              <p>YOLO11 분류 모델로 glioma, meningioma, pituitary, healthy 네 클래스를 판별하고, 분할 모델로 종양 경계를 찾았습니다.</p>
-              <p>그레이스케일 마스크를 형태학적 연산으로 정리한 뒤 YOLO polygon label로 변환하는 전처리 과정도 자동화했습니다.</p>
+              <p>YOLO11 분류 모델은 glioma, meningioma, pituitary, no_tumor 네 클래스를 다룹니다. 별도의 분할 모델은 종양 영역을 표시합니다. 데이터 전처리부터 두 모델의 학습 스크립트, 추론 결과를 확인하는 웹 데모까지 구현했습니다.</p>
             </div>
           </section>
-
-          <section class="case-metrics" aria-label="프로젝트 내부 평가 결과" data-reveal>
-            <div><strong>99.4%</strong><span>Top-1 classification</span></div>
-            <div><strong>92.7%</strong><span>Mask mAP50</span></div>
-          </section>
-
-          <section class="case-section" data-reveal>
-            <h2>Demo</h2>
-            <div class="case-section__copy">
-              <p>분류 결과와 분할 마스크를 한 화면에서 확인할 수 있도록 웹 UI를 추가했습니다.</p>
-            </div>
-          </section>
-
-          <figure class="case-video case-video--native" id="mri-demo">
-            <video src="/src/assets/projects/brain-mri/demo.mp4" poster="/src/assets/projects/brain-mri/classification-demo.png" width="1320" height="1032" controls playsinline preload="none" data-demo-video data-reveal="video" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
-            <figcaption data-reveal="text" lang="en">Classification + segmentation web demo</figcaption>
+          <figure class="case-architecture" data-reveal="group">
+            <a href="/src/assets/projects/brain-mri/architecture.webp" target="_blank" rel="noopener" aria-label="같은 MRI를 분류와 분할 모델에 각각 입력하고 결과를 함께 표시하는 구조 원본 크기로 보기"><img src="/src/assets/projects/brain-mri/architecture.webp" width="2400" height="1815" alt="같은 MRI를 분류와 분할 모델에 각각 입력하고 결과를 함께 표시하는 구조" loading="lazy" decoding="async" /></a>
+            <figcaption><span>Brain MRI · 분류·분할 모델과 결과 표시</span><a href="/src/assets/projects/brain-mri/architecture.webp" target="_blank" rel="noopener">원본 크기로 보기 <span aria-hidden="true">↗</span></a>
+            </figcaption>
           </figure>
-
-          <section class="case-section" id="mri-validation" data-reveal>
-            <h2>Validation</h2>
+          <section class="case-technical" id="mri-labels" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">01 / Mask → polygon</p>
+              <h2>픽셀 마스크를 <br />YOLO 다각형 라벨로 변환</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>그레이스케일 마스크에서 값이 1보다 큰 픽셀을 전경으로 삼습니다. 5×5 커널로 closing 후 opening을 적용하고, 외부 윤곽을 추출합니다. 점이 세 개 미만이거나 전체 이미지 면적의 0.1%보다 작은 윤곽은 제외합니다.</p>
+              <p>남은 점의 x·y를 이미지의 폭·높이로 나눠 비율 좌표로 기록합니다. 클래스와 좌표들을 원본 이미지와 같은 이름의 txt 파일에 저장해 분할 학습에 사용합니다.</p>
+              <ol class="case-steps" style="--step-count: 3">
+                <li><strong>이진화·형태 정리</strong><span><code>mask &gt; 1</code><br />closing → opening</span>
+                </li>
+                <li><strong>외부 윤곽 추출</strong><span><code>RETR_EXTERNAL</code><br />점 수·면적 필터</span>
+                </li>
+                <li><strong>좌표 정규화</strong><span><code>x/W · y/H</code><br />YOLO polygon label</span>
+                </li>
+              </ol>
+              <a class="source-link" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO/blob/3c9a0694dde759390c5813b60b60b5911448d716/src/training/train.py#L25" rel="noreferrer">mask_to_polygons · 라벨 변환 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="case-technical" id="mri-models" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">02 / Separate models</p>
+              <h2>분류와 분할에 맞는 <br />데이터와 가중치 사용</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>분류는 클래스별 이미지 폴더를, 분할은 이미지와 다각형 라벨 쌍을 사용합니다. 각각 <code>yolo11m-cls.pt</code>와 <code>yolo11m-seg.pt</code>에서 시작하며, 학습 함수와 저장하는 가중치를 나누었습니다.</p>
+              <div class="case-pair">
+                <div>
+                  <span>Classification</span><strong>이미지 → 클래스</strong><code>train_classification()</code>
+                </div>
+                <div>
+                  <span>Segmentation</span><strong>이미지 + polygon → 영역</strong><code>train_segmentation()</code>
+                </div>
+              </div>
+              <a class="source-link" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO/blob/3c9a0694dde759390c5813b60b60b5911448d716/src/training/train.py#L136" rel="noreferrer">분류·분할 학습 함수 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="case-technical" id="mri-inference" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">03 / Integrated inference</p>
+              <h2>같은 MRI에 두 모델을 호출하고 <br />결과를 한 화면에 표시</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>통합 추론은 같은 MRI를 분류 모델과 분할 모델에 차례로 입력합니다. 분류의 top-1 클래스·확률을 읽고, 분할 결과의 <code>plot()</code> 이미지에 OpenCV로 문구를 더해 저장합니다.</p>
+              <p>분류가 비종양을 반환해도 분할은 실행합니다. 한 모델의 결과로 다른 모델을 건너뛰거나 두 예측의 불일치를 자동 수정하지 않습니다.</p>
+              <ol class="case-steps" style="--step-count: 3">
+                <li><strong>같은 MRI 입력</strong><span>분류 predict · 분할 predict</span>
+                </li>
+                <li><strong>결과 읽기</strong><span>클래스·확률 · 분할 overlay</span>
+                </li>
+                <li><strong>통합 출력</strong><span>overlay 위에 클래스 문구 표시</span>
+                </li>
+              </ol>
+              <a class="source-link" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO/blob/3c9a0694dde759390c5813b60b60b5911448d716/src/testing/test.py#L117" rel="noreferrer">통합 추론 소스 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <figure class="case-video case-video--native case-technical-demo" id="mri-demo">
+            <video src="/src/assets/projects/brain-mri/demo.mp4" poster="/src/assets/projects/brain-mri/classification-demo.png" width="1320" height="1032" controls playsinline preload="none" data-demo-video data-reveal="video" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
+            <figcaption data-reveal="text">분류 결과와 분할 마스크를 함께 확인하는 기존 웹 데모</figcaption>
+          </figure>
+          <section class="case-section" id="mri-validation" data-reveal="group">
+            <h2>평가 자료와 한계</h2>
             <div class="case-section__copy">
-              <p>수치는 프로젝트 내부 평가 결과입니다. 데이터 분할과 재현 절차는 문서화 중이며, 외부 검증이나 임상 성능을 의미하지 않습니다.</p>
-              <a class="source-link" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO" rel="noreferrer">GitHub 저장소 <span aria-hidden="true">↗</span></a>
+              <p>저장소 README 보고치는 분류 Top-1 99.4%, Mask mAP50 92.7%입니다. 공개 가중치·학습 로그가 없어 독립 재현된 수치로 제시할 수는 없습니다. 학습 설정은 test 데이터를 validation에 사용하며 환자 단위 독립성도 확인되지 않았습니다.</p>
+              <p class="case-note">마스크 정제는 작은 병변이나 내부 구멍을 지울 수 있습니다. 비종양 클래스에는 다른 병변이 포함될 수 있으며, 이 프로젝트는 연구·시연용입니다.</p>
+              <a class="source-link" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO/blob/3c9a0694dde759390c5813b60b60b5911448d716/README.md" rel="noreferrer">README 보고치 <span aria-hidden="true">↗</span></a><a class="source-link" href="https://github.com/SeMinKong/BrainMRISegmentation_YOLO/blob/3c9a0694dde759390c5813b60b60b5911448d716/src/training/train.py#L87" rel="noreferrer">데이터 분할 설정 <span aria-hidden="true">↗</span></a>
             </div>
           </section>
         </div>

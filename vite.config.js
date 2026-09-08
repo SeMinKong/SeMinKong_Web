@@ -7,6 +7,15 @@ const rootDirectory = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   base: './',
+  html: {
+    additionalAssetSources: {
+      // Full-size image links must resolve to the same built asset as <img>.
+      a: {
+        srcAttributes: ['href'],
+        filter: ({ value }) => value.startsWith('/src/assets/')
+      }
+    }
+  },
   build: {
     emptyOutDir: true,
     rollupOptions: {

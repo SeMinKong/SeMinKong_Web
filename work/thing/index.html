@@ -74,7 +74,7 @@
             <h2>Hand Mimicry</h2>
             <div class="case-section__copy">
               <p>THING은 카메라로 읽은 사람의 손 자세를 텐던 구동 로봇 핸드가 실시간으로 따라 하도록 만든 Human-Mimetic robotics 프로젝트입니다.</p>
-              <p>단순 모터 제어를 넘어 비전 입력, 분산 장치 통신, 안전 제어, 관제 화면, 실험 데이터 보존을 하나의 운영 흐름으로 구성했습니다.</p>
+              <p>팀은 손 자세 인식, ROS 2 명령 처리, 모터 구동과 관제·기록을 연결했습니다. 저는 U2D2 통신 환경과 모터 점검 스크립트, 아크릴 마운트 제작·스풀·텐던 조립을 맡았습니다.</p>
             </div>
             </section>
 
@@ -144,7 +144,7 @@
             <section class="case-section" data-thing-story="prototype">
               <h2>Prototype</h2>
               <div class="case-section__copy">
-                <p>공개 저장소의 제작 기록과 시험 사진을 통해 실제 텐던 라우팅, 손가락 구조, Jetson 기반 landmark 인식 환경을 확인할 수 있습니다.</p>
+                <p>스풀에서 손가락으로 이어지는 텐던을 조립하고, 모터를 지지하는 아크릴 마운트를 제작했습니다. 아래 사진은 통합 시제품과 팀의 Jetson 손 인식 시험 환경입니다.</p>
                 <div class="thing-evidence-grid">
                   <figure class="thing-evidence-media thing-evidence-media--robot">
                     <img src="/src/assets/projects/thing/integrated-robot-hand-portrait.webp" alt="오렌지색 텐던이 연결된 THING 로봇 핸드 통합 시제품" width="1200" height="1600" loading="lazy" decoding="async" />
@@ -173,7 +173,7 @@
               <div class="case-section__copy">
                 <ul class="case-list">
                   <li>Jetson, Raspberry Pi 5, browser, AWS EC2 사이의 책임을 분리한 ROS 2 기반 구조</li>
-                  <li>명령 제한, 비상 정지, 네트워크 복구 뒤 자동 재동작을 막는 안전 경계</li>
+                  <li>명령 제한과 비상 정지, 네트워크 복구 뒤 자동 재동작 방지</li>
                   <li>실시간 상태와 카메라 피드를 함께 확인하는 React 관제 인터페이스</li>
                   <li>CAD·STL·URDF와 3D 프린팅 기구를 포함한 텐던 구동 하드웨어 구성</li>
                 </ul>
@@ -191,7 +191,7 @@
               <div><dt>Record</dt><dd>rosbag2 · JSON · CSV</dd></div>
             </dl>
             <a class="button button--primary button--small" href="https://github.com/SeMinKong/THING" rel="noreferrer">GitHub 저장소 보기 <span aria-hidden="true">↗</span></a>
-            <p class="source-note">이 페이지는 공개 시연 영상과 제작·시험 기록을 근거로 작성했으며, 공개 근거가 없는 개인별 역할은 별도로 주장하지 않습니다.</p>
+            <p class="source-note">모터 통신·점검과 기구 조립은 본인 작업이며, 비전·명령 중재·관제는 팀 구현입니다. 시연은 동작 예시로, 반복 파지 성공률을 측정한 결과는 아닙니다.</p>
           </aside>
         </div>
       </article>

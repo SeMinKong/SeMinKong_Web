@@ -13,6 +13,24 @@ from pypdf import PdfReader
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def crosses_text(start, end, element, clearance=1):
+    """Clip a line segment against a text rectangle, including a small gutter."""
+    low, high = 0.0, 1.0
+    for origin, delta, minimum, maximum in [
+        (start[0], end[0]-start[0], element['x']-clearance, element['x']+element['width']+clearance),
+        (start[1], end[1]-start[1], element['top']-clearance, element['top']+element['height']+clearance),
+    ]:
+        if abs(delta) < 1e-9:
+            if not minimum <= origin <= maximum:
+                return False
+        else:
+            entry, leave = sorted(((minimum-origin)/delta, (maximum-origin)/delta))
+            low, high = max(low, entry), min(high, leave)
+            if low > high:
+                return False
+    return True
+
+
 def verify(path):
     reader = PdfReader(path)
     assert len(reader.pages) == 26, 'Expected the full 26-page edition'
@@ -145,11 +163,11 @@ def verify(path):
         sources = [str(a.get_object()['/A']['/URI']) for a in reader.pages[page-1].get('/Annots', [])
                    if '/A' in a.get_object()]
         assert sum(bool(re.search(r'/blob/[0-9a-f]{40}/', u)) for u in sources) >= 3, f'Page {page}: source pins missing'
-        assert len([e for e in page_elements if e['x'] == 515 and e['height'] >= 45]) == 3
+        assert len([e for e in page_elements if e['x'] == 475 and e['height'] >= 45]) == 3
     # Added pages explain source conditions and calculations as searchable vectors.
     plate_labels = {
         5: ['acos', '180-theta', '0.65', '0.35', '0.08', '3020', '20Hz', '50Hz', '250ms', '실측 주기 보장 없음', '팀 구현'],
-        10: ['8초', '0.5', '70px', '시각·위치', '중복 판정보다 먼저', '0.6', '3초', '후보가 있을 때 집기 요청', '정지 응답 실패', 'x_mm', '종료 코드 0'],
+        10: ['8초', '0.5', '70px', '위치·시각', '중복 판정보다 먼저', '0.6', '3초', '후보가 있을 때 집기 요청', '정지 응답 실패', 'x_mm', '종료 코드 0'],
         16: ['384', '256', '1024', '512', '128', 'length_penalty', 'labels', '각 부분 요약에도', 'ROUGE', '거치지 않습니다'],
         19: ['mask > 1', '외부 윤곽', '0.001', 'x_norm', 'y_norm', '독립'],
         22: ['in_progress 유지', '[GENERATE_PROMPT]', 'round - 1', '1개 이상', '연결 종료 시 삭제', '이전 generated_prompt는 남습니다'],
@@ -189,6 +207,25 @@ def verify(path):
             if dx > .5 and dy > .5:
                 overlaps.append((a['page'], a['text'][:40], b['text'][:40]))
     assert not overlaps, f'Layout rectangle overlaps: {overlaps}'
+    arrow_collisions = []
+    for arrow in layout['arrows']:
+        for start, end in zip(arrow['points'], arrow['points'][1:]):
+            assert start != end, f"Zero-length arrow on page {arrow['page']}"
+            for element in elements:
+                if element['page'] == arrow['page'] and element['kind'] == 'text' and crosses_text(start,end,element):
+                    arrow_collisions.append((arrow['page'], element['text'][:45]))
+    assert not arrow_collisions, f'Arrow/text clearance: {arrow_collisions}'
+    for connection in layout['connections']:
+        (sx,sy,sw,sh),(tx,ty,tw,th)=connection['source'],connection['target']
+        start,end=connection['points']
+        if connection['vertical']:
+            assert abs(start[0]-(sx+sw/2)) < .01 and abs(end[0]-(tx+tw/2)) < .01
+            assert abs(start[1]-(sy+sh)-6) < .01 and abs(ty-end[1]-6) < .01
+            assert end[1] > start[1]
+        else:
+            assert abs(start[1]-(sy+sh/2)) < .01 and abs(end[1]-(ty+th/2)) < .01
+            assert abs(start[0]-(sx+sw)-6) < .01 and abs(tx-end[0]-6) < .01
+            assert end[0] > start[0]
     figure_captions = [
         (6, '@thing-spool-tendon.jpg', '구동부 내부:'),
         (6, '@thing-acrylic-mount.jpg', '전완부 모터 고정부'),
@@ -241,7 +278,8 @@ def verify(path):
                 layout_overlaps=len(overlaps), aligned_captions=len(figure_captions),
                 checked_paragraph_tails=len(edited_paragraphs), bytes=path.stat().st_size,
                 exact_rgba_architectures=len(figures),
-                vector_technical_plates=len(plate_labels),
+                vector_technical_plates=len(plate_labels), checked_arrows=len(layout['arrows']),
+                centered_connections=len(layout['connections']),
                 sha256=hashlib.sha256(path.read_bytes()).hexdigest().upper())
 
 

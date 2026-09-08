@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="LangGraph와 WebSocket으로 프로젝트 설계 대화를 병렬 처리하는 Project Prompt Generator." />
+    <meta name="description" content="영역별 대화 상태와 WebSocket으로 프로젝트 요구사항을 정리하는 Project Prompt Generator." />
     <link rel="canonical" href="https://seminkong.github.io/SeMinKong_Web/work/project-prompt-generator/" />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta property="og:site_name" content="Se Min Kong Portfolio" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Project Prompt Generator — Se Min Kong" />
-    <meta property="og:description" content="LangGraph와 WebSocket으로 프로젝트 설계 대화를 병렬 처리하는 Project Prompt Generator." />
+    <meta property="og:description" content="영역별 대화 상태와 WebSocket으로 프로젝트 요구사항을 정리하는 Project Prompt Generator." />
     <meta property="og:url" content="https://seminkong.github.io/SeMinKong_Web/work/project-prompt-generator/" />
     <meta property="og:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Project Prompt Generator — Se Min Kong" />
-    <meta name="twitter:description" content="여섯 설계 대화를 상태로 관리해 하나의 구현 문서로 합치는 LangGraph 도구입니다." />
+    <meta name="twitter:description" content="여섯 설계 대화를 각각 관리하고 생성된 결과를 구현 문서로 모으는 웹 도구입니다." />
     <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
     <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
@@ -41,58 +41,101 @@
     <main id="case-content" tabindex="-1">
       <article class="case-study">
         <header class="case-hero page-width">
-          <p class="case-hero__meta" data-intro>LangGraph · Personal · 2026</p>
+          <p class="case-hero__meta" data-intro>LLM Workflow · Personal · 2026</p>
           <h1 data-intro lang="en">Project Prompt <br /> Generator</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">여섯 설계 대화를 LangGraph 상태로 병렬 관리하고 결과를 하나의 구현 문서로 합치는 웹 도구를 만들었습니다.</p>
+            <p class="case-hero__lede">여섯 설계 영역의 대화와 진행 상태를 각각 관리하고, 생성된 결과를 구현 문서로 모으는 웹 도구를 만들었습니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#prompt-flow">Workflow 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="Project Prompt Generator 프로젝트 역할 및 핵심 근거">
             <div><dt>Role</dt><dd>Agent workflow <br /> Backend · Web UI</dd></div>
             <div><dt>Period</dt><dd>2026</dd></div>
-            <div><dt>Runtime</dt><dd>LangGraph <br /> WebSocket</dd></div>
+            <div><dt>Runtime</dt><dd>Domain state <br /> WebSocket</dd></div>
             <div><dt>Stack</dt><dd>Python · FastAPI <br /> Solar Pro · JavaScript</dd></div>
           </dl>
         </header>
 
         <nav class="case-local-nav" aria-label="Project Prompt Generator 페이지 안에서 이동">
-          <div class="page-width"><a href="#prompt-flow">Workflow</a><a href="#prompt-overview">Overview</a><a href="#prompt-state">State model</a><a href="#prompt-output">Output</a></div>
+          <div class="page-width"><a href="#prompt-flow">Workflow</a><a href="#prompt-overview">Overview</a><a href="#prompt-context">Context</a><a href="#prompt-state">State model</a><a href="#prompt-output">Output</a></div>
         </nav>
 
         <figure class="case-media case-media--prompt page-width" id="prompt-flow" data-reveal="media">
-          <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="프로젝트 입력을 여섯 설계 영역으로 나눈 뒤 최종 문서로 모으는 LangGraph 흐름도" decoding="async" />
-          <figcaption>LangGraph Workflow</figcaption>
+          <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="프로젝트 입력을 여섯 설계 영역으로 나눈 뒤 최종 문서로 모으는 원본 설계 흐름도" decoding="async" />
+          <figcaption>초기 설계 흐름도 · 아래 기술 설명은 실제 실행 코드를 기준으로 작성했습니다.</figcaption>
         </figure>
 
-        <div class="case-body page-width">
-          <section class="case-section" id="prompt-overview" data-reveal>
-            <h2>Workflow</h2>
+        <div class="case-body case-body--technical page-width">
+          <section class="case-section" id="prompt-overview" data-reveal="group">
+            <h2>아이디어를<br />설계 문서로 구체화</h2>
             <div class="case-section__copy">
-              <p>사용자가 프로젝트 아이디어를 입력하면 UI/UX, API, 데이터베이스, 시스템 구조, 테스트, 배포 영역을 각각 독립된 대화로 시작합니다.</p>
-              <p>각 영역은 별도 상태와 대화 이력을 유지하고, 답변이 충분해지면 최종 구현 문서에 합쳐집니다.</p>
+              <p>프로젝트 설명을 입력하면 UI/UX, 시스템 구조, 데이터베이스, API, 배포, 테스트에 관한 대화를 각각 시작합니다. 영역별 질문에 답하고, 생성된 설계를 Markdown 문서로 모을 수 있는 웹 도구입니다.</p>
+              <p>FastAPI와 Python 상태 관리, LangChain의 Solar Pro 호출을 연결하고 브라우저에서 진행 상황을 볼 수 있게 구현했습니다.</p>
             </div>
           </section>
-
-          <section class="case-section case-section--violet" id="prompt-state" data-reveal>
-            <h2>State Model</h2>
-            <div class="case-section__copy">
-              <ul class="case-list">
-                <li>LangGraph로 설계 영역별 상태와 진행 단계를 분리</li>
-                <li>최대 세 번의 질문으로 필요한 요구사항을 구체화</li>
-                <li>FastAPI WebSocket으로 질문과 완료 상태를 즉시 전달</li>
-                <li>완성된 영역별 설계를 한 문서로 병합</li>
-              </ul>
+          <figure class="case-architecture" data-reveal="group">
+            <a href="/src/assets/projects/prompt-generator/architecture.webp" target="_blank" rel="noopener" aria-label="브라우저, FastAPI 메모리 세션, 영역별 대화와 Solar Pro API의 연결 구조 원본 크기로 보기"><img src="/src/assets/projects/prompt-generator/architecture.webp" width="2400" height="1821" alt="브라우저, FastAPI 메모리 세션, 영역별 대화와 Solar Pro API의 연결 구조" loading="lazy" decoding="async" /></a>
+            <figcaption><span>Prompt Generator · 실제 웹·서버 구성</span><a href="/src/assets/projects/prompt-generator/architecture.webp" target="_blank" rel="noopener">원본 크기로 보기 <span aria-hidden="true">↗</span></a>
+            </figcaption>
+          </figure>
+          <section class="case-technical" id="prompt-context" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">01 / Conversation context</p>
+              <h2>여섯 대화의 문맥을 <br />섞지 않고 이어가기</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>모델 호출마다 영역별 지침, 프로젝트 설명, 해당 영역의 대화 이력, 새 사용자 입력을 구성합니다. 다른 영역의 이력은 포함하지 않아 API를 논의하던 대화가 UI 질문과 섞이지 않게 했습니다.</p>
+              <p>첫 질문은 <code>asyncio.gather</code>로 함께 시작합니다. 동기식 LLM 호출은 <code>asyncio.to_thread</code>에서 실행하고, 질문과 진행 상태를 WebSocket으로 전달합니다.</p>
+              <div class="case-context">
+                <span>영역·라운드 지침</span><span>프로젝트 설명</span><span>해당 영역 history</span><span>새 답변</span>
+              </div>
+              <p class="case-diagram-caption">한 영역의 호출에 포함되는 메시지 구성</p>
+              <a class="source-link" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph/blob/1972aa05d5caca05869a6ba588bf4b7573a7f678/dimensions/runner.py#L29" rel="noreferrer">영역별 메시지 구성 <span aria-hidden="true">↗</span></a>
             </div>
           </section>
-
-          <section class="case-section" id="prompt-output" data-reveal>
-            <h2>Document Output</h2>
-            <div class="case-section__copy source-links">
-              <p>여섯 설계 대화가 각자 상태를 유지하면서 진행되고, 완료된 결과를 하나의 구현 문서로 합치는 흐름을 웹에서 끝까지 사용할 수 있게 구현했습니다.</p>
-              <span class="source-status">Demo · Offline</span>
-              <a class="source-link" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph" rel="noreferrer">GitHub 저장소 <span aria-hidden="true">↗</span></a>
+          <section class="case-technical" id="prompt-state" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">02 / Completion condition</p>
+              <h2>대화 횟수와 완료 신호를 <br />함께 확인</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>입력을 처리할 때 상태를 <code>in_progress</code>로 바꾸고 라운드를 증가시킵니다. 첫 질문도 한 라운드로 셉니다. 3라운드 이상이고 응답에 <code>[GENERATE_PROMPT]</code>가 있어야 결과를 저장하고 <code>completed</code>로 바꿉니다. 세 번을 대화의 상한으로 제한하지는 않습니다.</p>
+              <p><code>RuntimeError</code>·<code>ValueError</code>·<code>OSError</code>를 처리할 때는 라운드를 되돌리고 <code>pending</code>으로 복구합니다. 성공한 대화만 이력에 추가하므로 실패한 응답이 다음 질문의 문맥에 들어가지 않습니다.</p>
+              <ol class="case-steps" style="--step-count: 3">
+                <li><strong>pending</strong><span>입력 대기</span>
+                </li>
+                <li><strong>in_progress</strong><span>round + 1 · 모델 호출</span>
+                </li>
+                <li><strong>completed</strong><span>round ≥ 3 + 완료 태그</span>
+                </li>
+              </ol>
+              <p class="case-diagram-caption">미완료 응답 → in_progress 유지 · 처리 대상 오류 → pending·이전 라운드</p>
+              <a class="source-link" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph/blob/1972aa05d5caca05869a6ba588bf4b7573a7f678/server/graph_runner.py#L40" rel="noreferrer">상태 갱신과 오류 처리 <span aria-hidden="true">↗</span></a>
             </div>
           </section>
+          <section class="case-technical" id="prompt-output" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">03 / Document output</p>
+              <h2>작성된 영역부터 <br />하나의 문서로 모으기</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>최종 문서 요청은 저장된 <code>generated_prompt</code>가 있는 영역을 모아 프로젝트 설명과 함께 별도의 모델 호출에 전달합니다. 여섯 영역이 모두 완료될 때까지 기다리는 방식이 아니며, 결과가 하나 이상 있으면 문서를 만들 수 있습니다.</p>
+              <ol class="case-steps" style="--step-count: 3">
+                <li><strong>영역별 생성 결과</strong><span>결과가 있는 영역 선택</span>
+                </li>
+                <li><strong>최종 문서 요청</strong><span>프로젝트 설명과 함께 입력</span>
+                </li>
+                <li><strong>Markdown 출력</strong><span>한 문서로 정리</span>
+                </li>
+              </ol>
+              <a class="source-link" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph/blob/1972aa05d5caca05869a6ba588bf4b7573a7f678/server/graph_runner.py#L93" rel="noreferrer">handle_finalize · 최종 문서 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <aside class="case-note case-note--standalone">
+            <p>세션은 메모리에 저장되며 연결 종료 시 삭제됩니다. 실패한 수정 뒤에는 이전 생성 결과가 남습니다. 공개 실행 코드는 영역별 상태 관리이며 LangGraph 그래프 실행은 포함하지 않습니다.</p>
+            <div class="source-links">
+              <span class="source-status">Demo · Offline</span><a class="source-link" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph" rel="noreferrer">GitHub 저장소 <span aria-hidden="true">↗</span></a>
+            </div>
+          </aside>
         </div>
       </article>
 

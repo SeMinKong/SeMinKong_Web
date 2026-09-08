@@ -1,8 +1,12 @@
 # Portfolio visual sources and bounded reproduction
 
+## Web architecture copies — 2026-09-08
+
+The approved returned PNGs for Briefit, MRI, Prompt and Alkkagi are copied to `src/assets/projects/{briefit,brain-mri,prompt-generator,alkkagi}/architecture.webp` as lossless WebP. All four decode to the exact same RGBA pixels at their original 2400px width; no resampling, redrawing or cropping was performed. Their combined file size is approximately 1.95MB. The web uses lazy loading, original proportions and links to the full-size files. Separate in-progress SVG/Excalidraw/icon changes are excluded.
+
 ## Current edition — 2026-09-08 visual engineering and AQIS expansion
 
-The current PDF is 26 pages: THING 3–7, AQIS 8–13, Briefit 14–16, MRI 17–19, Prompt 20–22, Alkkagi 23–25, contact 26. Original architecture images remain on pages 4/9/15/18/21/24. The five owner-returned RGBA PNGs retain all pixels, alpha, proportions and source hashes; only destination page numbers change in the manifest. Sixteen earlier body pages are preserved; the index and AQIS introduction are updated, six technical plates are visualized and two AQIS pages are added.
+The current PDF is 26 pages: THING 3–7, AQIS 8–13, Briefit 14–16, MRI 17–19, Prompt 20–22, Alkkagi 23–25, contact 26. Original architecture images remain on pages 4/9/15/18/21/24. The five owner-returned RGBA PNGs retain all pixels, alpha, proportions and source hashes; only destination page numbers change in the manifest. All project introductions, source imagery and technical coverage are retained. The latest revision adjusts title size, explanation width, word wrapping, equation emphasis and connector alignment throughout the 26-page book.
 
 Pages 5/10/16/19/22/25 use `technical_pages.py` for searchable vectors, timing/length plots, equations and state transitions. The diagrams are explanatory representations, not new camera captures, model outputs or experiments. Each page links to at least three pinned implementation sources. `aqis_pages.py` adds RoboDK and SLAM/URDF pages. Existing raster source imagery is unchanged.
 

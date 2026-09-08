@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="뉴스 수집, 유사 기사 grouping, KoBART 요약을 담당한 Briefit 팀 프로젝트." />
+    <meta name="description" content="뉴스 수집·본문 정제와 KoBART 학습·생성·평가 스크립트를 구현한 Briefit 팀 프로젝트." />
     <link rel="canonical" href="https://seminkong.github.io/SeMinKong_Web/work/briefit/" />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta property="og:site_name" content="Se Min Kong Portfolio" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Briefit — Se Min Kong" />
-    <meta property="og:description" content="뉴스 수집, 유사 기사 grouping, KoBART 요약을 담당한 Briefit 팀 프로젝트." />
+    <meta property="og:description" content="뉴스 수집·본문 정제와 KoBART 학습·생성·평가 스크립트를 구현한 Briefit 팀 프로젝트." />
     <meta property="og:url" content="https://seminkong.github.io/SeMinKong_Web/work/briefit/" />
     <meta property="og:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Briefit — Se Min Kong" />
-    <meta name="twitter:description" content="비동기 뉴스 수집부터 grouping과 KoBART 요약까지 구현한 AI 데이터 파이프라인입니다." />
+    <meta name="twitter:description" content="기사 수집과 본문 정제, KoBART 학습 입력과 긴 기사 요약을 구현했습니다." />
     <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
     <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
@@ -44,19 +44,19 @@
           <p class="case-hero__meta" data-intro>NLP · Team · 2025</p>
           <h1 data-intro lang="en">Briefit</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">비동기 뉴스 수집부터 유사 기사 grouping과 KoBART 요약까지 팀 제품의 AI 데이터 파이프라인을 담당했습니다.</p>
+            <p class="case-hero__lede">뉴스 본문을 수집·정제하고, KoBART의 학습 입력과 긴 기사 요약·후처리를 구현했습니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#briefit-product">제품 근거 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/capstone-btd/Briefit_AI" rel="noreferrer">Pipeline GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="Briefit 프로젝트 역할 및 핵심 근거">
             <div><dt>Role</dt><dd>Team AI Engineer</dd></div>
             <div><dt>Period</dt><dd>May — Sep 2025</dd></div>
-            <div><dt>Scope</dt><dd>Collection · Grouping<br />Summarization</dd></div>
-            <div><dt>Stack</dt><dd>Python · aiohttp<br />Transformers · KoBART</dd></div>
+            <div><dt>Scope</dt><dd>Collection · Training<br />Summarization</dd></div>
+            <div><dt>Stack</dt><dd>Python · Crawl4AI<br />Transformers · KoBART</dd></div>
           </dl>
         </header>
 
         <nav class="case-local-nav" aria-label="Briefit 페이지 안에서 이동">
-          <div class="page-width"><a href="#briefit-product">Product</a><a href="#briefit-contribution">Contribution</a><a href="#briefit-pipeline">Pipeline</a><a href="#briefit-integration">Integration</a></div>
+          <div class="page-width"><a href="#briefit-product">Product</a><a href="#briefit-contribution">Contribution</a><a href="#briefit-pipeline">Collection</a><a href="#briefit-training">Training</a><a href="#briefit-generation">Long input</a><a href="#briefit-integration">Evaluation</a></div>
         </nav>
 
         <figure class="case-media case-media--image page-width" id="briefit-product" data-reveal="media">
@@ -64,33 +64,81 @@
           <figcaption>Briefit Product</figcaption>
         </figure>
 
-        <div class="case-body page-width">
-          <section class="case-section" id="briefit-contribution" data-reveal>
-            <h2>Contribution</h2>
+        <div class="case-body case-body--technical page-width">
+          <section class="case-section" id="briefit-contribution" data-reveal="group">
+            <h2>기사 수집부터<br />읽을 수 있는 요약까지</h2>
             <div class="case-section__copy">
-              <p>Briefit은 여러 매체의 기사를 한곳에 모으고, 같은 이슈를 다루는 기사를 묶어 읽을 수 있게 만든 뉴스 큐레이션 서비스입니다.</p>
-              <p>위 화면은 팀의 전체 제품이며, 저는 프론트엔드 디자인이 아니라 AI 데이터 파이프라인을 담당했습니다.</p>
+              <p>Briefit은 여러 매체의 기사를 모으고 같은 이슈를 묶어 읽는 팀 뉴스 서비스입니다. 저는 AI 파트에서 기사 수집과 본문 정제, KoBART 학습·생성·평가 스크립트, 요약 후처리를 맡았습니다.</p>
+              <p>제품 화면은 팀 결과물이며, 아래는 본인이 작성한 2025년 KoBART 구현을 기준으로 설명합니다.</p>
             </div>
           </section>
-
-          <section class="case-section case-section--violet" id="briefit-pipeline" data-reveal>
-            <h2>Pipeline</h2>
-            <div class="case-section__copy">
-              <ul class="case-list">
-                <li>aiohttp와 BeautifulSoup을 이용한 비동기 다중 뉴스 수집</li>
-                <li>기사 본문 전처리와 tokenization 흐름 정리</li>
-                <li>기사 간 유사도를 기준으로 같은 이슈 grouping</li>
-                <li>KoBART API와 local model을 이용한 중립 요약 실험</li>
-              </ul>
+          <figure class="case-architecture" data-reveal="group">
+            <a href="/src/assets/projects/briefit/architecture.webp" target="_blank" rel="noopener" aria-label="Briefit의 뉴스 수집, KoBART 학습·평가와 로컬 요약 구조 원본 크기로 보기"><img src="/src/assets/projects/briefit/architecture.webp" width="2400" height="1749" alt="Briefit의 뉴스 수집, KoBART 학습·평가와 로컬 요약 구조" loading="lazy" decoding="async" /></a>
+            <figcaption><span>Briefit · 2025년 수집·KoBART 구성</span><a href="/src/assets/projects/briefit/architecture.webp" target="_blank" rel="noopener">원본 크기로 보기 <span aria-hidden="true">↗</span></a>
+            </figcaption>
+          </figure>
+          <section class="case-technical" id="briefit-pipeline" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">01 / Collection</p>
+              <h2>배치가 바뀌어도 <br />같은 기사를 다시 저장하지 않기</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>수집 대상을 기사 URL로 좁히고 댓글 페이지를 제외했습니다. 본문 선택자를 순서대로 확인해 script·style 등의 요소를 제거한 뒤 텍스트만 JSON으로 저장합니다.</p>
+              <p>저장에 성공한 URL은 배치 사이에서 공유하는 집합에 넣습니다. 다음 배치가 같은 링크를 만나면 건너뛰므로 한 번의 실행 안에서 중복 저장을 막습니다.</p>
+              <ol class="case-steps" style="--step-count: 3">
+                <li><strong>기사 URL 선택</strong><span>기사 패턴 허용 · 댓글 제외</span>
+                </li>
+                <li><strong>본문 정제</strong><span>본문 요소 추출 · 불필요 태그 제거</span>
+                </li>
+                <li><strong>JSON 저장</strong><span>저장 성공 URL을 집합에 추가</span>
+                </li>
+              </ol>
+              <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI/blob/a7b25dff1438940fea631d8ba597835435b7c32a/Dataset/Crawl4AI.py#L111" rel="noreferrer">crawl_naver · 수집과 중복 처리 <span aria-hidden="true">↗</span></a>
             </div>
           </section>
-
-          <section class="case-section" id="briefit-integration" data-reveal>
-            <h2>Product Integration</h2>
-            <div class="case-section__copy source-links">
-              <p>수집·전처리·grouping·요약 단계를 하나의 비동기 파이프라인으로 연결해 팀 제품이 기사 묶음별 요약을 제공할 수 있도록 구현했습니다.</p>
-              <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI" rel="noreferrer">파이프라인 저장소 <span aria-hidden="true">↗</span></a>
-              <a class="source-link" href="https://github.com/capstone-btd/.github/blob/main/profile/README.md" rel="noreferrer">팀 소개 <span aria-hidden="true">↗</span></a>
+          <section class="case-technical" id="briefit-training" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">02 / Seq2seq training</p>
+              <h2>기사와 정답 요약을 <br />서로 다른 입력으로 구성</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>학습 데이터의 기사 <code>text</code>는 encoder 입력으로, 정답 <code>summary</code>는 decoder의 <code>labels</code>로 전달합니다. 각각 최대 384·256토큰으로 자르고 패딩해 Seq2SeqTrainer가 사용할 학습 쌍을 구성했습니다.</p>
+              <div class="case-pair">
+                <div>
+                  <span>Encoder input</span><strong>기사 · 384토큰</strong><code>input_ids + attention_mask</code>
+                </div>
+                <div>
+                  <span>Decoder target</span><strong>정답 요약 · 256토큰</strong><code>labels = summary.input_ids</code>
+                </div>
+              </div>
+              <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI/blob/714502c017f0c57ebebd634b60ea77a102945d81/Kobart/Scripts/Train.py#L25" rel="noreferrer">preprocess_fn · 학습 입력 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="case-technical" id="briefit-generation" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">03 / Long articles</p>
+              <h2>긴 기사는 부분 요약을 모아 <br />다시 요약</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>생성 단계에서는 입력이 1,024토큰 이하면 한 번에 요약합니다. 더 긴 기사는 문단을 누적해 나누고, 각 부분의 요약문을 연결한 뒤 다시 요약합니다. 부분 요약과 재요약의 출력 상한은 각각 512토큰이며, 생성에는 beam 4개와 length penalty 1.2를 사용합니다.</p>
+              <p>매 생성 뒤 <code>_clean_tail</code>이 짧은 끝문장과 직전 문장의 반복을 제거합니다. 문단을 더한 뒤 길이를 검사하고 매 입력을 1,024토큰에서 자르므로, 긴 문단이나 연결된 요약문은 일부가 잘릴 수 있습니다.</p>
+              <ol class="case-steps" style="--step-count: 3">
+                <li><strong>문단 묶음</strong><span>입력 길이 검사</span>
+                </li>
+                <li><strong>부분 요약</strong><span>각 결과를 줄바꿈으로 연결</span>
+                </li>
+                <li><strong>재요약</strong><span>연결된 요약을 새 입력으로 사용</span>
+                </li>
+              </ol>
+              <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI/blob/da4ea1b09cfd44724facc19233d65c07e4301f3a/Kobart/Scripts/GenerateJson.py#L44" rel="noreferrer">generate_summary · smart_summarize <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="case-section" id="briefit-integration" data-reveal="group">
+            <h2>품질을 확인하는 기준</h2>
+            <div class="case-section__copy">
+              <p>별도 평가 스크립트는 모델이 생성한 원문을 정답 요약과 ROUGE로 비교합니다. 부분·재요약이나 후처리를 거친 최종 출력과는 평가 대상이 다릅니다.</p>
+              <p class="case-note">짧은 정상 문장도 후처리에서 지워질 수 있어 자연스러움과 정보 보존을 함께 확인해야 합니다. 공개 소스에는 학습·평가 코드가 있으며 완료 로그나 요약 품질 개선 수치는 확인되지 않았습니다.</p>
+              <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI/blob/714502c017f0c57ebebd634b60ea77a102945d81/Kobart/Scripts/Evaluate.py#L12" rel="noreferrer">ROUGE 평가 소스 <span aria-hidden="true">↗</span></a><a class="source-link" href="https://github.com/capstone-btd/.github/blob/main/profile/README.md" rel="noreferrer">팀 소개 <span aria-hidden="true">↗</span></a>
             </div>
           </section>
         </div>

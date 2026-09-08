@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Alkkagi.io — Se Min Kong" />
-    <meta name="twitter:description" content="서버 권위 60 FPS 물리 상태를 공유하는 실시간 멀티플레이 게임입니다." />
+    <meta name="twitter:description" content="서버에서 원형 돌의 충돌을 계산하고 모든 플레이어에게 같은 상태를 전달하는 멀티플레이 게임입니다." />
     <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
     <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
@@ -44,19 +44,19 @@
           <p class="case-hero__meta" data-intro>Real-time Web · Personal · 2026</p>
           <h1 data-intro lang="en">Alkkagi.io</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">서버가 60 FPS 물리 상태를 계산해 모든 플레이어가 같은 결과를 보는 실시간 멀티플레이 게임을 구현했습니다.</p>
+            <p class="case-hero__lede">서버에서 돌의 이동과 충돌을 계산하고, 모든 플레이어가 같은 상태를 보는 실시간 멀티플레이 게임을 구현했습니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#alkkagi-demo">Gameplay 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/SeMinKong/Alkkagi" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="Alkkagi.io 프로젝트 역할 및 핵심 근거">
             <div><dt>Role</dt><dd>Frontend · Backend<br />Physics engine</dd></div>
             <div><dt>Period</dt><dd>Mar — Apr 2026</dd></div>
-            <div><dt>Loop</dt><dd>Server-authoritative<br />60 FPS</dd></div>
+            <div><dt>Loop</dt><dd>Server-authoritative<br />60Hz target</dd></div>
             <div><dt>Stack</dt><dd>React · TypeScript<br />Node.js · Socket.io</dd></div>
           </dl>
         </header>
 
         <nav class="case-local-nav" aria-label="Alkkagi.io 페이지 안에서 이동">
-          <div class="page-width"><a href="#alkkagi-demo">Gameplay</a><a href="#alkkagi-overview">Overview</a><a href="#alkkagi-physics">Server physics</a><a href="#alkkagi-source">Source</a></div>
+          <div class="page-width"><a href="#alkkagi-demo">Gameplay</a><a href="#alkkagi-overview">Overview</a><a href="#alkkagi-physics">Server</a><a href="#alkkagi-collision">Collision</a><a href="#alkkagi-update">Update</a><a href="#alkkagi-source">Source</a></div>
         </nav>
 
         <figure class="case-media case-media--video page-width" id="alkkagi-demo">
@@ -64,31 +64,79 @@
           <figcaption data-reveal="text" lang="en">Multiplayer Gameplay</figcaption>
         </figure>
 
-        <div class="case-body page-width">
-          <section class="case-section" id="alkkagi-overview" data-reveal>
-            <h2>Gameplay</h2>
+        <div class="case-body case-body--technical page-width">
+          <section class="case-section" id="alkkagi-overview" data-reveal="group">
+            <h2>같은 보드에서<br />같은 결과를 보기</h2>
             <div class="case-section__copy">
-              <p>전통 알까기를 브라우저 기반 실시간 아레나 게임으로 만들었습니다. 자신의 돌을 드래그해 튕기고, 상대를 보드 밖으로 밀어내면 돌의 크기와 질량이 달라집니다.</p>
+              <p>전통 알까기를 브라우저의 실시간 아레나 게임으로 만들었습니다. 돌을 드래그해 튕기고 상대를 보드 밖으로 밀어내면 점수가 오르며, 돌의 반경과 질량이 달라집니다.</p>
+              <p>React·TypeScript 화면, Node.js 서버와 Socket.io 통신, 원형 돌에 맞춘 물리 모듈을 직접 구현했습니다. 보드 크기는 접속 인원에 따라 조정합니다.</p>
             </div>
           </section>
-
-          <section class="case-section case-section--blue" id="alkkagi-physics" data-reveal>
-            <h2>Server physics</h2>
-            <div class="case-section__copy">
-              <p>모든 플레이어가 같은 결과를 보도록 서버를 상태의 기준으로 두었습니다. 서버가 60 FPS로 위치와 속도를 계산하고 결과를 Socket.io로 전달합니다.</p>
-              <ul class="case-list">
-                <li>질량과 속도에 따른 탄성 충돌과 impulse 계산</li>
-                <li>마찰과 감속, 고속 충돌 시 위치 보정</li>
-                <li>킬 수에 따른 반경과 질량 변화</li>
-                <li>접속 인원에 맞춘 아레나 크기 조절</li>
-              </ul>
+          <figure class="case-architecture" data-reveal="group">
+            <a href="/src/assets/projects/alkkagi/architecture.webp" target="_blank" rel="noopener" aria-label="React 클라이언트들이 입력을 보내고 서버 물리 계산 결과를 공유하는 Alkkagi 구조 원본 크기로 보기"><img src="/src/assets/projects/alkkagi/architecture.webp" width="2400" height="1755" alt="React 클라이언트들이 입력을 보내고 서버 물리 계산 결과를 공유하는 Alkkagi 구조" loading="lazy" decoding="async" /></a>
+            <figcaption><span>Alkkagi.io · 서버의 게임 상태를 공유하는 구조</span><a href="/src/assets/projects/alkkagi/architecture.webp" target="_blank" rel="noopener">원본 크기로 보기 <span aria-hidden="true">↗</span></a>
+            </figcaption>
+          </figure>
+          <section class="case-technical" id="alkkagi-physics" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">01 / Authoritative server</p>
+              <h2>클라이언트는 입력을 보내고 <br />서버가 상태를 결정</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>서버는 입력을 보낸 접속자의 돌을 찾고, 500ms 안의 재입력을 거절합니다. 튕기기 벡터의 크기를 보드 크기에 비례한 상한으로 제한한 뒤 질량으로 나눠 속도를 정합니다.</p>
+              <p>게임 상태는 서버 메모리에 한 벌로 두고 <code>gameStateUpdate</code>로 배포합니다. React 클라이언트는 받은 위치를 DOM·SVG에 표시하므로 플레이어마다 충돌을 별도로 판정하지 않습니다.</p>
+              <ol class="case-steps" style="--step-count: 3">
+                <li><strong>flick 입력</strong><span>접속자 · 재입력 간격 확인</span>
+                </li>
+                <li><strong>서버 물리 계산</strong><span>힘 제한 · 질량 반영</span>
+                </li>
+                <li><strong>상태 배포</strong><span>모든 클라이언트에 같은 결과</span>
+                </li>
+              </ol>
+              <a class="source-link" href="https://github.com/SeMinKong/Alkkagi/blob/530229c524a432c0016a28376a5c6fccd8f8e5b5/server/index.ts#L139" rel="noreferrer">flick 입력 처리 <span aria-hidden="true">↗</span></a>
             </div>
           </section>
-
-          <section class="case-section" id="alkkagi-source" data-reveal>
-            <h2>Custom Physics</h2>
+          <section class="case-technical" id="alkkagi-collision" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">02 / Circle collision</p>
+              <h2>겹친 위치를 먼저 풀고 <br />접근 중일 때 충격량 적용</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>두 돌의 중심 거리와 반경 합으로 겹침을 찾습니다. 겹친 거리의 절반씩 양쪽 위치를 밀어낸 다음, 두 돌을 잇는 방향의 상대 속도를 확인합니다. 이미 멀어지는 중이면 충격량을 더하지 않습니다.</p>
+              <p>접근 중이면 반발계수 0.7과 두 돌의 역질량으로 충격량을 계산합니다. 위치 보정은 반씩 나누지만 속도 변화는 질량에 따라 달라져, 커진 돌의 무게가 충돌 반응에 반영됩니다.</p>
+              <div class="case-equations">
+                <code>n = (p₂ − p₁) / distance</code><code>vₙ = (v₂ − v₁) · n</code><code>j = −(1 + 0.7) × vₙ / (1/m₁ + 1/m₂)</code>
+              </div>
+              <p class="case-diagram-caption">중심이 서로 다른 두 돌의 충돌식 · vₙ &gt; 0이면 충격량 계산 생략</p>
+              <a class="source-link" href="https://github.com/SeMinKong/Alkkagi/blob/530229c524a432c0016a28376a5c6fccd8f8e5b5/server/physics.ts#L31" rel="noreferrer">겹침 보정과 impulse 계산 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="case-technical" id="alkkagi-update" data-reveal="group">
+            <header class="case-technical__head">
+              <p class="case-kicker">03 / Physics update</p>
+              <h2>한 번의 갱신을 <br />10개 소단계로 나누기</h2>
+            </header>
+            <div class="case-technical__body">
+              <p>서버 타이머는 60Hz를 목표로 설정하고 한 번의 갱신에서 물리를 10회 계산합니다. 각 소단계에서 이동·마찰·충돌·보드 이탈을 처리한 뒤 최종 상태를 배포합니다. 득점과 재배치, 반경·질량 변경도 서버에서 처리합니다.</p>
+              <ol class="case-steps" style="--step-count: 3">
+                <li><strong>소단계 × 10</strong><span>이동 → 감속 → 충돌 → 득점</span>
+                </li>
+                <li><strong>게임 상태 갱신</strong><span>반경·질량 · 재배치</span>
+                </li>
+                <li><strong>gameStateUpdate</strong><span>한 갱신의 결과를 배포</span>
+                </li>
+              </ol>
+              <div class="case-equations">
+                <code>position += velocity × 0.1</code><code>velocity *= 0.8 ** 0.1</code>
+              </div>
+              <a class="source-link" href="https://github.com/SeMinKong/Alkkagi/blob/530229c524a432c0016a28376a5c6fccd8f8e5b5/server/physics.ts#L79" rel="noreferrer">마찰·정지 처리 <span aria-hidden="true">↗</span></a><a class="source-link" href="https://github.com/SeMinKong/Alkkagi/blob/530229c524a432c0016a28376a5c6fccd8f8e5b5/server/index.ts#L99" rel="noreferrer">갱신 루프와 배포 <span aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="case-section" id="alkkagi-source" data-reveal="group">
+            <h2>게임에 필요한 물리</h2>
             <div class="case-section__copy">
-              <p>Matter.js 같은 범용 엔진 대신 게임에 필요한 원형 충돌만 다루는 TypeScript 물리 모듈을 직접 작성했습니다. 계산 범위를 좁혀 서버 루프와 상태 동기화 흐름을 명확하게 유지했습니다.</p>
+              <p>범용 엔진 대신 원형 충돌과 보드 밖 득점에 집중한 TypeScript 모듈로 계산을 구성했습니다. 마찰은 소단계마다 <code>FRICTION ** stepFactor</code>로 적용합니다. 충돌·정지·재배치가 없으면 10회 적용 후 속도는 기존의 0.8배가 됩니다. 각 소단계에서 축별 속도의 절댓값이 0.1 미만이면 0으로 처리합니다.</p>
+              <p class="case-note">60Hz는 타이머 설정입니다. 지속 FPS·네트워크 지연·동시 접속 성능은 별도로 측정하지 않았습니다.</p>
               <a class="source-link" href="https://github.com/SeMinKong/Alkkagi" rel="noreferrer">GitHub 저장소 <span aria-hidden="true">↗</span></a>
             </div>
           </section>
