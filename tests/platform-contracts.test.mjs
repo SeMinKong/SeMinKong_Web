@@ -390,10 +390,10 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 15872459);
+  assert.equal(pdf.length, 15867137);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    'BB4FC7C074375E6D70E92E926C893AE8FDAA44501A55E653DFAFB47A0D538B18',
-    'Published PDF must match the reviewed 27-page edition with centered C++/Python languages and preserved technical coverage'
+    'D94A1403B44254CF115185FE48181C1B677E34F5ACBB228138AE5227B99DF02C',
+    'Published PDF must match the reviewed 27-page edition with the personal learning stack and preserved project coverage'
   );
 });

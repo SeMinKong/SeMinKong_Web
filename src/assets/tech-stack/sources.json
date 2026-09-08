@@ -51,10 +51,28 @@
       "sha256": "e87efce2979f736e3372f95ecb3f1ef4c179880b18307d6932edb297dc72623c"
     },
     {
+      "file": "llamacpp.svg",
+      "kind": "existing official project mark",
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/media/llama1-icon-transparent.svg",
+      "sha256": "f48b6d6a7dac9184c7bf812b417c761496de10e6a1af2d52ed9f570fab64b352"
+    },
+    {
       "file": "nodedotjs.svg",
       "kind": "Simple Icons brand mark",
       "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/nodedotjs.svg",
       "sha256": "5e6af20da4b3eed4fb4567023fe60585123a48908e5dd31767425f120371d252"
+    },
+    {
+      "file": "nvidia.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/nvidia.svg",
+      "sha256": "37ca309ac911fd1ef84cae3dc92d4ff022de40eac796e6018d8c68557e71b437"
+    },
+    {
+      "file": "ollama.svg",
+      "kind": "Simple Icons brand mark",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/ollama.svg",
+      "sha256": "d0b690fbf0706211b6158d52b6f4b7e80cc1fcda237e771e9ff24a350f137cda"
     },
     {
       "file": "opencv.svg",

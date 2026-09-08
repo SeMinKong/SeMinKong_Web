@@ -355,44 +355,33 @@ def stack_icon_row(b, title, items, top, icon_size=18, font_size=9.5):
 
 
 def tech_stack(b):
-    b.start('Tech Stack', key='tech-stack')
+    b.start('학습 스택', key='tech-stack')
     stack_icon_row(b, '사용 언어', [('C++', 'cplusplus'), ('Python', 'python')], 97, 28, 12)
     groups = [
-        ('로봇·장비 제어', [('Python', 'python'), ('ROS 2', 'ros'), ('DYNAMIXEL', 'dynamixel')],
-         '모터 검색·초기 위치·정지 점검 스크립트<br/>ROS 메시지와 장비 API 연결',
-         [('THING', 'thing'), ('AQIS', 'aqis')]),
-        ('비전·언어 모델', [('PyTorch', 'pytorch'), ('OpenCV', 'opencv'), ('YOLO', 'ultralytics'), ('Transformers', 'huggingface')],
-         'MRI 마스크 전처리·분류/분할 추론<br/>KoBART 기사 요약 학습·생성·후처리',
-         [('MRI', 'mri'), ('Briefit', 'briefit')]),
-        ('백엔드·비동기 처리', [('FastAPI', 'fastapi'), ('WebSocket', 'websocket'), ('asyncio', 'asyncio'), ('LangChain', 'langchain')],
-         '장비 상태 전송과 명령 처리<br/>대화 상태 관리·비동기 모델 호출',
-         [('AQIS', 'aqis'), ('Prompt', 'prompt')]),
-        ('웹·실시간 서비스', [('React', 'react'), ('TypeScript', 'typescript'), ('Node.js', 'nodedotjs'), ('Socket.io', 'socketdotio')],
-         '로봇 관제 화면과 장비 상태 표시<br/>서버 기준 게임 상태·충돌 계산·화면 동기화',
-         [('AQIS', 'aqis'), ('Alkkagi', 'alkkagi')]),
+        ('로봇·시뮬레이션', [('ROS 2', 'ros'), ('Isaac Sim', 'nvidia'), ('Isaac Lab', 'nvidia')],
+         'ROS 2 통신·관절 제어<br/>센서 오차·접촉·마찰과 sim-to-real'),
+        ('AI·에이전트', [('PyTorch', 'pytorch'), ('LangChain', 'langchain')],
+         '모델 학습·추론<br/>LLM 응용·대화 상태 관리'),
+        ('로컬 추론·API', [('Ollama', 'ollama'), ('llama.cpp', 'llamacpp'), ('FastAPI', 'fastapi')],
+         '양자화·문맥 길이·메모리 사용량<br/>로컬 모델 실행·API 연결'),
+        ('개발 환경', [('Ubuntu', 'ubuntu'), ('Git', 'git'), ('Docker', 'docker')],
+         'Linux 개발 환경·버전 관리<br/>컨테이너 실행 환경'),
     ]
     gap = 48
     width = (CW - gap) / 2
-    for i, (title, tools, experience, projects) in enumerate(groups):
+    for i, (title, tools, focus) in enumerate(groups):
         x = M + (i % 2) * (width + gap)
         top = 133 + (i // 2) * 184
         b.rule(top, x, width)
         b.para(title, x, top + 12, width, 13.5, 21, bold=True, align='center')
-        tile_width = width / 4
+        tile_width = width / 3
         tile_start = x + (width - tile_width * len(tools)) / 2
         for j, (label, icon) in enumerate(tools):
             tile_x = tile_start + j * tile_width
-            b.svg(icon, tile_x + (tile_width - 23) / 2, top + 46, 23)
-            b.para(label, tile_x, top + 78, tile_width, 9.5, 15, align='center')
-        b.para(experience, x, top + 107, width, 10.4, 17, MUTED, align='center')
-        link_gap = 22
-        total = sum(pdfmetrics.stringWidth(label, 'Korean', 9.5) for label, _ in projects) + link_gap
-        link_x = x + (width - total) / 2
-        for label, key in projects:
-            link_x += b.link(label, key, link_x, top + 151, 9.5, internal=True) + link_gap
-    b.rule(503)
-    stack_icon_row(b, '개발 환경', [('Git', 'git'), ('Ubuntu', 'ubuntu'), ('Docker', 'docker')], 513)
-    b.end([('기술·도구 더 보기', WEB + 'about/#now-title'), ('프로젝트 코드', 'https://github.com/SeMinKong')])
+            b.svg(icon, tile_x + (tile_width - 28) / 2, top + 46, 28)
+            b.para(label, tile_x, top + 84, tile_width, 10.5, 16, align='center')
+        b.para(focus, x, top + 117, width, 10.4, 17, MUTED, align='center')
+    b.end([('학습 관심사', WEB + 'about/#questions-title'), ('GitHub', 'https://github.com/SeMinKong')])
 
 
 def project_index(b):

@@ -7,7 +7,7 @@ const root = new URL('../../src/assets/tech-stack/', import.meta.url);
 await mkdir(root, { recursive: true });
 const names = ['Cplusplus', 'Python', 'Ros', 'Pytorch', 'Opencv', 'Ultralytics', 'Huggingface',
   'Fastapi', 'Langchain', 'React', 'Typescript', 'Nodedotjs', 'Socketdotio',
-  'Git', 'Ubuntu', 'Docker'];
+  'Git', 'Ubuntu', 'Docker', 'Nvidia', 'Ollama'];
 const colors = { React: '168DA8', Huggingface: 'A97800', Langchain: '1C3C3C' };
 for (const name of names) {
   const icon = icons[`si${name}`];
@@ -27,16 +27,19 @@ for (const [name, paths] of Object.entries(pictograms)) {
 }
 
 const packageRoot = new URL('../../node_modules/simple-icons/', import.meta.url);
+await copyFile(new URL('../../src/assets/llama-cpp-logo.svg', import.meta.url), new URL('llamacpp.svg', root));
 const { version } = JSON.parse(await readFile(new URL('package.json', packageRoot), 'utf8'));
-const files = [...names.map(name => name.toLowerCase()), ...Object.keys(pictograms)].sort();
+const files = [...names.map(name => name.toLowerCase()), ...Object.keys(pictograms), 'llamacpp'].sort();
 const sources = [];
 for (const name of files) {
   const custom = name in pictograms;
+  const projectMark = name === 'llamacpp';
   const bytes = await readFile(new URL(`${name}.svg`, root));
   sources.push({
     file: `${name}.svg`,
-    kind: custom ? 'original functional pictogram' : 'Simple Icons brand mark',
-    source: custom ? 'scripts/portfolio/export_stack_icons.mjs'
+    kind: projectMark ? 'existing official project mark' : custom ? 'original functional pictogram' : 'Simple Icons brand mark',
+    source: projectMark ? 'https://github.com/ggml-org/llama.cpp/blob/master/media/llama1-icon-transparent.svg'
+      : custom ? 'scripts/portfolio/export_stack_icons.mjs'
       : `https://github.com/simple-icons/simple-icons/blob/${version}/icons/${name}.svg`,
     sha256: createHash('sha256').update(bytes).digest('hex')
   });

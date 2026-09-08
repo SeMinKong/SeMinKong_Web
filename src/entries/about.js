@@ -7,12 +7,10 @@ import '../styles/motion.css';
 
 import { createPageRuntime } from '../app/create-page-runtime.js';
 import { initIntro, initReveals } from '../motion/reveal.js';
-import { initToolLogos } from '../ui/tool-logos.js';
 
 const runtime = createPageRuntime();
 const { environment } = runtime;
 
-initToolLogos();
 runtime.start();
 runtime.register(initIntro(environment, '[data-about-intro]'));
 runtime.register(initReveals(environment, '[data-about-reveal]', { threshold: 0.08 }));

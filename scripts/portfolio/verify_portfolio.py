@@ -77,7 +77,7 @@ def verify(path):
                 assert 'canva.com' not in uri, 'Do not publish a Canva editing/share token'
                 external.append(uri)
     stack = texts[1]
-    assert all(label in stack for label in ['Tech Stack', '사용 언어', 'C++', 'Python', 'ROS 2', 'DYNAMIXEL', 'PyTorch', 'OpenCV', 'YOLO', 'Transformers', 'FastAPI', 'WebSocket', 'asyncio', 'LangChain', 'React', 'TypeScript', 'Node.js', 'Socket.io', 'Git', 'Ubuntu', 'Docker'])
+    assert all(label in stack for label in ['학습 스택', '사용 언어', 'C++', 'Python', 'ROS 2', 'Isaac Sim', 'Isaac Lab', 'PyTorch', 'Ollama', 'llama.cpp', 'LangChain', 'FastAPI', 'Git', 'Ubuntu', 'Docker'])
     assert not reader.pages[1]['/Resources'].get('/XObject'), 'Stack icons must stay vector-only'
     intro = texts[0]
     assert 'Suwon,' in texts[0] and 'Republic of Korea' in texts[0]
@@ -118,15 +118,14 @@ def verify(path):
     assert not any(value in all_text for value in ['99.4%', '92.7%', 'STYLE SAMPLE', 'PLACEHOLDER', 'TODO'])
     assert not any(value in all_text for value in ['LOCAL / MOCK', '로컬 재현', '이번 재현', '원본 시연 00:', '영상 00:', 'LangGraph'])
     assert len(set(u for u in external if '/resume/award-' in u)) == 4
-    assert internal == 14
-    assert internal_destinations[:8] == [4, 9, 18, 15, 9, 21, 9, 24], 'Stack links must reach related introductions'
-    assert internal_destinations[8:] == [4, 9, 15, 18, 21, 24], 'Index must open each project introduction in owner order'
+    assert internal == 6
+    assert internal_destinations == [4, 9, 15, 18, 21, 24], 'Index must open each project introduction in owner order'
     assert 'https://seminkong.github.io/SeMinKong_Web/' in external
     assert 'mailto:semin1224@gmail.com' in external
     layout = json.loads(path.with_suffix('.layout.json').read_text(encoding='utf-8'))
     overlaps = []
     elements = layout['elements']
-    assert len([e for e in elements if e['page'] == 2 and e['kind'] == 'svg']) == 20
+    assert len([e for e in elements if e['page'] == 2 and e['kind'] == 'svg']) == 13
     languages = [e for e in elements if e['page'] == 2 and 97 <= e['top'] < 133]
     assert {e['text'] for e in languages} == {'사용 언어', 'C++', 'Python', 'cplusplus', 'python'}
     assert abs((min(e['x'] for e in languages) + max(e['x'] + e['width'] for e in languages)) / 2 - 841.89 / 2) < .02
