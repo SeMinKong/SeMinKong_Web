@@ -74,9 +74,9 @@ def chip(b,title,detail,x,y,w,h=57,color=INK):
     return (x,y,w,h)
 
 
-def centered(b,s,cx,y,size=10,color=INK,bold=False):
-    font='KoreanBold' if bold else 'Korean'
-    text(b,s,cx-pdfmetrics.stringWidth(s,font,size)/2,y,size,color,bold)
+def centered(b,s,cx,y,size=10,color=INK,bold=False,font=None):
+    font=font or ('KoreanBold' if bold else 'Korean')
+    b.text(s,cx-pdfmetrics.stringWidth(s,font,size)/2,y,size,font,color)
     b.checks[-1]['center_x'] = round(cx,2)
 
 
@@ -179,9 +179,9 @@ def aqis(b,ref):
     para(b,'<b>RUNNING + pending</b><br/>준비 시각 이후·이벤트 나이≤3초의 불량 중 깊이 있는 후보 우선.<br/>후보가 있을 때 집기 요청·pending 해제.<br/>timestamp 누락은 허용하며 최초 물체 ID를 고정하지 않습니다.',557,320,246,9.8,14)
 
     section(b,'카메라 좌표를 Dobot 작업 좌표로 변환',422)
-    equation(b,'X=(u-cx)*d/fx; Y=(v-cy)*d/fy',38,460,10.4)
-    equation(b,'x_mm=1000*(a11*X+a12*Y+tx)+ox',38,483,10.4)
-    para(b,'검출 상자 중심 → 깊이 격자 → 유효 깊이 중앙값 d(m).<br/>로봇 y도 affine, z는 고정 높이 또는 X/Y affine. 깊이 누락은 고정 좌표.',38,507,486,9.3,13)
+    centered(b,'X=(u-cx)*d/fx; Y=(v-cy)*d/fy',281,460,10.4,font='Courier')
+    centered(b,'x_mm=1000*(a11*X+a12*Y+tx)+ox',281,483,10.4,font='Courier')
+    para(b,'검출 상자 중심 → 깊이 격자 → 유효 깊이 중앙값 d(m).<br/>로봇 y도 affine, z는 고정 높이 또는 X/Y affine. 깊이 누락은 고정 좌표.',38,507,486,9.3,13,align='center')
     para(b,'<b>재개 조건</b> 재개 설정 ON + 종료 코드 0.<br/>정지 응답 실패 시에도 자동 차단하지 않습니다. 실제 파지 성공은 센서로 확인하지 않습니다.',557,459,246,9.8,14.5)
     b.end([('중복 창',ref+'server/app/services/detection_deduper.py#L26'),('pending·입력 선택',ref+'server/app/main.py#L212'),('실제 설정',ref+'server/app/config.py#L46'),('좌표·집기',ref+'server/app/services/dobot_pick_place.py#L142')])
 
@@ -267,7 +267,7 @@ def prompt(b,ref):
     for source,target in zip(boxes,boxes[1:]): connect(b,source,target)
     text(b,'round ≥ 3 + [GENERATE_PROMPT]',563,295,9.5,MUTED)
     b.arrow([(320.5,383),(320.5,405),(120.5,405),(120.5,383)],ACCENT,True)
-    text(b,'처리 오류: round - 1 · 이력 추가 없음',38,418,10.1,ACCENT)
+    centered(b,'처리 오류: round - 1 · 이력 추가 없음',220.5,418,10.1,ACCENT)
     text(b,'미완료 응답: in_progress 유지',438,392,10.1,MUTED)
     para(b,'첫 질문도 라운드 1 / RuntimeError·ValueError·OSError 복원 / 자동 재시도 없음',438,414,365,9.4,13.5,MUTED)
 
