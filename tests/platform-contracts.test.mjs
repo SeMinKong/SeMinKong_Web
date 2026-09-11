@@ -189,8 +189,9 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
   assert.match(resumeStyles, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.award-dialog::backdrop\s*\{[^}]*animation:\s*none;/);
 
   const proofButtons = resume.match(/<button\b[^>]*data-award-proof[^>]*>/g) ?? [];
-  assert.equal(proofButtons.length, 4);
+  assert.equal(proofButtons.length, 6);
   assert.equal((resume.match(/>상장 보기 /g) ?? []).length, 4);
+  assert.equal((resume.match(/>자격증 보기 /g) ?? []).length, 2);
   assert.doesNotMatch(resume, /증빙 보기|수상 증빙|증빙 이미지/);
   assert.match(resume, /Award gallery/);
   assert.doesNotMatch(resume, /Award evidence/i);
@@ -207,7 +208,9 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
     ['award-ssafy-common-project.webp', 1240, 1755, 'CFEA27E549987D9EF3758E66AC3534F2F55DBD2462D0AB035E9AAAC0B9999A9F'],
     ['award-it-project-pro-league.webp', 1240, 1755, '610CD537EAAFEBE5610003A7941E2F058E1C04B82129569015D584287A3AA983'],
     ['award-capstone-design.webp', 1239, 1758, '149AA5AEE5EBA3058E89065F5DF095DB0558FCBDBB29A6C03E325A984F642A69'],
-    ['award-software-competition.webp', 1240, 1755, '5868CA69CAAF69751580FD464890E587294DFCD9727FB10DF05A35A10C83C20B']
+    ['award-software-competition.webp', 1240, 1755, '5868CA69CAAF69751580FD464890E587294DFCD9727FB10DF05A35A10C83C20B'],
+    ['certificate-information-processing.webp', 1240, 1755, '4D3943EF1F10A9D9954543AE95B6828F9A441B2DD5E39743DD6343BB500B678F'],
+    ['certificate-opic-english.webp', 1240, 1755, '94D10B2A64D134CF1BC4759F25FEB53393CD27FF0434E64233B683685D04E97C']
   ];
   for (const [filename, expectedWidth, expectedHeight, expectedHash] of awardFiles) {
     const reference = proofButtons.find((button) => button.includes(`data-proof-src="./${filename}"`));
