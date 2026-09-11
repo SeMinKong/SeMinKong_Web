@@ -209,8 +209,8 @@ test('media geometry, loading, and approved public Resume files stay explicit', 
     ['award-it-project-pro-league.webp', 1240, 1755, '610CD537EAAFEBE5610003A7941E2F058E1C04B82129569015D584287A3AA983'],
     ['award-capstone-design.webp', 1239, 1758, '149AA5AEE5EBA3058E89065F5DF095DB0558FCBDBB29A6C03E325A984F642A69'],
     ['award-software-competition.webp', 1240, 1755, '5868CA69CAAF69751580FD464890E587294DFCD9727FB10DF05A35A10C83C20B'],
-    ['certificate-information-processing.webp', 1240, 1755, '4D3943EF1F10A9D9954543AE95B6828F9A441B2DD5E39743DD6343BB500B678F'],
-    ['certificate-opic-english.webp', 1240, 1755, '94D10B2A64D134CF1BC4759F25FEB53393CD27FF0434E64233B683685D04E97C']
+    ['certificate-information-processing.webp', 1240, 1755, 'E1B0FDE6D6A14CCDA05E05CC9EECDEB7997BAE99364BEE52151395CD927EE287'],
+    ['certificate-opic-english.webp', 1240, 1755, '46A034983F3FE1E9C4B8EA74AA785444099D16ADFE0D0ECE2BB7EC6ED40A71CC']
   ];
   for (const [filename, expectedWidth, expectedHeight, expectedHash] of awardFiles) {
     const reference = proofButtons.find((button) => button.includes(`data-proof-src="./${filename}"`));
