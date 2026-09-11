@@ -299,6 +299,7 @@
 }
 
 .project-deck {
+  --deck-count: 6;
   --deck-card-height: clamp(500px, 43vw, 548px);
   position: relative;
   clip-path: none !important;
@@ -315,7 +316,7 @@
   position: relative;
   min-width: 0;
   height: var(--deck-card-height);
-  z-index: calc(3 - var(--deck-index));
+  z-index: calc(var(--deck-count) - var(--deck-index));
 }
 
 .project-card--deck {
@@ -353,7 +354,7 @@
   pointer-events: none;
 }
 
-.project-deck:not(.is-animating) .project-deck__slot.is-active .project-card--deck,
+.project-deck .project-deck__slot.is-active .project-card--deck,
 .project-card--deck:focus-within {
   border-color: color-mix(in srgb, var(--project-accent) 42%, var(--line-strong));
   box-shadow: 0 26px 62px rgba(0, 0, 0, 0.34);
@@ -475,7 +476,7 @@
   letter-spacing: 0;
 }
 
-.project-deck:not(.is-animating) .project-deck__slot.is-active .project-card--deck h3 a,
+.project-deck .project-deck__slot.is-active .project-card--deck h3 a,
 .project-card--deck:focus-within h3 a {
   color: var(--project-accent);
 }
@@ -485,53 +486,63 @@
 }
 
 @media (min-width: 961px) {
-  .project-deck.is-deck-mode .project-deck__stage {
+  /* The ring is wider than the page, so it breaks out of the column and clips
+     at the viewport edge instead of adding a horizontal scrollbar. */
+  .project-deck.is-carousel {
+    --deck-card-height: clamp(486px, 40vw, 544px);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow-x: clip;
+    perspective: 2400px;
+    perspective-origin: 50% 46%;
+  }
+
+  .project-deck.is-carousel .project-deck__stage {
     position: relative;
     display: block;
     height: calc(var(--deck-card-height) + 20px);
+    transform-style: preserve-3d;
+    touch-action: pan-y;
+    user-select: none;
+    cursor: grab;
   }
 
-  .project-deck.is-deck-mode .project-deck__slot {
-    --deck-card-width: min(340px, calc((100% - 40px) / 3));
+  .project-deck.is-carousel.is-dragging .project-deck__stage {
+    cursor: grabbing;
+  }
+
+  .project-deck.is-carousel .project-deck__slot {
+    --deck-card-width: clamp(300px, 25vw, 372px);
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;
     width: var(--deck-card-width);
-    opacity: 0;
+    margin-left: calc(var(--deck-card-width) / -2);
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
   }
 
-  .project-deck.is-deck-mode.is-ready .project-deck__slot {
-    opacity: 1;
+  /* A shorter plate buys the copy the room the wider frame took from it. */
+  .project-deck.is-carousel .project-card--deck .project-card__media {
+    height: clamp(150px, 13vw, 170px);
   }
 
-  .project-deck.is-deck-mode.is-animating .project-deck__slot {
-    will-change: transform;
+  .project-deck.is-carousel .project-card--deck {
+    backface-visibility: hidden;
+    cursor: inherit;
+    transition:
+      border-color 320ms ease,
+      box-shadow 420ms var(--ease-out),
+      transform 420ms var(--ease-out);
   }
 
-  .project-deck.is-deck-mode:not(.is-animating) .project-deck__slot.is-active {
-    z-index: 20;
+  .project-deck.is-carousel .project-deck__slot.is-active .project-card--deck {
+    transform: translateY(-6px) scale(1.03);
   }
 
-  .project-deck.is-deck-mode .project-card__edge {
-    position: absolute;
-    z-index: 5;
-    top: 52px;
-    right: 5px;
-    display: block;
-    color: #f1eee6;
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    line-height: 1;
-    text-transform: uppercase;
-    writing-mode: vertical-rl;
-    transition: opacity 180ms ease;
-  }
-
-  .project-deck.is-deck-mode .project-deck__slot:first-child .project-card__edge,
-  .project-deck.is-deck-mode.is-expanded .project-card__edge {
-    opacity: 0;
+  /* The vertical spine label only read as a label while the cards were stacked. */
+  .project-deck.is-carousel .project-card__edge {
+    display: none;
   }
 }
 
@@ -684,12 +695,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .project-deck__slot:last-child {
-    width: calc(50% - 10px);
-    grid-column: 1 / -1;
-    justify-self: center;
-  }
-
   .focus-list {
     grid-template-columns: 1fr;
     border-bottom: 0;
@@ -717,8 +722,7 @@
     gap: 18px;
   }
 
-  .project-deck__slot,
-  .project-deck__slot:last-child {
+  .project-deck__slot {
     width: 100%;
     grid-column: auto;
   }

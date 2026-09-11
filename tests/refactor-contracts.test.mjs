@@ -54,11 +54,12 @@ test('gallery direction keeps static surfaces and restrained typography', async 
   assert.match(tokenStyles, /Jua/);
   assert.match(tokenStyles, /jua-korean-400-normal\.woff2/);
   assert.doesNotMatch(tokenStyles, /Asta Sans Variable|Geist Mono Variable|Dongle|Gowun Dodum/);
-  assert.match(deckSource, /pointerover/);
+  assert.match(deckSource, /pointerdown/);
+  assert.match(deckSource, /pointermove/);
   assert.match(deckSource, /focusin/);
-  assert.match(deckSource, /restoreInputState/);
+  assert.match(deckSource, /requestAnimationFrame/);
   assert.match(deckSource, /pointerInside = false/);
-  assert.doesNotMatch(deckSource, /pointermove|FLUID_OBSTACLE_EVENT/);
+  assert.doesNotMatch(deckSource, /FLUID_OBSTACLE_EVENT/);
 });
 
 test('motion runtimes stay route-scoped and keep static fallbacks', async () => {
