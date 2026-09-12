@@ -32,9 +32,9 @@ def verify(path):
             assert abs(page.width-841.89) < .1 and abs(page.height-595.28) < .1
             assert not page.rotation
             text = page.extract_text() or ''
-            assert len(text) > 400 and '\ufffd' not in text, f'Page {n}: missing text'
-            footer = page.crop((page.width-60, 550, page.width-37, 578)).extract_text()
-            assert footer.strip() == str(n), f'Page {n}: wrong page number'
+            assert len(text) > 150 and '\ufffd' not in text, f'Page {n}: missing text'
+            footer = page.crop((page.width/2-24, 570, page.width/2+24, 588)).extract_text()
+            assert footer.strip() == f'{n:02d}', f'Page {n}: wrong centered page number'
             texts.append(reader.pages[n-1].extract_text() or '')
             for char in page.chars:
                 assert char['x0'] >= 0 and char['x1'] <= page.width + .1
@@ -60,9 +60,14 @@ def verify(path):
     all_text = '\n'.join(texts)
     assert all(x not in all_text for x in ['PLACEHOLDER', 'TODO', '\ufffd', '27쪽', '99.4%', '92.7%', '기준을 정하는 중'])
     assert not re.search(r'010[- ]?\d{4}[- ]?\d{4}|\d{6}-[1-4]\d{6}', all_text)
-    for label in ['공세민', 'Se Min Kong', '정보처리기사', 'OPIc English IH', 'Suwon', '2026.09.12', '9쪽']:
+    for label in ['공세민', 'Se Min Kong', '정보처리기사', 'OPIc English IH', 'Suwon']:
         assert label in texts[0], f'Cover missing {label}'
-    assert '구현 경험과 기술 스택' in texts[1]
+    assert not any(label in texts[0] for label in ['이 문서', '2026.09.12', '9쪽', 'A4 가로'])
+    assert '구현 경험' in texts[1]
+    assert not any(label in all_text for label in ['Torque OFF', '구현을 더 자세히 읽기', '프로젝트의 입구'])
+    assert not any(e['page'] == 2 and e['kind'] == 'annotation' for e in layout['elements'])
+    assert not any(label in texts[1] for label in ['(AQIS)', '(THING)', '(Brain MRI', '(Alkkagi', '(Prompt)']), \
+        'Experience headings must not repeat project-specific explanation'
     assert all(x in texts[1] for x in ['C++', 'Python', 'Isaac Sim', 'Isaac Lab', 'LangChain', 'vLLM', 'Jira'])
     all_links = [u for links in links_by_page for u in links]
     assert len({u for u in all_links if '/resume/award-' in u}) == 4
@@ -80,7 +85,7 @@ def verify(path):
                 overlaps.append((a['page'], a['text'][:30], b['text'][:30]))
     assert not overlaps, f'Overlapping elements: {overlaps}'
     for n, spec in enumerate(PROJECTS, 3):
-        for label in [spec['name'], '직접 맡은 구현', '결과와 검증 범위']:
+        for label in [spec['name'], '직접 맡은 구현', '트러블슈팅', '회고']:
             assert label in texts[n-1], f'Page {n}: missing {label}'
         expected = [spec['repo']+'blob/main/README.md', spec['repo']+'blob/main/'+spec['detail'], WEB+spec['case']]
         assert all(url in links_by_page[n-1] for url in expected), f'Page {n}: missing direct detail links'
@@ -91,6 +96,7 @@ def verify(path):
         assert abs(caption['x']-figure['x']) < .02 and abs(caption['width']-figure['width']) < .02
         assert abs(caption['top']-figure['top']-figure['height']-10) < .02
         assert abs(caption['center_x']-figure['x']-figure['width']/2) < .02
+        assert abs(caption['top']-381) < .02, f'Page {n}: inconsistent caption baseline'
         name = spec['figure'][0]
         source = ROOT/'scripts/portfolio/assets'/name[1:] if name.startswith('@') else ROOT/'src/assets/projects'/name
         with Image.open(source) as image:
@@ -111,10 +117,27 @@ def verify(path):
     assert portrait['page'] == 1 and abs(portrait['width']/portrait['height']-.75) < .001
     assert len(reader.pages[0].images) == 1
     assert reader.pages[0].images[0].image.size == (1086, 1448)
+    with Image.open(ROOT/'.private/portfolio/se-min-kong-profile.png') as source:
+        assert reader.pages[0].images[0].image.convert('RGBA').tobytes() == source.convert('RGBA').tobytes()
+    centered = [e for e in elements if 'center_x' in e]
+    with pdfplumber.open(path) as doc:
+        for e in centered:
+            chars = [c for c in doc.pages[e['page']-1].chars
+                     if e['x']-.1 <= c['x0'] and c['x1'] <= e['x']+e['width']+.1
+                     and e['top']-.1 <= c['top'] and c['bottom'] <= e['top']+e['height']+2]
+            rows = {}
+            for c in chars:
+                rows.setdefault(round(c['top'], 1), []).append(c)
+            assert rows, f'No centered text extracted: {e}'
+            for row in rows.values():
+                center = (min(c['x0'] for c in row)+max(c['x1'] for c in row))/2
+                assert abs(center-e['center_x']) < .35, f'Off-center text: {e["text"]}'
+    for n, bookmark in enumerate(reader.outline):
+        assert reader.get_destination_page_number(bookmark) == n
     return dict(pages=9, bookmarks=9, external_links=len(all_links),
                 direct_project_links=18, repository_index_links=12,
                 min_font_pt=round(min(sizes), 2), layout_overlaps=0,
-                aligned_captions=6, unchanged_source_images=6,
+                aligned_captions=6, centered_text_blocks=len(centered), unchanged_source_images=6,
                 bytes=path.stat().st_size, sha256=hashlib.sha256(path.read_bytes()).hexdigest().upper())
 
 

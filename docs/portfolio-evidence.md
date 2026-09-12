@@ -4,7 +4,7 @@ Reviewed 2026-09-12. Current output is the nine-page edition described in [portf
 
 ## Current editorial structure
 
-A4 landscape, nine pages: introduction, contact, education, two qualifications and four awards (1); implementation experience and a text-only tool list (2); THING (3), AQIS (4), Briefit (5), MRI (6), Prompt (7), Alkkagi (8); repository reading guide and contact (9). Each project uses a real source image, personal scope, three implementation points, two code-supported design choices, validation limits and direct README/detail/web links. Existing portrait and project imagery are retained. No invented historical incident, skill rating, new benchmark or clinical/hardware validation is added.
+A4 landscape, nine pages: introduction, contact, education, two qualifications and four awards (1); six descriptive experience headings without project-specific explanatory copy and a text-only tool list (2); THING (3), AQIS (4), Briefit (5), MRI (6), Prompt (7), Alkkagi (8); repository reading guide and contact (9). Each project uses a real source image, personal scope, two implementation points, two code-supported troubleshooting notes, and a separate reflection on validation limits and direct README/detail/web links. Existing portrait and project imagery are retained. No invented historical incident, skill rating, new benchmark or clinical/hardware validation is added.
 
 ## Tech Stack selection — 2026-09-12
 

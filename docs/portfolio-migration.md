@@ -38,7 +38,9 @@
 
 ## 최종 PDF
 
-- 버전: 2026.09.12, A4 가로 9쪽, 4,522,300 bytes.
-- SHA-256: `BAE1E4981D34F094133CA4F5DA3FBBEDE2E502951F1E2FC2E079A614E0315747`.
+후속 편집에서 세 소제목, 중앙 페이지 번호·캡션·수상·자료 링크 정렬을 적용했다. 구현 경험 제목은 구체적으로 유지하며 프로젝트별 부연 설명은 생략한다. 표지의 문서 정보 행은 제거했다.
+
+- 버전: 2026.09.12, A4 가로 9쪽, 4,505,443 bytes.
+- SHA-256: `91183B91A6DA5DAC1E8E392C352572A32A21DE6BAC6CCE58DF69D12342078997`.
 - [공개 다운로드](https://seminkong.github.io/SeMinKong_Web/portfolio/SeMinKong-Portfolio.pdf).
 - 제작과 검증: `scripts/portfolio/build_portfolio.py`, `project_pages.py`, `verify_portfolio.py`. 기존 27쪽 제작 자료·실제 이미지·증빙은 Git 이력과 기존 자산에 보존한다.

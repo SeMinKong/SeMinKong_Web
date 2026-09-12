@@ -172,8 +172,22 @@ class Book:
             self.c.linkURL(quote(url, safe=':/#?=&%@'), rect, relative=0, thickness=0)
         return width
 
+    def center_link(self, title, url, center, top, size=10, limit=BOTTOM):
+        width = pdfmetrics.stringWidth(title, 'Korean', size)
+        self.link(title, url, center - width / 2, top, size, limit=limit)
+        self.checks[-1]['center_x'] = round(center, 2)
+
+    def link_row(self, sources, top, size=10, center=W / 2, gap=30):
+        widths = [pdfmetrics.stringWidth(title, 'Korean', size) for title, _ in sources]
+        total = sum(widths) + gap * (len(widths) - 1)
+        x = center - total / 2
+        for (title, url), width in zip(sources, widths):
+            self.center_link(title, url, x + width / 2, top, size, limit=H - 20)
+            x += width + gap
+
     def image(self, name, x, top, width, height, region=(0, 0, 1, 1),
-              caption=None, caption_size=9.5, caption_leading=15, caption_gap=10):
+              caption=None, caption_size=9.5, caption_leading=15, caption_gap=10,
+              align_bottom=False):
         """Place an unchanged source; optionally clip to an oriented display region."""
         if name not in self.images:
             # The owner approved this portrait inside the PDF only, not as a
@@ -203,6 +217,8 @@ class Book:
         scale = min(width / rw, height / rh)
         dw, dh = rw * scale, rh * scale
         ix = x + (width - dw) / 2
+        if align_bottom:
+            top += height - dh
         self.track(name, ix, top, dw, dh, 'image')
         self.c.saveState()
         clip = self.c.beginPath()
@@ -292,25 +308,23 @@ class Book:
         self.n += 1
         self.c.setFillColor(PAPER)
         self.c.rect(0, 0, W, H, fill=1, stroke=0)
-        self.para(title, M, 57, CW, 23, 30, bold=True, align=title_align)
+        self.para(title, M, 46, CW, 25, 33, bold=True, align=title_align)
         if subtitle:
-            self.para(subtitle, M, 97, CW, 10.4, 16, MUTED)
+            self.para(subtitle, M, 91, CW, 10.5, 16, MUTED, align=title_align)
         key = key or f'p{self.n}'
         self.c.bookmarkPage(key)
         self.c.addOutlineEntry(title, key, level=0, closed=False)
         self.pages.append(dict(page=self.n, key=key, title=title))
 
-    def end(self, sources=None, rule_top=548):
+    def end(self, sources=None, rule_top=540):
         if rule_top is not None:
             self.rule(rule_top)
-        x = M
-        for title, url in sources or []:
-            x += self.link(title, url, x, 557, 9, limit=H - 20) + 23
-            if x > W - M - 10:
-                raise ValueError(f'Page {self.n}: source row overflow')
-        page_number = str(self.n)
-        self.text(page_number, W - M - pdfmetrics.stringWidth(page_number, 'Helvetica', 9),
-                  557, 9, 'Helvetica', MUTED, limit=H)
+        if sources:
+            self.link_row(sources, 549, size=9.5)
+        page_number = f'{self.n:02d}'
+        self.para(page_number, W / 2 - 24, 571, 48, 9.5, 12,
+                  MUTED, align='center', limit=H - 10)
+        self.checks[-1]['kind'] = 'page_number'
         self.c.showPage()
 
     def section(self, title, body, x, top, width, size=10.4, keep_words=True):
@@ -366,129 +380,118 @@ class Book:
 def introduction(b):
     b.start('공세민', key='introduction')
     b.text('Se Min Kong', M, 108, 34, 'Helvetica-Bold')
-    b.para('로봇과 소프트웨어를 연결하는 개발자', M, 162, 380, 17, 25, bold=True)
-    b.para('센서 입력부터 제어 명령과 실제 동작까지 연결하며,<br/>어떤 조건에서 동작하고 언제 오류가 나는지 확인합니다.<br/><br/>숭실대학교에서 소프트웨어를 전공했고, 현재 SSAFY<br/>Robotics Track에서 공부하고 있습니다.',
+    b.para('로봇·소프트웨어 개발', M, 162, 380, 18, 26, bold=True)
+    b.para('센서 입력, 제어 명령, 실제 장비를 연결하는<br/>소프트웨어를 만듭니다.<br/><br/>숭실대학교 소프트웨어학부를 졸업하고<br/>SSAFY Robotics Track에서 공부하고 있습니다.',
            M, 204, 380, 11.6, 20, keep_words=True)
     b.image('@se-min-kong-profile.png', 448, 137, 180, 168)
     b.label('연락처', 650, 137)
     b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', 650, 159, 10)
     b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', 650, 183, 10)
     b.link('웹 포트폴리오', WEB, 650, 207, 10)
-    b.label('현재', 650, 240)
-    b.para('SSAFY Robotics Track<br/>2026.01 - 현재', 650, 258, 150, 9.6, 14.5)
+    b.label('교육', 650, 240)
+    b.para('SSAFY Robotics Track<br/>2026.01 - 현재', 650, 258, 150, 10, 15)
 
     b.rule(322)
-    b.para('자격', M, 336, 360, 12.3, 18, bold=True)
+    b.para('자격', M, 334, 360, 13, 19, bold=True, align='center')
     for i, (title, issuer, valid, asset) in enumerate(CERTIFICATIONS):
-        top = 362 + i * 60
-        b.rule(top, M, 360, ACCENT, 1.1)
-        b.para(title, M, top + 10, 240, 11.6, 17, bold=True)
-        b.para(f'{issuer} · {valid}', M, top + 30, 240, 9, 13.5, MUTED, keep_words=True)
-        b.link('자격증 보기', WEB + 'resume/' + asset, 300, top + 12, 9)
+        top = 359 + i * 64
+        b.rule(top, M, 360, LINE, .7)
+        b.center_link(title, WEB + 'resume/' + asset, M + 180, top + 10, 11.6)
+        b.para(issuer, M, top + 29, 360, 9.3, 14, MUTED, align='center')
+        b.para(valid, M, top + 44, 360, 9.3, 14, MUTED, align='center')
 
-    b.para('수상', 430, 336, 373, 12.3, 18, bold=True)
+    b.para('수상', 430, 334, 373, 13, 19, bold=True, align='center')
+    award_lines = [
+        'SSAFY 공통 프로젝트<br/>우수상',
+        'IT대학 소프트웨어 공모전<br/>금상',
+        '숭실 캡스톤디자인 경진대회<br/>장려상',
+        'IT 프로젝트 프로리그<br/>장려상',
+    ]
     for index, (project, title, date, asset) in enumerate(AWARDS):
-        top = 362 + (index % 2) * 60
-        x = 430 + (index // 2) * 192
-        b.rule(top, x, 176, LINE, 1)
-        b.para(title, x, top + 9, 176, 9.6, 13.5, bold=True, keep_words=True)
-        b.para(f'{date} · {project}', x, top + 38, 176, 9, 13.5, MUTED)
+        top = 359 + (index // 2) * 64
+        x = 430 + (index % 2) * 192
+        b.rule(top, x, 176, LINE, .7)
+        b.para(award_lines[index], x, top + 8, 176, 10.1, 14, bold=True, align='center')
+        b.para(f'{date} · {project}', x, top + 43, 176, 9.3, 14, MUTED, align='center')
 
-    b.rule(488)
-    b.para('<b>학력</b> 숭실대학교 소프트웨어학부 2020.03 - 2026.02'
-           '　　<b>관심 분야</b> Computer Vision · Robotics / Physical AI'
-           '　　<b>거주지</b> Suwon, Republic of Korea'
-           f'　　<b>이 문서</b> {VERSION} · 9쪽 · A4 가로',
-           M, 502, CW, 9.2, 14, MUTED, keep_words=True)
+    b.rule(493)
+    facts = [
+        ('학력', '숭실대학교 소프트웨어학부 · 2020.03 - 2026.02'),
+        ('관심 분야', 'Computer Vision · Robotics / Physical AI'),
+        ('거주지', 'Suwon, Republic of Korea'),
+    ]
+    width = CW / 3
+    for i, (label, body) in enumerate(facts):
+        x = M + i * width
+        b.para(label, x, 501, width, 9.3, 13, MUTED, bold=True, align='center')
+        b.para(body, x, 518, width, 9.3, 14, MUTED, align='center', keep_words=True)
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/'),
-           ('프로젝트 전체 보기', WEB + 'work/')])
+           ('프로젝트', WEB + 'work/')])
 
 
 def capability(b):
-    b.start('구현 경험과 기술 스택', '프로젝트에서 직접 맡은 범위와 현재 공부하는 도구를 정리했습니다.',
-            key='capability')
+    b.start('구현 경험', key='capability')
+    titles = ['카메라 입력과 로봇 제어를 연결한 시스템 구현',
+              'ROS 2와 웹 서버 간 비동기 데이터 연동',
+              '다축 모터 제어와 텐던 구동계 통합',
+              '학습·추론을 위한 데이터 변환 파이프라인 구축',
+              '서버 기반 실시간 물리·게임 상태 관리',
+              '영역별 LLM 대화와 설계 문서 생성']
+    gap = 36
+    width = (CW - gap) / 2
+    for i, title in enumerate(titles):
+        x = M + (i % 2) * (width + gap)
+        top = 132 + (i // 2) * 64
+        b.rule(top, x, width, ACCENT, .9)
+        b.para(title, x, top + 19, width, 13.3, 20, bold=True, align='center', keep_words=True)
 
-    rows = [
-        ('카메라 입력에서 로봇 동작까지 한 줄로 연결',
-         '검출 결과로 컨베이어를 멈추고 로봇 집기 좌표까지 넘기는 경로를 구현했습니다. (AQIS)'),
-        ('ROS 2와 웹 백엔드를 잇는 비동기 브리지',
-         'ROS 콜백에서 만든 이벤트의 WebSocket 전송을 asyncio 루프에 예약합니다. (AQIS)'),
-        ('실제 장비를 통신 수준에서 점검하고 제어',
-         'U2D2로 DYNAMIXEL 7축을 개별 점검하고 토크 순서와 Torque OFF를 다뤘습니다. (THING)'),
-        ('학습·추론을 위한 데이터 변환',
-         '마스크를 polygon 라벨로 변환하고, 입력 길이에 따라 기사를 분할·재요약했습니다. (Brain MRI · Briefit)'),
-        ('서버에서 게임 판정과 상태 계산',
-         '충돌·마찰·득점을 서버에서만 계산하고 클라이언트는 입력과 렌더링만 맡게 했습니다. (Alkkagi.io)'),
-        ('영역별 대화와 결과 문서 생성',
-         '영역별 이력·라운드·결과를 관리하고 저장된 결과를 설계 문서로 합성합니다. (Prompt)'),
-    ]
-    width = (CW - 48) / 2
-    for i, (title, body) in enumerate(rows):
-        x = M + (i % 2) * (width + 48)
-        top = 141 + (i // 2) * 74
-        b.badge(i + 1, x, top)
-        b.para(title, x + 28, top, width - 28, 11, 16, bold=True)
-        b.para(body, x + 28, top + 21, width - 28, 9.1, 13.6, MUTED, keep_words=True)
-
-    b.rule(370)
-    b.para('기술 스택', M, 384, 130, 12.3, 18, bold=True)
-    b.para('프로젝트 적용 기술과 개인 학습 도구입니다.',
-           200, 387, 400, 9, 14, MUTED, keep_words=True)
-
+    b.rule(329)
+    b.para('기술 스택', M, 345, CW, 14, 21, bold=True, align='center')
     column = CW / len(STACK)
-    for i, (group, tools) in enumerate(STACK):
+    group_labels = ['Robotics · Simulation', 'Languages', 'AI · Vision',
+                    'LLM · Backend', 'Platform · Collaboration']
+    for i, (_, tools) in enumerate(STACK):
         x = M + i * column
-        b.rule(414, x, column - 16, ACCENT, 1.1)
-        b.para(group, x, 424, column - 16, 9.6, 14, bold=True, keep_words=True)
-        top = 448
-        for name in tools:
-            b.para(name, x, top, column - 16, 9.4, 13)
-            top += 15
-    b.end([('GitHub 프로필', 'https://github.com/SeMinKong'),
+        b.para(group_labels[i], x, 389, column, 10, 15, bold=True, align='center')
+        for j, name in enumerate(tools):
+            b.para(name, x, 418 + j * 19, column, 10.2, 15, align='center')
+    b.end([('GitHub', 'https://github.com/SeMinKong'),
            ('학습 관심사', WEB + 'about/#questions-title')])
 
 
 def closing(b):
-    b.start('구현을 더 자세히 읽기', 'README·구현 문서·웹 시연에서 각 프로젝트의 내용을 이어서 확인할 수 있습니다.', key='closing')
-    habits = [
-        ('README · 프로젝트의 입구',
-         '개요·시연·담당 범위와 실행 방법을 제공합니다. 팀 프로젝트는 팀 기능과 개인 기여를 구분합니다.'),
-        ('구현 상세 · 계산과 흐름',
-         '기존 포트폴리오의 기술 설명을 코드·수식·상태 흐름과 연결했습니다. 구현 조건과 검증 한계를 함께 적습니다.'),
-        ('웹 · 시연과 결과 자료',
-         '영상과 실제 프로젝트 화면을 볼 수 있습니다. 공개 소스와 상세 문서를 함께 확인할 수 있습니다.'),
-    ]
-    width = (CW - 60) / 3
-    for i, (title, body) in enumerate(habits):
-        x = M + i * (width + 30)
-        b.rule(137, x, width, ACCENT, 1.15)
-        b.para(title, x, 152, width, 11.6, 17, bold=True)
-        b.para(body, x, 200, width, 9.4, 14.4, MUTED, keep_words=True)
+    b.start('프로젝트 자료', 'README · 기술 문서 · 시연', key='closing', title_align='center')
+    guide = [('README', '개요 · 역할 · 실행 방법'),
+             ('기술 문서', '코드 · 계산식 · 검증 범위'),
+             ('프로젝트 시연', '영상 · 실제 화면 · 결과 자료')]
+    gap = 30
+    width = (CW - gap * 2) / 3
+    for i, (title, body) in enumerate(guide):
+        x = M + i * (width + gap)
+        b.rule(136, x, width, ACCENT, .9)
+        b.para(title, x, 151, width, 12.5, 19, bold=True, align='center')
+        b.para(body, x, 181, width, 10, 15, MUTED, align='center')
 
-    b.rule(288)
-    b.para('프로젝트 저장소', M, 302, 380, 12.3, 18, bold=True)
+    b.rule(225)
     for i, spec in enumerate(project_pages.PROJECTS):
-        top = 330 + (i % 3) * 46
-        x = M + (i // 3) * 250
-        b.para(spec['name'], x, top, 230, 10, 14, bold=True)
-        b.link('README →', spec['repo'] + 'blob/main/README.md', x, top + 19, 9.5)
-        b.link('구현 상세 →', spec['repo'] + 'blob/main/' + spec['detail'], x + 100, top + 19, 9.5)
+        x = M + (i % 3) * (width + gap)
+        top = 250 + (i // 3) * 83
+        b.para(spec['name'], x, top, width, 12, 18, bold=True, align='center')
+        b.link_row([('README', spec['repo'] + 'blob/main/README.md'),
+                    ('기술 문서', spec['repo'] + 'blob/main/' + spec['detail'])],
+                   top + 31, size=10.2, center=x + width / 2, gap=25)
 
-    b.label('웹 포트폴리오', 548, 302)
+    b.rule(402)
     widget = qr.QrCodeWidget(WEB)
     x0, y0, x1, y1 = widget.getBounds()
-    side = 122
+    side = 70
     drawing = Drawing(side, side, transform=[side / (x1-x0), 0, 0, side / (y1-y0), 0, 0])
     drawing.add(widget)
-    renderPDF.draw(drawing, b.c, 548, H - 324 - side)
-    b.link('seminkong.github.io/SeMinKong_Web/', WEB, 548, 456, 9.5)
-
-    b.rule(486)
-    b.text('Se Min Kong', M, 500, 22, 'Helvetica-Bold')
-    b.para('공세민 · 소프트웨어 개발자', 200, 504, 200, 11, 16, MUTED)
-    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', 430, 504, 11)
-    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', 640, 504, 11)
-    b.end([('프로젝트 영상과 상세 설명', WEB + 'work/'), ('이력서와 상장 전시', WEB + 'resume/')])
+    renderPDF.draw(drawing, b.c, (W - side) / 2, H - 418 - side)
+    b.center_link('웹 포트폴리오', WEB, W / 2, 494, 10)
+    b.link_row([('semin1224@gmail.com', 'mailto:semin1224@gmail.com'),
+                ('github.com/SeMinKong', 'https://github.com/SeMinKong')], 520, size=10)
+    b.end([('프로젝트', WEB + 'work/'), ('이력서 · 수상', WEB + 'resume/')])
 
 
 PAGES = [introduction, capability,
