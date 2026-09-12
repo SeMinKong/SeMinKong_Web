@@ -10,9 +10,9 @@
 - [x] output·public·dist PDF는 4,522,300 bytes, SHA-256 `BAE1E4981D34F094133CA4F5DA3FBBEDE2E502951F1E2FC2E079A614E0315747`로 일치한다. Resume의 9 pages·4.5 MB·2026.09.12와 다운로드 계약을 동기화했다.
 - [x] `npm.cmd run verify`: 테스트 67개, route 11개·module 29개·stylesheet 13개, production build·배포 entry 24개 통과. 요청 범위 `git diff --check` 통과.
 - [x] 실제 Chrome Home·Resume의 390·768·1280px 기본/reduced 12개 조합 통과. 가로 넘침·콘솔 오류·경고·요청 실패 0, skip link와 2px 키보드 포커스, 자동 lite/static·full/interactive·reduced/flat을 확인했다. Resume에서 키보드로 실제 다운로드한 6개 PDF 모두 파일명·용량·해시가 일치한다. 세 폭의 화면을 육안 검수했다.
-- [x] 390px touch Home·Resume, 390px JavaScript 비활성 Home·Resume, 1280px forced-colors Home의 추가 5개 조합도 통과했다. 총 17개 조합이며 보조 환경의 Resume 키보드 다운로드도 동일한 파일을 제공한다.
+- [x] 390px touch Home·Resume, 390px JavaScript 비활성 Home·Resume, 1280px forced-colors Home의 추가 5개 조합은 기능 검사를 통과했다. 총 17개 자동 검사이며 Resume 키보드 다운로드 8회 모두 동일한 파일을 제공한다. Forced-colors의 별도 시각 검사에서는 기존 Home 이름의 투명 측정 텍스트와 SVG가 겹치는 문제가 남아 있어 완전한 시각 통과로 보지 않는다.
 
-Chrome은 headless이며 reduced motion·touch·forced-colors는 브라우저 에뮬레이션이다. 실물 touch·실제 OS 설정과 새 로봇·모델 학습·임상·부하 실험은 검증하지 않았다. 기존 Home carousel의 일반 마우스 클릭 이동 문제와 About/Resume 스택 차이는 이번 문서·PDF 변경 범위에서 수정하지 않았다.
+Chrome은 headless이며 reduced motion·touch·forced-colors는 브라우저 에뮬레이션이다. 실물 touch·실제 OS 설정과 새 로봇·모델 학습·임상·부하 실험은 검증하지 않았다. 기존 Home carousel의 일반 마우스 클릭 이동, forced-colors 이름 중첩, About/Resume 스택 차이는 이번 문서·PDF 변경 범위에서 수정하지 않았다. 관련 Home markup과 CSS는 이번 변경에 포함되지 않는다.
 
 ## 2026-09-08 로봇 조립 허용 범위·마그네틱 결합
 
