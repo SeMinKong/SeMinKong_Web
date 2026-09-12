@@ -1,4 +1,4 @@
-// Shared, transparent SVG assets for the website and PDF Tech Stack page.
+// Transparent SVG source library; the current PDF uses text-only stack labels.
 import * as icons from 'simple-icons';
 import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -7,7 +7,7 @@ const root = new URL('../../src/assets/tech-stack/', import.meta.url);
 await mkdir(root, { recursive: true });
 const names = ['Cplusplus', 'Python', 'Ros', 'Pytorch', 'Opencv', 'Ultralytics', 'Huggingface',
   'Fastapi', 'Langchain', 'React', 'Typescript', 'Nodedotjs', 'Socketdotio',
-  'Git', 'Ubuntu', 'Docker', 'Nvidia', 'Ollama'];
+  'Git', 'Ubuntu', 'Docker', 'Nvidia', 'Ollama', 'Vllm', 'Jira'];
 const colors = { React: '168DA8', Huggingface: 'A97800', Langchain: '1C3C3C' };
 for (const name of names) {
   const icon = icons[`si${name}`];

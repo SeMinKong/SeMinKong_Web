@@ -56,8 +56,13 @@ FONT_FILES = {
     'Korean': ('NanumGothic-Regular.ttf', 'NanumGothic.ttf'),
     'KoreanBold': ('NanumGothic-Bold.ttf', 'NanumGothicBold.ttf'),
 }
+FONT_HASHES = {
+    'Korean': '76f45ef4a6bcff344c837c95a7dcc26e017e38b5846d5ae0cdcb5b86be2e2d31',
+    'KoreanBold': 'f96298f9fb18e364d2370f4c3ce948ac67a2b61af992d7234bc15c42b033c674',
+}
 FONT_DIRS = [Path(p) for p in (
     os.environ.get('PORTFOLIO_FONT_DIR', ''),
+    FIGURES / 'fonts',
     'C:/Windows/Fonts',
     Path.home() / 'AppData/Local/Microsoft/Windows/Fonts',
     '/usr/share/fonts/truetype/nanum',
@@ -65,13 +70,14 @@ FONT_DIRS = [Path(p) for p in (
 
 
 def register_font(name):
-    """Published bytes use NanumGothic; PORTFOLIO_FONT_DIR allows a local check."""
+    """Pin the published NanumGothic edition, independent of installed fonts."""
     for directory in FONT_DIRS:
         for filename in FONT_FILES[name]:
-            if (directory / filename).exists():
-                pdfmetrics.registerFont(TTFont(name, str(directory / filename)))
+            source = directory / filename
+            if source.exists() and hashlib.sha256(source.read_bytes()).hexdigest() == FONT_HASHES[name]:
+                pdfmetrics.registerFont(TTFont(name, str(source)))
                 return
-    raise SystemExit(f'{name}: NanumGothic not found in {[str(d) for d in FONT_DIRS]}')
+    raise SystemExit(f'{name}: approved NanumGothic bytes not found in {[str(d) for d in FONT_DIRS]}')
 
 
 register_font('Korean')
@@ -101,6 +107,9 @@ STACK = [
     ('LLM · Backend', ['FastAPI', 'LangChain', 'Ollama', 'llama.cpp', 'vLLM']),
     ('Platform · Collaboration', ['Ubuntu', 'Docker', 'Git', 'Jira']),
 ]
+STACK_RATINGS = json.loads((ROOT / 'config/stack-ratings.json').read_text(encoding='utf-8'))
+if set(STACK_RATINGS['ratings']) != {name for _, names in STACK for name in names}:
+    raise ValueError('Every portfolio stack tool must have exactly one approved rating')
 CERTIFICATIONS = [
     ('정보처리기사', '국가기술자격 · 과학기술정보통신부', '2026.09.11 취득',
      'certificate-information-processing.webp'),
@@ -494,7 +503,12 @@ def capability(b):
         x = M + i * column
         b.para(group_labels[i], x, 389, column, 10, 15, bold=True, align='center')
         for j, name in enumerate(tools):
-            b.para(name, x, 418 + j * 19, column, 10.2, 15, align='center')
+            score = STACK_RATINGS['ratings'][name]
+            stars = '★' * score + '☆' * (STACK_RATINGS['scale'] - score)
+            b.para(f"{name} <font color='#a73524'>{stars}</font>",
+                   x, 418 + j * 19, column, 10.2, 15, align='center')
+    b.para('별점은 작성자 자기평가이며 5단계 기준입니다.', M, 517, CW,
+           9.3, 14, MUTED, align='center')
     b.end([('GitHub', 'https://github.com/SeMinKong'),
            ('학습 관심사', WEB + 'about/#questions-title')])
 

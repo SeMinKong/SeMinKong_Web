@@ -15,7 +15,7 @@
 - Hidden/offscreen에서는 연속 모션과 미디어를 멈춘다. 기능 실패 시 읽을 수 있는 정적 콘텐츠로 돌아간다.
 - 수동 Motion/Depth 버튼, 커서 follower, 버튼·링크를 끌어당기는 magnetic effect, 전역 fluid, Three.js는 사용하지 않는다. 로봇 조인트의 국소적인 결합 보정은 아래 명세를 따른다.
 
-About·Resume 학습 스택은 고정된 위치에서 읽을 수 있도록 대상 reveal을 적용하지 않는다. 최초 `#now-title`·`#skills-title` 진입만 상단 intro를 생략하고, load 이후 폰트 준비와 다음 프레임을 기다려 `scroll-padding-top` 기준으로 한 번 위치를 맞춘다. 기존 `smoothScrollAfter`로 이 정렬 뒤 Lenis를 시작한다. 사용자 조작·다른 해시·페이지 이탈 시 취소하고, 뒤로/앞으로 복원에는 적용하지 않는다.
+About 기술 스택은 고정된 위치에서 읽을 수 있도록 대상 reveal을 적용하지 않는다. 최초 `#now-title` 진입만 상단 intro를 생략하고, load 이후 폰트 준비와 다음 프레임을 기다려 `scroll-padding-top` 기준으로 한 번 위치를 맞춘다. 기존 `smoothScrollAfter`로 이 정렬 뒤 Lenis를 시작한다. 사용자 조작·다른 해시·페이지 이탈 시 취소하고, 뒤로/앞으로 복원에는 적용하지 않는다. Resume의 중복 스택은 삭제되어 `#skills-title` 전용 정렬·intro 예외도 제거하며 일반 페이지 초기화를 사용한다.
 
 ## Home 서명과 project deck
 

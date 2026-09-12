@@ -2,6 +2,20 @@
 
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
+## 2026-09-12 프로젝트 재배치·별점·Resume 중복 제거·SVG 아이콘
+
+- [x] 최종 PDF 9쪽 전체를 렌더·육안 검수했다. 프로젝트 6쪽은 왼쪽 이미지→설명→회고, 오른쪽 구현→트러블슈팅으로 구성하고 승인 원문을 모두 보존한다. 본문 10.3pt/15.5pt, 문서 최소 9.3pt, 요소 겹침 0, 중앙 문구 121개·캡션 6개, 북마크 9개·외부 링크 49개가 정상이다.
+- [x] 이전 공개본과 1·9쪽은 픽셀·텍스트·링크 좌표가 동일하다. 2쪽은 스택 별점·자기평가 안내만 바뀌었으며 3–8쪽은 직전 재배치 검수본과 픽셀 동일하다. 승인 원고 JSON과 프로젝트 원본 이미지 6개·PDF 전용 프로필 이미지 1개는 보존됐다.
+- [x] 웹 About·공통 설정·PDF의 16개 별점을 작성자 지정값과 대조했다. 4점 6개·3점 7개·2점 3개이며 접근 가능한 이름에도 같은 값이 들어간다. 동일 이름의 시스템 글꼴 차이를 발견해 이전 PDF와 일치하는 공식 NanumGothic 원본을 OFL과 함께 고정하고 전체 SHA-256·임베드 메트릭을 회귀 검사한다.
+- [x] `npm.cmd run verify`: 테스트 87개, 11 routes·29 modules·13 stylesheets, production build·24 deployment entries 통과. Resume의 스택 CSS·앵커 초기화를 제거하고 소스 스타일 순서 계약을 맞췄다. 공용 About 스택·앵커, 원본 이력서·프로젝트별 기술 목록·PDF 다운로드는 유지한다.
+- [x] vLLM·Jira는 Simple Icons 16.29.0 원본 경로·브랜드 색상의 로컬 SVG로 교체했다. 기존 22개 SVG는 보존하고 새 두 파일의 출처·버전·해시 및 LF 계약, native 이름 토글·접근성·명시적 크기를 검사한다. 24개 SVG 모두 출처 manifest 해시와 일치하며 새 파일에는 스크립트·외부 참조가 없다.
+- [x] Chrome production preview Resume 390×844·768×1024·1280×900의 기본/reduced 6개 조합에서 console warning/error·가로 overflow 0, skip link와 PDF 링크의 2px 키보드 포커스, 기본 lite/static·full/interactive와 reduced/flat을 확인했다. 기본 3개 크기의 Tab/Enter 다운로드와 390px touch·JavaScript 비활성 다운로드가 최종 해시와 일치한다.
+- [x] 최종 SVG 빌드의 About은 3개 폭×기본/reduced와 390px touch·JavaScript 비활성, 총 8개 조합을 통과했다. 16개 별점·aria, vLLM/Jira decode·56×56 크기, 14개 native 이름 토글과 키보드/터치, 같은 스크롤 위치의 토글 전후 배치 이동 0px·전체 페이지 overflow 0·console/pageerror/HTTP 오류 0을 확인했다. 3개 폭의 viewport 캡처도 육안 검수했다. 초기 QA 실패는 스크롤 변화와 Vite SVG 인라인 방식을 잘못 가정한 검사 코드 문제였으며 제품 결함은 없었다.
+- [x] 새 빌드의 Resume 6개 조합에서 중복 스택 0, 원본 PDF/DOCX·포트폴리오 링크 HTTP 200, 증빙 모달 이미지 decode·Tab 순환·Escape 닫기·포커스 복귀를 재확인했다. 독립 release audit에서 기존 자산 보존과 dist의 private 원본·제작용 TTF·스크립트·임시 QA 파일 제외도 확인했다.
+- [x] output·public·dist PDF는 4,527,050 bytes, SHA-256 `5D004F8E4DFB71DCF5EA43F8BA4921363EE17D77EE249707B04BF1FE264D8E31`로 일치한다. 9 pages·4.5 MB·2026.09.12 표시를 유지하고 바이트·해시 계약을 갱신했다.
+
+Chrome은 headless이며 reduced motion·touch는 브라우저 에뮬레이션이다. 실물 touch 기기·OS forced-colors 전환·새 모델/하드웨어/부하 실험은 수행하지 않았다. 관련 없는 README·dev 정리 기록·분석 초안은 배포에서 제외한다. 공개 배포 결과는 해당 release의 Pages 실행과 최종 작업 보고를 따른다.
+
 ## 2026-09-12 THING·AQIS 웹 아키텍처
 
 - [x] `npm.cmd run verify`: 84개 테스트, 11 routes·29 modules·13 stylesheets, production build·24 deployment entries 통과. 빌드 경고 0, `git diff --check` 통과.

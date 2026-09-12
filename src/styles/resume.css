@@ -337,12 +337,6 @@
   padding-block: 18px;
 }
 
-.resume-block.resume-block--skills {
-  grid-template-columns: 1fr;
-  gap: 12px;
-  padding-block: 24px;
-}
-
 .award-proof {
   min-height: 44px;
   display: inline-flex;

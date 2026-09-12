@@ -393,10 +393,72 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 4526879);
+  assert.equal(pdf.length, 4527050);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    '0EFF9B1E10EF795570D2B949D4D1FEE12139C89BCA6B19C88482687D0A44742A',
-    'Published PDF must match the reviewed edition with explicit contribution, troubleshooting and reflection sections'
+    '5D004F8E4DFB71DCF5EA43F8BA4921363EE17D77EE249707B04BF1FE264D8E31',
+    'Published PDF must match the reviewed image-description-reflection and implementation-troubleshooting edition'
   );
+});
+
+test('portfolio generation pins the approved, licensed NanumGothic font bytes', async () => {
+  for (const [file, expected] of [
+    ['NanumGothic-Regular.ttf', '76F45EF4A6BCFF344C837C95A7DCC26E017E38B5846D5AE0CDCB5B86BE2E2D31'],
+    ['NanumGothic-Bold.ttf', 'F96298F9FB18E364D2370F4C3CE948AC67A2B61AF992D7234BC15C42B033C674']
+  ]) {
+    assert.equal(await sha256Of(`scripts/portfolio/assets/fonts/${file}`), expected);
+  }
+  const license = await readFile(sourceUrl('scripts/portfolio/assets/fonts/OFL.txt'), 'utf8');
+  assert.match(license, /Copyright \(c\) 2010, NHN Corporation/);
+  assert.match(license, /SIL OPEN FONT LICENSE Version 1\.1/);
+});
+
+test('About and the PDF source share all 16 owner-approved ratings while Resume omits the duplicate stack', async () => {
+  const [about, resume, entry, rawRatings] = await Promise.all([
+    'about/index.html', 'resume/index.html', 'src/entries/resume.js', 'config/stack-ratings.json'
+  ].map(path => readFile(sourceUrl(path), 'utf8')));
+  const { ratings, scale } = JSON.parse(rawRatings);
+  assert.equal(scale, 5);
+  assert.deepEqual(ratings, {
+    'C++': 4, Python: 3, 'ROS 2': 3, 'Isaac Sim': 2, 'Isaac Lab': 2,
+    PyTorch: 4, YOLO: 4, FastAPI: 3, LangChain: 3, Ollama: 4, 'llama.cpp': 4,
+    vLLM: 2, Ubuntu: 3, Docker: 3, Git: 4, Jira: 3
+  });
+  const items = [...about.matchAll(/<li\b[^>]*>[\s\S]*?<\/li>/g)]
+    .map(match => match[0]).filter(item => item.includes('tech-stack-score'));
+  assert.equal(items.length, 16);
+  const found = [];
+  for (const item of items) {
+    const name = item.match(/<span lang="en">([^<]+)<\/span>/)?.[1];
+    assert.ok(Object.hasOwn(ratings, name), `Unexpected tool ${name}`);
+    found.push(name);
+    const score = ratings[name], stars = '★'.repeat(score) + '☆'.repeat(5 - score);
+    assert.ok(item.includes(`role="img" aria-label="${name} 숙련도 5단계 중 ${score}단계">${stars}</span>`));
+  }
+  assert.equal(new Set(found).size, 16);
+  assert.doesNotMatch(resume, /tech-stack|resume-block--skills|skills-title/);
+  assert.doesNotMatch(entry, /tech-stack|initLearningStackAnchor|skills-title/);
+  assert.match(resume, /aria-labelledby="portfolio-title"/);
+  assert.match(resume, /aria-labelledby="original-resume-title"/);
+});
+
+test('vLLM and Jira use sourced local SVG icons with native accessible name toggles', async () => {
+  const about = await readFile(sourceUrl('about/index.html'), 'utf8');
+  const manifest = JSON.parse(await readFile(sourceUrl('src/assets/tech-stack/sources.json'), 'utf8'));
+  assert.doesNotMatch(about, /tech-stack-mark/);
+  for (const [name, slug, color] of [['vLLM', 'vllm', '30A2FF'], ['Jira', 'jira', '0052CC']]) {
+    const expected = `<details class="tech-stack-tool"><summary aria-label="${name}" title="${name}"><img src="/src/assets/tech-stack/${slug}.svg" alt="" width="56" height="56" loading="lazy" decoding="async" /></summary><span lang="en">${name}</span></details>`;
+    assert.ok(about.includes(expected), `${name} keeps its native name toggle and explicit image dimensions`);
+    const path = `src/assets/tech-stack/${slug}.svg`;
+    const svg = await readFile(sourceUrl(path), 'utf8');
+    assert.ok(svg.includes(`fill="#${color}"`));
+    assert.match(svg, /viewBox="0 0 24 24"/);
+    assert.match(svg, /<path d="[^"]+"\/>/);
+    assert.doesNotMatch(svg, /<script|<foreignObject|<image|\bon\w+=|\bhref=/i);
+    const records = manifest.icons.filter(icon => icon.file === `${slug}.svg`);
+    assert.equal(records.length, 1);
+    assert.equal(records[0].simple_icons_version ?? manifest.simple_icons_version, '16.29.0');
+    assert.equal(records[0].source, `https://github.com/simple-icons/simple-icons/blob/16.29.0/icons/${slug}.svg`);
+    assert.equal((await sha256Of(path)).toLowerCase(), records[0].sha256);
+  }
 });

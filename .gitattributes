@@ -1,2 +1,5 @@
 # Preserve the reviewed publication bytes across Windows/Linux checkouts.
 public/portfolio/*.pdf binary
+# Keep the new source-audited SVG hashes stable on Windows and Linux.
+src/assets/tech-stack/jira.svg text eol=lf
+src/assets/tech-stack/vllm.svg text eol=lf

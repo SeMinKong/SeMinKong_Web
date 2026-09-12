@@ -1,0 +1,23 @@
+{
+  "approvedOn": "2026-09-12",
+  "basis": "owner self-assessment",
+  "scale": 5,
+  "ratings": {
+    "C++": 4,
+    "Python": 3,
+    "ROS 2": 3,
+    "Isaac Sim": 2,
+    "Isaac Lab": 2,
+    "PyTorch": 4,
+    "YOLO": 4,
+    "FastAPI": 3,
+    "LangChain": 3,
+    "Ollama": 4,
+    "llama.cpp": 4,
+    "vLLM": 2,
+    "Ubuntu": 3,
+    "Docker": 3,
+    "Git": 4,
+    "Jira": 3
+  }
+}

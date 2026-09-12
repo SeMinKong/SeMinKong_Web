@@ -10,7 +10,7 @@ import pdfplumber
 from PIL import Image
 from pypdf import PdfReader
 
-from project_pages import PROJECTS, M, LEFT_WIDTH, RIGHT_X, RIGHT_WIDTH
+from project_pages import PROJECTS, M, CW, LEFT_WIDTH, RIGHT_X, RIGHT_WIDTH, CONTENT_TOP, CONTENT_BOTTOM
 
 ROOT = Path(__file__).resolve().parents[2]
 WEB = 'https://seminkong.github.io/SeMinKong_Web/'
@@ -44,6 +44,14 @@ def verify(path):
     assert min(sizes) >= 8.99, 'Text must remain at least 9pt'
     for page in reader.pages:
         assert page.cropbox == page.mediabox
+        for ref in page['/Resources']['/Font'].values():
+            font = ref.get_object()
+            descriptor = font.get('/FontDescriptor')
+            if descriptor:
+                descriptor = descriptor.get_object()
+                assert (descriptor['/Ascent'], descriptor['/Descent']) == (856, -144), \
+                    'PDF must retain the approved NanumGothic edition'
+                assert descriptor['/CapHeight'] in (743, 755)
         links = []
         for entry in page.get('/Annots', []):
             a = entry.get_object()
@@ -69,6 +77,13 @@ def verify(path):
     assert not any(label in texts[1] for label in ['(AQIS)', '(THING)', '(Brain MRI', '(Alkkagi', '(Prompt)']), \
         'Experience headings must not repeat project-specific explanation'
     assert all(x in texts[1] for x in ['C++', 'Python', 'Isaac Sim', 'Isaac Lab', 'LangChain', 'vLLM', 'Jira'])
+    ratings = json.loads((ROOT / 'config/stack-ratings.json').read_text(encoding='utf-8'))
+    assert ratings['scale'] == 5 and len(ratings['ratings']) == 16
+    for name, score in ratings['ratings'].items():
+        assert isinstance(score, int) and 1 <= score <= 5
+        expected = name + '★' * score + '☆' * (5 - score)
+        assert re.sub(r'\s+', '', expected) in re.sub(r'\s+', '', texts[1]), f'Incorrect PDF rating: {name}'
+    assert '작성자 자기평가' in texts[1]
     all_links = [u for links in links_by_page for u in links]
     assert len({u for u in all_links if '/resume/award-' in u}) == 4
     assert len({u for u in all_links if '/resume/certificate-' in u}) == 2
@@ -92,32 +107,54 @@ def verify(path):
         # Compare every approved sentence, ignoring extraction-only line wraps.
         compact = lambda value: re.sub(r'\s+', '', value)
         page_text = compact(texts[n-1])
-        for sentence in [*spec['built'], spec['reflection'],
+        for sentence in [spec['tagline'], spec['summary'], spec['role'], spec['period'], spec['team'],
+                         spec['stack'].replace('<br/>', ' · '), *spec['built'], spec['reflection'],
                          *[part for pair in spec['troubleshooting'] for part in pair]]:
             assert compact(sentence) in page_text, f'Page {n}: approved text omitted or shortened: {sentence}'
         page_elements = [e for e in elements if e['page'] == n]
-        for label, top in [('직접 맡은 구현', 106), ('트러블슈팅', 260), ('회고', 438)]:
+        headings_by_label = {}
+        for label, x, width in [('직접 맡은 구현', RIGHT_X, RIGHT_WIDTH),
+                                ('트러블슈팅', RIGHT_X, RIGHT_WIDTH), ('회고', M, LEFT_WIDTH)]:
             headings = [e for e in page_elements if e['text'] == label]
             assert len(headings) == 1
-            assert abs(headings[0]['x'] - RIGHT_X) < .02 and headings[0]['top'] == top
-            assert abs(headings[0]['width'] - RIGHT_WIDTH) < .02
+            assert abs(headings[0]['x'] - x) < .02
+            assert abs(headings[0]['width'] - width) < .02
+            headings_by_label[label] = headings[0]
+        bottom = lambda e: e['top'] + e['height']
+        assert headings_by_label['직접 맡은 구현']['top'] == CONTENT_TOP
         reflection = next(e for e in page_elements if e['text'] == spec['reflection'])
-        first_issue = next(e for e in page_elements if e['text'].startswith('<b>' + spec['troubleshooting'][0][0]))
-        first_built = next(e for e in page_elements if e['text'] == spec['built'][0])
-        for e, x, top in [(first_built, RIGHT_X + 12, 130), (first_issue, RIGHT_X, 284),
-                          (reflection, RIGHT_X, 462)]:
-            assert abs(e['x'] - x) < .02 and e['top'] == top
-        for label, top in [(f"<b>기간</b> {spec['period']} · {spec['team']}", 106),
-                           (f"<b>역할</b> {spec['role']}", 129), (spec['stack'], 152),
-                           (spec['tagline'], 438), (spec['summary'], 462)]:
-            e = next(e for e in page_elements if e['text'] == label)
-            assert e['x'] == M and e['width'] == LEFT_WIDTH and e['top'] == top
+        built = [next(e for e in page_elements if e['text'] == item) for item in spec['built']]
+        issues = [next(e for e in page_elements if e['text'] == f'<b>{title}</b> · {body}')
+                  for title, body in spec['troubleshooting']]
+        assert built[0]['top'] == CONTENT_TOP + 28
+        for previous, current in zip(built, built[1:]):
+            assert abs(current['top'] - bottom(previous) - 6) < .02
+        assert abs(headings_by_label['트러블슈팅']['top'] - bottom(built[-1]) - 23) < .02
+        assert abs(issues[0]['top'] - bottom(headings_by_label['트러블슈팅']) - 10) < .02
+        for previous, current in zip(issues, issues[1:]):
+            assert abs(current['top'] - bottom(previous) - 8) < .02
+        assert all(abs(e['x'] - RIGHT_X - 12) < .02 for e in built)
+        assert all(abs(e['x'] - RIGHT_X) < .02 for e in issues)
+        assert bottom(issues[-1]) <= CONTENT_BOTTOM
+        assert reflection['x'] == M and reflection['width'] == LEFT_WIDTH
+        assert abs(reflection['top'] - bottom(headings_by_label['회고']) - 10) < .02
+        assert bottom(reflection) <= CONTENT_BOTTOM
+        tagline = next(e for e in page_elements if e['text'] == spec['tagline'])
+        summary = next(e for e in page_elements if e['text'] == spec['summary'])
+        for e in [tagline, summary]:
+            assert e['x'] == M and e['width'] == LEFT_WIDTH
+        assert abs(summary['top'] - bottom(tagline) - 6) < .02
+        assert abs(headings_by_label['회고']['top'] - bottom(summary) - 24) < .02
+        metadata = next(e for e in page_elements if e['text'].startswith(spec['period'] + ' · '))
+        assert metadata['x'] == M and metadata['top'] == 90 and abs(metadata['width'] - CW) < .02
+        stack = next(e for e in page_elements if e['text'] == spec['stack'].replace('<br/>', ' · '))
+        assert stack['x'] == M and stack['top'] == 534
         links = [next(e for e in page_elements if e['text'] == label)
                  for label in ['README', '기술 문서', '프로젝트 시연']]
-        assert all(e['top'] == 563 for e in links)
+        assert all(e['top'] == 564 for e in links)
         assert abs((links[0]['x'] + links[-1]['x'] + links[-1]['width']) / 2 - 841.89 / 2) < .02
         assert sum(e['kind'] == 'trophy' for e in page_elements) == len(spec['awards'])
-        award_items = [e for e in page_elements if 545 <= e['top'] <= 546]
+        award_items = [e for e in page_elements if 548 <= e['top'] <= 549]
         if award_items:
             left = min(e['x'] for e in award_items)
             right = max(e['x'] + e['width'] for e in award_items)
@@ -131,7 +168,8 @@ def verify(path):
         assert abs(caption['x']-figure['x']) < .02 and abs(caption['width']-figure['width']) < .02
         assert abs(caption['top']-figure['top']-figure['height']-10) < .02
         assert abs(caption['center_x']-figure['x']-figure['width']/2) < .02
-        assert abs(caption['top']-405) < .02, f'Page {n}: inconsistent caption baseline'
+        assert figure['top'] == CONTENT_TOP and 0 < figure['height'] <= 194
+        assert abs(tagline['top'] - bottom(caption) - 14) < .02, f'Page {n}: description must follow the image'
         assert abs(caption['center_x']-M-LEFT_WIDTH/2) < .02
         name = spec['figure'][0]
         source = ROOT/'scripts/portfolio/assets'/name[1:] if name.startswith('@') else ROOT/'src/assets/projects'/name
@@ -175,7 +213,7 @@ def verify(path):
                 min_font_pt=round(min(sizes), 2), layout_overlaps=0,
                 aligned_captions=6, centered_text_blocks=len(centered), unchanged_source_images=6,
                 complete_project_texts=6, aligned_project_grids=6,
-                page_numbers=0, trophy_icons=5,
+                page_numbers=0, trophy_icons=5, approved_stack_ratings=16,
                 bytes=path.stat().st_size, sha256=hashlib.sha256(path.read_bytes()).hexdigest().upper())
 
 

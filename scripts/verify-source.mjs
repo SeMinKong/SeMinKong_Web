@@ -9,7 +9,7 @@ const entryStyles = {
   'case-study.js': ['tokens.css', 'base.css', 'case-study.css', 'gallery-surface.css', 'motion.css'],
   'home.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'home.css', 'kinetic-home.css', 'gallery-surface.css', 'motion.css'],
   'legal.js': ['tokens.css', 'base.css', 'legal.css', 'gallery-surface.css', 'motion.css'],
-  'resume.js': ['tokens.css', 'base.css', 'resume.css', 'tech-stack.css', 'gallery-surface.css', 'motion.css'],
+  'resume.js': ['tokens.css', 'base.css', 'resume.css', 'gallery-surface.css', 'motion.css'],
   'work.js': ['tokens.css', 'base.css', 'portfolio-shared.css', 'work.css', 'gallery-surface.css', 'motion.css']
 };
 const moduleScriptPattern = /<script\b(?=[^>]*\btype=["']module["'])[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi;

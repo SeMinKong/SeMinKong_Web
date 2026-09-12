@@ -45,6 +45,14 @@
       "sha256": "c76fe6d4502d5f7365776cb32e45b01d3cde2eaa27a1d3c3091a3437f129ab92"
     },
     {
+      "file": "jira.svg",
+      "kind": "Simple Icons brand mark",
+      "simple_icons_version": "16.29.0",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.29.0/icons/jira.svg",
+      "brand_source": "https://atlassian.design/resources/logo-library/",
+      "sha256": "5aaf941886a2ea740b0371ab74e606192b3a6c887b2fa22d4f8685c62ec81fdd"
+    },
+    {
       "file": "langchain.svg",
       "kind": "Simple Icons brand mark",
       "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/langchain.svg",
@@ -127,6 +135,14 @@
       "kind": "Simple Icons brand mark",
       "source": "https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/ultralytics.svg",
       "sha256": "3a222eee259a740369d86426bbbd22b99400624aa2f6d5a429486366d0b0664d"
+    },
+    {
+      "file": "vllm.svg",
+      "kind": "Simple Icons brand mark",
+      "simple_icons_version": "16.29.0",
+      "source": "https://github.com/simple-icons/simple-icons/blob/16.29.0/icons/vllm.svg",
+      "brand_source": "https://github.com/vllm-project/media-kit/blob/79b2ea5db25b723f2d81dae203a87c5b9a076722/vLLM-Logo.svg",
+      "sha256": "21bec95627e362db1e1a19c6ca45db34eb4e85c04b5ac8955d337780371f8e87"
     },
     {
       "file": "websocket.svg",

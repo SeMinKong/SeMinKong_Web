@@ -115,26 +115,13 @@
 }
 
 
-/* Proficiency marker; the scale is still being decided, so every entry reads one. */
+/* Owner-provided five-point self-assessment; values live in config/stack-ratings.json. */
 .tech-stack-score {
   color: var(--signal);
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   line-height: 1;
-}
-
-/* Tools whose brand mark is not bundled keep the tile shape with a lettered face. */
-.tech-stack-mark {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border: 1px solid var(--line-strong);
-  border-radius: 6px;
-  color: var(--text-soft);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
 }
 
 /* A five-tool group needs a second row. */

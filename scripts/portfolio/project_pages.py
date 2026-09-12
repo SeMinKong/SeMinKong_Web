@@ -8,13 +8,16 @@ from pathlib import Path
 
 from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.platypus import Paragraph
 
 W, H = landscape(A4)
 M, CW = 38, W - 76
-LEFT_WIDTH = 290
-RIGHT_X = 354
+LEFT_WIDTH = 300
+RIGHT_X = 368
 RIGHT_WIDTH = W - M - RIGHT_X
-BODY_SIZE, BODY_LEADING = 9.8, 14.5
+BODY_SIZE, BODY_LEADING = 10.3, 15.5
+CONTENT_TOP, CONTENT_BOTTOM = 128, 522
 MUTED, LINE, ACCENT, TINT = map(HexColor, ['#625e56', '#d4d0c5', '#a73524', '#eeeae1'])
 
 PROJECTS = [{'key': 'thing',
@@ -104,52 +107,70 @@ for project in PROJECTS:
     project.update({field: experience[field] for field in ('built', 'troubleshooting', 'reflection')})
 
 
+def text_height(text, width, size, leading, bold=False):
+    """Measure the same word-preserving paragraphs that Book.para renders."""
+    style = ParagraphStyle('measure', fontName='KoreanBold' if bold else 'Korean',
+                           fontSize=size, leading=leading, splitLongWords=False)
+    return Paragraph(text, style).wrap(width, H)[1]
+
+
 def project_page(b, spec, web, awards):
     b.start(spec['name'], key=spec['key'])
-    b.para(f"<b>기간</b> {spec['period']} · {spec['team']}",
-           M, 106, LEFT_WIDTH, 9.8, 15, MUTED, keep_words=True)
-    b.para(f"<b>역할</b> {spec['role']}",
-           M, 129, LEFT_WIDTH, 9.8, 15, MUTED, keep_words=True)
-    b.para(spec['stack'], M, 152, LEFT_WIDTH, 9.8, 15, MUTED, keep_words=True)
-    b.rule(193, M, LEFT_WIDTH)
-    figure, region = spec['figure']
-    b.image(figure, M, 209, LEFT_WIDTH, 186, region=region, caption=spec['caption'],
-            caption_size=10.2, caption_leading=15, caption_gap=10, align_bottom=True)
-    b.para(spec['tagline'], M, 438, LEFT_WIDTH, 12.3, 18, bold=True, keep_words=True)
-    b.para(spec['summary'], M, 462, LEFT_WIDTH, 10.2, 16, MUTED, keep_words=True)
+    metadata = f"{spec['period']} · {spec['team']} <font color='#d4d0c5'>|</font> <b>역할</b> {spec['role']}"
+    b.para(metadata, M, 90, CW, 10, 15, MUTED, keep_words=True)
+    b.rule(113)
 
-    b.para('직접 맡은 구현', RIGHT_X, 106, RIGHT_WIDTH, 12.3, 18, bold=True)
-    top = 130
+    # The image adapts to the full approved copy, never the other way around.
+    # Keep the source pixels and the previously approved display region intact.
+    reflection_height = text_height(spec['reflection'], LEFT_WIDTH, 10, 15)
+    summary_height = text_height(spec['summary'], LEFT_WIDTH, 10.5, 16)
+    tagline_height = text_height(spec['tagline'], LEFT_WIDTH, 12.3, 18, bold=True)
+    image_height = min(194, CONTENT_BOTTOM - CONTENT_TOP - reflection_height
+                       - summary_height - tagline_height - 15 - 18 - 64)
+    if image_height < 130:
+        raise ValueError(f"{spec['key']}: full left-column copy leaves insufficient image space")
+    figure, region = spec['figure']
+    top = b.image(figure, M, CONTENT_TOP, LEFT_WIDTH, image_height,
+                  region=region, caption=spec['caption'],
+                  caption_size=9.8, caption_leading=15, caption_gap=10)
+    top = b.para(spec['tagline'], M, top + 14, LEFT_WIDTH, 12.3, 18,
+                 bold=True, keep_words=True)
+    top = b.para(spec['summary'], M, top + 6, LEFT_WIDTH, 10.5, 16,
+                 MUTED, keep_words=True)
+    b.rule(top + 12, M, LEFT_WIDTH)
+    top = b.para('회고', M, top + 24, LEFT_WIDTH, 12.3, 18, bold=True)
+    left_end = b.para(spec['reflection'], M, top + 10, LEFT_WIDTH,
+                      10, 15, MUTED, keep_words=True)
+    if left_end > CONTENT_BOTTOM + .1:
+        raise ValueError(f"{spec['key']}: left column exceeds available space ({left_end})")
+
+    b.para('직접 맡은 구현', RIGHT_X, CONTENT_TOP, RIGHT_WIDTH, 12.3, 18, bold=True)
+    top = CONTENT_TOP + 28
     for item in spec['built']:
-        b.para('·', RIGHT_X, top, 8, BODY_SIZE, BODY_LEADING)
+        b.para('·', RIGHT_X, top, 8, BODY_SIZE, BODY_LEADING, color=ACCENT)
         top = b.para(item, RIGHT_X + 12, top, RIGHT_WIDTH - 12,
-                     BODY_SIZE, BODY_LEADING, keep_words=True) + 5
-    if top - 5 > 247:
-        raise ValueError(f"{spec['key']}: implementation exceeds available space ({top - 5})")
-    b.para('트러블슈팅', RIGHT_X, 260, RIGHT_WIDTH, 12.3, 18, bold=True)
-    top = 284
+                     BODY_SIZE, BODY_LEADING, keep_words=True) + 6
+    b.rule(top + 6, RIGHT_X, RIGHT_WIDTH)
+    top = b.para('트러블슈팅', RIGHT_X, top + 17, RIGHT_WIDTH, 12.3, 18, bold=True) + 10
     for title, body in spec['troubleshooting']:
         top = b.para(f'<b>{title}</b> · {body}', RIGHT_X, top, RIGHT_WIDTH,
-                     BODY_SIZE, BODY_LEADING, keep_words=True) + 6
-    if top - 6 > 427:
-        raise ValueError(f"{spec['key']}: troubleshooting exceeds available space ({top - 6})")
-    b.para('회고', RIGHT_X, 438, RIGHT_WIDTH, 12.3, 18, bold=True)
-    reflection_end = b.para(spec['reflection'], RIGHT_X, 462, RIGHT_WIDTH,
-                            BODY_SIZE, BODY_LEADING, MUTED, keep_words=True)
-    if reflection_end > 530:
-        raise ValueError(f"{spec['key']}: full experience exceeds available space ({reflection_end})")
+                     BODY_SIZE, BODY_LEADING, keep_words=True) + 8
+    if top - 8 > CONTENT_BOTTOM:
+        raise ValueError(f"{spec['key']}: right column exceeds available space ({top - 8})")
     footer(b, spec, web, awards)
 
 
 def footer(b, spec, web, awards):
+    stack = spec['stack'].replace('<br/>', ' · ')
+    b.para(stack, M, 534, CW, 9.3, 12, MUTED, keep_words=True, align='center', limit=H - 20)
     titles = ['SSAFY 공통 프로젝트 우수상', 'SW 공모전 금상',
               '캡스톤디자인 장려상', 'IT 프로젝트 프로리그 장려상']
     if spec['awards']:
         b.award_links([(titles[index], web + 'resume/' + awards[index][3])
-                       for index in spec['awards']], 546, size=9.8, gap=26)
-    b.rule(540)
+                       for index in spec['awards']], 549, size=9.3, gap=26)
+    b.rule(530)
     links = [('README', spec['repo'] + 'blob/main/README.md'),
              ('기술 문서', spec['repo'] + 'blob/main/' + spec['detail']),
              ('프로젝트 시연', web + spec['case'])]
-    b.link_row(links, 563, size=9.8, gap=30)
+    b.link_row(links, 564, size=9.3, gap=30)
     b.end(rule_top=None)
