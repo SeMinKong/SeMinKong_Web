@@ -2,9 +2,20 @@
 
 Reviewed 2026-09-12. Current output is the nine-page edition described in [portfolio-migration.md](portfolio-migration.md). The former 27-page technical explanations are retained in the six repositories' READMEs and linked implementation documents. The source records below remain evidence for those documents; historical page numbers and bounded reproductions do not describe the current PDF layout or establish fresh hardware, model-quality or production-performance results.
 
+## Owner-confirmed experience — 2026-09-12
+
+The owner supplied THING, AQIS and Briefit experience, then approved all six rewritten projects for implementation. The full approved account used verbatim in the PDF is retained in `scripts/portfolio/project_experiences.json`. These firsthand corrections supersede earlier ownership exclusions inferred from source/slide availability. Historical code notes below remain implementation evidence, not a restriction on newly confirmed personal work.
+
+- THING: Codex Blender-assisted modeling and printing, seven-motor synchronization/keyboard control, U2D2/ROS command bridge, tendon return design and Cyclone DDS communication settings are owner-confirmed work. This does not attribute the team's perception, arbitration, guard or recording UI to the owner.
+- AQIS: about 1,000 training/validation images (70/30), video refresh about 4→30 FPS after MJPEG separation, one-second inference intervals, and package-based SLAM/designated-goal navigation are the owner's project account. Video FPS is not inference FPS, latency, or cycle time. Automatic dispatch from server process events remains a distinct future task.
+- Briefit: about 4,000 articles collected, about 3,000 used for KoBART fine-tuning, T5/KoBART ROUGE comparison and Gemini service supplementation concern the 2025 work. The latest team's GPT-OSS pipeline is separate. The code's 5,000 collection target is not the actual collected count.
+- MRI, Prompt and Alkkagi: implementation mechanics were rechecked against the pinned source; proposed reflections were approved by the owner. No extra clinical result, production benchmark, outage history or personal motivation is inferred.
+
+No new hardware, model-training or performance experiment was run for this editorial release.
+
 ## Current editorial structure
 
-A4 landscape, nine pages: introduction, contact, education, two qualifications and four awards (1); six descriptive experience headings without project-specific explanatory copy and a text-only tool list (2); THING (3), AQIS (4), Briefit (5), MRI (6), Prompt (7), Alkkagi (8); repository reading guide and contact (9). Each project uses a real source image, personal scope, two implementation points, two code-supported troubleshooting notes, and a separate reflection on validation limits and direct README/detail/web links. Existing portrait and project imagery are retained. No invented historical incident, skill rating, new benchmark or clinical/hardware validation is added.
+A4 landscape, nine pages: introduction, contact, education, two qualifications and four awards (1); six descriptive experience headings without project-specific explanatory copy and a text-only tool list (2); THING (3), AQIS (4), Briefit (5), MRI (6), Prompt (7), Alkkagi (8); repository reading guide and contact (9). Each project uses a real source image, personal scope, three or four implementation points, two or three owner-confirmed or code-supported troubleshooting notes, and a separate reflection on learning and next steps and direct README/detail/web links. Existing portrait and project imagery are retained. No invented historical incident, skill rating, new benchmark or clinical/hardware validation is added.
 
 ## Tech Stack selection — 2026-09-12
 
@@ -25,12 +36,12 @@ The implementation notes distinguish THING's move/home target synchronization fr
 ## AQIS
 
 - Two people; Kong is team lead and Full-stack/Robot Integration owner. Main development 2026-06-01 to 06-26, initial planning in May. [Roles and schedule](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/docs/07-roles-and-schedule.md).
-- Own work: RealOps, FastAPI REST/WebSocket, ROS 2 bridge, conveyor HTTP, Dobot sequence, LLM command/fallback. Model training/Roboflow/CAD/simulation are separate teammate work, not personal claims.
+- Own work: RealOps, FastAPI REST/WebSocket, ROS 2 bridge, conveyor HTTP, Dobot sequence, LLM command/fallback. Owner confirmation on 2026-09-12 additionally establishes personal YOLO training (about 1,000 lid images, 70/30 split), package-based SLAM/designated-goal navigation, separate MJPEG delivery (about 4 to 30 video FPS) and one-second inference intervals. Roboflow/CAD/RoboDK simulation remain teammate contributions.
 - Strong decision: develop common REST/WS with mock adapters before hardware access. [Day 1](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/docs/day1-decisions.md).
 - The initial plan limits hardware use to the final three days. This is a documented planning constraint, not a measured actual deployment duration. The PDF links this constraint to the implemented adapter/API separation.
 - Strong integration issue: moving target coordinates become stale; use a detection after stop request and configured wait. [Main event flow](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/server/app/main.py), [related tests](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/main/server/tests/test_real_monitoring.py).
-- Isolated local tests were run during the visual revision: 26 passed and two existing calibration-expectation tests failed. See reproduction scope below. Do not infer physical stop confirmation, classification success rate, cycle time, Nav2 completion or persistent database implementation. Demo contains speed-up segments.
-- Current PDF verification table covers duplicate detections, STOPPED monitoring and timestamped stale input, supported by original tests plus prior bounded Mock reproduction. A missing timestamp passes freshness checking; the automatic path does not gate the next stage on conveyor stop failure; missing depth can use fixed coordinates. Process exit code zero is the resume condition, not sensed grasp success. Hardware cycle time, repeated sorting success and outage recovery remain unmeasured. See pinned source `9f6530a2acffa0555f9df2eb628b40e4d01b6341`.
+- Isolated local tests were run during the visual revision: 26 passed and two existing calibration-expectation tests failed. See reproduction scope below. Do not infer physical stop confirmation, classification success rate, cycle time, server-triggered automatic navigation missions or persistent database implementation. Demo contains speed-up segments.
+- The former detailed PDF verification table covered duplicate detections, STOPPED monitoring and timestamped stale input, supported by original tests plus prior bounded Mock reproduction. A missing timestamp passes freshness checking; the automatic path does not gate the next stage on conveyor stop failure; missing depth can use fixed coordinates. Process exit code zero is the resume condition, not sensed grasp success. Hardware cycle time, repeated sorting success and outage recovery remain unmeasured. See pinned source `9f6530a2acffa0555f9df2eb628b40e4d01b6341`.
 
 ## Added vector technical plates — 2026-09-08
 

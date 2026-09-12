@@ -36,11 +36,26 @@
 - 팀 로봇 운영 제어와 개인 점검 도구를 구분했다. THING의 이동 명령은 토크 ON 전에 목표값을 기록하지만 별도 토크 토글까지 같은 동작으로 확대하지 않는다. AQIS는 정지 요청과 센서로 확인된 정지를 구분한다.
 - 새 하드웨어·모델 학습·임상·부하 실험은 실행하지 않았다. 실제 미디어와 원본 자료는 기존 저장소·웹 상세에서 계속 제공하며 별도 private 원본은 공개하지 않는다.
 
+## 구현 경험 보강 — 2026-09-12
+
+작성자가 승인한 전체 원고를 여섯 README와 기술 문서에 반영했다. THING·AQIS의 개인 담당 범위를 최신 진술로 보강했고, AQIS 영문 README·기여표도 맞췄다. Briefit은 최신 원격 main의 다른 변경을 보존했다. 기존 코드·계산식·시연·실행 안내는 유지했다.
+
+| 저장소 | 문서 수 | 반영 커밋 |
+| --- | --- | --- |
+| SSAFY-15th-HK/AQIS-for-SmartFactory | 4 | [e0c49a9](https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/commit/e0c49a991bf740084e0aa9240327c5120356a258) |
+| SeMinKong/Alkkagi | 2 | [506c5ec](https://github.com/SeMinKong/Alkkagi/commit/506c5ec72eff2ffc1cd5c4f5577db4a30c2f78ae) |
+| SeMinKong/BrainMRISegmentation_YOLO | 2 | [851fcc1](https://github.com/SeMinKong/BrainMRISegmentation_YOLO/commit/851fcc1264eb037b4712f51a59a5285293c9504f) |
+| SeMinKong/ProjectPromptGenerator_LangGraph | 2 | [837a8db](https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph/commit/837a8dbb6b8009ae789129006fc7da27ca0a5f39) |
+| SeMinKong/THING | 2 | [abadaa0](https://github.com/SeMinKong/THING/commit/abadaa033c783e9b343f76c20d948c4e809bf87c) |
+| capstone-btd/Briefit_AI | 2 | [df6ac0d](https://github.com/capstone-btd/Briefit_AI/commit/df6ac0db39cdeef21cd05a177beba4e889355c26) |
+
+문서 14개를 Markdown으로 파싱하고 새 경험 섹션 6개를 Chrome에서 렌더·육안 검수했다. 기존 fenced code/Mermaid 블록 77개는 변경되지 않았다. 게시 후 14개 원격 파일을 검수본과 바이트 단위로 대조했다. PDF와 README·상세 문서는 동일한 승인 원고 전체를 담는다.
+
 ## 최종 PDF
 
-후속 편집에서 세 소제목, 중앙 페이지 번호·캡션·수상·자료 링크 정렬을 적용했다. 구현 경험 제목은 구체적으로 유지하며 프로젝트별 부연 설명은 생략한다. 표지의 문서 정보 행은 제거했다.
+후속 편집에서 왼쪽 이미지·소개와 오른쪽 구현·트러블슈팅·회고의 2열 배치를 유지했다. 원문을 모두 싣고 메타 정보·하단 자료 링크를 묶었다. 페이지 번호는 제거하고 수상에는 벡터 트로피 아이콘을 붙였다. 소제목·본문 시작과 캡션·수상·자료 링크의 중앙축을 맞췄다. 구현 경험 제목은 구체적으로 유지하며 프로젝트별 부연 설명은 생략한다. 표지의 문서 정보 행은 제거했다.
 
-- 버전: 2026.09.12, A4 가로 9쪽, 4,505,443 bytes.
-- SHA-256: `91183B91A6DA5DAC1E8E392C352572A32A21DE6BAC6CCE58DF69D12342078997`.
+- 버전: 2026.09.12, A4 가로 9쪽, 4,526,879 bytes.
+- SHA-256: `0EFF9B1E10EF795570D2B949D4D1FEE12139C89BCA6B19C88482687D0A44742A`.
 - [공개 다운로드](https://seminkong.github.io/SeMinKong_Web/portfolio/SeMinKong-Portfolio.pdf).
 - 제작과 검증: `scripts/portfolio/build_portfolio.py`, `project_pages.py`, `verify_portfolio.py`. 기존 27쪽 제작 자료·실제 이미지·증빙은 Git 이력과 기존 자산에 보존한다.

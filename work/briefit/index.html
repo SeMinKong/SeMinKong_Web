@@ -44,14 +44,14 @@
           <p class="case-hero__meta" data-intro>NLP · Team · 2025</p>
           <h1 data-intro lang="en">Briefit</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">뉴스 본문을 수집·정제하고, KoBART의 학습 입력과 긴 기사 요약·후처리를 구현했습니다.</p>
+            <p class="case-hero__lede">뉴스 약 4,000건을 수집·정제하고, KoBART 파인튜닝·T5 비교·Gemini API 보완으로 서비스 요약을 구현했습니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#briefit-product">제품 근거 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/capstone-btd/Briefit_AI" rel="noreferrer">Pipeline GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="Briefit 프로젝트 역할 및 핵심 근거">
             <div><dt>Role</dt><dd>Team AI Engineer</dd></div>
             <div><dt>Period</dt><dd>May — Sep 2025</dd></div>
             <div><dt>Scope</dt><dd>Collection · Training<br />Summarization</dd></div>
-            <div><dt>Stack</dt><dd>Python · Crawl4AI<br />Transformers · KoBART</dd></div>
+            <div><dt>Stack</dt><dd>Python · Crawl4AI<br />KoBART · T5 · Gemini</dd></div>
           </dl>
         </header>
 
@@ -68,8 +68,8 @@
           <section class="case-section" id="briefit-contribution" data-reveal="group">
             <h2>기사 수집부터<br />읽을 수 있는 요약까지</h2>
             <div class="case-section__copy">
-              <p>Briefit은 여러 매체의 기사를 모으고 같은 이슈를 묶어 읽는 팀 뉴스 서비스입니다. 저는 AI 파트에서 기사 수집과 본문 정제, KoBART 학습·생성·평가 스크립트, 요약 후처리를 맡았습니다.</p>
-              <p>제품 화면은 팀 결과물이며, 아래는 본인이 작성한 2025년 KoBART 구현을 기준으로 설명합니다.</p>
+              <p>Briefit은 여러 매체의 기사를 모으고 같은 이슈를 묶어 읽는 팀 뉴스 서비스입니다. 저는 AI 파트에서 약 4,000건의 기사 수집·정제, 약 3,000건의 KoBART 파인튜닝과 T5·KoBART의 ROUGE-1·2 비교를 진행했습니다. 실사용 품질을 보완하기 위해 Gemini API도 연결했습니다.</p>
+              <p>제품 화면은 팀 결과물이며, 아래 기술 설명과 구조도는 그중 공개된 2025년 KoBART 구현을 다룹니다. 현재 팀의 GPT-OSS 경로와는 구분합니다.</p>
             </div>
           </section>
           <figure class="case-architecture" data-reveal="group">
@@ -80,10 +80,10 @@
           <section class="case-technical" id="briefit-pipeline" data-reveal="group">
             <header class="case-technical__head">
               <p class="case-kicker">01 / Collection</p>
-              <h2>배치가 바뀌어도 <br />같은 기사를 다시 저장하지 않기</h2>
+              <h2>본문 확보·데이터 정제</h2>
             </header>
             <div class="case-technical__body">
-              <p>수집 대상을 기사 URL로 좁히고 댓글 페이지를 제외했습니다. 본문 선택자를 순서대로 확인해 script·style 등의 요소를 제거한 뒤 텍스트만 JSON으로 저장합니다.</p>
+              <p>기사 본문을 직접 확보하고 모델 입력에 맞게 정제하기 위해 Crawl4AI를 선택했습니다. 수집 대상을 기사 URL로 좁히고 댓글 페이지를 제외했습니다. 본문 선택자를 순서대로 확인해 script·style 등의 요소를 제거한 뒤 텍스트만 JSON으로 저장합니다.</p>
               <p>저장에 성공한 URL은 배치 사이에서 공유하는 집합에 넣습니다. 다음 배치가 같은 링크를 만나면 건너뛰므로 한 번의 실행 안에서 중복 저장을 막습니다.</p>
               <ol class="case-steps" style="--step-count: 3">
                 <li><strong>기사 URL 선택</strong><span>기사 패턴 허용 · 댓글 제외</span>
@@ -136,8 +136,8 @@
           <section class="case-section" id="briefit-integration" data-reveal="group">
             <h2>품질을 확인하는 기준</h2>
             <div class="case-section__copy">
-              <p>별도 평가 스크립트는 모델이 생성한 원문을 정답 요약과 ROUGE로 비교합니다. 부분·재요약이나 후처리를 거친 최종 출력과는 평가 대상이 다릅니다.</p>
-              <p class="case-note">짧은 정상 문장도 후처리에서 지워질 수 있어 자연스러움과 정보 보존을 함께 확인해야 합니다. 공개 소스에는 학습·평가 코드가 있으며 완료 로그나 요약 품질 개선 수치는 확인되지 않았습니다.</p>
+              <p>별도 평가 스크립트는 모델의 후처리 전 요약문을 정답 요약과 ROUGE로 비교합니다. 부분·재요약이나 후처리를 거친 최종 출력과는 평가 대상이 다릅니다.</p>
+              <p class="case-note">짧은 정상 문장도 후처리에서 지워질 수 있어 자연스러움과 정보 보존을 함께 확인해야 합니다. 약 3,000건의 파인튜닝과 모델 비교는 당시 작업 경험입니다. 공개 저장소에는 해당 체크포인트와 연결된 평가 로그·품질 비교 수치가 포함되어 있지 않습니다.</p>
               <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI/blob/714502c017f0c57ebebd634b60ea77a102945d81/Kobart/Scripts/Evaluate.py#L12" rel="noreferrer">ROUGE 평가 소스 <span aria-hidden="true">↗</span></a><a class="source-link" href="https://github.com/capstone-btd/.github/blob/main/profile/README.md" rel="noreferrer">팀 소개 <span aria-hidden="true">↗</span></a>
             </div>
           </section>

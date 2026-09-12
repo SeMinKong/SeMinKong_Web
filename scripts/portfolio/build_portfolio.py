@@ -185,6 +185,49 @@ class Book:
             self.center_link(title, url, x + width / 2, top, size, limit=H - 20)
             x += width + gap
 
+    def trophy(self, x, top, size=12):
+        """Small vector trophy; independent of emoji/font fallback."""
+        self.track('trophy', x, top, size, size, 'trophy', limit=H - 10)
+        c = self.c
+        c.saveState()
+        c.translate(x, H - top - size)
+        c.scale(size / 24, size / 24)
+        c.setStrokeColor(ACCENT)
+        c.setFillColor(ACCENT)
+        c.setLineWidth(1.8)
+        c.setLineJoin(1)
+        p = c.beginPath()
+        p.moveTo(6, 21)
+        p.lineTo(18, 21)
+        p.lineTo(17, 13)
+        p.curveTo(16, 8, 8, 8, 7, 13)
+        p.close()
+        c.drawPath(p, stroke=1, fill=0)
+        p = c.beginPath()
+        p.moveTo(6, 19)
+        p.lineTo(2, 19)
+        p.curveTo(2, 13, 5, 12, 7, 12)
+        p.moveTo(18, 19)
+        p.lineTo(22, 19)
+        p.curveTo(22, 13, 19, 12, 17, 12)
+        p.moveTo(12, 9)
+        p.lineTo(12, 4)
+        p.moveTo(7, 3)
+        p.lineTo(17, 3)
+        c.drawPath(p, stroke=1, fill=0)
+        c.restoreState()
+
+    def award_links(self, sources, top, size=10, center=W / 2, gap=26):
+        icon, spacing = 12, 5
+        widths = [pdfmetrics.stringWidth(title, 'Korean', size) for title, _ in sources]
+        total = sum(widths) + (icon + spacing) * len(widths) + gap * (len(widths) - 1)
+        x = center - total / 2
+        for (title, url), width in zip(sources, widths):
+            self.trophy(x, top - 1, icon)
+            self.center_link(title, url, x + icon + spacing + width / 2,
+                             top, size, limit=H - 10)
+            x += icon + spacing + width + gap
+
     def image(self, name, x, top, width, height, region=(0, 0, 1, 1),
               caption=None, caption_size=9.5, caption_leading=15, caption_gap=10,
               align_bottom=False):
@@ -321,10 +364,6 @@ class Book:
             self.rule(rule_top)
         if sources:
             self.link_row(sources, 549, size=9.5)
-        page_number = f'{self.n:02d}'
-        self.para(page_number, W / 2 - 24, 571, 48, 9.5, 12,
-                  MUTED, align='center', limit=H - 10)
-        self.checks[-1]['kind'] = 'page_number'
         self.c.showPage()
 
     def section(self, title, body, x, top, width, size=10.4, keep_words=True):
@@ -400,7 +439,8 @@ def introduction(b):
         b.para(issuer, M, top + 29, 360, 9.3, 14, MUTED, align='center')
         b.para(valid, M, top + 44, 360, 9.3, 14, MUTED, align='center')
 
-    b.para('수상', 430, 334, 373, 13, 19, bold=True, align='center')
+    b.trophy(594.5, 336, 13)
+    b.para('수상', 612.5, 334, 26, 13, 19, bold=True, align='center')
     award_lines = [
         'SSAFY 공통 프로젝트<br/>우수상',
         'IT대학 소프트웨어 공모전<br/>금상',

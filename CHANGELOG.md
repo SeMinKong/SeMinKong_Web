@@ -6,7 +6,8 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
-- Refined PDF typography, centered page numbers, image captions, awards and project references; separated personal implementation, troubleshooting and reflection, retaining descriptive experience headings without project-specific explanatory copy.
+- Expanded all six project implementation, troubleshooting and reflection sections with the full owner-approved text. Preserved the two-column layout and nine-page PDF, grouped metadata and document links, removed page numbers, and added trophy icons. Aligned repository documentation and web contribution summaries.
+- Refined PDF typography, centered image captions, awards and project references; separated personal implementation, troubleshooting and reflection, retaining descriptive experience headings without project-specific explanatory copy.
 - Condensed the static portfolio from 27 to 9 pages, with one summary per project and direct links to six repository READMEs and their retained technical explanations. Updated the Resume download metadata and verified PDF contract.
 - Split the Home robot's configuration, artwork and completion poses from its scene controller, preserving the existing design and interactions.
 - Consolidated Hero styles, removed unused Home CSS and orphaned motion code, and replaced obsolete source checks with route import-graph validation.

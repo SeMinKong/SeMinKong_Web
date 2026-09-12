@@ -10,7 +10,7 @@ import pdfplumber
 from PIL import Image
 from pypdf import PdfReader
 
-from project_pages import PROJECTS
+from project_pages import PROJECTS, M, LEFT_WIDTH, RIGHT_X, RIGHT_WIDTH
 
 ROOT = Path(__file__).resolve().parents[2]
 WEB = 'https://seminkong.github.io/SeMinKong_Web/'
@@ -33,8 +33,8 @@ def verify(path):
             assert not page.rotation
             text = page.extract_text() or ''
             assert len(text) > 150 and '\ufffd' not in text, f'Page {n}: missing text'
-            footer = page.crop((page.width/2-24, 570, page.width/2+24, 588)).extract_text()
-            assert footer.strip() == f'{n:02d}', f'Page {n}: wrong centered page number'
+            footer = page.crop((0, 580, page.width, page.height)).extract_text()
+            assert not footer.strip(), f'Page {n}: unexpected bottom text'
             texts.append(reader.pages[n-1].extract_text() or '')
             for char in page.chars:
                 assert char['x0'] >= 0 and char['x1'] <= page.width + .1
@@ -74,6 +74,8 @@ def verify(path):
     assert len({u for u in all_links if '/resume/certificate-' in u}) == 2
     assert WEB in all_links and 'mailto:semin1224@gmail.com' in all_links
     elements = layout['elements']
+    assert not any(e['kind'] == 'page_number' for e in elements)
+    assert sum(e['kind'] == 'trophy' for e in elements) == 5
     overlaps = []
     for i, a in enumerate(elements):
         for b in elements[i+1:]:
@@ -87,6 +89,39 @@ def verify(path):
     for n, spec in enumerate(PROJECTS, 3):
         for label in [spec['name'], '직접 맡은 구현', '트러블슈팅', '회고']:
             assert label in texts[n-1], f'Page {n}: missing {label}'
+        # Compare every approved sentence, ignoring extraction-only line wraps.
+        compact = lambda value: re.sub(r'\s+', '', value)
+        page_text = compact(texts[n-1])
+        for sentence in [*spec['built'], spec['reflection'],
+                         *[part for pair in spec['troubleshooting'] for part in pair]]:
+            assert compact(sentence) in page_text, f'Page {n}: approved text omitted or shortened: {sentence}'
+        page_elements = [e for e in elements if e['page'] == n]
+        for label, top in [('직접 맡은 구현', 106), ('트러블슈팅', 260), ('회고', 438)]:
+            headings = [e for e in page_elements if e['text'] == label]
+            assert len(headings) == 1
+            assert abs(headings[0]['x'] - RIGHT_X) < .02 and headings[0]['top'] == top
+            assert abs(headings[0]['width'] - RIGHT_WIDTH) < .02
+        reflection = next(e for e in page_elements if e['text'] == spec['reflection'])
+        first_issue = next(e for e in page_elements if e['text'].startswith('<b>' + spec['troubleshooting'][0][0]))
+        first_built = next(e for e in page_elements if e['text'] == spec['built'][0])
+        for e, x, top in [(first_built, RIGHT_X + 12, 130), (first_issue, RIGHT_X, 284),
+                          (reflection, RIGHT_X, 462)]:
+            assert abs(e['x'] - x) < .02 and e['top'] == top
+        for label, top in [(f"<b>기간</b> {spec['period']} · {spec['team']}", 106),
+                           (f"<b>역할</b> {spec['role']}", 129), (spec['stack'], 152),
+                           (spec['tagline'], 438), (spec['summary'], 462)]:
+            e = next(e for e in page_elements if e['text'] == label)
+            assert e['x'] == M and e['width'] == LEFT_WIDTH and e['top'] == top
+        links = [next(e for e in page_elements if e['text'] == label)
+                 for label in ['README', '기술 문서', '프로젝트 시연']]
+        assert all(e['top'] == 563 for e in links)
+        assert abs((links[0]['x'] + links[-1]['x'] + links[-1]['width']) / 2 - 841.89 / 2) < .02
+        assert sum(e['kind'] == 'trophy' for e in page_elements) == len(spec['awards'])
+        award_items = [e for e in page_elements if 545 <= e['top'] <= 546]
+        if award_items:
+            left = min(e['x'] for e in award_items)
+            right = max(e['x'] + e['width'] for e in award_items)
+            assert abs((left + right) / 2 - 841.89 / 2) < .02
         expected = [spec['repo']+'blob/main/README.md', spec['repo']+'blob/main/'+spec['detail'], WEB+spec['case']]
         assert all(url in links_by_page[n-1] for url in expected), f'Page {n}: missing direct detail links'
         assert all(url in links_by_page[8] for url in expected[:2]), f'Index missing project {spec["key"]}'
@@ -96,7 +131,8 @@ def verify(path):
         assert abs(caption['x']-figure['x']) < .02 and abs(caption['width']-figure['width']) < .02
         assert abs(caption['top']-figure['top']-figure['height']-10) < .02
         assert abs(caption['center_x']-figure['x']-figure['width']/2) < .02
-        assert abs(caption['top']-381) < .02, f'Page {n}: inconsistent caption baseline'
+        assert abs(caption['top']-405) < .02, f'Page {n}: inconsistent caption baseline'
+        assert abs(caption['center_x']-M-LEFT_WIDTH/2) < .02
         name = spec['figure'][0]
         source = ROOT/'scripts/portfolio/assets'/name[1:] if name.startswith('@') else ROOT/'src/assets/projects'/name
         with Image.open(source) as image:
@@ -138,6 +174,8 @@ def verify(path):
                 direct_project_links=18, repository_index_links=12,
                 min_font_pt=round(min(sizes), 2), layout_overlaps=0,
                 aligned_captions=6, centered_text_blocks=len(centered), unchanged_source_images=6,
+                complete_project_texts=6, aligned_project_grids=6,
+                page_numbers=0, trophy_icons=5,
                 bytes=path.stat().st_size, sha256=hashlib.sha256(path.read_bytes()).hexdigest().upper())
 
 
