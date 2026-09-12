@@ -2,6 +2,18 @@
 
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
+## 2026-09-12 README 상세 보존·9쪽 PDF
+
+- [x] 기존 27쪽의 기술 내용과 여섯 프로젝트 소스를 대조했다. README·상세 문서 21개를 해당 저장소 main에 반영하고 원격 내용이 검수본과 동일함을 확인했다. 반영 커밋과 이전 내용의 위치는 [portfolio-migration.md](portfolio-migration.md)에 기록했다.
+- [x] Markdown 21개·Mermaid 도식 24개를 실제 Chrome에서 렌더링해 오류 0을 확인했다. 전체 도식 육안 검수 중 Prompt의 전이 라벨 겹침을 수정하고 재검수했다. 기존 시연·기여자·실행 안내를 보존하며 소스와 어긋난 조건·명령은 바로잡았다.
+- [x] 최종 PDF 9쪽 전체를 렌더·육안 검수했다. 마지막 표현 수정은 2·3쪽에만 반영됐고 나머지 7쪽은 직전 검수본과 픽셀이 동일하다. 최소 9pt, 북마크 9개·링크 49개, 요소 겹침 0, 중앙 캡션 6개·아래 간격 10pt, 실제 프로젝트 이미지 6개와 기존 증명사진 보존을 확인했다.
+- [x] output·public·dist PDF는 4,522,300 bytes, SHA-256 `BAE1E4981D34F094133CA4F5DA3FBBEDE2E502951F1E2FC2E079A614E0315747`로 일치한다. Resume의 9 pages·4.5 MB·2026.09.12와 다운로드 계약을 동기화했다.
+- [x] `npm.cmd run verify`: 테스트 67개, route 11개·module 29개·stylesheet 13개, production build·배포 entry 24개 통과. 요청 범위 `git diff --check` 통과.
+- [x] 실제 Chrome Home·Resume의 390·768·1280px 기본/reduced 12개 조합 통과. 가로 넘침·콘솔 오류·경고·요청 실패 0, skip link와 2px 키보드 포커스, 자동 lite/static·full/interactive·reduced/flat을 확인했다. Resume에서 키보드로 실제 다운로드한 6개 PDF 모두 파일명·용량·해시가 일치한다. 세 폭의 화면을 육안 검수했다.
+- [x] 390px touch Home·Resume, 390px JavaScript 비활성 Home·Resume, 1280px forced-colors Home의 추가 5개 조합도 통과했다. 총 17개 조합이며 보조 환경의 Resume 키보드 다운로드도 동일한 파일을 제공한다.
+
+Chrome은 headless이며 reduced motion·touch·forced-colors는 브라우저 에뮬레이션이다. 실물 touch·실제 OS 설정과 새 로봇·모델 학습·임상·부하 실험은 검증하지 않았다. 기존 Home carousel의 일반 마우스 클릭 이동 문제와 About/Resume 스택 차이는 이번 문서·PDF 변경 범위에서 수정하지 않았다.
+
 ## 2026-09-08 로봇 조립 허용 범위·마그네틱 결합
 
 - [x] fine/coarse 결합 각도 35°/40°·반경 38/42 × interactionScale, 예고 각도 45°/50°를 적용했다. 80ms 머무름과 180ms 강체 정렬, 연결부의 얇은 곡선·160ms 단발 ring을 확인했다. 조립 후 관절 가동 범위·원본 SVG·PDF는 유지한다.

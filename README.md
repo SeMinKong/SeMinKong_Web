@@ -51,7 +51,9 @@ The Home robot lives in `src/motion/`:
 
 Read [design-brief.md](docs/design-brief.md) for the current design, [motion-spec.md](docs/motion-spec.md) for interaction rules and [decisions.md](docs/decisions.md) for implementation boundaries. Use [qa-checklist.md](docs/qa-checklist.md) before publishing. Prior specifications and verification records are kept in [docs/history/](docs/history/).
 
-`scripts/portfolio/` contains the retained source tooling for the approved static portfolio PDF. Its evidence is documented in [portfolio-evidence.md](docs/portfolio-evidence.md), with publication rules in `AGENTS.md`. `tmp/` is ignored local scratch space; generated `dist/` and `node_modules/` are never edited directly.
+`scripts/portfolio/` contains the source tooling for the approved nine-page static portfolio PDF. Each project summary links to its repository README and detailed implementation document; [portfolio-migration.md](docs/portfolio-migration.md) records where the former 27-page edition's technical content now lives. Evidence is documented in [portfolio-evidence.md](docs/portfolio-evidence.md), with publication rules in `AGENTS.md`.
+
+To regenerate the PDF, install ReportLab, Pillow, pypdf and pdfplumber in a Python environment; provide NanumGothic Regular/Bold through `PORTFOLIO_FONT_DIR` or an installed font directory, and retain the approved portrait in `.private/portfolio/`. Run `python scripts/portfolio/build_portfolio.py` followed by `python scripts/portfolio/verify_portfolio.py`. Review every rendered page before copying the final PDF to `public/portfolio/` and synchronizing the Resume metadata and download contract. Private originals and generated review files are not published. `tmp/` is ignored local scratch space; generated `dist/` and `node_modules/` are never edited directly.
 
 ## Deployment
 

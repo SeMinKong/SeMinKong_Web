@@ -388,15 +388,15 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(resume, /href="\.\.\/portfolio\/SeMinKong-Portfolio\.pdf" download="SeMinKong-Portfolio\.pdf"/);
   assert.match(resume, /href="\.\.\/portfolio\/SeMinKong-Portfolio\.pdf" target="_blank" rel="noreferrer"/);
   assert.match(home, /href="\.\/portfolio\/SeMinKong-Portfolio\.pdf" download="SeMinKong-Portfolio\.pdf"/);
-  assert.match(resume, /27 pages · A4 landscape · PDF · 15\.9 MB · 2026\.09\.08/);
+  assert.match(resume, /9 pages · A4 landscape · PDF · 4\.5 MB · 2026\.09\.12/);
   assert.doesNotMatch(home, /home-about__portrait|assets\/profile\/se-min-kong|se-min-kong-profile/);
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 15865761);
+  assert.equal(pdf.length, 4522300);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    '23424C7BCB051CE18A63F00EC28F021F843CED852BF4F53553E800D1E3A38C00',
-    'Published PDF must match the reviewed 27-page edition with the learning stack last and centered figure captions'
+    'BAE1E4981D34F094133CA4F5DA3FBBEDE2E502951F1E2FC2E079A614E0315747',
+    'Published PDF must match the reviewed 9-page edition with direct repository implementation links'
   );
 });
