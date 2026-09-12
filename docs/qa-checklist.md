@@ -2,6 +2,16 @@
 
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
+## 2026-09-12 THING·AQIS 웹 아키텍처
+
+- [x] `npm.cmd run verify`: 84개 테스트, 11 routes·29 modules·13 stylesheets, production build·24 deployment entries 통과. 빌드 경고 0, `git diff --check` 통과.
+- [x] 원본 PNG → 웹 자산 → dist의 SHA-256이 동일하다. THING 3502×2298 / 1,564,147 bytes / `FB547330C9067CB146E9C28D9E7C617A765B58C2DDD686FFC46ACAD144050A0E`, AQIS 1419×1031 / 325,280 bytes / `234498EAA2A7EF7C00037477A5CDF8672E88C91D0EA715F669C7EE2B97DBC1C3`. 두 이미지의 explicit dimensions·lazy/async·alt·원본 링크를 회귀 테스트한다.
+- [x] 실제 Chromium production preview에서 두 상세의 390×844·768×1024·1280×900 레이아웃을 육안 확인했다. 그림 비율·배경·캡션을 보존하고 가로 overflow 0, 기본 lite/static 및 full/interactive를 확인했다. THING 그림은 좁은 설명 열이 아닌 전체 본문 폭을 사용한다.
+- [x] 이미지·캡션 링크의 2px keyboard focus와 Enter로 열린 두 원본 PNG 새 탭의 해상도를 확인했다. AQIS Architecture 내부 링크가 추가됐으며 모바일 nav는 기존 가로 스크롤을 유지한다. 두 페이지의 localhost reduced override는 flat·정적 그림·overflow 0이다. 검수 탭 warning/error 0.
+- [x] 작성자 정정에 따라 AQIS의 구성은 구현된 전체 시스템으로 표기했다. 새 확장 계획 설명과 기존 자동 임무를 후속 과제로 단정한 문장은 source·dist에서 제거됐다. PDF와 기존 원본 파일은 변경하지 않았다.
+
+실물 touch 기기와 OS reduced/forced-colors 전환은 검증하지 않았다. THING은 초기 desktop 모션 geometry가 정착하기 전 해시 진입 위치가 변할 수 있어 준비 후 스크롤·링크 focus로 그림을 확인했다. 이 작업은 새 성능·장비 실험이나 기존 스크롤 동작 개편을 포함하지 않는다. 공개 배포 결과는 해당 release의 Pages 실행과 최종 작업 보고를 따른다.
+
 ## 2026-09-12 Home 프로젝트 클릭 복구
 
 - [x] `npm.cmd run verify`: 기존 67개와 gesture 회귀 15개, 총 82개 테스트 통과. 11 routes·29 modules·13 stylesheets, production build·24 deployment entries 검증 통과, 빌드 경고 0. Home JS는 16.96 kB / gzip 6.83 kB로 이전 대비 약 0.53 / 0.17 kB 증가했으며 새 의존성은 없다.

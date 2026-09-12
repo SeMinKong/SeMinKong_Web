@@ -196,3 +196,10 @@
 - 사용자가 공개 Home의 프로젝트 클릭 무반응을 확인한 뒤 수정·배포를 승인했다. Pointerdown에서 stage를 즉시 capture하던 동작을 수평 6px 초과 시점으로 미룬다. Pending 중 회전과 pointer focus 정렬은 멈춰 누른 링크의 위치를 보존한다.
 - Stage 밖 release와 취소·capture 상실·blur·hidden/pagehide·모드 해제·destroy에서 gesture를 정리한다. 완료된 드래그의 해당 pointer click만 한 번 억제하며 Enter·보조키·중간 버튼의 native 링크 동작을 유지한다. 자식의 implicit capture를 stage로 옮기는 과정은 취소로 처리하지 않는다.
 - 기존 ring 디자인·관성·자동 회전과 정적 fallback을 유지한다. 새 라이브러리, 화살표 탐색 개편, 다른 페이지 내용과 PDF 변경은 없다. 회귀 테스트와 실제 브라우저 검증 후 이 범위만 기존 GitHub Pages workflow로 배포한다.
+
+## 2026-09-12 — THING·AQIS 웹 아키텍처 그림
+
+- 사용자가 두 프로젝트 상세에도 다른 사례와 같은 아키텍처 그림을 요청했다. 보관 중인 승인 PNG를 `src/assets/projects/{thing,aqis}/architecture.png`로 바이트 동일하게 복사한다. 원본 해상도·비율·배경·내용을 유지하며 재압축·재작화하지 않는다.
+- THING은 기존 Architecture 섹션의 전체 본문 폭을 사용하고, AQIS는 챕터 앞에 Architecture와 내부 이동 링크를 추가한다. 공통 이미지·캡션·원본 크기 보기 스타일, lazy/async 로딩과 접근 가능한 링크를 재사용한다. THING 그림은 기존 GSAP 목록 애니메이션과 별도로 정적으로 표시한다.
+- 작성자가 AQIS 그림의 구성은 모두 구현됐다고 직접 정정했다. 새 소개에서 확장 계획이라는 설명을 빼고 구현된 전체 시스템으로 표기하며 기존 자동 임무를 후속 과제로 단정한 문장도 제거한다. 과거 출처 메모보다 이 최신 확인을 우선한다. 새 실물·부하 실험이나 성능 수치를 주장하지 않는다.
+- 두 상세페이지와 관련 웹 자산·회귀 테스트·기록만 검증해 기존 Pages로 배포한다. PDF와 별도 작업 파일은 변경하지 않는다.

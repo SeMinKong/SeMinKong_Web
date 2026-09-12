@@ -57,10 +57,21 @@
         </header>
 
         <nav class="case-local-nav" aria-label="AQIS 페이지 안에서 이동">
-          <div class="page-width"><a href="#aqis-inspection">01 · 실제 검사·분류</a><a href="#aqis-simulation">02 · RoboDK</a><a href="#aqis-monitoring">03 · SLAM·로봇 관제</a><a href="#aqis-integration">본인 역할</a></div>
+          <div class="page-width"><a href="#aqis-architecture">Architecture</a><a href="#aqis-inspection">01 · 실제 검사·분류</a><a href="#aqis-simulation">02 · RoboDK</a><a href="#aqis-monitoring">03 · SLAM·로봇 관제</a><a href="#aqis-integration">본인 역할</a></div>
         </nav>
 
         <div class="aqis-case-body page-width">
+          <section class="aqis-chapter" id="aqis-architecture" aria-labelledby="aqis-architecture-title">
+            <header class="aqis-chapter__head" data-reveal>
+              <div><h2 id="aqis-architecture-title">Architecture</h2></div>
+              <div class="aqis-chapter__intro"><p>시뮬레이션·실물 장비·FastAPI 서버·웹 관제·LLM 연계를 구현한 AQIS의 전체 시스템 구성도입니다.</p></div>
+            </header>
+            <figure class="case-architecture" data-reveal="group">
+              <a href="/src/assets/projects/aqis/architecture.png" target="_blank" rel="noopener" aria-label="AQIS 시스템 아키텍처 원본 크기로 보기"><img src="/src/assets/projects/aqis/architecture.png" width="1419" height="1031" alt="AQIS의 RoboDK 시뮬레이션, ROS 2 실물 로봇과 카메라, FastAPI 서버, React 관제 및 LLM 연계 구성을 나타낸 발표 자료" loading="lazy" decoding="async" /></a>
+              <figcaption><span>AQIS · 발표 자료의 시스템 구성도</span><a href="/src/assets/projects/aqis/architecture.png" target="_blank" rel="noopener">원본 크기로 보기 <span aria-hidden="true">↗</span></a></figcaption>
+            </figure>
+          </section>
+
           <section class="aqis-chapter" id="aqis-inspection" aria-labelledby="aqis-inspection-title">
             <header class="aqis-chapter__head" data-reveal>
               <div><p class="aqis-chapter__number">01 / Physical system</p><h2 id="aqis-inspection-title">실제 검사에서<br />Dobot 분류까지</h2></div>
@@ -131,7 +142,7 @@
                 <div><span class="aqis-observation__source">위치 상태</span><h4>ROS 2 → RealOps</h4><p>TF의 <code>map → base_footprint</code> 위치를 우선 읽고, 가용성에 따라 <code>amcl_pose</code>·<code>odom</code>을 사용합니다.</p><code>x · y · yaw · source · stamp</code></div>
                 <div><span class="aqis-observation__source">현장 화면</span><h4>TurtleBot camera</h4><p>영상과 상태 전송을 분리하고 MJPEG 서버로 영상 갱신을 약 4→30 FPS로 개선했습니다. 객체 추론은 별도의 1초 간격으로 구성했습니다.</p><code>camera stream + telemetry</code></div>
               </div>
-              <div class="aqis-plate__foot"><p>ROS bridge는 지도 이벤트를 수집하고 React는 갱신 시각을 표시합니다. 지도는 RViz에서 보며, 기존 ROS 패키지로 SLAM과 지정 목표점 주행을 구성했습니다. 공정 이벤트 기반 서버 자동 출동·반복 임무 연결은 후속 과제입니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/services/ros_bridge.py#L161" rel="noreferrer">TF·위치 fallback 소스 ↗</a></div>
+              <div class="aqis-plate__foot"><p>ROS bridge는 지도 이벤트를 수집하고 React는 갱신 시각을 표시합니다. 지도는 RViz에서 보며, 기존 ROS 패키지로 SLAM과 지정 목표점 주행을 구성했습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/services/ros_bridge.py#L161" rel="noreferrer">TF·위치 fallback 소스 ↗</a></div>
             </figure>
 
             <div class="aqis-monitor-grid" data-reveal>

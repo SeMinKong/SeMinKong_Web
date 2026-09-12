@@ -1,5 +1,11 @@
 # Portfolio visual sources and bounded reproduction
 
+## THING / AQIS web architecture — 2026-09-12
+
+The approved `thing-architecture-source.png` (3502×2298, 1,564,147 bytes) and `aqis-architecture-source.png` (1419×1031, 325,280 bytes) are copied byte-for-byte to `src/assets/projects/{thing,aqis}/architecture.png`. The existing source hashes below are preserved. No resizing, recompression, redrawing or background removal is performed. Both case studies use the shared architecture figure style, explicit dimensions, lazy/async loading and native full-size image links. The PDF is unchanged.
+
+The owner explicitly confirmed on 2026-09-12 that all components in the AQIS diagram are implemented. This supersedes the older expansion-plan characterization below for the new web presentation. The figure is described as the implemented full system; this publication does not claim a new hardware run, load test or measured result.
+
 ## Tech Stack SVG sources — 2026-09-08
 
 The asset library contains 22 transparent SVGs in `src/assets/tech-stack/`, exported by `scripts/portfolio/export_stack_icons.mjs`: eighteen Simple Icons brand paths (CC0-1.0), three functional pictograms and the existing official llama.cpp mark. The current learning stack displays 13 icon instances from 12 files; Isaac Sim and Isaac Lab reuse the NVIDIA identification mark with distinct visible names. C++ and Python remain the centered programming-language row. New NVIDIA/Ollama marks retain the installed package geometry; llama.cpp is copied byte-for-byte from the previously approved `src/assets/llama-cpp-logo.svg`. The final PDF page uses vector-only icons with searchable category headings and Isaac Sim/Lab labels. Web icons keep visible Isaac names; other names are accessible on native summary controls and can be revealed without JavaScript. See `sources.json` for sources and hashes. Earlier project-stack icons remain in the asset library; original architecture sources are untouched.

@@ -4,6 +4,10 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Added
+
+- Added the original THING and AQIS system architecture diagrams to their case studies with responsive presentation and full-size image links. Reflected the owner's confirmation that the AQIS diagram describes the implemented system.
+
 ### Fixed
 
 - Restored native Home project-card clicks by capturing the pointer only after a confirmed drag. Preserved keyboard and modified-link activation, and added gesture cancellation and regression coverage.
