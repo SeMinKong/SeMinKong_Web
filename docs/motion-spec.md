@@ -1,12 +1,13 @@
 # Motion specification
 
-현재 구현 기준: 2026-09-08. 과거에 폐기·대체된 연출은 [모션 이력](history/motion-spec.md)에 보관한다.
+현재 구현 기준: 2026-09-12. 과거에 폐기·대체된 연출은 [모션 이력](history/motion-spec.md)에 보관한다.
 
 ## 공통 원칙과 소유권
 
 모션은 자동으로 환경에 맞춘다. `environment.js`가 fine pointer·viewport·OS reduced motion으로 full/interactive, lite/static, reduced/flat을 결정한다. localhost의 `?motion=full|lite|reduced`는 검수용이며 공개 사이트에서 사용자 설정을 덮어쓰지 않는다.
 
-- Anime.js: 서명, 공통 entrance/reveal, page curtain, Home project deck, 관절 hint.
+- Anime.js: 서명, 공통 entrance/reveal, page curtain, 관절 hint.
+- Home project deck: 기존 requestAnimationFrame 기반 ring의 회전·관성·정렬. 별도 모션 라이브러리를 추가하지 않는다.
 - PixiJS + Matter.js: Home 로봇 렌더와 물리.
 - GSAP/ScrollTrigger: Work 수평 전시와 THING 증거 구간. SplitText는 Work만 사용한다.
 - Lenis: full desktop의 page scroll. Touch는 native vertical pan과 pinch를 유지한다.
@@ -22,7 +23,9 @@ About·Resume 학습 스택은 고정된 위치에서 읽을 수 있도록 대�
 
 취소 시 Anime drawable의 draw/pathLength/dash 속성과 inline style을 제거한다. Reduced, hash 진입, BFCache, 이미 스크롤된 페이지는 즉시 완성 상태다. Ready Promise가 로봇과 smooth scroll의 시작을 연결한다.
 
-Home project deck은 hover/focus에서 단발성으로 펼쳐진다. 포인터 좌표를 계속 추적하지 않는다. 포커스가 있는 내용은 항상 읽을 수 있어야 한다.
+Home project deck은 full/interactive에서 기존 3D ring과 관성·카드 정렬을 사용한다. Hover 중 자동 회전을 멈추고 키보드 focus가 들어온 원본 카드를 정면으로 정렬한다. 복제 카드는 시각적 ring만 채우며 접근성 트리와 Tab 순서에서 제외한다. Lite/reduced에서는 원본 링크의 정적 목록을 유지한다.
+
+Primary pointerdown은 pending으로 두고 수평 이동이 6px를 넘을 때만 stage가 capture하여 드래그한다. 누른 동안 카드 위치를 유지하고 짧은 클릭·보조키 클릭·중간 버튼·Enter는 native 링크 동작을 보존한다. 완료된 드래그의 후속 pointer click만 한 번 막으며 키보드 activation은 막지 않는다. Stage 밖 release, cancel, stage capture 상실, blur, hidden/pagehide, capability 해제와 destroy에서 입력 상태를 정리한다.
 
 ## 로봇 lifecycle
 

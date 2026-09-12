@@ -52,7 +52,7 @@ export const initProjectDeck = (environment) => {
   let dragOriginAngle = 0;
   let dragPreviousX = 0;
   let dragPreviousTime = 0;
-  let dragDistance = 0;
+  let suppressedClickPointerId = null;
   let snapPending = false;
 
   const shouldEnable = () => environment.motion === 'full' && environment.depth === 'interactive';
@@ -185,7 +185,8 @@ export const initProjectDeck = (environment) => {
     const elapsed = lastTime ? Math.min(80, time - lastTime) : 16.7;
     lastTime = time;
 
-    if (!dragging) advance(elapsed);
+    // Keep the pressed link still until this gesture becomes a drag or a click.
+    if (dragPointerId === null) advance(elapsed);
 
     angle = wrapAngle(angle);
     render();
@@ -209,39 +210,43 @@ export const initProjectDeck = (environment) => {
     pointerInside = true;
     // Drift stops the moment the pointer arrives, so let it stop on a card
     // rather than wherever it happened to be.
-    if (!dragging) snapPending = true;
+    if (dragPointerId === null) snapPending = true;
   };
 
   const onPointerLeave = () => {
-    if (dragging) return;
+    if (dragPointerId !== null) return;
     pointerInside = false;
   };
 
   const onPointerDown = (event) => {
-    if (!enabled) return;
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (!enabled || dragPointerId !== null || event.isPrimary === false) return;
+    suppressedClickPointerId = null;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
 
-    dragging = true;
     dragPointerId = event.pointerId;
     dragOriginX = event.clientX;
     dragOriginAngle = angle;
     dragPreviousX = event.clientX;
     dragPreviousTime = event.timeStamp;
-    dragDistance = 0;
     velocity = 0;
     target = null;
     snapPending = false;
     pointerInside = true;
-    root.classList.add('is-dragging');
-    stage.setPointerCapture?.(event.pointerId);
   };
 
   const onPointerMove = (event) => {
-    if (!dragging || event.pointerId !== dragPointerId) return;
+    if (event.pointerId !== dragPointerId) return;
 
     const travelled = event.clientX - dragOriginX;
+    if (!dragging) {
+      if (Math.abs(travelled) <= CLICK_SLOP) return;
+      dragging = true;
+      root.classList.add('is-dragging');
+      // Capturing on pointerdown retargets even a stationary link click to the
+      // stage. Capture only a confirmed drag; short clicks retain native targets.
+      stage.setPointerCapture?.(event.pointerId);
+    }
     angle = dragOriginAngle + travelled * degreesPerPixel;
-    dragDistance = Math.max(dragDistance, Math.abs(travelled));
 
     const frameTravel = event.clientX - dragPreviousX;
     const frameElapsed = Math.max(8, event.timeStamp - dragPreviousTime);
@@ -255,28 +260,46 @@ export const initProjectDeck = (environment) => {
     dragPreviousTime = event.timeStamp;
   };
 
-  const endDrag = (event) => {
-    if (!dragging || (event && event.pointerId !== dragPointerId)) return;
+  const endDrag = (event, cancelled = false) => {
+    if (dragPointerId === null || (event && event.pointerId !== dragPointerId)) return;
 
+    const pointerId = dragPointerId;
+    suppressedClickPointerId = !cancelled && dragging ? pointerId : null;
+    if (cancelled) velocity = 0;
     dragging = false;
     dragPointerId = null;
     snapPending = true;
     root.classList.remove('is-dragging');
     pointerInside = root.matches(':hover');
+    if (stage.hasPointerCapture?.(pointerId)) stage.releasePointerCapture(pointerId);
   };
 
-  const onDragStart = (event) => event.preventDefault();
+  const cancelDrag = (event) => endDrag(event, true);
+  const onLostPointerCapture = (event) => {
+    // A touch target can lose implicit capture when the stage takes over.
+    if (event.target === stage) cancelDrag(event);
+  };
+  const resetGesture = () => {
+    cancelDrag();
+    suppressedClickPointerId = null;
+  };
+
+  const onDragStart = (event) => {
+    if (enabled) event.preventDefault();
+  };
 
   // A drag that finishes on a card must not also follow that card's link.
   const onClickCapture = (event) => {
-    if (dragDistance <= CLICK_SLOP) return;
+    // Keyboard activation has detail 0 and must never inherit drag suppression.
+    if (event.detail === 0 || suppressedClickPointerId === null) return;
+    if (event.pointerId !== undefined && event.pointerId !== suppressedClickPointerId) return;
     event.preventDefault();
     event.stopPropagation();
-    dragDistance = 0;
+    suppressedClickPointerId = null;
   };
 
   const onFocusIn = (event) => {
-    if (!enabled) return;
+    if (!enabled || dragPointerId !== null) return;
     const slot = event.target?.closest?.('[data-deck-card]');
     const index = slot ? slots.indexOf(slot) : -1;
     if (index < 0) return;
@@ -314,7 +337,7 @@ export const initProjectDeck = (environment) => {
     enabled = false;
     stopLoop();
     resizeObserver.unobserve(stage);
-    endDrag();
+    resetGesture();
     pointerInside = false;
     snapPending = false;
     target = null;
@@ -340,11 +363,17 @@ export const initProjectDeck = (environment) => {
   const onEnvironmentChange = () => syncEnvironment();
 
   const onVisibilityChange = () => {
-    if (document.hidden) stopLoop();
+    if (document.hidden) {
+      resetGesture();
+      stopLoop();
+    }
     else if (enabled && inView) startLoop();
   };
 
-  const onPageHide = () => stopLoop();
+  const onPageHide = () => {
+    resetGesture();
+    stopLoop();
+  };
 
   const resizeObserver = new ResizeObserver(() => {
     if (!enabled) return;
@@ -365,9 +394,12 @@ export const initProjectDeck = (environment) => {
   root.addEventListener('pointerenter', onPointerEnter);
   root.addEventListener('pointerleave', onPointerLeave);
   stage.addEventListener('pointerdown', onPointerDown);
-  stage.addEventListener('pointermove', onPointerMove);
-  stage.addEventListener('pointerup', endDrag);
-  stage.addEventListener('pointercancel', endDrag);
+  // Pending presses have no capture, so release/cancel outside the stage must
+  // still clear them. Confirmed drags bubble here through pointer capture.
+  window.addEventListener('pointermove', onPointerMove);
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', cancelDrag);
+  stage.addEventListener('lostpointercapture', onLostPointerCapture);
   stage.addEventListener('dragstart', onDragStart);
   root.addEventListener('click', onClickCapture, true);
   root.addEventListener('focusin', onFocusIn);
@@ -375,6 +407,7 @@ export const initProjectDeck = (environment) => {
   window.addEventListener('portfolio:environment-change', onEnvironmentChange);
   document.addEventListener('visibilitychange', onVisibilityChange);
   window.addEventListener('pagehide', onPageHide);
+  window.addEventListener('blur', resetGesture);
 
   syncEnvironment();
 
@@ -383,9 +416,10 @@ export const initProjectDeck = (environment) => {
       root.removeEventListener('pointerenter', onPointerEnter);
       root.removeEventListener('pointerleave', onPointerLeave);
       stage.removeEventListener('pointerdown', onPointerDown);
-      stage.removeEventListener('pointermove', onPointerMove);
-      stage.removeEventListener('pointerup', endDrag);
-      stage.removeEventListener('pointercancel', endDrag);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', endDrag);
+      window.removeEventListener('pointercancel', cancelDrag);
+      stage.removeEventListener('lostpointercapture', onLostPointerCapture);
       stage.removeEventListener('dragstart', onDragStart);
       root.removeEventListener('click', onClickCapture, true);
       root.removeEventListener('focusin', onFocusIn);
@@ -393,6 +427,7 @@ export const initProjectDeck = (environment) => {
       window.removeEventListener('portfolio:environment-change', onEnvironmentChange);
       document.removeEventListener('visibilitychange', onVisibilityChange);
       window.removeEventListener('pagehide', onPageHide);
+      window.removeEventListener('blur', resetGesture);
       resizeObserver.disconnect();
       visibilityObserver?.disconnect();
       disable();

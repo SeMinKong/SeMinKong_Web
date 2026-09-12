@@ -2,6 +2,15 @@
 
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
+## 2026-09-12 Home 프로젝트 클릭 복구
+
+- [x] `npm.cmd run verify`: 기존 67개와 gesture 회귀 15개, 총 82개 테스트 통과. 11 routes·29 modules·13 stylesheets, production build·24 deployment entries 검증 통과, 빌드 경고 0. Home JS는 16.96 kB / gzip 6.83 kB로 이전 대비 약 0.53 / 0.17 kB 증가했으며 새 의존성은 없다.
+- [x] 실제 Chromium production preview 1280×900에서 정면 카드, 원본 측면 AQIS, 복제 측면 Alkkagi 클릭으로 상세 페이지가 열렸다. 카드 drag 후 Home에 머물고 `is-dragging`이 해제되며 이어서 Enter로 상세 페이지가 열렸다. Keyboard focus의 2px outline을 확인했다.
+- [x] Home 390×844·768×1024·1280×900을 육안 확인했다. 기본 lite/static과 full/interactive, 가로 overflow 0을 확인했으며 390px THING·768px AQIS 클릭 이동도 정상이다. 1280px localhost reduced override에서는 flat·복제 카드 0·정적 링크와 Enter 이동이 정상이다. 검수 탭 console warning/error 0.
+- [x] VM에서 6px 이내 pending, capture 시점, 후속 클릭 1회 억제, 다른 pointer·Enter 예외, stage 밖 release, cancel/capture 상실/blur/hidden/pagehide/disable/destroy 정리, 자식 implicit capture 이전, 새 press·보조키·중간 버튼·secondary pointer·정적 모드를 검증했다.
+
+실물 touch/하이브리드 기기와 OS reduced/forced-colors 전환은 확인하지 않았다. Ctrl+클릭의 비차단 상태는 확인했지만 검수 브라우저에서 새 탭 생성은 확인되지 않아 native 새 탭 동작을 실브라우저 통과로 기록하지 않는다. 기존 화살표 탐색·장시간 focus 유지·offscreen capability 전환은 이번 클릭 수정 범위가 아니다. PDF는 변경하지 않았다. 공개 배포 결과는 해당 release 커밋의 GitHub Pages 실행과 최종 작업 보고를 따른다.
+
 ## 2026-09-12 전체 경험 원고·2열 배치
 
 - [x] 승인된 여섯 프로젝트의 구현·트러블슈팅·회고 원문을 PDF 추출문과 문장별로 대조해 누락·축약이 없음을 확인했다. README·기술 문서 14개는 원격 게시 후 검수본과 바이트 단위로 일치한다. 새 경험 섹션 6개를 Chrome에서 렌더·육안 검수했고 기존 코드·Mermaid 블록 77개는 보존했다.

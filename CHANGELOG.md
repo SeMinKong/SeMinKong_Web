@@ -4,6 +4,10 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ## [Unreleased]
 
+### Fixed
+
+- Restored native Home project-card clicks by capturing the pointer only after a confirmed drag. Preserved keyboard and modified-link activation, and added gesture cancellation and regression coverage.
+
 ### Changed
 
 - Expanded all six project implementation, troubleshooting and reflection sections with the full owner-approved text. Preserved the two-column layout and nine-page PDF, grouped metadata and document links, removed page numbers, and added trophy icons. Aligned repository documentation and web contribution summaries.
