@@ -2,6 +2,17 @@
 
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
+## 2026-09-12 카드 호버·아키텍처 직접 표시
+
+- [x] 최신 main의 클릭 복구·THING/AQIS 아키텍처·PDF/스택 변경을 통합해 보존했다. 이번 변경은 카드 호버·모서리, 여섯 아키텍처 표시와 수직 드래그의 클릭 오인 방지다.
+- [x] 구조도 6개를 390·768·1280px 기본/reduced 및 390px touch·JavaScript 비활성, 총 48개 조합으로 검사했다. 스크롤 전 이미지 로드·opacity 1·transform 없음, 단일 직접 이미지·원본 링크/캡션 제거, 프레임 16px·이미지 8px 모서리를 확인했다. 중앙 오차 0px, 비율 높이 오차 최대 0.0153px, 가로 넘침·콘솔 오류·경고·요청 실패 0이다.
+- [x] 18개 이미지 렌더와 페이지 문맥 캡처를 육안 검수했다. THING은 GSAP가 활성화된 세 스크롤 위치에서도 이미지와 상위 요소가 정적으로 표시된다. 기존 PNG/WebP·다른 미디어와 DDS/HTTPS 설명을 보존했다.
+- [x] 실제 production preview에서 여섯 상세 페이지의 이미지 첫 표시와 Home 1280px 호버 테두리·12px 카드 모서리·상세 페이지 클릭 이동을 다시 확인했다.
+- [x] Home 390·768·1280px 기본/reduced와 390px touch·JavaScript 비활성에서 호버 진입/이탈, 키보드 2px 포커스·Enter, 자동 full/lite/reduced·정적 fallback과 가로 넘침을 검사했다. 원본/복제 카드 클릭, Ctrl-click 새 탭과 마우스 포커스 후 테두리 해제가 정상이다. 최종 production의 수평 150px·수직 100px 끌기는 탐색을 차단하고 다음 클릭을 허용한다. 수직은 회전각 0deg를 유지하며 3px+3px 이동은 정상 링크 클릭이다.
+- [x] `npm.cmd run verify`: 테스트 88개, route 11개·module 29개·stylesheet 13개, production build·배포 entry 24개 통과. 기존 아키텍처 자산 검사는 직접 표시 계약으로 갱신했으며 수직 드래그가 회전·탐색을 일으키지 않고 다음 클릭을 허용하는 회귀 검사를 추가했다. 최신 main의 PDF 바이트·해시 계약은 유지한다.
+
+Chrome headless와 touch/reduced 에뮬레이션으로 검증했다. JavaScript 비활성은 CSS를 JS로 주입하는 Vite dev 대신 production preview에서 검사했다. 이벤트 추적을 포함한 일부 Home→THING 탐색에서는 native ViewTransition의 `Transition was aborted because of invalid state. ViewTransition opt-in disabled` pageerror가 간헐적으로 기록됐으나 URL 이동·콘텐츠 표시는 완료됐다. 최소 클릭 검사는 로컬·공개 사이트 모두 오류 0으로 원인을 확정하지 않았으며, 공통 페이지 전환 구현은 이번 수정 대상이 아니다. 390px native touch 스와이프는 Home에서 세로 스크롤을 유지하고 이어진 탭으로 상세에 이동하며 콘솔·pageerror 0이다. 실물 모바일 기기와 저속 네트워크의 다운로드 소요 시간은 측정하지 않았다.
+
 ## 2026-09-12 프로젝트 재배치·별점·Resume 중복 제거·SVG 아이콘
 
 - [x] 최종 PDF 9쪽 전체를 렌더·육안 검수했다. 프로젝트 6쪽은 왼쪽 이미지→설명→회고, 오른쪽 구현→트러블슈팅으로 구성하고 승인 원문을 모두 보존한다. 본문 10.3pt/15.5pt, 문서 최소 9.3pt, 요소 겹침 0, 중앙 문구 121개·캡션 6개, 북마크 9개·외부 링크 49개가 정상이다.

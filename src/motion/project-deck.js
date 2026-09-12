@@ -49,6 +49,7 @@ export const initProjectDeck = (environment) => {
   let dragging = false;
   let dragPointerId = null;
   let dragOriginX = 0;
+  let dragOriginY = 0;
   let dragOriginAngle = 0;
   let dragPreviousX = 0;
   let dragPreviousTime = 0;
@@ -225,6 +226,7 @@ export const initProjectDeck = (environment) => {
 
     dragPointerId = event.pointerId;
     dragOriginX = event.clientX;
+    dragOriginY = event.clientY;
     dragOriginAngle = angle;
     dragPreviousX = event.clientX;
     dragPreviousTime = event.timeStamp;
@@ -239,7 +241,7 @@ export const initProjectDeck = (environment) => {
 
     const travelled = event.clientX - dragOriginX;
     if (!dragging) {
-      if (Math.abs(travelled) <= CLICK_SLOP) return;
+      if (Math.hypot(travelled, event.clientY - dragOriginY) <= CLICK_SLOP) return;
       dragging = true;
       root.classList.add('is-dragging');
       // Capturing on pointerdown retargets even a stationary link click to the

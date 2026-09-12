@@ -70,7 +70,7 @@
   transition: color 260ms ease;
 }
 
-.project-card:focus-within,
+.project-card:has(:focus-visible),
 .work-row:focus-within {
   outline: 2px solid var(--signal);
   outline-offset: 5px;

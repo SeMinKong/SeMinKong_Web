@@ -25,7 +25,9 @@ About 기술 스택은 고정된 위치에서 읽을 수 있도록 대상 reveal
 
 Home project deck은 full/interactive에서 기존 3D ring과 관성·카드 정렬을 사용한다. Hover 중 자동 회전을 멈추고 키보드 focus가 들어온 원본 카드를 정면으로 정렬한다. 복제 카드는 시각적 ring만 채우며 접근성 트리와 Tab 순서에서 제외한다. Lite/reduced에서는 원본 링크의 정적 목록을 유지한다.
 
-Primary pointerdown은 pending으로 두고 수평 이동이 6px를 넘을 때만 stage가 capture하여 드래그한다. 누른 동안 카드 위치를 유지하고 짧은 클릭·보조키 클릭·중간 버튼·Enter는 native 링크 동작을 보존한다. 완료된 드래그의 후속 pointer click만 한 번 막으며 키보드 activation은 막지 않는다. Stage 밖 release, cancel, stage capture 상실, blur, hidden/pagehide, capability 해제와 destroy에서 입력 상태를 정리한다.
+Primary pointerdown은 pending으로 두고 가로·세로 합산 이동 거리가 6px를 넘을 때만 stage가 capture하여 드래그한다. 누른 동안 카드 위치를 유지하고 짧은 클릭·보조키 클릭·중간 버튼·Enter는 native 링크 동작을 보존한다. 회전량은 가로 이동으로만 계산하고, 수직 끌기도 링크 클릭으로 오인하지 않도록 차단한다. 완료된 드래그의 후속 pointer click만 한 번 막으며 키보드 activation은 막지 않는다. Stage 밖 release, cancel, stage capture 상실, blur, hidden/pagehide, capability 해제와 destroy에서 입력 상태를 정리한다.
+
+회전 카드의 강조 테두리는 fine pointer 호버와 `:focus-visible`인 내부 링크에 반응한다. 클릭으로 남은 일반 포커스는 강조 테두리의 조건에서 제외한다. 카드 선택·회전·드래그 동작과 hover 중 자동 회전 정지는 기존 동작을 유지한다.
 
 ## 로봇 lifecycle
 
@@ -82,6 +84,8 @@ THING은 full/interactive, 1021px 이상 폭, 640px 이상 높이에서 Demos, P
 Hidden/pagehide에서는 기존 story geometry를 보존해 깊은 스크롤 복귀를 막지 않는다. Capability 해제와 destroy는 GSAP context, SplitText와 해당 inline style을 정리한다.
 
 ## 미디어와 접근성
+
+여섯 프로젝트의 아키텍처 이미지는 `data-reveal` 없이 HTML에서 바로 표시하고 eager 로딩한다. 핵심 구조도를 읽는 데 스크롤 관찰이나 애니메이션 완료를 요구하지 않는다. 기존 이미지 파일·비율을 유지하며 원본 보기 링크와 별도 캡션은 제공하지 않는다.
 
 자동 preview는 full motion과 viewport visibility를 모두 만족할 때만 재생한다. 수동 demo 하나를 재생하면 나머지를 멈춘다. Offscreen/hidden/pagehide에서 pause하며 복귀 시 수동 demo를 자동 재생하지 않는다.
 

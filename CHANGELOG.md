@@ -14,6 +14,7 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Changed
 
+- Show Home project borders on hover and keyboard focus, round the cards, and display case-study architecture images directly without reveal delays or original-view links.
 - Expanded all six project implementation, troubleshooting and reflection sections with the full owner-approved text. Preserved the two-column layout and nine-page PDF, grouped metadata and document links, removed page numbers, and added trophy icons. Aligned repository documentation and web contribution summaries.
 - Refined PDF typography, centered image captions, awards and project references; separated personal implementation, troubleshooting and reflection, retaining descriptive experience headings without project-specific explanatory copy.
 - Condensed the static portfolio from 27 to 9 pages, with one summary per project and direct links to six repository READMEs and their retained technical explanations. Updated the Resume download metadata and verified PDF contract.

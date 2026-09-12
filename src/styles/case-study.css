@@ -766,8 +766,9 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 }
 
 .case-architecture {
-  padding: clamp(20px, 3vw, 32px);
-  border-bottom: 1px solid var(--line);
+  padding: clamp(12px, 2vw, 24px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
   background: #f5f1e9;
 }
 
@@ -775,39 +776,12 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
   grid-column: 1 / -1;
 }
 
-.case-architecture > a {
+.case-architecture > img {
   display: block;
   width: min(100%, 760px);
-  margin-inline: auto;
-}
-
-.case-architecture img {
-  display: block;
-  width: 100%;
   height: auto;
-}
-
-.case-architecture figcaption {
-  max-width: 760px;
   margin-inline: auto;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px 24px;
-  padding-top: 24px;
-  color: #625e56;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  line-height: 1.65;
-}
-
-.case-architecture figcaption a {
-  color: #302d27;
-  text-underline-offset: 4px;
-}
-
-.case-architecture a:focus-visible {
-  outline-color: #a73524;
+  border-radius: 8px;
 }
 
 .case-steps {
@@ -956,10 +930,6 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 }
 
 @media (max-width: 600px) {
-  .case-architecture {
-    padding: 18px 12px;
-  }
-
   .case-steps,
   .case-pair {
     grid-template-columns: 1fr;

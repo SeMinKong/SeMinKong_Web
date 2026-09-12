@@ -16,7 +16,7 @@ class Target {
   dispatch(type, overrides = {}) {
     const event = {
       type, target: this, pointerId: 1, pointerType: 'mouse', isPrimary: true, button: 0,
-      clientX: 100, timeStamp: 10, detail: 1, defaultPrevented: false, stopped: false,
+      clientX: 100, clientY: 100, timeStamp: 10, detail: 1, defaultPrevented: false, stopped: false,
       preventDefault() { this.defaultPrevented = true; },
       stopPropagation() { this.stopped = true; }, ...overrides
     };
@@ -140,6 +140,22 @@ test('release outside the stage clears an uncaptured press', (t) => {
   assert.deepEqual(h.captures, []);
   h.drag();
   assert.deepEqual(h.captures, [1]);
+});
+
+test('vertical dragging does not turn the ring or activate the pressed link', (t) => {
+  const h = createHarness();
+  t.after(() => h.destroy());
+  const initial = h.stage.style.transform;
+  h.stage.dispatch('pointerdown');
+  h.window.dispatch('pointermove', { clientY: 200, timeStamp: 30 });
+  h.tick();
+  assert.deepEqual(h.captures, [1]);
+  assert.equal(h.stage.style.transform, initial);
+  h.window.dispatch('pointerup');
+  assert.equal(h.root.dispatch('click').defaultPrevented, true);
+  h.stage.dispatch('pointerdown');
+  h.window.dispatch('pointerup');
+  assert.equal(h.root.dispatch('click').defaultPrevented, false);
 });
 
 test('transferring implicit capture from a descendant does not cancel the stage drag', (t) => {

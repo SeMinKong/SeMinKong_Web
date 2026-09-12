@@ -10,7 +10,7 @@ const projects = [
 const read = (path, encoding) => readFile(new URL(`../${path}`, import.meta.url), encoding);
 
 for (const { name, width, height, anchor, hash } of projects) {
-  test(`${name} architecture keeps the approved PNG bytes and native full-size links`, async () => {
+  test(`${name} architecture displays the approved PNG directly without a reveal gate`, async () => {
     const asset = `src/assets/projects/${name}/architecture.png`;
     const [png, original, html] = await Promise.all([
       read(asset), read(`scripts/portfolio/assets/${name}-architecture-source.png`), read(`work/${name}/index.html`, 'utf8')
@@ -28,14 +28,9 @@ for (const { name, width, height, anchor, hash } of projects) {
     assert.ok(image.includes(`src="/${asset}"`));
     assert.ok(image.includes(`width="${width}" height="${height}"`));
     assert.match(image, /alt="[^"]+"/);
-    assert.match(image, /loading="lazy" decoding="async"/);
-    const links = [...figure.matchAll(/<a\b[^>]*>/g)].map(([tag]) => tag);
-    assert.equal(links.length, 2, 'both image and caption open the full-size asset');
-    for (const link of links) {
-      assert.ok(link.includes(`href="/${asset}"`));
-      assert.match(link, /target="_blank" rel="noopener"/);
-    }
-    assert.match(links[0], /aria-label="[^"]+원본 크기로 보기"/);
+    assert.match(image, /loading="eager" decoding="async"/);
+    assert.match(figure, /^<figure class="case-architecture">\s*<img\b[^>]*>\s*<\/figure>$/);
+    assert.doesNotMatch(figure, /data-reveal|<a\b|<figcaption\b/);
     assert.ok(html.includes(`href="#${anchor}"`));
     assert.ok(html.includes(`id="${anchor}"`));
   });
