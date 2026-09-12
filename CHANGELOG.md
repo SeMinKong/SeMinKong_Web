@@ -6,6 +6,7 @@ All notable changes to this project are recorded here. The project follows Seman
 
 ### Added
 
+- Added a quiet, tilted Home robot assembly cue using the existing font and a small curved arrow, visible only while the interactive puzzle is available and unfinished.
 - Added the original THING and AQIS system architecture diagrams to their case studies with responsive presentation and full-size image links. Reflected the owner's confirmation that the AQIS diagram describes the implemented system.
 
 ### Fixed

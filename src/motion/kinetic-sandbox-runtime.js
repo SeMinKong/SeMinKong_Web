@@ -96,6 +96,10 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
   let walls = [];
   let width = initialRect.width;
   let hasInteracted = false;
+  const assemblyHint = stage.querySelector('.kinetic-stage__hint');
+  const assemblyArrow = assemblyHint?.querySelector('path');
+  let hintPoseKey = '';
+  assemblyHint?.style.removeProperty('visibility');
 
   let scale = getScale(width);
   let interactionScale = clamp(scale, 1, 1.4);
@@ -273,6 +277,28 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     if (!destroyed) stage.dataset.kineticState = state;
   };
 
+  // Anchor the quiet cue to the rendered part, including responsive scatter and rotation.
+  const syncAssemblyHint = (pose, spec) => {
+    if (!assemblyArrow || hasInteracted) return;
+    const key = [pose.x, pose.y, pose.angle, width, height, scale].join(':');
+    if (key === hintPoseKey) return;
+    hintPoseKey = key;
+    const x = assemblyHint.offsetLeft;
+    const y = assemblyHint.offsetTop;
+    const start = { x: x + assemblyHint.offsetWidth + 14, y: y + assemblyHint.offsetHeight / 2 };
+    const delta = { x: pose.x - start.x, y: pose.y - start.y };
+    const distance = Math.hypot(delta.x, delta.y);
+    if (distance < 1) return;
+    const direction = { x: delta.x / distance, y: delta.y / distance };
+    const local = rotatePoint(direction, -pose.angle);
+    const edge = Math.min(spec.width * scale / (2 * Math.abs(local.x)), spec.height * scale / (2 * Math.abs(local.y)));
+    const end = { x: pose.x - direction.x * (edge + 8), y: pose.y - direction.y * (edge + 8) };
+    const point = (px, py) => `${(px - x).toFixed(2)} ${(py - y).toFixed(2)}`;
+    const head = (side) => point(end.x - direction.x * 8 - direction.y * side * 4, end.y - direction.y * 8 + direction.x * side * 4);
+    const curve = width <= 1000 ? 0 : 44;
+    assemblyArrow.setAttribute('d', `M${point(start.x, start.y)} C${point(start.x + 28, start.y - curve)} ${point(end.x - direction.x * 28, end.y - direction.y * 28)} ${point(end.x, end.y)} M${head(-1)} L${point(end.x, end.y)} L${head(1)}`);
+  };
+
   const syncViews = (alpha = 1) => {
     for (const [body, view] of bodyToView) {
       const state = poseStates.get(body);
@@ -280,6 +306,8 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
         ? interpolatePose(state.previous, state.current, alpha)
         : { x: body.position.x, y: body.position.y, angle: body.angle };
       updateViewLighting(view, pose, { width, height });
+      const spec = bodyMeta.get(body).spec;
+      if (spec.id === (width <= 1000 ? 'chest' : 'thigh-b')) syncAssemblyHint(pose, spec);
     }
     magnetEffects.draw((body) => {
       const state = poseStates.get(body);
@@ -940,6 +968,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     const body = findBody(point);
     if (!body) return;
     hasInteracted = true;
+    if (assemblyHint) assemblyHint.style.visibility = 'hidden';
 
     const localPoint = rotatePoint(Vector.sub(point, body.position), -body.angle);
     setPortHints([], 'none', true);
@@ -1160,6 +1189,11 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(stage);
+  const hintResizeObserver = assemblyHint ? new ResizeObserver(() => {
+    hintPoseKey = '';
+    if (!destroyed) syncViews(1);
+  }) : null;
+  hintResizeObserver?.observe(assemblyHint);
 
   const setMode = (nextMode) => {
     if (destroyed) return;
@@ -1189,6 +1223,7 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
     snap.reset();
     magnetEffects.clear();
     hasInteracted = true;
+    if (assemblyHint) assemblyHint.style.visibility = 'hidden';
     const point = toWorldPoint(clientX, clientY);
     let body = findBody(point);
     if (!body) {
@@ -1224,6 +1259,9 @@ export const mountKineticSandbox = async (stage, { mode = 'full', onFailure } = 
       stop();
       destroyed = true;
       resizeObserver.disconnect();
+      hintResizeObserver?.disconnect();
+      assemblyHint?.style.removeProperty('visibility');
+      assemblyArrow?.removeAttribute('d');
       canvas.removeEventListener('pointerdown', handlePointerDown);
       canvas.removeEventListener('pointermove', handleHoverPointerMove);
       canvas.removeEventListener('pointerleave', handlePointerLeave);

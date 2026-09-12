@@ -1,6 +1,6 @@
 # Motion specification
 
-현재 구현 기준: 2026-09-12. 과거에 폐기·대체된 연출은 [모션 이력](history/motion-spec.md)에 보관한다.
+현재 구현 기준: 2026-09-13. 과거에 폐기·대체된 연출은 [모션 이력](history/motion-spec.md)에 보관한다.
 
 ## 공통 원칙과 소유권
 
@@ -36,6 +36,8 @@ Primary pointerdown은 pending으로 두고 가로·세로 합산 이동 거리�
 Full/lite 전환에서는 로딩 중이거나 이미 생성된 controller를 유지한다. Resolution과 pointer 기준만 갱신하고 antialias는 최초 WebGL context 설정을 유지한다. Reduced/forced-colors에서는 runtime을 만들지 않고 정적 fallback을 사용한다.
 
 캔버스의 touch-action은 `pan-y pinch-zoom`이다. Native passive pointer listener를 사용하고 pointer capture나 gesture preventDefault를 추가하지 않는다. Pixi의 사용하지 않는 document-level hit-testing은 분리한다.
+
+조립 안내는 기존 stage 상태가 ready/running/sleeping이고 puzzle이 complete가 아닐 때만 CSS로 표시한다. Reduced/forced-colors와 JavaScript 비활성·runtime 실패에서는 숨긴다. 문구만 기울이고 화살표는 `syncViews`가 사용하는 부품의 보간 pose를 기준으로 회전된 외곽 8px 앞을 가리킨다. 기존 렌더·resize를 이용하며 글꼴로 문구 크기가 변하면 ResizeObserver로 좌표를 갱신한다. 첫 부품 pointerdown 또는 대기 입력 nudge 이후에는 안내를 숨기며 destroy에서 관찰자·inline 표시 상태·경로를 정리한다. 별도 애니메이션·RAF·물리 변경은 없고, 기존 aria-hidden 장식 stage 안에 pointer-events:none으로 두어 부품 조작과 native 스크롤을 유지한다.
 
 그림자는 viewport 기준 좌상단의 고정 광원을 따른다. 부품이 회전해도 광원 방향은 함께 회전하지 않으며 그림자와 재질 표현은 물리에 영향을 주지 않는다.
 
