@@ -1,5 +1,14 @@
 # QA checklist
 
+## 2026-09-14 웹 아키텍처 SVG 교체
+
+- [x] 최신 main `cc799dc`의 직접 이미지·eager/async·둥근 모서리 표시를 유지하고 프로젝트 6종의 경로와 명시적 크기만 교체했다. 승인 SVG → 소스 자산 → dist의 SHA-256 6개가 동일하다. THING은 흰 배경·짙은 선/글자와 내장 사진 6개, 나머지는 벡터 경로다.
+- [x] `npm.cmd run verify`: 94개 테스트, 11 routes·29 modules·13 stylesheets, production build·24 deployment entries 통과. `git diff --check` 통과. 원본 PNG/WebP·PDF·JavaScript·CSS·배포 설정은 변경하지 않았다.
+- [x] Chrome production preview에서 6개 상세 × 390·768·1280px × 기본/reduced의 36개 및 390px touch·JavaScript 비활성의 12개, 총 48개 조합을 검사했다. 이미지 decode·비율·직접 표시·eager/async·대체 텍스트, 가로 넘침 0, 2px 키보드 포커스와 자동 lite/static·full/interactive·reduced/flat을 확인했다. console warning/error·pageerror·HTTP 오류 0이다.
+- [x] 세 폭의 기본 이미지 18개를 육안 검수했다. THING의 흰 배경과 검은 선, 전체 그림의 비율·잘림·중앙 배치가 정상이다. 가장 큰 AQIS SVG도 모든 조합에서 decode되었으며 로컬 탐색 시작부터 decode까지 약 1.9–2.4초였다. 이는 네트워크 성능 벤치마크가 아니다.
+
+Chrome은 headless이며 touch와 reduced motion은 에뮬레이션이다. 실물 기기·저속 네트워크·OS 설정 전환은 검증하지 않았다. AQIS의 11.67MB 원본과 기존 추적 차이는 승인된 SVG 그대로 보존했다. 공개 배포 결과와 최종 파일 해시는 해당 Pages 실행 및 최종 작업 보고를 따른다.
+
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
 ## 2026-09-13 Home 조립 안내·부품 화살표
