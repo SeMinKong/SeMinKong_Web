@@ -1,5 +1,14 @@
 # QA checklist
 
+## 2026-09-14 아키텍처 흰 캔버스 표시 제거
+
+- [x] CSS 두 선언으로 크림색 프레임 안에서만 `darken` 혼합을 적용했다. 기존 프레임색·여백·모서리·비율·직접 이미지 표시를 유지하며 SVG 6개와 원본 출력 파일의 해시는 변경하지 않았다.
+- [x] `npm.cmd run verify`: 94개 테스트, 11 routes·29 modules·13 stylesheets, production build·24 deployment entries 통과. `git diff --check` 통과.
+- [x] Chrome production preview에서 6개 상세 × 390·768·1280px × 기본/reduced와 390px touch·JavaScript 비활성, 총 48개 조합을 검사했다. 이미지 decode·비율·eager/async·대체 텍스트·2px 키보드 포커스·자동 모션/깊이 fallback을 유지하며 가로 넘침·console warning/error·pageerror·HTTP 오류 0이다.
+- [x] 모든 조합에서 프레임 `rgb(245, 241, 233)`·`isolate`와 이미지 `darken`을 확인했다. 기본 18개와 JavaScript 비활성 6개 캡처의 이전 흰 캔버스 지점이 프레임 RGB `(245,241,233)`과 정확히 일치한다. 기본 스크린샷 18개를 독립 육안 검수했으며 흰 사각형·잘림·새로운 선/글자 손상이 없다.
+
+이 변경은 웹의 흰 바탕 표시를 없애며 단독 SVG 파일의 투명도를 변경하지 않는다. Chrome은 headless이며 touch/reduced는 에뮬레이션이다. 실물 기기·저속 네트워크는 검증하지 않았다. 공개 배포 결과는 해당 Pages 실행 및 최종 작업 보고를 따른다.
+
 ## 2026-09-14 웹 아키텍처 SVG 교체
 
 - [x] 최신 main `cc799dc`의 직접 이미지·eager/async·둥근 모서리 표시를 유지하고 프로젝트 6종의 경로와 명시적 크기만 교체했다. 승인 SVG → 소스 자산 → dist의 SHA-256 6개가 동일하다. THING은 흰 배경·짙은 선/글자와 내장 사진 6개, 나머지는 벡터 경로다.

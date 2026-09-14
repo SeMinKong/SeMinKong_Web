@@ -766,6 +766,7 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 }
 
 .case-architecture {
+  isolation: isolate;
   padding: clamp(12px, 2vw, 24px);
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -782,6 +783,7 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
   height: auto;
   margin-inline: auto;
   border-radius: 8px;
+  mix-blend-mode: darken;
 }
 
 .case-steps {
