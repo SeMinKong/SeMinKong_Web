@@ -1,5 +1,15 @@
 # QA checklist
 
+## 2026-09-14 모바일 조립·자석 당김·전기 스파크
+
+- [x] `npm.cmd run verify`: 109 tests, 11 routes·31 modules·13 stylesheets, production build·24 deployment entries 통과. 이후 입력 모듈 경계 계약만 갱신해 해당 4 tests를 재검사했다. `git diff --check` 통과. 새 라이브러리·별도 RAF·원본 로봇 자산 변경은 없다.
+- [x] Chrome production preview에서 390·768·1280px 기본/reduced/touch 9개와 390px JavaScript 비활성·forced-colors·runtime 실패 3개, 총 12개 조합을 검사했다. 기본과 touch의 타깃 11개·빈 캔버스 pan-y·부품 pinch-zoom·메인 overscroll contain, fallback의 타깃 0개를 확인했다. 가로 넘침 0, 기본 포커스 2px·forced-colors 3px, 자동 full/interactive·lite/static·reduced/flat이 정상이다. 의도한 runtime 차단의 ERR_FAILED/기존 fallback 경고 외 console/page/HTTP 오류는 0이다.
+- [x] 실제 production 페이지에서 CDP touch로 부품을 세로 48px 끌었을 때 각 폭에서 약 45–46px 이동하고 페이지 scrollY 변화는 0이었다. 빈 곳에서 위로 밀면 165–205px 스크롤했다. 390px 터치와 1280px 마우스의 Hero 프로젝트 링크가 실제 Work 페이지로 이동했다. 세 폭 기본 화면과 reduced 정적 완성형을 육안 검수했다.
+- [x] 독립 fixture의 trusted mouse/CDP touch 23개 시나리오 통과: 상하좌우·대각 drag, 빈 곳 pan, 탭·긴 누름·왕복 drag, touch 속도 제한, multi-touch 취소·all-up 복구, native pinch, 반복 취소와 다음 결합, sleeping/pending의 capture-loss·blur·stop·mode·resize 정리, 각도·연결 묶음·후퇴 취소를 확인했다. Console/pageerror 0이다. Native pinch의 배율 2.493과 fixture 재설정 없이 다음 부품 조작 복구를 확인했다.
+- [x] 청록/흰 접근 번개와 접촉 스파크를 실제 렌더로 육안 확인했다. 마지막 10번째 연결에서 스파크가 남은 동안 완성 연출이 시작되지 않았으며 이후 완성 연출을 마치고 sleep했다. 완료 후 관절 간격 오차는 0이었다. 원문 runtime과 fixture에 주입한 관찰용 원문 해시가 같고 src/dist에 QA 훅·fixture 내용은 없다.
+
+Chrome은 headless이며 touch/reduced/forced-colors는 에뮬레이션이다. 조립 fixture는 초기 위치와 기존 연결을 배치한 뒤 실제 입력을 보냈으며 흩어진 상태에서 모든 10개 관절을 손으로 조립한 검증은 아니다. 실물 iPhone/Android·브라우저 UI의 당겨서 새로고침은 확인하지 않았다. 공개 배포 결과는 해당 Pages 실행 및 최종 작업 보고를 따른다.
+
 ## 2026-09-14 아키텍처 흰 캔버스 표시 제거
 
 - [x] CSS 두 선언으로 크림색 프레임 안에서만 `darken` 혼합을 적용했다. 기존 프레임색·여백·모서리·비율·직접 이미지 표시를 유지하며 SVG 6개와 원본 출력 파일의 해시는 변경하지 않았다.

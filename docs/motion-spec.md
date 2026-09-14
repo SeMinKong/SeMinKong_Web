@@ -35,7 +35,9 @@ Primary pointerdown은 pending으로 두고 가로·세로 합산 이동 거리�
 
 Full/lite 전환에서는 로딩 중이거나 이미 생성된 controller를 유지한다. Resolution과 pointer 기준만 갱신하고 antialias는 최초 WebGL context 설정을 유지한다. Reduced/forced-colors에서는 runtime을 만들지 않고 정적 fallback을 사용한다.
 
-캔버스의 touch-action은 `pan-y pinch-zoom`이다. Native passive pointer listener를 사용하고 pointer capture나 gesture preventDefault를 추가하지 않는다. Pixi의 사용하지 않는 document-level hit-testing은 분리한다.
+빈 캔버스의 touch-action은 `pan-y pinch-zoom`이다. 로봇 부품 11개를 따르는 투명 DOM 타깃은 터치 시작 전부터 `pinch-zoom`을 선언해 한 손가락의 상하좌우 이동을 조립으로 받는다. 부품 입력에만 pointer capture를 사용하고 빈 공간의 세로 스크롤·CTA·두 손가락 확대를 유지한다. 모든 입력 listener는 passive이며 gesture preventDefault나 별도 조작 모드는 없다. Pixi의 사용하지 않는 document-level hit-testing은 분리한다.
+
+DOM 타깃은 보간된 실제 부품 pose와 동기화하고 크기·위치가 달라질 때만 inline style을 쓴다. Coarse pointer에서 각 방향 8px을 확장하고 잡기 anchor는 물리 외곽 안으로 제한한다. 두 번째 손가락이 닿으면 drag/capture/snap/effect를 취소한다. Pinch의 pointercancel 뒤 pointerup이 없을 수 있으므로 passive touchend/touchcancel의 실제 touches 수가 0이 될 때까지 새 조립을 차단한다. Blur·stop·resize·mode 변경·destroy에서도 공통 입력 정리를 실행하며 sleeping/pending도 예외가 아니다. 메인 문서에만 `overscroll-behavior-y: contain`을 적용한다.
 
 조립 안내는 기존 stage 상태가 ready/running/sleeping이고 puzzle이 complete가 아닐 때만 CSS로 표시한다. Reduced/forced-colors와 JavaScript 비활성·runtime 실패에서는 숨긴다. 문구만 기울이고 화살표는 `syncViews`가 사용하는 부품의 보간 pose를 기준으로 회전된 외곽 8px 앞을 가리킨다. 기존 렌더·resize를 이용하며 글꼴로 문구 크기가 변하면 ResizeObserver로 좌표를 갱신한다. 첫 부품 pointerdown 또는 대기 입력 nudge 이후에는 안내를 숨기며 destroy에서 관찰자·inline 표시 상태·경로를 정리한다. 별도 애니메이션·RAF·물리 변경은 없고, 기존 aria-hidden 장식 stage 안에 pointer-events:none으로 두어 부품 조작과 native 스크롤을 유지한다.
 
@@ -51,23 +53,23 @@ Full/lite 전환에서는 로딩 중이거나 이미 생성된 controller를 유
 - Body grip은 연결 묶음을 이동한다. 말단 grip은 해당 부품의 parent 관절을 pivot으로 child branch를 회전시킨다.
 - 다른 관절은 drag 시작 시의 각도를 유지한다. Release는 선택 관절을 15도 detent 또는 neck/waist endpoint로 저장한다.
 - 결합 시 baseAngle은 hard limit 중심이며 poseAngle은 저장한 자세다. Hard limit를 넘어가면 child branch 전체를 보정하고 anchor를 다시 정렬한다.
-- 짧은 click/tap은 component를 30도 회전시킨다. 연결부를 바깥으로 당기면 분리하며 같은 gesture의 즉시 재결합을 막는다.
-- Touch의 8px 이내 움직임은 pending이고 세로 우세 입력은 native scroll에 맡긴다. Cancel/scroll은 새 포즈를 저장하지 않는다.
+- 최대 이동 6px 미만인 click/tap은 component를 30도 회전시킨다. Touch는 250ms 이내여야 하며 길게 누르거나 원점으로 돌아온 드래그는 탭으로 처리하지 않는다. 연결부를 바깥으로 당기면 분리하며 같은 gesture의 즉시 재결합을 막는다. 분리 거리는 mouse/touch 각각 34/44 × interactionScale이다.
+- 부품 Touch는 6px 미만에서 pending이며 방향과 관계없이 6px부터 drag한다. 빈 공간은 native scroll에 맡긴다. Cancel은 새 포즈·회전·throw를 저장하지 않는다. Touch release의 최대 속도는 5.5, 최대 각속도는 0.045로 mouse 11.5/0.11보다 낮게 제한한다.
 - 조작 전 resize는 화면별 초기 배치를 적용한다. 조작 후에는 사용자의 pose와 연결을 유지하고 component 단위로 viewport 안에 맞춘다.
 
 정확한 튜닝 값과 초기 배치는 `robot-config.js`, 계산은 `kinetic-math.js`가 기준이다.
 
 ## 연결 hint와 완성 연출
 
-호환되는 조인트 한 쌍만 접근 hint를 표시한다. Fine/coarse hint 반경은 52/58 × interactionScale, 허용 각도는 45°/50°다. 실제 결합 반경은 38/42 × interactionScale, 각도는 35°/40°다. 실제 결합이 가능한 후보를 먼저 고르고 그 안에서 이전 pair를 유지한다. family·polarity·occupied/component 제외 조건은 hint와 결합이 공유한다.
+호환되는 조인트 한 쌍만 접근 hint를 표시한다. Fine/coarse hint 반경은 72/80 × interactionScale, 허용 각도는 45°/50°다. 실제 결합 반경은 52/58 × interactionScale, 각도는 35°/40°다. 실제 결합이 가능한 후보를 먼저 고르고 그 안에서 이전 pair를 유지한다. family·polarity·occupied/component 제외 조건은 hint와 결합이 공유한다.
 
-같은 후보 곁에서 80ms 동안 포인터 이동이 10 × interactionScale 이내면 180ms 결합 보정을 시작한다. 정상 release는 표시한 후보를 다시 검증해 즉시 보정을 시작하거나 진행 중인 보정을 끝낸다. 빠른 통과·분리 직후 gesture·포즈 조작에서는 자동 결합하지 않는다. 후보가 사라지면 대기 시간을 초기화한다.
+같은 후보 곁에서 40ms 동안 포인터 이동이 10 × interactionScale 이내면 140ms 결합 보정을 시작한다. 정상 release는 표시한 후보를 다시 검증해 즉시 보정을 시작하거나 진행 중인 보정을 끝낸다. 빠른 통과·분리 직후 gesture·포즈 조작에서는 자동 결합하지 않는다. 후보가 사라지면 대기 시간을 초기화한다.
 
-위치와 각도는 고정 물리 clock에서 ease-out으로 보정한다. 이미 연결된 이동 부품은 시작 자세의 강체 묶음으로 변환하고, 해당 묶음의 drag·servo 제어를 잠시 분리한다. 맞물리는 두 묶음 사이의 충돌만 임시로 해제하며 다른 부품·벽과의 충돌은 유지한다. 회전 경로가 화면 경계를 넘으면 보정을 시작하지 않는다. 완료 직전에 포트·연결 상태를 확인하고 한 번만 graph를 갱신한 뒤 현재 포인터 기준으로 drag를 다시 연결한다.
+위치와 각도는 고정 물리 clock에서 progress²로 가속해 정확한 포트 위치에서 고정한다. 이미 연결된 이동 부품은 시작 자세의 강체 묶음으로 변환하고, 해당 묶음의 drag·servo 제어를 잠시 분리한다. 맞물리는 두 묶음 사이의 충돌만 임시로 해제하며 다른 부품·벽과의 충돌은 유지한다. 회전 경로가 화면 경계를 넘으면 보정을 시작하지 않는다. 완료 직전에 포트·연결 상태를 확인하고 한 번만 graph를 갱신한 뒤 현재 포인터 기준으로 drag를 다시 연결한다.
 
 포인터가 결합 범위에서 10 × interactionScale 이상 벗어나거나, 목표가 시작 위치에서 같은 거리 또는 10° 이상 움직이면 보정을 취소한다. 목표 이탈 검사는 release 이후에도 유지한다. 분리·새 입력·cancel·stop·resize·mode 변경·destroy에서 보정과 임시 충돌 그룹을 정리한다. 마지막 연결이 release 뒤 완성되면 commit에서 완성 연출을 시작한다.
 
-보정 중 연결부 사이에 낮은 불투명도의 vermilion 곡선 하나를 표시하고 결합 후 160ms 동안 작은 링을 한 번 펼친다. 효과는 보간된 실제 관절 좌표를 따라가며 지속적인 점멸·소리·반복 입자는 없다. Reduced/forced-colors는 기존 정적 완성형을 유지한다.
+보정 중 연결부 사이에 청록 외곽 `#087c9b`와 흰 중심의 짧은 번개 1~2갈래를 표시한다. 세 가지 고정 모양을 진행률에 따라 전환하고 가까워질수록 흔들림을 줄인다. 접촉 후 140ms 동안 작은 링·스파크 5개를 표시하며 lite/coarse에서는 번개 1갈래·스파크 3개로 줄인다. 기존 Graphics와 tick을 재사용하며 별도 RAF·blur 필터·소리·지속 입자는 없다. 효과는 보간된 실제 관절 좌표를 따라가고 취소 시 지운다. 마지막 스파크가 끝날 때까지 완성 연출과 sleep을 유예한다. Reduced/forced-colors는 기존 정적 완성형을 유지한다.
 
 말단 hover는 분리 grip을 먼저 제외한 뒤 실제 parent 관절 ring과 crosshair를 표시한다. Body grip은 grab이다. Hint opacity만 Anime.js로 140ms 보간하며 sleeping 물리는 깨우지 않는다. Release, cancel, leave, stop, resize, 완성 시작과 destroy에서 hint를 지운다.
 

@@ -91,14 +91,15 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   // Keep only integration boundaries here, so module extraction stays possible.
   assert.match(kineticRuntime, /from 'pixi\.js'/);
   assert.match(kineticRuntime, /from 'matter-js'/);
-  for (const module of ['robot-config', 'robot-artwork', 'robot-completion']) {
+  for (const module of ['robot-config', 'robot-artwork', 'robot-completion', 'robot-input', 'robot-snap']) {
     assert.ok(kineticRuntime.includes(`from './${module}.js'`));
   }
   assert.match(kineticRuntime, /touchAction = 'pan-y pinch-zoom'/);
-  assert.doesNotMatch(kineticRuntime, /setPointerCapture|requestAnimationFrame/);
+  assert.doesNotMatch(kineticRuntime, /requestAnimationFrame/);
   assert.doesNotMatch(kineticRuntime, /handlePointer(?:Down|Move|Up|Cancel)[\s\S]{0,700}preventDefault\(/);
   assert.match(kineticStyles, /height: 100svh/);
   assert.match(kineticStyles, /touch-action: pan-y pinch-zoom/);
+  assert.match(kineticStyles, /\.kinetic-stage__target \{[^}]*touch-action: pinch-zoom/);
   assert.match(kineticStyles, /html\[data-motion="reduced"\] \.kinetic-stage__canvas/);
   assert.doesNotMatch(kineticStyles, /position: fixed|138svh|155svh/);
   assert.doesNotMatch(homeEntry + kineticFacade + kineticRuntime, /loadGsap|ScrollTrigger|SplitText/);

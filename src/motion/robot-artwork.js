@@ -4,6 +4,7 @@ import { ROBOT_GEOMETRY } from './robot-kit.js';
 import { getWorldLight } from './kinetic-math.js';
 import { SHADOW, SIGNAL } from './robot-config.js';
 import { worldPort } from './kinetic-math.js';
+import { createMagnetEffectState, getMagnetArcs, getMagnetContact } from './robot-magnet-model.js';
 import chestAssetUrl from '../assets/kinetic-robot/chest.svg?url';
 import forearmAssetUrl from '../assets/kinetic-robot/forearm.svg?url';
 import headAssetUrl from '../assets/kinetic-robot/head.svg?url';
@@ -124,42 +125,44 @@ export const createPortHints = (stage, bodyToView, renderHints) => {
   return setPortHints;
 };
 
-// One faint connection arc and a single settling ring, confined to the bearings.
+// Cyan edges keep the white electrical core visible on the paper background.
 export const createMagnetEffects = (layer) => {
   const graphic = new Graphics();
   layer.addChild(graphic);
-  let capture = null;
-  let pulse = null;
+  const state = createMagnetEffectState();
+  const edge = 0x087c9b;
+  const core = 0xffffff;
+  const line = (points, width, alpha) => {
+    for (const [color, strokeWidth, opacity] of [[edge, width, alpha], [core, width * 0.34, alpha * 0.96]]) {
+      graphic.moveTo(points[0].x, points[0].y);
+      for (let index = 1; index < points.length; index += 1) graphic.lineTo(points[index].x, points[index].y);
+      graphic.stroke({ color, width: strokeWidth, alpha: opacity });
+    }
+  };
   return {
-    progress(state) { capture = state; },
-    connect(pair) { capture = null; pulse = { pair, elapsed: 0 }; },
-    clear() { capture = pulse = null; graphic.clear(); },
-    update(delta) {
-      if (pulse) {
-        pulse.elapsed += delta;
-        if (pulse.elapsed >= 160) pulse = null;
-      }
-    },
+    progress(next) { state.progress(next); if (!next) graphic.clear(); },
+    connect(pair) { state.connect(pair); },
+    clear() { state.clear(); graphic.clear(); },
+    setQuality(simplified) { state.setQuality(simplified); },
+    update(delta) { state.update(delta); },
+    get active() { return state.active; },
     draw(poseOf) {
       graphic.clear();
-      if (capture) {
-        const { pair, progress } = capture;
+      if (state.capture) {
+        const { pair, progress } = state.capture;
         const a = worldPort(poseOf(pair.movingBody), pair.movingPort);
         const b = worldPort(poseOf(pair.targetBody), pair.targetPort);
-        const distance = Math.hypot(b.x - a.x, b.y - a.y);
-        const bend = Math.min(5, distance * 0.15) * Math.sin(progress * Math.PI);
-        const length = Math.max(1, distance);
-        graphic.moveTo(a.x, a.y).quadraticCurveTo(
-          (a.x + b.x) / 2 - (b.y - a.y) / length * bend,
-          (a.y + b.y) / 2 + (b.x - a.x) / length * bend, b.x, b.y
-        ).stroke({ color: SIGNAL, width: 1.25, alpha: 0.35 * Math.sin(progress * Math.PI) });
+        getMagnetArcs(a, b, progress, state.lite).forEach((arc, index) => {
+          line(arc.points, index ? 1.8 : state.lite ? 2.7 : 3.2, arc.alpha);
+        });
       }
-      if (pulse) {
-        const { pair, elapsed } = pulse;
+      if (state.contact) {
+        const { pair, elapsed } = state.contact;
         const anchor = worldPort(poseOf(pair.targetBody), pair.targetPort);
-        const progress = elapsed / 160;
-        graphic.circle(anchor.x, anchor.y, 6 + progress * 7)
-          .stroke({ color: SIGNAL, width: 1.2, alpha: 0.42 * (1 - progress) });
+        const contact = getMagnetContact(anchor, elapsed, state.lite);
+        graphic.circle(anchor.x, anchor.y, contact.radius)
+          .stroke({ color: edge, width: 1.35, alpha: contact.alpha * 0.74 });
+        for (const spark of contact.sparks) line(spark, state.lite ? 2.2 : 2.6, contact.alpha);
       }
     }
   };

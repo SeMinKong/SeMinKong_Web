@@ -131,7 +131,8 @@ export const createRobotSnap = ({
       || pointer?.skipSnapUntilRelease || pointer?.flexConnection) { reset(); return; }
     capture.elapsed = Math.min(SNAP_DURATION, capture.elapsed + delta);
     const progress = capture.elapsed / SNAP_DURATION;
-    const eased = 1 - (1 - progress) ** 3;
+    // Accelerate into the bearing and lock exactly at contact, without overshoot.
+    const eased = progress * progress;
     const solved = solveMovingPortPose(pivot, pair.movingPort, poseOf(pair.targetBody), pair.targetPort);
     const next = new Map([...poses].map(([body, pose]) => [body, blendSnapPose(pose, pivot, solved, eased)]));
     if (!canPlace(next, pair)) { reset(); return; }

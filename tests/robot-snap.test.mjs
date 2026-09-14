@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import Matter from 'matter-js';
 import { createRobotSnap, blendSnapPose } from '../src/motion/robot-snap.js';
-import { getSnapTuning } from '../src/motion/robot-config.js';
+import { getSnapTuning, SNAP_DWELL, SNAP_DURATION } from '../src/motion/robot-config.js';
 import { worldPort } from '../src/motion/kinetic-math.js';
 
 const { Bodies, Body } = Matter;
@@ -53,11 +53,11 @@ test('angle assistance advertises a wider range than it accepts', () => {
   assert.equal(reversed.snap.hint, null);
 });
 
-test('80ms steady approach starts one capture, then commits only after 180ms', () => {
+test('40ms steady approach starts one capture, then commits only after 140ms', () => {
   const h = harness();
-  h.advance(70); assert.equal(h.snap.active, false);
+  h.advance(30); assert.equal(h.snap.active, false);
   h.advance(10); assert.equal(h.snap.active, true);
-  h.advance(170); assert.equal(h.events.commit, 0);
+  h.advance(130); assert.equal(h.events.commit, 0);
   h.advance(10); assert.equal(h.events.commit, 1);
   h.advance(500); assert.equal(h.events.commit, 1);
   assert.equal(h.events.start, 1);
@@ -76,15 +76,15 @@ test('fast pointer passes reset dwell instead of capturing', () => {
 
 test('leaving and returning to a candidate requires a fresh dwell', () => {
   const h = harness();
-  h.advance(60);
+  h.advance(30);
   Body.setPosition(h.moving, { x: 50, y: 300 }); h.snap.update(10);
-  Body.setPosition(h.moving, { x: 215, y: 300 }); h.advance(70);
+  Body.setPosition(h.moving, { x: 215, y: 300 }); h.advance(30);
   assert.equal(h.events.start, 0);
   h.advance(10); assert.equal(h.events.start, 1);
 });
 
 test('a nearby eligible joint replaces an older hint outside capture range', () => {
-  const h = harness(); Body.setPosition(h.moving, { x: 197, y: 300 }); h.advance(10);
+  const h = harness(); Body.setPosition(h.moving, { x: 177, y: 300 }); h.advance(10);
   assert.equal(h.snap.hint.targetBody, h.target);
   const closer = Bodies.rectangle(260, 300, 40, 30);
   h.bodies.push(closer); h.meta.set(closer, { ports: [{ ...h.socket, id: 'closer' }] });
@@ -150,7 +150,7 @@ test('pointer retreat cancels capture and returns control without connecting', (
 });
 
 test('reset cancels capture and discards accumulated dwell across lifecycle changes', () => {
-  const h = harness(); h.advance(70); h.snap.reset(); h.advance(70);
+  const h = harness(); h.advance(30); h.snap.reset(); h.advance(30);
   assert.equal(h.events.start, 0);
   h.advance(30); h.snap.reset(); h.pointer = null; h.advance(400);
   assert.equal(h.events.cancel, 1); assert.equal(h.events.commit, 0);
@@ -200,8 +200,43 @@ test('elapsed-time timing is stable at 30, 60 and 120 updates per second', () =>
     const h = harness(); let time = 0;
     while (h.events.commit === 0 && time < 500) { h.snap.update(1000 / hz); time += 1000 / hz; }
     assert.equal(h.events.commit, 1);
-    assert.ok(time >= 260 - 1e-8 && time <= 260 + 2000 / hz);
+    const duration = SNAP_DWELL + SNAP_DURATION;
+    assert.ok(time >= duration - 1e-8 && time <= duration + 2000 / hz);
   }
+});
+
+test('wider capture accepts a nearby joint while a farther hint remains non-binding', () => {
+  const h = harness({ angle: 0 });
+  Body.setPosition(h.moving, { x: 200, y: 300 });
+  h.pointer.target = { ...h.moving.position };
+  h.advance(SNAP_DWELL);
+  assert.equal(h.snap.active, true, 'a 60px port gap should enter the expanded capture region');
+  const hintOnly = harness({ angle: 0 });
+  Body.setPosition(hintOnly.moving, { x: 170, y: 300 });
+  hintOnly.pointer.target = { ...hintOnly.moving.position };
+  hintOnly.advance(SNAP_DWELL * 3);
+  assert.ok(hintOnly.snap.hint, 'a 90px gap should advertise the target');
+  assert.equal(hintOnly.snap.active, false);
+  assert.equal(hintOnly.snap.request(hintOnly.moving), false);
+});
+
+test('capture accelerates toward contact and ends with exact alignment and zero velocity', () => {
+  const h = harness({ angle: 0 });
+  h.snap.request(h.moving);
+  const startX = h.moving.position.x;
+  h.advance(35);
+  const first = h.moving.position.x - startX;
+  const quarterX = h.moving.position.x;
+  h.advance(35);
+  const second = h.moving.position.x - quarterX;
+  assert.ok(first > 0 && second > first * 2, 'the next equal interval should pull more strongly');
+  h.advance(70);
+  const movingPort = worldPort(poseOf(h.moving), h.plug);
+  const targetPort = worldPort(poseOf(h.target), h.socket);
+  close(movingPort.x, targetPort.x); close(movingPort.y, targetPort.y);
+  assert.deepEqual(h.moving.velocity, { x: 0, y: 0 });
+  close(h.moving.angularVelocity, 0);
+  assert.equal(h.events.commit, 1);
 });
 
 test('rigid interpolation uses the supplied shortest angular solution', () => {
