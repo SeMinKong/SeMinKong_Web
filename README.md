@@ -1,6 +1,6 @@
 # Se Min Kong Portfolio
 
-AI, Robotics, Computer Vision, and software projects presented through Home, About, Work, case-study, and Resume pages in Vite.
+Vite로 만든 개인 포트폴리오입니다. Home, About, Work, 프로젝트 상세, Resume 페이지에 AI, Robotics, Computer Vision 프로젝트를 정리했습니다.
 
 ## Local development
 
@@ -33,7 +33,7 @@ Each route loads only the entry and stylesheet layers it owns. Shared page behav
 
 `config/site-routes.js` is the source of truth for Vite inputs and deployment verification. `npm.cmd run verify` runs behavior tests, checks route/import/style boundaries and unused source files, builds production assets, and validates local deployment references.
 
-The Home robot lives in `src/motion/`:
+Home 화면의 로봇 코드는 `src/motion/`에 있습니다.
 
 | Module | Responsibility |
 | --- | --- |
