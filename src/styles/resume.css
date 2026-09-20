@@ -9,6 +9,7 @@
   --muted: var(--paper-muted);
   --line: var(--paper-line);
   --line-strong: var(--paper-line-strong);
+  --resume-divider: #000;
   color-scheme: light;
   background: var(--paper);
 }
@@ -214,7 +215,7 @@
   grid-template-columns: 150px minmax(0, 1fr);
   gap: clamp(42px, 7vw, 82px);
   padding-block: clamp(48px, 6vw, 70px);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--resume-divider);
 }
 
 .resume-summary > div {
@@ -244,7 +245,7 @@
 
 .resume-list > article {
   padding-block: 26px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--resume-divider);
 }
 
 .resume-list > article:first-child {
@@ -401,7 +402,7 @@ html.award-dialog-open body {
   justify-content: space-between;
   gap: 22px;
   padding: 15px 16px 14px 18px;
-  border-bottom: 1px solid var(--paper-line);
+  border-bottom: 1px solid var(--resume-divider);
 }
 
 .award-dialog__header p {
@@ -504,7 +505,7 @@ html.award-dialog-open body {
   gap: clamp(32px, 6vw, 72px);
   align-items: center;
   padding-block: clamp(58px, 7vw, 82px);
-  border-top: 1px solid var(--line-strong);
+  border-top: 1px solid var(--resume-divider);
 }
 
 .resume-cta h2 {
@@ -542,6 +543,7 @@ html.award-dialog-open body {
 }
 
 .resume-footer {
+  border-top-color: var(--resume-divider);
   width: min(calc(100% - 80px), 1040px);
   margin-inline: auto;
 }

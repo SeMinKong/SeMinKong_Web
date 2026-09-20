@@ -1,0 +1,18 @@
+{
+  "updated": "2026.09.20",
+  "pages": 1,
+  "files": {
+    "SeMinKong-Resume.docx": {
+      "bytes": 12166,
+      "sha256": "646abe0ecf1d6745a29a5a70758ab5d4f9faff669c619c813d9f1d66ec74f503"
+    },
+    "SeMinKong-Resume.pdf": {
+      "bytes": 135528,
+      "sha256": "d1e420e2394c314de39d824d179c020f52d56d0a1d31a486ab555908940dab92"
+    },
+    "SeMinKong-Resume-page-1.png": {
+      "bytes": 471835,
+      "sha256": "78378b5dac3953e73d50c1abbddff4fbcc3935936bd462fa20a597012c51dc96"
+    }
+  }
+}

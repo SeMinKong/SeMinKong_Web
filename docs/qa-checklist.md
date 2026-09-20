@@ -30,6 +30,16 @@ Chrome은 headless이며 touch와 reduced motion은 에뮬레이션이다. 실�
 
 이 체크리스트는 현재 사이트와 이후 변경 검증에 사용한다. 이전 전체 검수·배포 결과는 [QA 이력](history/qa-checklist.md)에 보관한다.
 
+## 2026-09-20 Resume 원본 형식 보존·Briefit 보강
+
+- [x] 사용자 제공 Drive의 DOCX/PDF와 최종 Word 출력물을 나란히 육안 검수했다. 원본 1쪽 영문 형식, 중앙 이름·연락처, 섹션 순서, Arial 글꼴 크기, 여백, 우측 날짜, italic 기술 목록과 bullet을 보존한다. Briefit과 수상·자격 6건을 포함해 잘림·겹침이 없다.
+- [x] 원본 DOCX ZIP에서 `document.xml`과 구분선 색상을 바꾼 `styles.xml`만 달라진다. 페이지 설정·글꼴 크기 집합·나머지 ZIP part는 동일하며 구분선은 모두 `000000`이다. PDF는 실제 Microsoft Word 내보내기 1쪽, 외부 링크 7개이며 해당 출력물을 문서 렌더러로 래스터화했다.
+- [x] 최신 웹의 담당 범위를 영문 문서에 반영하고 Briefit의 서비스 목적·수집·학습·ROUGE 비교·Gemini 보완을 대조했다. 오래된 MRI 정확도·Alkkagi FPS 표기는 제거했다. PDF/DOCX/PNG의 공개 파일·다운로드 바이트·SHA-256과 `config/resume-artifacts.json`, 1 page·136 KB / 12 KB·2026.09.20 표기가 일치한다.
+- [x] Chrome production preview 390×844·768×1024·1280×900 기본/reduced 및 390px touch·JavaScript 비활성에서 Briefit 설명·검정 구분선·자동 motion/depth·fallback을 확인했다. 가로 넘침·콘솔 오류 0, skip link·다운로드 키보드 포커스가 정상이다. 최종 파일 교체 후 세 폭의 미리보기, 실제 키보드 PDF 다운로드, 상장 모달의 검정 선·포커스를 재확인했다.
+- [x] 최신 원격 main의 기존 변경을 통합한 뒤 `npm.cmd run verify`: 테스트 110개, 11 routes·31 modules·13 stylesheets, production build·24 deployment entries 통과. 별도 9쪽 포트폴리오 PDF는 변경하지 않는다.
+
+Chrome headless와 브라우저 touch/reduced 에뮬레이션으로 검증했다. 실물 모바일 기기는 확인하지 않았다. 공개 배포 결과는 해당 Pages 실행과 최종 작업 보고를 따른다.
+
 ## 2026-09-13 Home 조립 안내·부품 화살표
 
 - [x] 기존 표시용 폰트·400 굵기·회색 `#93908a`, 데스크톱 -6°·모바일 -2° 기울기와 작은 곡선 화살표를 확인했다. PNG·폰트·라이브러리 추가 없이 semantic 소개·CTA·로봇 자산과 물리를 보존한다.

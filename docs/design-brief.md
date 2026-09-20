@@ -11,7 +11,7 @@
 - Work: THING, AQIS, Brain Tumor MRI, Alkkagi, Briefit, Project Prompt Generator의 여섯 프로젝트. 실제 미디어·프로젝트명·한 문장 설명·상세 링크만 둔다.
 - 각 Case study: 역할, 구현, 결과, 근거 링크를 읽을 수 있는 독립 문서.
 - About: 소개, 현재 관심, 경험, 기술 도구.
-- Resume: 원본 문서 미리보기·다운로드, 수상 증빙 모달, 포트폴리오 PDF 다운로드.
+- Resume: Drive 원본의 1쪽 영문 형식을 유지한 이력서 미리보기·PDF/DOCX 다운로드, 수상 증빙 모달, 포트폴리오 PDF 다운로드. Resume와 이력서 문서의 구분선은 검정으로 통일한다.
 - Copyright: 사용한 자료와 라이선스 범위를 설명한다.
 
 경로와 entry의 기준은 `config/site-routes.js`다. 프로젝트 사실과 자료 출처는 [포트폴리오 근거](portfolio-evidence.md), [시각자료 출처](portfolio-visual-sources.md)를 따른다.

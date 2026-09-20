@@ -27,6 +27,18 @@ const sha256Of = async (file) => createHash('sha256')
   .digest('hex')
   .toUpperCase();
 
+test('Resume downloads and preview match the reviewed export', async () => {
+  const manifest = JSON.parse(await readFile(sourceUrl('config/resume-artifacts.json'), 'utf8'));
+  const html = await readFile(sourceUrl('resume/index.html'), 'utf8');
+  assert.ok(html.includes(`${manifest.pages} ${manifest.pages === 1 ? 'page' : 'pages'} · PDF / DOCX`));
+  assert.ok(html.includes(manifest.updated));
+  for (const [name, expected] of Object.entries(manifest.files)) {
+    const bytes = await readFile(sourceUrl(`public/resume/${name}`));
+    assert.equal(bytes.length, expected.bytes, name);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), expected.sha256, name);
+  }
+});
+
 const readWebpDimensions = async (file) => {
   const buffer = await readFile(sourceUrl(file));
   assert.equal(buffer.toString('ascii', 0, 4), 'RIFF', `${file} must be RIFF`);
