@@ -1,5 +1,13 @@
 # QA checklist
 
+## 2026-09-22 Google Analytics 태그
+
+- [x] 공개 HTML 11개와 production HTML 11개에서 측정 ID `G-ZY1T1JQT20`의 async 로더·기본 초기화·config가 각각 한 번이며 `<head>` 바로 다음에 배치됨을 확인했다. 태그를 제거한 HTML은 최신 배포 기준 `2da2f93`와 동일하다.
+- [x] 최신 main 기반 별도 worktree에서 `npm.cmd ci` 후 `npm.cmd run verify`: 110 tests, 11 routes·31 modules·13 stylesheets, production build·24 deployment entries 통과. `git diff --check`와 독립 변경 범위 감사 통과. 최초 부모 node_modules 재사용 빌드의 폰트 경로 검증 실패는 별도 의존성 설치로 해결했다.
+- [x] 실제 Chrome headless의 11 routes × 390·768·1280px × 기본/reduced, 총 66개 조합에서 가로 넘침·console warning/error·pageerror 0, 키보드 포커스, 자동 full/interactive·lite/static·reduced/flat과 태그 초기화 각 1회를 확인했다. Home·THING의 세 폭 화면을 육안 확인했고 390px touch의 static depth와 JavaScript 비활성 Home 본문 표시를 확인했다.
+
+브라우저 반복 QA에서는 인위적인 페이지뷰 전송을 피하기 위해 Google 외부 로더만 빈 응답으로 대체하고 실제 inline 초기화를 검사했다. 실물 모바일 기기와 GA 관리 화면 수신 여부는 확인하지 않았다. 공개 배포·실제 외부 로더 검증 결과는 해당 Pages 실행과 최종 작업 보고를 따른다.
+
 ## 2026-09-14 모바일 조립·자석 당김·전기 스파크
 
 - [x] `npm.cmd run verify`: 109 tests, 11 routes·31 modules·13 stylesheets, production build·24 deployment entries 통과. 이후 입력 모듈 경계 계약만 갱신해 해당 4 tests를 재검사했다. `git diff --check` 통과. 새 라이브러리·별도 RAF·원본 로봇 자산 변경은 없다.
