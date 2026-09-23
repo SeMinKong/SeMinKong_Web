@@ -1,5 +1,13 @@
 # QA checklist
 
+## 2026-09-23 Google Analytics 측정 ID 교체
+
+- [x] 공개 source·dist HTML 각 11개에서 새 ID `G-8VBR1KCEKY`의 로더와 config가 각각 1회이며 이전 ID가 없음을 독립 감사로 확인했다. HTML diff는 ID 두 곳 교체뿐이며 `<head>` 직후 배치를 유지한다.
+- [x] `npm.cmd run verify`: 110 tests·11 routes·31 modules·13 stylesheets·production build·24 deployment entries 통과. `git diff --check` 통과.
+- [x] Chrome headless에서 11 routes × 390·768·1280px × 기본/reduced, 66개 조합의 태그 초기화·키보드 포커스·자동 motion/depth를 확인했다. 가로 넘침·console warning/error·pageerror 0이며 Home 세 폭 화면을 육안 확인했다. 390px touch static depth와 JavaScript 비활성 본문 표시도 통과했다.
+
+반복 QA의 외부 Google 로더는 빈 응답으로 대체해 테스트 페이지뷰 전송을 피했다. 실물 기기·GA 관리 화면은 확인하지 않았으며 공개 배포와 실제 Google 로더·수집 응답은 최종 보고를 따른다.
+
 ## 2026-09-22 Google Analytics 태그
 
 - [x] 공개 HTML 11개와 production HTML 11개에서 측정 ID `G-ZY1T1JQT20`의 async 로더·기본 초기화·config가 각각 한 번이며 `<head>` 바로 다음에 배치됨을 확인했다. 태그를 제거한 HTML은 최신 배포 기준 `2da2f93`와 동일하다.

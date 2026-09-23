@@ -2,6 +2,10 @@
 
 현재 유효한 결정과 새 변경만 기록한다. 2026-09-07까지의 전체 승인·변경 기록은 [결정 이력](history/decisions.md)에 보관한다.
 
+## 2026-09-23 — Google Analytics 측정 ID 교체
+
+- 사용자 요청으로 공개 11개 페이지의 Google 태그 측정 ID를 `G-ZY1T1JQT20`에서 `G-8VBR1KCEKY`로 교체한다. async 로더 URL과 config를 함께 변경하고 각 페이지의 태그는 기존처럼 한 번만 유지한다.
+
 ## 2026-09-22 — Google Analytics 태그
 
 - 사용자 지정 측정 ID `G-ZY1T1JQT20`의 Google 태그를 공개 HTML 11개(공통 페이지 5개·프로젝트 상세 6개)의 `<head>` 바로 다음에 한 번씩 추가한다. 비동기 로더와 기본 `js`·`config` 초기화를 사용한다.
