@@ -182,6 +182,14 @@
 .case-hero--thing .case-hero__summary {
   grid-column: 1;
   grid-row: 3;
+  gap: 16px;
+}
+
+.case-hero__contribution {
+  color: var(--text);
+  font-size: var(--type-body-sm);
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .case-hero--thing .case-media--thing-demo {
@@ -633,6 +641,7 @@
 
 .case-page--mri .case-media--image,
 .case-page--prompt .case-media--prompt {
+  --case-caption-color: var(--paper-soft);
   background: #dfe8ec;
 }
 
@@ -648,7 +657,7 @@
 .case-media figcaption,
 .case-video figcaption {
   padding: 12px 2px 1px;
-  color: var(--muted);
+  color: var(--case-caption-color, var(--muted));
   font-family: var(--font-mono);
   font-size: var(--type-meta);
   font-weight: var(--weight-meta);

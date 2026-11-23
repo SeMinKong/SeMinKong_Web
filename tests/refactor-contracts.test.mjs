@@ -116,7 +116,12 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.equal(workHtml.match(/class="work-row__cta"/g)?.length, 6);
   assert.equal(workHtml.match(/class="work-row__composition"/g)?.length, 6);
   assert.doesNotMatch(workHtml, /work-row__proofs|aria-label="주요 기술"|work-row__media-caption|work-row__arrow/);
-  assert.match(workHtml, /id="work-list" tabindex="-1" data-work-viewport/);
+  assert.match(workHtml, /class="skip-link" href="#work-list"/);
+  assert.match(workHtml, /<nav class="work-fast-path page-width" id="work-list" tabindex="-1"/);
+  const fastPath = workHtml.match(/<nav class="work-fast-path[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? '';
+  const projectHrefs = [...workHtml.matchAll(/class="work-row__composition" href="([^"]+)"/g)].map((match) => match[1]);
+  assert.deepEqual([...fastPath.matchAll(/href="([^"]+)"/g)].map((match) => match[1]), projectHrefs);
+  assert.doesNotMatch(workHtml, /<video\b/);
   assert.match(workStory, /min-width: 961px/);
   assert.match(workStory, /min-height: 640px/);
   assert.match(workStory, /Promise\.all\(\[[\s\S]*?loadGsapWithSplitText\(\),[\s\S]*?waitForTitleFont\(\)/);

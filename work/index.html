@@ -87,23 +87,24 @@
         <p>프로젝트를 선택하면 만든 과정과 결과를 자세히 볼 수 있습니다.</p>
       </header>
 
-      <nav class="work-fast-path page-width" aria-label="대표 프로젝트 빠른 탐색">
-        <span class="work-fast-path__label">Fast track</span>
-        <a href="./thing/"><span>Robotics</span><strong>THING</strong><i aria-hidden="true">↗</i></a>
-        <a href="./aqis/"><span>Smart Factory</span><strong>AQIS</strong><i aria-hidden="true">↗</i></a>
-        <a href="./brain-tumor-mri/"><span>Computer Vision</span><strong>Brain MRI</strong><i aria-hidden="true">↗</i></a>
-        <a class="work-fast-path__all" href="#work-list"><span>Explore</span><strong>6 projects</strong><i aria-hidden="true">↓</i></a>
+      <nav class="work-fast-path page-width" id="work-list" tabindex="-1" aria-label="프로젝트 바로가기">
+        <a href="./thing/" lang="en">THING</a>
+        <a href="./aqis/" lang="en">AQIS</a>
+        <a href="./brain-tumor-mri/" lang="en">Brain Tumor MRI</a>
+        <a href="./alkkagi/" lang="en">Alkkagi.io</a>
+        <a href="./briefit/" lang="en">Briefit</a>
+        <a href="./project-prompt-generator/" lang="en">Project Prompt Generator</a>
       </nav>
 
       <section class="work-showcase" data-work-showcase aria-label="프로젝트 쇼케이스">
-        <div class="work-showcase__viewport" id="work-list" tabindex="-1" data-work-viewport>
+        <div class="work-showcase__viewport" data-work-viewport>
           <section class="work-list page-width" aria-label="프로젝트" data-work-track>
             <article class="work-row work-row--featured" data-work-beat data-reveal="row">
               <div class="work-row__scene">
                 <a class="work-row__composition" href="./thing/" aria-label="THING 프로젝트 상세 보기">
-                  <div class="work-row__media-stage work-row__media-stage--portrait work-row__media-stage--native" data-work-artifact>
-                    <div class="work-row__media work-row__media--thing work-row__media--native-video" aria-hidden="true">
-                      <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" muted loop playsinline preload="none" data-auto-video aria-hidden="true"></video>
+                  <div class="work-row__media-stage work-row__media-stage--portrait work-row__media-stage--poster" data-work-artifact>
+                    <div class="work-row__media work-row__media--thing work-row__media--poster" aria-hidden="true">
+                      <img src="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" alt="" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
@@ -152,9 +153,9 @@
             <article class="work-row" data-work-beat data-reveal="row">
               <div class="work-row__scene">
                 <a class="work-row__composition" href="./alkkagi/" aria-label="Alkkagi.io 프로젝트 상세 보기">
-                  <div class="work-row__media-stage work-row__media-stage--native" data-work-artifact>
-                    <div class="work-row__media work-row__media--alkkagi work-row__media--native-video" aria-hidden="true">
-                      <video src="/src/assets/projects/alkkagi/demo.mp4" poster="/src/assets/projects/alkkagi/demo-poster.png" width="1276" height="1270" muted loop playsinline preload="none" data-auto-video aria-hidden="true"></video>
+                  <div class="work-row__media-stage work-row__media-stage--poster" data-work-artifact>
+                    <div class="work-row__media work-row__media--alkkagi work-row__media--poster" aria-hidden="true">
+                      <img src="/src/assets/projects/alkkagi/demo-poster.png" width="400" height="400" alt="" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>

@@ -79,7 +79,7 @@ DOM 타깃은 보간된 실제 부품 pose와 동기화하고 크기·위치가 
 
 ## Work와 THING
 
-Work는 full/interactive, 961px 이상 폭, 640px 이상 높이에서 단일 pinned 수평 rail을 사용한다. 여섯 프로젝트의 단일 semantic link와 DOM 순서를 유지한다. 실제 미디어 요소가 아닌 wrapper와 제목/설명/CTA만 움직인다. Keyboard focus가 이동한 프로젝트는 화면에 즉시 맞추며 Tab을 가로채지 않는다.
+Work는 full/interactive, 961px 이상 폭, 640px 이상 높이에서 단일 pinned 수평 rail을 사용한다. 쇼케이스의 각 프로젝트는 하나의 링크를 사용하며 기존 DOM 순서를 유지한다. 미디어 wrapper와 제목/설명/CTA만 움직인다. 키보드 포커스가 이동한 프로젝트는 화면에 즉시 맞추며 Tab을 가로채지 않는다. `#work-list`는 pin 영역 밖에 있는 여섯 프로젝트의 바로가기 목록을 가리킨다. skip link를 실행하면 이 목록에 포커스가 가고 다음 Tab으로 첫 프로젝트를 열 수 있다.
 
 Work는 필요한 Signika face와 GSAP이 준비된 후 강화한다. 초기 준비가 1500ms 안에 끝나지 않으면 정적 세로 목록을 보여주고 해당 진입의 늦은 전환을 막는다. Reduced·touch·좁거나 낮은 viewport·실패도 같은 정적 목록이다.
 
@@ -91,6 +91,6 @@ Hidden/pagehide에서는 기존 story geometry를 보존해 깊은 스크롤 복
 
 여섯 프로젝트의 아키텍처 이미지는 `data-reveal` 없이 HTML에서 바로 표시하고 eager 로딩한다. 핵심 구조도를 읽는 데 스크롤 관찰이나 애니메이션 완료를 요구하지 않는다. 기존 이미지 파일·비율을 유지하며 원본 보기 링크와 별도 캡션은 제공하지 않는다.
 
-자동 preview는 full motion과 viewport visibility를 모두 만족할 때만 재생한다. 수동 demo 하나를 재생하면 나머지를 멈춘다. Offscreen/hidden/pagehide에서 pause하며 복귀 시 수동 demo를 자동 재생하지 않는다.
+Work의 모든 미리보기는 정적 이미지다. 상세 페이지의 영상은 native controls로 재생하고, 하나를 재생하면 나머지를 멈춘다. Offscreen/hidden/pagehide에서 pause하며 복귀 시 자동 재생하지 않는다.
 
 상장 모달은 명시적인 click/keyboard로 연다. ESC·backdrop·닫기를 지원하고 닫으면 원래 trigger로 포커스를 돌린다. 필수 콘텐츠, native media controls, skip link와 navigation은 모션 상태에 의존하지 않는다.

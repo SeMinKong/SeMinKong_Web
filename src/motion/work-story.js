@@ -284,7 +284,7 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
           const title = chapter.querySelector('[data-work-title]');
           const summary = copy?.querySelector('.work-row__summary');
           const action = copy?.querySelector('.work-row__cta');
-          const usesNativeVideo = stage?.classList.contains('work-row__media-stage--native');
+          const isPoster = stage?.classList.contains('work-row__media-stage--poster');
           if (!stage || !copy || !title || !summary || !action) return;
 
           const split = SplitText.create(title, {
@@ -335,7 +335,7 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
             yPercent: 32
           };
 
-          if (!usesNativeVideo) {
+          if (!isPoster) {
             stageFrom.clipPath = 'inset(8% 6% round 2px)';
             stageIdentity.clipPath = 'inset(0% 0% round 0px)';
           }
@@ -343,7 +343,7 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
           if (index === 0) {
             timeline.set(stage, {
               autoAlpha: 1,
-              clipPath: usesNativeVideo ? undefined : 'inset(0% 0% round 0px)',
+              clipPath: isPoster ? undefined : 'inset(0% 0% round 0px)',
               scale: 1,
               x: 0,
               y: 0
@@ -395,7 +395,7 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
           // Freeze every reading target at an exact identity through the hold.
           timeline.set(stage, {
             autoAlpha: 1,
-            clipPath: usesNativeVideo ? undefined : 'inset(0% 0% round 0px)',
+            clipPath: isPoster ? undefined : 'inset(0% 0% round 0px)',
             scale: 1,
             x: 0,
             y: 0
@@ -418,7 +418,7 @@ export const initWorkStory = (environment, { smoothScroll } = {}) => {
               x: () => -Math.min(52, viewport.clientWidth * 0.041),
               y: () => -clamp(viewport.clientHeight * 0.024, 12, 18)
             };
-            if (!usesNativeVideo) stageExit.clipPath = 'inset(6% 4% round 2px)';
+            if (!isPoster) stageExit.clipPath = 'inset(6% 4% round 2px)';
 
             timeline.to(stage, stageExit, SCENE_BEATS.handoff);
             timeline.to(titleChars, {

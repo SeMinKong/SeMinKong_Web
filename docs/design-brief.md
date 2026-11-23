@@ -8,8 +8,8 @@
 
 - 공개 이름: Se Min Kong. 현재 거주지: Suwon.
 - Home: Hero → Projects → Focus → About → Contact.
-- Work: THING, AQIS, Brain Tumor MRI, Alkkagi, Briefit, Project Prompt Generator의 여섯 프로젝트. 실제 미디어·프로젝트명·한 문장 설명·상세 링크만 둔다.
-- 각 Case study: 역할, 구현, 결과, 근거 링크를 읽을 수 있는 독립 문서.
+- Work: THING, AQIS, Brain Tumor MRI, Alkkagi, Briefit, Project Prompt Generator의 여섯 프로젝트. 상단에 모든 상세 페이지로 가는 프로젝트 목록을 제공한다. 쇼케이스는 실제 작업 이미지, 프로젝트명, 한 문장 설명과 상세 링크로 구성한다.
+- 각 Case study: 역할, 구현, 결과, 근거 링크를 읽을 수 있는 독립 문서. THING은 첫 화면에서 맡은 구현을 한 문장으로 소개하고 페이지 내 탐색에서 역할 상세로 바로 연결한다.
 - About: 소개, 현재 관심, 경험, 기술 도구.
 - Resume: Drive 원본의 1쪽 영문 형식을 유지한 이력서 미리보기·PDF/DOCX 다운로드, 수상 증빙 모달, 포트폴리오 PDF 다운로드. Resume와 이력서 문서의 구분선은 검정으로 통일한다.
 - Copyright: 사용한 자료와 라이선스 범위를 설명한다.
