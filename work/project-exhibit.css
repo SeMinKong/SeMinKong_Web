@@ -1,0 +1,166 @@
+/* Hallmark v2.0.0, existing portfolio gallery. The artifact leads in a split hero. */
+/* Critique: keep the two VR views intact and the full dashboard legible at each width. */
+/* Hallmark · waive 77 · the bench check and the headset check use measured observations · Bondi and Tac-Touch give the verification conditions a short section beside their evidence. */
+html,
+body {
+  overflow-x: clip;
+}
+
+.exhibit-case .exhibit-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+  padding-top: clamp(56px, 7vw, 96px);
+}
+
+.exhibit-case .exhibit-hero__story {
+  display: grid;
+  justify-items: start;
+  gap: clamp(16px, 2vw, 28px);
+  min-width: 0;
+}
+
+.exhibit-case .exhibit-hero h1 {
+  min-width: 0;
+  font-size: var(--type-page);
+  line-height: 1;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+.exhibit-case .exhibit-hero .case-hero__lede {
+  max-width: 29em;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.exhibit-case .exhibit-hero .case-facts {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: clamp(28px, 4vw, 52px);
+}
+
+.exhibit-case .exhibit-figure {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.exhibit-case .exhibit-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.exhibit-case .exhibit-figure figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px 16px;
+  color: var(--text-soft);
+  font-size: var(--type-body-sm);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.exhibit-case .exhibit-figure figcaption a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.exhibit-case .exhibit-figure figcaption a:hover,
+.exhibit-case .exhibit-figure figcaption a:active {
+  color: var(--project-accent);
+}
+
+.exhibit-case .exhibit-figure figcaption a:focus-visible {
+  outline: 2px solid var(--project-accent);
+  outline-offset: 4px;
+}
+
+.exhibit-case .exhibit-sequence {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(4px, 1vw, 16px);
+  align-items: start;
+}
+
+.exhibit-case .exhibit-quote {
+  margin: 0;
+  padding-block: clamp(16px, 2.5vw, 32px);
+  color: var(--text);
+  border-block: 1px solid var(--line-strong);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.exhibit-case .case-local-nav a {
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  letter-spacing: normal;
+}
+
+.exhibit-case .case-body {
+  margin-top: clamp(32px, 5vw, 68px);
+}
+
+.exhibit-case .case-technical__body strong {
+  color: var(--text);
+}
+
+.exhibit-case .case-technical__head h2 {
+  min-width: 0;
+  font-size: var(--type-section);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.exhibit-case .exhibit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.exhibit-case .exhibit-table caption {
+  margin-bottom: 8px;
+  color: var(--text-soft);
+  text-align: start;
+  font-size: var(--type-body-sm);
+}
+
+.exhibit-case .exhibit-table :is(th, td) {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: start;
+}
+
+.exhibit-case .exhibit-table :is(th, td):first-child {
+  padding-left: 0;
+}
+
+.exhibit-case .exhibit-table th {
+  color: var(--text);
+  font-weight: var(--weight-ui);
+}
+
+@media (max-width: 840px) {
+  .exhibit-case .exhibit-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .exhibit-case .exhibit-hero .case-facts {
+    margin-bottom: 8px;
+  }
+}
+
+@media (forced-colors: active) {
+  .exhibit-case .exhibit-figure figcaption a {
+    color: LinkText;
+  }
+}
