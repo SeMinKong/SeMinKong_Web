@@ -52,7 +52,7 @@
         <header class="case-hero page-width">
           <h1 data-intro lang="en">Alkkagi.io</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">돌을 튕겨 상대 돌을 밀어내는 온라인 알까기입니다. 서버가 충돌을 계산해 모든 참가자에게 같은 판을 보여 줍니다.</p>
+            <p class="case-hero__lede">돌을 튕겨 상대 돌을 판 밖으로 밀어내는 실시간 온라인 알까기입니다. 서버가 물리 충돌을 직접 계산해 모든 플레이어에게 같은 결과를 동기화합니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#alkkagi-demo">게임 영상 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/SeMinKong/Alkkagi" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="Alkkagi.io 프로젝트 역할 및 핵심 근거">
@@ -74,8 +74,8 @@
           <section class="case-section" id="alkkagi-overview" data-reveal="group">
             <h2>게임 규칙과 구현</h2>
             <div class="case-section__copy">
-              <p>돌을 드래그해 상대를 보드 밖으로 밀어내면 점수가 오르고 돌의 반경과 질량이 달라집니다.</p>
-              <p>React 화면과 Node.js 서버를 Socket.io로 연결하고 원형 충돌 모듈을 구현했습니다. 보드는 접속 인원에 맞춰 조정합니다.</p>
+              <p>돌을 드래그해 상대를 보드 밖으로 밀어내면 점수가 오르고 돌의 반경과 질량이 커집니다.</p>
+              <p>React 화면과 Node.js 서버를 Socket.io로 연결하고 원형 충돌 모듈을 직접 구현했습니다. 보드 크기는 접속 인원에 맞춰 조정됩니다.</p>
             </div>
           </section>
           <figure class="case-architecture">
@@ -86,10 +86,10 @@
               <h2>입력 검증과 서버 상태</h2>
             </header>
             <div class="case-technical__body">
-              <p>서버는 입력을 보낸 접속자의 돌을 찾고, 500ms 안의 재입력을 거절합니다. 튕기기 벡터의 크기를 보드 크기에 비례한 상한으로 제한한 뒤 질량으로 나눠 속도를 정합니다.</p>
-              <p>게임 상태는 서버 메모리에 한 벌로 두고 <code>gameStateUpdate</code>로 배포합니다. React 클라이언트는 받은 위치를 DOM·SVG에 표시하므로 플레이어마다 충돌을 별도로 판정하지 않습니다.</p>
+              <p>플레이어가 돌을 튕기면 서버가 500ms 쿨타임을 먼저 검사하고, 보드 크기에 비례한 최대 힘 상한과 돌의 질량을 반영해 초기 속도를 계산합니다.</p>
+              <p>모든 물리 상태는 서버 메모리 한 곳에서 관리해 <code>gameStateUpdate</code>로 브로드캐스트하고, React 클라이언트는 받은 좌표를 DOM·SVG로 렌더링하는 역할만 맡겨 클라이언트 간 판정 불일치를 없앴습니다.</p>
               <ol class="case-steps" style="--step-count: 3">
-                <li><strong>flick 입력</strong><span>접속자 · 재입력 간격 확인</span>
+                <li><strong>flick 입력</strong><span>플레이어 · 쿨타임 확인</span>
                 </li>
                 <li><strong>서버 물리 계산</strong><span>힘 제한 · 질량 반영</span>
                 </li>
@@ -104,8 +104,8 @@
               <h2>원형 충돌과 위치 보정</h2>
             </header>
             <div class="case-technical__body">
-              <p>두 돌의 중심 거리와 반경 합으로 겹침을 찾습니다. 겹친 거리의 절반씩 양쪽 위치를 밀어낸 다음, 두 돌을 잇는 방향의 상대 속도를 확인합니다. 이미 멀어지는 중이면 충격량을 더하지 않습니다.</p>
-              <p>접근 중이면 반발계수 0.7과 두 돌의 역질량으로 충격량을 계산합니다. 위치 보정은 반씩 나누지만 속도 변화는 질량에 따라 달라져, 커진 돌의 무게가 충돌 반응에 반영됩니다.</p>
+              <p>두 돌이 겹치면 먼저 겹친 거리의 절반씩 양쪽으로 밀어내 위치를 보정하고, 서로 가까워지는 방향일 때만 반발계수 0.7과 역질량 비율로 충격량을 계산합니다.</p>
+              <p>위치 보정은 동일하게 나누되 속도 변화에는 질량을 반영해, 점수가 올라 커진 돌일수록 묵직하게 부딪히도록 만들었습니다.</p>
               <div class="case-equations">
                 <code>n = (p₂ − p₁) / distance</code><code>vₙ = (v₂ − v₁) · n</code><code>j = −(1 + 0.7) × vₙ / (1/m₁ + 1/m₂)</code>
               </div>
@@ -118,13 +118,13 @@
               <h2>갱신당 10회 물리 계산</h2>
             </header>
             <div class="case-technical__body">
-              <p>서버 타이머는 60Hz를 목표로 설정하고 한 번의 갱신에서 물리를 10회 계산합니다. 각 소단계에서 이동·마찰·충돌·보드 이탈을 처리한 뒤 최종 상태를 배포합니다. 득점과 재배치, 반경·질량 변경도 서버에서 처리합니다.</p>
+              <p>서버 틱을 60Hz로 두고, 한 틱 안에서 물리를 10개 서브스텝으로 쪼개 계산해 빠른 돌이 서로 통과하는 현상을 줄였습니다. 매 서브스텝마다 이동·마찰·충돌·보드 이탈을 처리하고, 득점에 따른 돌 크기·질량 변화와 재배치까지 반영한 최종 상태를 클라이언트에 보냅니다.</p>
               <ol class="case-steps" style="--step-count: 3">
-                <li><strong>소단계 × 10</strong><span>이동 → 감속 → 충돌 → 득점</span>
+                <li><strong>서브스텝 × 10</strong><span>이동 → 감속 → 충돌 → 득점</span>
                 </li>
                 <li><strong>게임 상태 갱신</strong><span>반경·질량 · 재배치</span>
                 </li>
-                <li><strong>gameStateUpdate</strong><span>한 갱신의 결과를 배포</span>
+                <li><strong>gameStateUpdate</strong><span>한 틱의 최종 상태 배포</span>
                 </li>
               </ol>
               <div class="case-equations">
@@ -136,8 +136,8 @@
           <section class="case-section" id="alkkagi-source" data-reveal="group">
             <h2>게임에 필요한 물리</h2>
             <div class="case-section__copy">
-              <p>범용 엔진 대신 원형 충돌과 보드 밖 득점에 집중한 TypeScript 모듈로 계산을 구성했습니다. 마찰은 소단계마다 <code>FRICTION ** stepFactor</code>로 적용합니다. 충돌·정지·재배치가 없으면 10회 적용 후 속도는 기존의 0.8배가 됩니다. 각 소단계에서 축별 속도의 절댓값이 0.1 미만이면 0으로 처리합니다.</p>
-              <p class="case-note">60Hz는 타이머 설정입니다. 지속 FPS·네트워크 지연·동시 접속 성능은 별도로 측정하지 않았습니다.</p>
+              <p>범용 물리 엔진을 붙이는 대신 원형 충돌과 보드 이탈 판정에 필요한 계산만 TypeScript 모듈로 직접 짰습니다. 마찰은 서브스텝마다 <code>FRICTION ** stepFactor</code>로 분할 적용해 1틱당 속도가 0.8배로 줄어들게 맞췄고, 축별 속도가 0.1 미만으로 떨어지면 완전히 정지시켜 미세한 미끄러짐을 막았습니다.</p>
+              <p class="case-note">60Hz 타이머 기준으로 구현했으며, 다수 동시 접속이나 네트워크 지연에 따른 부하 테스트는 아직 진행하지 않았습니다.</p>
               <a class="source-link" href="https://github.com/SeMinKong/Alkkagi" rel="noreferrer">GitHub 저장소 <span aria-hidden="true">↗</span></a>
             </div>
           </section>

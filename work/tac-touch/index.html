@@ -53,12 +53,12 @@
         <header class="exhibit-hero page-width">
           <div class="exhibit-hero__story" data-intro>
             <h1 lang="en">Tac-Touch</h1>
-            <p class="case-hero__lede">그리퍼 양쪽 손끝의 움직임을 촉각 센서로 읽고 PC에서 3D 기구와 함께 보여 줍니다.</p>
+            <p class="case-hero__lede">그리퍼 양쪽 손끝의 촉각 신호를 센서로 읽어 PC 화면의 3D 모델과 함께 보여주는 앱입니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#sensor">센서 수집 보기 <span aria-hidden="true">↓</span></a></div>
           </div>
           <figure class="exhibit-figure" data-intro>
-            <img src="/src/assets/projects/tac-touch/dashboard.webp" width="1980" height="1120" alt="로봇팔 3D 모델 양쪽으로 손끝 방향 화살표가, 아래로 두 센서의 변화 그래프가 보이는 모의 전시 화면" decoding="async" fetchpriority="high" />
-            <figcaption><span>PC 앱 전시 화면 · 모의 센서 입력</span><a href="/src/assets/projects/tac-touch/dashboard.webp">큰 이미지 보기</a></figcaption>
+            <img src="/src/assets/projects/tac-touch/dashboard.webp" width="1980" height="1120" alt="로봇팔 3D 모델 양쪽으로 손끝 방향 화살표가, 아래로 두 센서의 변화 그래프가 보이는 테스트 입력 화면" decoding="async" fetchpriority="high" />
+            <figcaption><span>PC 앱 화면 · 테스트 센서 입력</span><a href="/src/assets/projects/tac-touch/dashboard.webp">큰 이미지 보기</a></figcaption>
           </figure>
           <dl class="case-facts" aria-label="Tac-Touch 프로젝트 정보">
             <div><dt>프로젝트</dt><dd>SSAFY 15기 자율프로젝트, 택로봇 기업 연계</dd></div>
@@ -79,13 +79,13 @@
           <section class="case-technical" id="sensor" aria-labelledby="sensor-title" data-reveal="group">
             <header class="case-technical__head"><h2 id="sensor-title">움직임이 없는 0과 읽기 실패</h2></header>
             <div class="case-technical__body">
-              <p>멈춘 손끝과 응답하지 않는 센서는 화면에서 모두 0처럼 보일 수 있습니다. 펌웨어에서 채널별 읽기 결과와 마지막 정상 측정값을 따로 보관했습니다.</p>
+              <p>손끝이 멈춰 있을 때와 센서가 응답하지 않을 때 모두 값이 0으로 보이면 현장에서 구분하기 어렵습니다. 펌웨어 단에서 채널별 읽기 상태와 직전 정상 측정값을 분리해 관리하도록 바꿨습니다.</p>
               <table class="exhibit-table">
                 <caption>채널별 읽기 결과</caption>
-                <thead><tr><th scope="col">읽기 결과</th><th scope="col">신호의 의미</th></tr></thead>
+                <thead><tr><th scope="col">상태</th><th scope="col">해석</th></tr></thead>
                 <tbody>
-                  <tr><th scope="row">정상 수신, 값 0</th><td>측정한 움직임 없음</td></tr>
-                  <tr><th scope="row">읽기 실패</th><td>새 측정값 없음</td></tr>
+                  <tr><th scope="row">정상 수신 (값 0)</th><td>움직임 없음</td></tr>
+                  <tr><th scope="row">읽기 실패</th><td>센서 응답 없음 · 갱신 제외</td></tr>
                 </tbody>
               </table>
             </div>
@@ -94,15 +94,15 @@
           <section class="case-technical" id="bench" aria-labelledby="bench-title" data-reveal="group">
             <header class="case-technical__head"><h2 id="bench-title">보드 출력과 PC 수신값</h2></header>
             <div class="case-technical__body">
-              <p>실물 보드의 출력과 같은 시점의 PC 수신값을 대조했습니다. PC에서도 0을 보낸 채널과 수집에서 제외된 채널을 구분했습니다.</p>
+              <p>실물 보드 로그와 같은 시점의 PC 수신 데이터를 대조하며 검증했고, PC 측에서도 정상 0값 채널과 읽기 실패 채널이 섞이지 않게 구분했습니다.</p>
             </div>
           </section>
 
           <section class="case-technical" id="mcp" aria-labelledby="mcp-title" data-reveal="group">
             <header class="case-technical__head"><h2 id="mcp-title">그리퍼 장착 각도 편집</h2></header>
             <div class="case-technical__body">
-              <p>MCP(Model Context Protocol)를 통해 AI 도구가 PC 앱의 현재 선택을 읽고, 지정한 축의 장착 각도를 바꾼 사본을 저장하도록 했습니다.</p>
-              <p>Nova 2 로봇팔과 AG-160-95 그리퍼의 사본에서 기존 장착 거리와 새 각도를 대조하고, 파일이 3D 화면에 열리는 것을 확인했습니다.</p>
+              <p>PC 앱에 MCP(Model Context Protocol)를 연동해, 현재 선택한 기구 정보를 AI 도구가 읽고 지정한 축의 장착 각도만 수정한 별도 파일로 저장할 수 있게 했습니다.</p>
+              <p>Nova 2 로봇팔과 AG-160-95 그리퍼 조합에서 기존 장착 오프셋이 유지된 채 각도만 반영되는지, 수정본이 3D 뷰어에서 정상 로드되는지까지 확인했습니다.</p>
             </div>
           </section>
         </div>

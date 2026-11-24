@@ -52,7 +52,7 @@
         <header class="case-hero page-width">
           <h1 data-intro lang="en">Briefit</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">여러 언론사의 기사를 이슈별로 묶고 한국어 요약을 제공하는 뉴스 서비스입니다.</p>
+            <p class="case-hero__lede">여러 언론사의 기사를 이슈별로 묶고 핵심 내용을 한국어로 요약해 주는 뉴스 서비스입니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#briefit-product">서비스 화면 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/capstone-btd/Briefit_AI" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="Briefit 프로젝트 역할 및 핵심 근거">
@@ -74,8 +74,8 @@
           <section class="case-section" id="briefit-contribution" data-reveal="group">
             <h2>담당한 작업</h2>
             <div class="case-section__copy">
-              <p>기사 약 4,000건을 수집·정제하고 약 3,000건으로 KoBART를 학습했습니다. T5와 KoBART를 ROUGE-1·2로 비교하고 서비스에는 Gemini API도 연결했습니다.</p>
-              <p>구조도는 제가 참여한 2025년 KoBART 구현을 담고 있습니다. 팀의 후속 서비스는 GPT-OSS를 사용합니다.</p>
+              <p>기사 약 4,000건을 수집·정제하고 이 중 약 3,000건으로 KoBART를 파인튜닝했습니다. T5와 KoBART의 요약 성능을 ROUGE-1·2로 비교했고, 실제 서비스 파이프라인에는 Gemini API도 연동했습니다.</p>
+              <p>아래 구조도는 제가 참여한 2025년 KoBART 버전 기준이며, 이후 팀에서 이어진 버전은 GPT-OSS로 전환됐습니다.</p>
             </div>
           </section>
           <figure class="case-architecture">
@@ -86,14 +86,14 @@
               <h2>기사 수집과 정제</h2>
             </header>
             <div class="case-technical__body">
-              <p>기사 본문을 직접 확보하고 모델 입력에 맞게 정제하기 위해 Crawl4AI를 선택했습니다. 수집 대상을 기사 URL로 좁히고 댓글 페이지를 제외했습니다. 본문 선택자를 순서대로 확인해 script·style 등의 요소를 제거한 뒤 텍스트만 JSON으로 저장합니다.</p>
-              <p>저장에 성공한 URL은 배치 사이에서 공유하는 집합에 넣습니다. 다음 배치가 같은 링크를 만나면 건너뛰므로 한 번의 실행 안에서 중복 저장을 막습니다.</p>
+              <p>모델 학습에 쓸 본문을 깔끔하게 확보하기 위해 Crawl4AI로 크롤러를 만들었습니다. 기사 URL만 걸러 댓글 페이지를 제외했고, 본문 영역에서 script·style 같은 불필요한 태그를 걷어낸 뒤 텍스트만 JSON으로 저장했습니다.</p>
+              <p>저장에 성공한 URL은 실행 내내 Set으로 공유해 배치 간 중복 수집을 막았습니다.</p>
               <ol class="case-steps" style="--step-count: 3">
                 <li><strong>기사 URL 선택</strong><span>기사 패턴 허용 · 댓글 제외</span>
                 </li>
                 <li><strong>본문 정제</strong><span>본문 요소 추출 · 불필요 태그 제거</span>
                 </li>
-                <li><strong>JSON 저장</strong><span>저장 성공 URL을 집합에 추가</span>
+                <li><strong>JSON 저장</strong><span>저장 성공 URL을 Set으로 중복 제거</span>
                 </li>
               </ol>
               <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI/blob/a7b25dff1438940fea631d8ba597835435b7c32a/Dataset/Crawl4AI.py#L111" rel="noreferrer">crawl_naver · 수집과 중복 처리 <span aria-hidden="true">↗</span></a>
@@ -104,7 +104,7 @@
               <h2>기사와 요약의 학습 쌍</h2>
             </header>
             <div class="case-technical__body">
-              <p>학습 데이터의 기사 <code>text</code>는 encoder 입력으로, 정답 <code>summary</code>는 decoder의 <code>labels</code>로 전달합니다. 각각 최대 384·256토큰으로 자르고 패딩해 Seq2SeqTrainer가 사용할 학습 쌍을 구성했습니다.</p>
+              <p>기사 본문(<code>text</code>, 최대 384토큰)을 Encoder 입력으로, 정답 요약(<code>summary</code>, 최대 256토큰)을 Decoder의 <code>labels</code>로 맞춰 Seq2SeqTrainer용 학습 데이터셋을 구성했습니다.</p>
               <div class="case-pair">
                 <div>
                   <span>Encoder input</span><strong>기사 · 384토큰</strong><code>input_ids + attention_mask</code>
@@ -121,8 +121,8 @@
               <h2>긴 기사의 분할 요약</h2>
             </header>
             <div class="case-technical__body">
-              <p>생성 단계에서는 입력이 1,024토큰 이하면 한 번에 요약합니다. 더 긴 기사는 문단을 누적해 나누고, 각 부분의 요약문을 연결한 뒤 다시 요약합니다. 부분 요약과 재요약의 출력 상한은 각각 512토큰이며, 생성에는 beam 4개와 length penalty 1.2를 사용합니다.</p>
-              <p>매 생성 뒤 <code>_clean_tail</code>이 짧은 끝문장과 직전 문장의 반복을 제거합니다. 문단을 더한 뒤 길이를 검사하고 매 입력을 1,024토큰에서 자르므로, 긴 문단이나 연결된 요약문은 일부가 잘릴 수 있습니다.</p>
+              <p>추론 시 1,024토큰 이하 기사는 한 번에 요약하고, 이를 넘는 긴 기사는 문단 단위로 나눠 부분 요약한 뒤 합쳐서 다시 요약하는 2단계 방식을 썼습니다. 출력 상한은 512토큰으로 두고 beam 4개와 length penalty 1.2를 적용했습니다.</p>
+              <p>생성 끝부분에 자주 생기는 어색한 단문이나 문장 반복은 후처리 함수(<code>_clean_tail</code>)로 정리했습니다. 다만 문단을 합친 뒤 1,024토큰을 넘기면 잘라내는 구조라, 아주 긴 문단이나 합쳐진 요약문은 일부 내용이 잘릴 수 있습니다.</p>
               <ol class="case-steps" style="--step-count: 3">
                 <li><strong>문단 묶음</strong><span>입력 길이 검사</span>
                 </li>
@@ -137,8 +137,8 @@
           <section class="case-section" id="briefit-integration" data-reveal="group">
             <h2>품질을 확인하는 기준</h2>
             <div class="case-section__copy">
-              <p>별도 평가 스크립트는 모델의 후처리 전 요약문을 정답 요약과 ROUGE로 비교합니다. 부분·재요약이나 후처리를 거친 최종 출력과는 평가 대상이 다릅니다.</p>
-              <p class="case-note">짧은 정상 문장도 후처리에서 지워질 수 있어 자연스러움과 정보 보존을 함께 확인해야 합니다. 약 3,000건의 파인튜닝과 모델 비교는 당시 작업 경험입니다. 공개 저장소에는 해당 체크포인트와 연결된 평가 로그·품질 비교 수치가 포함되어 있지 않습니다.</p>
+              <p>ROUGE 평가 스크립트는 후처리 전 원시 요약문을 기준으로 계산했기 때문에, 분할·재요약과 후처리를 거친 최종 출력과는 평가 대상에 차이가 있습니다.</p>
+              <p class="case-note">끝문장 정리 과정에서 짧은 정상 문장까지 지워질 수 있어 정량 지표 외에 실제 문장 자연스러움도 함께 확인했습니다. 당시 3,000건 규모로 학습하며 모델을 비교했지만, 현재 공개 저장소에는 체크포인트와 평가 로그를 따로 올려두지 않았습니다.</p>
               <a class="source-link" href="https://github.com/capstone-btd/Briefit_AI/blob/714502c017f0c57ebebd634b60ea77a102945d81/Kobart/Scripts/Evaluate.py#L12" rel="noreferrer">ROUGE 평가 소스 <span aria-hidden="true">↗</span></a><a class="source-link" href="https://github.com/capstone-btd/.github/blob/main/profile/README.md" rel="noreferrer">팀 소개 <span aria-hidden="true">↗</span></a>
             </div>
           </section>

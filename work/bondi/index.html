@@ -53,7 +53,7 @@
         <header class="exhibit-hero page-width">
           <div class="exhibit-hero__story" data-intro>
             <h1 lang="en">Bondi</h1>
-            <p class="case-hero__lede">깨진 토기와 AI로 복원한 모형을 손으로 돌려 보는 VR 박물관입니다.</p>
+            <p class="case-hero__lede">깨진 유물과 AI 복원 모델을 손으로 직접 돌려보며 비교하는 VR 박물관입니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#restoration">토기 복원 보기 <span aria-hidden="true">↓</span></a></div>
           </div>
           <figure class="exhibit-figure" data-intro>
@@ -79,11 +79,11 @@
           <section class="case-technical" id="restoration" aria-labelledby="restoration-title" data-reveal="group">
             <header class="case-technical__head"><h2 id="restoration-title">빗살무늬토기 복원</h2></header>
             <div class="case-technical__body">
-              <p>빗살무늬토기 사진 한 장을 TRELLIS에 넣어 3D 형상을 만들었습니다. 표면의 점들을 같은 중심과 크기로 맞춘 뒤 AdaPoinTr로 결손 부위를 추정했습니다.</p>
-              <p>사진에 보이지 않는 뒤쪽과 안쪽은 추정한 형상입니다. 입력 점과 예측 점을 겹쳐 보완 범위를 확인하고, 전시 설명에 자료 출처와 추정 근거를 적었습니다.</p>
+              <p>빗살무늬토기 사진 한 장에서 TRELLIS로 3D 형상을 뽑아낸 뒤, 점군 중심과 스케일을 정규화하고 AdaPoinTr로 깨진 부분을 보완했습니다.</p>
+              <p>단일 사진이라 보이지 않는 뒷면과 내부는 모델이 추정한 형상이기 때문에, 원본 점군과 예측 결과를 겹쳐 보완 범위를 확인하고 전시 설명에도 출처와 추정 범위를 함께 밝혔습니다.</p>
               <figure class="exhibit-figure">
                 <img src="/src/assets/projects/bondi/restoration.webp" width="1450" height="572" alt="굽다리바리의 손상 사진, 손상된 3D 형상, 빠진 몸체를 채운 복원 모델을 차례로 비교한 그림" loading="lazy" decoding="async" />
-                <figcaption><span>팀의 굽다리바리 사례 · 원본 사진, 손상 형상, 복원 형상</span></figcaption>
+                <figcaption><span>굽다리바리 복원 사례 (원본 사진 → 손상 모델 → 복원 모델)</span></figcaption>
               </figure>
             </div>
           </section>
@@ -91,8 +91,8 @@
           <section class="case-technical" id="interaction" aria-labelledby="interaction-title" data-reveal="group">
             <header class="case-technical__head"><h2 id="interaction-title">손으로 조작하는 전시</h2></header>
             <div class="case-technical__body">
-              <p>Blender로 메인 홀과 전시실을 모델링하고 Unreal에 배치했습니다.</p>
-              <p>OpenXR로 손을 추적해 검지로 버튼을 누르면 두 모델이 같은 자리에서 바뀌도록 했습니다. 엄지와 검지를 맞대면 유물을 들어 돌릴 수 있고, 손을 펴면 제자리로 돌아갑니다.</p>
+              <p>Blender로 메인 홀과 전시실을 모델링해 Unreal Engine에 배치했습니다.</p>
+              <p>OpenXR 핸드 트래킹으로 검지 버튼을 누르면 원본과 복원 모델이 같은 위치에서 전환되고, 엄지와 검지로 집어 돌려보다가 손을 펴면 제자리로 돌아오게 구현했습니다.</p>
               <figure class="exhibit-figure">
                 <div class="exhibit-sequence">
                   <img src="/src/assets/projects/bondi/grasp.webp" width="500" height="577" alt="손가락을 모아 신라관의 유물을 집는 장면" loading="lazy" decoding="async" />
@@ -107,9 +107,9 @@
           <section class="case-technical" id="headset" aria-labelledby="headset-title" data-reveal="group">
             <header class="case-technical__head"><h2 id="headset-title">포털 도착 오차</h2></header>
             <div class="case-technical__body">
-              <p>관람객이 실제로 걸으면 포털의 도착점이 어긋났습니다. 화면 전환 중 헤드셋 위치와 방향을 다시 잡고 목적지 표식에 배치했습니다.</p>
+              <p>관람객이 실제로 걸어 다니다 포털을 타면 헤드셋 오프셋 때문에 도착 위치가 크게 어긋나는 문제가 있었습니다. 전환 시점에 헤드셋 위치와 시선 방향을 기준으로 오프셋을 보정해 목적지 마커에 맞춰 떨어지도록 수정했습니다.</p>
               <table class="exhibit-table">
-                <caption>Quest 2 실기 측정 · 수동 위치 재설정 없음</caption>
+                <caption>Quest 2 실기 측정 (수동 리센터링 없이 측정)</caption>
                 <thead><tr><th scope="col">도착 지점</th><th scope="col">수정 전</th><th scope="col">수정 후</th></tr></thead>
                 <tbody>
                   <tr><th scope="row">토기 전시실</th><td>369 cm</td><td><strong>13 cm</strong></td></tr>

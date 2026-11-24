@@ -28,7 +28,7 @@
     <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Project Prompt Generator — Se Min Kong" />
-    <meta name="twitter:description" content="여섯 설계 대화를 각각 관리하고 생성된 결과를 구현 문서로 모으는 웹 도구입니다." />
+    <meta name="twitter:description" content="6개 설계 영역별 대화를 따로 관리하고 결과를 구현 문서로 모으는 웹 도구입니다." />
     <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
     <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
@@ -52,7 +52,7 @@
         <header class="case-hero page-width">
           <h1 data-intro lang="en">Project Prompt Generator</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">프로젝트 아이디어를 UI, API, 배포 등 여섯 영역의 설계 문서로 정리하는 대화형 도구입니다.</p>
+            <p class="case-hero__lede">아이디어를 주고받으며 UI, API, 배포 등 6개 영역의 설계 문서로 정리해 주는 대화형 도구입니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#prompt-flow">설계 흐름도 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="Project Prompt Generator 프로젝트 역할 및 핵심 근거">
@@ -66,16 +66,16 @@
         </nav>
 
         <figure class="case-media case-media--prompt page-width" id="prompt-flow" data-reveal="media">
-          <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="프로젝트 입력을 여섯 설계 영역으로 나눈 뒤 최종 문서로 모으는 원본 설계 흐름도" decoding="async" />
+          <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="프로젝트 입력을 6개 설계 영역으로 나눈 뒤 최종 문서로 모으는 원본 설계 흐름도" decoding="async" />
           <figcaption>초기 설계 흐름도</figcaption>
         </figure>
 
         <div class="case-body case-body--technical page-width">
           <section class="case-section" id="prompt-overview" data-reveal="group">
-            <h2>여섯 설계 영역</h2>
+            <h2>6개 설계 영역</h2>
             <div class="case-section__copy">
-              <p>UI/UX, 시스템 구조, 데이터베이스, API, 배포, 테스트를 별도로 논의하고 결과를 Markdown으로 모읍니다.</p>
-              <p>FastAPI에서 대화 상태를 관리하고 LangChain으로 Solar Pro를 호출합니다.</p>
+              <p>UI/UX, 시스템 아키텍처, DB, API, 배포, 테스트 6개 영역을 따로 논의한 뒤 하나의 Markdown 문서로 합쳐줍니다.</p>
+              <p>FastAPI로 세션 상태를 관리하고, LangChain을 통해 Solar Pro를 호출합니다.</p>
             </div>
           </section>
           <figure class="case-architecture">
@@ -86,8 +86,8 @@
               <h2>영역별 대화 문맥</h2>
             </header>
             <div class="case-technical__body">
-              <p>모델 호출마다 영역별 지침, 프로젝트 설명, 해당 영역의 대화 이력, 새 사용자 입력을 구성합니다. 다른 영역의 이력은 포함하지 않아 API를 논의하던 대화가 UI 질문과 섞이지 않게 했습니다.</p>
-              <p>첫 질문은 <code>asyncio.gather</code>로 함께 시작합니다. 동기식 LLM 호출은 <code>asyncio.to_thread</code>에서 실행하고, 질문과 진행 상태를 WebSocket으로 전달합니다.</p>
+              <p>LLM을 호출할 때마다 해당 영역의 지침, 프로젝트 설명, 그 영역의 이전 대화만 묶어 보내 API 논의와 UI 질문이 서로 섞이지 않게 분리했습니다.</p>
+              <p>초기 질문 생성은 <code>asyncio.gather</code>로 병렬 처리했고, 동기식 LLM 호출은 <code>asyncio.to_thread</code>로 넘겨 WebSocket 이벤트 루프가 막히지 않게 했습니다.</p>
               <div class="case-context">
                 <span>영역·라운드 지침</span><span>프로젝트 설명</span><span>해당 영역 history</span><span>새 답변</span>
               </div>
@@ -100,8 +100,8 @@
               <h2>완료 조건과 오류 복구</h2>
             </header>
             <div class="case-technical__body">
-              <p>입력을 처리할 때 상태를 <code>in_progress</code>로 바꾸고 라운드를 증가시킵니다. 첫 질문도 한 라운드로 셉니다. 3라운드 이상이고 응답에 <code>[GENERATE_PROMPT]</code>가 있어야 결과를 저장하고 <code>completed</code>로 바꿉니다. 세 번을 대화의 상한으로 제한하지는 않습니다.</p>
-              <p><code>RuntimeError</code>·<code>ValueError</code>·<code>OSError</code>를 처리할 때는 라운드를 되돌리고 <code>pending</code>으로 복구합니다. 성공한 대화만 이력에 추가하므로 실패한 응답이 다음 질문의 문맥에 들어가지 않습니다.</p>
+              <p>영역별 대화가 시작되면 상태를 <code>in_progress</code>로 바꾸고, 최소 3라운드 이상 대화가 오간 뒤 모델 응답에 <code>[GENERATE_PROMPT]</code> 태그가 포함됐을 때만 결과를 확정(<code>completed</code>)하도록 했습니다.</p>
+              <p>LLM 호출이나 파싱 과정에서 예외가 나면 라운드와 상태를 직전(<code>pending</code>)으로 되돌려, 실패한 응답이 대화 히스토리에 오염되지 않게 막았습니다.</p>
               <ol class="case-steps" style="--step-count: 3">
                 <li><strong>pending</strong><span>입력 대기</span>
                 </li>
@@ -110,7 +110,7 @@
                 <li><strong>completed</strong><span>round ≥ 3 + 완료 태그</span>
                 </li>
               </ol>
-              <p class="case-diagram-caption">미완료 응답 → in_progress 유지 · 처리 대상 오류 → pending·이전 라운드</p>
+              <p class="case-diagram-caption">미완료 응답 → in_progress 유지 · 예외 발생 시 → pending·이전 라운드 복구</p>
               <a class="source-link" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph/blob/1972aa05d5caca05869a6ba588bf4b7573a7f678/server/graph_runner.py#L40" rel="noreferrer">상태 갱신과 오류 처리 <span aria-hidden="true">↗</span></a>
             </div>
           </section>
@@ -119,7 +119,7 @@
               <h2>Markdown 문서 생성</h2>
             </header>
             <div class="case-technical__body">
-              <p>최종 문서 요청은 저장된 <code>generated_prompt</code>가 있는 영역을 모아 프로젝트 설명과 함께 별도의 모델 호출에 전달합니다. 여섯 영역이 모두 완료될 때까지 기다리는 방식이 아니며, 결과가 하나 이상 있으면 문서를 만들 수 있습니다.</p>
+              <p>6개 영역을 전부 끝낼 필요 없이, <code>generated_prompt</code>가 하나 이상 만들어진 시점부터 완료된 영역만 모아 프로젝트 설명과 함께 하나의 Markdown 문서로 정리해 줍니다.</p>
               <ol class="case-steps" style="--step-count: 3">
                 <li><strong>영역별 생성 결과</strong><span>결과가 있는 영역 선택</span>
                 </li>
@@ -132,7 +132,7 @@
             </div>
           </section>
           <aside class="case-note case-note--standalone">
-            <p>세션은 메모리에 저장되며 연결 종료 시 삭제됩니다. 실패한 수정 뒤에는 이전 생성 결과가 남습니다. 공개 실행 코드는 영역별 상태 관리이며 LangGraph 그래프 실행은 포함하지 않습니다.</p>
+            <p>현재는 인메모리 세션이라 연결이 끊기면 대화가 초기화됩니다. 수정 요청이 실패하면 기존 결과를 유지하며, 공개 코드는 LangGraph 대신 직접 구현한 영역별 상태 관리 로직으로 동작합니다.</p>
             <div class="source-links">
               <span class="source-status">Demo · Offline</span><a class="source-link" href="https://github.com/SeMinKong/ProjectPromptGenerator_LangGraph" rel="noreferrer">GitHub 저장소 <span aria-hidden="true">↗</span></a>
             </div>

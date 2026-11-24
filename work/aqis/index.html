@@ -53,7 +53,7 @@
         <header class="case-hero page-width">
           <h1 data-intro lang="en">AQIS</h1>
           <div class="case-hero__summary" data-intro>
-            <p class="case-hero__lede">카메라로 불량을 찾아 컨베이어를 멈추고 Dobot 로봇으로 분류하는 검사 시스템입니다.</p>
+            <p class="case-hero__lede">비전 검사로 불량을 감지해 컨베이어를 세우고, Dobot 로봇팔로 제품을 분류하는 자동화 시스템입니다.</p>
             <div class="case-hero__actions"><a class="button button--primary button--small" href="#aqis-demo">실제 구동 보기 <span aria-hidden="true">↓</span></a><a class="button button--quiet button--small" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
           </div>
           <dl class="case-facts" data-intro aria-label="AQIS 프로젝트 역할 및 핵심 근거">
@@ -70,7 +70,7 @@
           <section class="aqis-chapter" id="aqis-architecture" aria-labelledby="aqis-architecture-title">
             <header class="aqis-chapter__head" data-reveal>
               <div><h2 id="aqis-architecture-title">장비와 서버 구성</h2></div>
-              <div class="aqis-chapter__intro"><p>실물 장비와 RoboDK 시뮬레이션은 별도로 실행하고 FastAPI와 웹 관제로 연결했습니다.</p></div>
+              <div class="aqis-chapter__intro"><p>실물 장비와 RoboDK 시뮬레이션은 독립적으로 동작하게 두고, FastAPI 서버와 웹 관제 화면에서 통합 제어할 수 있게 구성했습니다.</p></div>
             </header>
             <figure class="case-architecture">
               <img src="/src/assets/projects/aqis/architecture.svg" width="1419" height="1031" alt="AQIS의 RoboDK 시뮬레이션, ROS 2 실물 로봇과 카메라, FastAPI 서버, React 관제 및 LLM 연계 구성을 나타낸 발표 자료" loading="eager" decoding="async" />
@@ -80,7 +80,7 @@
           <section class="aqis-chapter" id="aqis-inspection" aria-labelledby="aqis-inspection-title">
             <header class="aqis-chapter__head" data-reveal>
               <div><h2 id="aqis-inspection-title">불량 검사와 Dobot 분류</h2></div>
-              <div class="aqis-chapter__intro" id="aqis-overview"><p>RealSense의 RGB·Depth 입력과 YOLOv5 검사 결과를 컨베이어 정지, 좌표 갱신, 흡착 분류로 연결했습니다. 뚜껑 이미지 약 1,000장을 학습·검증 7:3으로 나눠 모델을 학습하고, 검출 결과를 서버와 장비 제어에 연결했습니다.</p><p class="aqis-credit">본인 · YOLO 학습, ROS 통합, FastAPI·ROS 2 bridge, Dobot 작업 연결</p></div>
+              <div class="aqis-chapter__intro" id="aqis-overview"><p>뚜껑 이미지 약 1,000장(학습:검증 7:3)으로 YOLOv5를 학습하고, RealSense의 RGB·Depth 입력부터 컨베이어 정지, 좌표 보정, Dobot 흡착 분류까지 한 흐름으로 묶었습니다.</p><p class="aqis-credit">담당 · YOLO 학습, ROS 통합, FastAPI·ROS 2 bridge, Dobot 작업 연결</p></div>
             </header>
 
             <figure class="case-video case-video--native aqis-demo" id="aqis-demo" data-reveal>
@@ -91,19 +91,19 @@
             <figure class="aqis-plate" id="aqis-pipeline" aria-labelledby="aqis-inspection-flow" data-reveal>
               <figcaption class="aqis-plate__head"><div><h3 id="aqis-inspection-flow">정지 후 좌표 갱신</h3></div></figcaption>
               <ol class="aqis-flow aqis-flow--four">
-                <li><h4>검사 이벤트</h4><code>RGB + Depth → detection</code><p>불량 여부와 <code>camera_point_m</code>을 서버 입력으로 정규화합니다.</p></li>
-                <li><h4>컨베이어 정지</h4><code>defect → stop()</code><p>정지 요청 뒤 대기 구간을 두고 집기에 사용할 후속 이벤트를 기다립니다.</p></li>
-                <li><h4>좌표 다시 선택</h4><code>fresh event → pick point</code><p>timestamp와 깊이 좌표를 확인해 정지 후 들어온 후보를 선택합니다.</p></li>
-                <li><h4>Dobot 작업</h4><code>camera → robot → pick</code><p>카메라 좌표를 로봇 작업 좌표로 바꿔 vacuum pick-and-place를 실행합니다.</p></li>
+                <li><h4>검사 이벤트</h4><code>RGB + Depth → detection</code><p>불량 여부와 <code>camera_point_m</code>을 서버 입력 형식으로 정리합니다.</p></li>
+                <li><h4>컨베이어 정지</h4><code>defect → stop()</code><p>정지 명령 뒤 잠시 대기하며 집기에 쓸 후속 프레임을 기다립니다.</p></li>
+                <li><h4>좌표 다시 선택</h4><code>fresh event → pick point</code><p>timestamp와 깊이 좌표를 확인해 정지 직후 들어온 후보 좌표를 선택합니다.</p></li>
+                <li><h4>Dobot 작업</h4><code>camera → robot → pick</code><p>카메라 좌표를 로봇 작업 좌표로 변환해 vacuum pick-and-place를 실행합니다.</p></li>
               </ol>
-              <div class="aqis-plate__foot"><p>정지 실패 응답으로 다음 단계를 자동 차단하지 않습니다. timestamp 누락은 허용하고 깊이 누락 시 고정 좌표를 사용합니다. 물리 파지 성공을 자동 확인하는 단계는 없습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/main.py#L165" rel="noreferrer">검출·정지 후 처리 소스 ↗</a></div>
+              <div class="aqis-plate__foot"><p>컨베이어가 멈춘 직후 새로 들어온 프레임으로 집기 좌표를 다시 잡되, 깊이 값이 빠지는 경우에는 기본 좌표로 대체해 공정이 끊기지 않게 처리했습니다. 실제 흡착 성공 여부를 센서로 재확인하는 단계는 아직 넣지 못했습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/main.py#L165" rel="noreferrer">검출·정지 후 처리 소스 ↗</a></div>
             </figure>
           </section>
 
           <section class="aqis-chapter" id="aqis-simulation" aria-labelledby="aqis-simulation-title">
             <header class="aqis-chapter__head" data-reveal>
               <div><h2 id="aqis-simulation-title">RoboDK 가상 공정</h2></div>
-              <div class="aqis-chapter__intro"><p>컨베이어에서 불량을 분리하고 UR5가 TurtleBot에 적재하는 가상 공정입니다. 웹의 명령을 RoboDK로 전달하고, 공정 단계·검출·AGV 이동 상태를 다시 화면에 반영합니다.</p><p class="aqis-credit">팀원 · RoboDK 장면·공정·Simulation Dashboard<br />본인 · 서버 연동, 명령·상태 중계, AGV 경로 조정</p></div>
+              <div class="aqis-chapter__intro"><p>컨베이어에서 불량을 분리하고 UR5가 TurtleBot에 적재하는 가상 공정입니다. 웹의 명령을 RoboDK로 전달하고, 공정 단계·검출·AGV 이동 상태를 다시 화면에 반영합니다.</p><p class="aqis-credit">팀원 · RoboDK 장면·공정·Simulation Dashboard<br />담당 · 서버 연동, 명령·상태 중계, AGV 경로 조정</p></div>
             </header>
 
             <figure class="case-video case-video--native aqis-demo" data-reveal>
@@ -118,13 +118,13 @@
                 <div class="aqis-sync__column"><p class="aqis-sync__actor">FastAPI</p><div class="aqis-sync__step"><span>순서대로 보관</span><strong>command queue</strong><code>append → popleft</code></div><div class="aqis-sync__step aqis-sync__step--return"><span>상태 중계</span><strong>robodk_status · agv_mission</strong><code>manager.broadcast(event)</code></div></div>
                 <div class="aqis-sync__column"><p class="aqis-sync__actor">RoboDK script</p><div class="aqis-sync__step"><span>명령 소비</span><strong>HTTP polling</strong><code>GET /api/robodk/command</code></div><div class="aqis-sync__step aqis-sync__step--return"><span>실행 상태 반환</span><strong>공정 단계 · AGV 위치</strong><code>POST /api/robodk/status<br />POST /api/sim/agv/state</code></div></div>
               </div>
-              <div class="aqis-plate__foot"><p><code>script_id</code>로 다른 실행의 명령 소비와 검출 이벤트를 필터링합니다. RoboDK의 UR5와 실장비 Dobot은 별도 경로입니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/adapters/robodk.py#L41" rel="noreferrer">명령 큐·소비 소스 ↗</a></div>
+              <div class="aqis-plate__foot"><p>실행 인스턴스마다 <code>script_id</code>를 붙여 이전 실행의 명령이나 이벤트가 섞이지 않게 걸러냈고, 가상 공정(UR5)과 실장비(Dobot) 제어 경로는 분리해 두었습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/adapters/robodk.py#L41" rel="noreferrer">명령 큐·소비 소스 ↗</a></div>
             </figure>
 
             <div class="aqis-methods" data-reveal>
               <div><h3>위치 조건과 목표 자세</h3><p>객체가 검출 위치에 도달하면 공정을 전환합니다. UR5는 저장된 목표로 <code>MoveJ</code>를 호출하고, 객체의 부모를 그리퍼·AGV로 변경해 적재를 표현합니다.</p></div>
               <div><h3>장면 좌표를 경로로 사용</h3><p>RoboDK의 <code>nav1~nav6</code> 프레임을 읽고 구간별 위치를 보간합니다. 경로와 몸체 방향을 맞추는 조정을 맡았습니다.</p></div>
-              <div><h3>공정 시뮬레이션의 범위</h3><p>객체 이름과 위치로 검출을 판정하는 운동학적 공정 시뮬레이션입니다. 접촉력·마찰·파지 성공이나 자율주행 경로는 계산하지 않습니다.</p></div>
+              <div><h3>공정 시뮬레이션의 범위</h3><p>접촉 물리나 자율주행 연산까지는 포함하지 않고, 객체 위치와 공정 흐름 검증에 초점을 둔 기구학적 시뮬레이션입니다.</p></div>
             </div>
             <a class="source-link aqis-chapter__source" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/AQIS-sim/robodk/Main.py#L506" rel="noreferrer">RoboDK 공정·이동 소스 ↗</a>
           </section>
@@ -132,12 +132,12 @@
           <section class="aqis-chapter" id="aqis-monitoring" aria-labelledby="aqis-monitoring-title">
             <header class="aqis-chapter__head" data-reveal>
               <div><h2 id="aqis-monitoring-title">SLAM 지도와 로봇 관제</h2></div>
-              <div class="aqis-chapter__intro"><p>TurtleBot의 지도·센서 시연은 RViz에서, 카메라와 위치·장비 상태는 RealOps에서 확인합니다. Dobot은 ROS 관절값을 URDF 모델에 반영해 현재 자세를 함께 보여줍니다.</p><p class="aqis-credit">본인 · SLAM·지정 목표점 주행 구성, ROS 상태 수집, RealOps·MJPEG·URDF 관제<br />팀 시연 · TurtleBot SLAM·RViz 및 실제 로봇 동작</p></div>
+              <div class="aqis-chapter__intro"><p>TurtleBot의 지도·센서 시연은 RViz에서, 카메라와 위치·장비 상태는 RealOps에서 확인합니다. Dobot은 ROS 관절값을 URDF 모델에 반영해 현재 자세를 함께 보여줍니다.</p><p class="aqis-credit">담당 · SLAM·지정 목표점 주행 구성, ROS 상태 수집, RealOps·MJPEG·URDF 관제<br />팀 시연 · TurtleBot SLAM·RViz 및 실제 로봇 동작</p></div>
             </header>
 
             <figure class="case-video case-video--native aqis-demo" data-reveal>
               <video src="/src/assets/projects/aqis/slam-demo.mp4" poster="/src/assets/projects/aqis/slam-navigation.png" width="720" height="406" muted playsinline controls preload="none" data-demo-video aria-label="TurtleBot의 실제 주행, RViz 지도와 RealOps 관제 시연"></video>
-              <figcaption><strong>TurtleBot · RViz · RealOps 공개 시연</strong><span>지도 화면은 RViz · 웹 지도 렌더링이나 자체 SLAM 알고리즘 구현을 뜻하지 않습니다.</span></figcaption>
+              <figcaption><strong>TurtleBot · RViz · RealOps 공개 시연</strong><span>지도 시각화는 RViz에서, 위치·영상 관제는 RealOps 웹 화면에서 확인합니다.</span></figcaption>
             </figure>
 
             <figure class="aqis-plate" aria-labelledby="aqis-slam-flow" data-reveal>
@@ -145,14 +145,14 @@
               <div class="aqis-observation">
                 <div><h4>RViz 지도</h4><p>SLAM 지도와 로봇 주변 센서를 시각화한 시연 화면입니다.</p><code>ROS map / sensor visualization</code></div>
                 <div><h4>RealOps 위치</h4><p>TF의 <code>map → base_footprint</code> 위치를 우선 읽고, 가용성에 따라 <code>amcl_pose</code>·<code>odom</code>을 사용합니다.</p><code>x · y · yaw · source · stamp</code></div>
-                <div><h4>TurtleBot 카메라</h4><p>영상과 상태 전송을 분리하고 MJPEG 서버로 영상 갱신을 약 4→30 FPS로 개선했습니다. 객체 추론은 별도의 1초 간격으로 구성했습니다.</p><code>camera stream + telemetry</code></div>
+                <div><h4>TurtleBot 카메라</h4><p>영상 스트림과 텔레메트리 전송을 분리하고 MJPEG 서버를 붙여 갱신 속도를 약 4 FPS에서 30 FPS로 끌어올렸습니다. 객체 추론은 부하를 줄이기 위해 1초 간격으로 분리했습니다.</p><code>camera stream + telemetry</code></div>
               </div>
-              <div class="aqis-plate__foot"><p>ROS bridge는 지도 이벤트를 수집하고 React는 갱신 시각을 표시합니다. 지도는 RViz에서 보며, 기존 ROS 패키지로 SLAM과 지정 목표점 주행을 구성했습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/services/ros_bridge.py#L161" rel="noreferrer">TF·위치 fallback 소스 ↗</a></div>
+              <div class="aqis-plate__foot"><p>SLAM과 목표점 주행은 기존 ROS 패키지를 조합해 구성했고, 지도는 RViz에서 보면서 웹(RealOps)에서는 지도 갱신 시각과 로봇 위치·영상 확인에 집중했습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/server/app/services/ros_bridge.py#L161" rel="noreferrer">TF·위치 fallback 소스 ↗</a></div>
             </figure>
 
             <div class="aqis-monitor-grid" data-reveal>
               <figure class="aqis-monitor-image"><img src="/src/assets/projects/aqis/real-ops.png" width="960" height="540" loading="lazy" decoding="async" alt="실제 AQIS RealOps 화면의 Dobot 3D 모델과 검사·장비 상태" /><figcaption>RealOps · Dobot 자세와 현장 상태</figcaption></figure>
-              <div class="aqis-monitor-copy"><h3>관절값으로 URDF 자세 갱신</h3><p>URDF의 링크 계층과 원점·회전축을 읽고, ROS에서 받은 라디안 값을 관절에 적용합니다. mimic 관절의 배율과 offset도 반영합니다.</p><div class="aqis-formula"><code>q_view = multiplier × q_ros + offset</code><span>원점 자세 복원 → 관절축 기준 회전</span></div><p>관절 상태를 3D 모델에 표시하는 뷰어이며, 동역학과 충돌 계산은 포함하지 않습니다.</p></div>
+              <div class="aqis-monitor-copy"><h3>관절값으로 URDF 자세 갱신</h3><p>URDF의 링크 계층과 원점·회전축을 읽고, ROS에서 받은 라디안 값을 관절에 적용합니다. mimic 관절의 배율과 offset도 반영합니다.</p><div class="aqis-formula"><code>q_view = multiplier × q_ros + offset</code><span>원점 자세 복원 → 관절축 기준 회전</span></div><p>실시간 관절 상태를 3D로 확인하기 위한 시각화 뷰어로, 동역학이나 충돌 검사는 포함하지 않습니다.</p></div>
             </div>
             <figure class="aqis-plate aqis-plate--compact" aria-labelledby="aqis-joint-flow" data-reveal>
               <figcaption class="aqis-plate__head"><div><h3 id="aqis-joint-flow">ROS 스레드에서 브라우저 관절까지</h3></div></figcaption>
@@ -162,7 +162,7 @@
                 <li><h4>WebSocket</h4><code>dobot_status → React</code><p>최신 관절 상태를 수신해 화면 상태에 병합합니다.</p></li>
                 <li><h4>URDF model</h4><code>rotateOnAxis(axis, angle)</code><p>링크 구조와 mimic 관계에 따라 자세를 갱신합니다.</p></li>
               </ol>
-              <div class="aqis-plate__foot"><p>ROS 연결이 활성화되면 수신한 관절값으로 모델 자세를 갱신합니다. 갱신 지연은 별도로 측정하지 않았습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/AQIS-real/web/src/DobotUrdfView.tsx#L305" rel="noreferrer">URDF 관절 갱신 소스 ↗</a></div>
+              <div class="aqis-plate__foot"><p>ROS 연결이 활성화되면 들어오는 관절값으로 3D 모델 자세를 바로 갱신합니다. 통신 지연 시간 정량 측정은 따로 진행하지 않았습니다.</p><a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory/blob/60951747fac753eb521fd80efce3fbade0eda101/AQIS-real/web/src/DobotUrdfView.tsx#L305" rel="noreferrer">URDF 관절 갱신 소스 ↗</a></div>
             </figure>
           </section>
 
@@ -171,7 +171,7 @@
             <div class="case-section__copy">
               <p id="aqis-result">팀장으로 YOLO 모델 학습과 Dobot·RealSense·TurtleBot3·컨베이어의 ROS 환경 통합을 맡았습니다. 시뮬레이션과 실물 실행은 분리하고 공통 데이터·명령으로 공정 흐름을 연결했습니다.</p>
               <ul class="case-list"><li>YOLO 모델 학습, FastAPI REST·WebSocket과 ROS 2 bridge</li><li>컨베이어 adapter와 정지 후 Dobot 집기 연결</li><li>React RealOps·MJPEG 영상 분리·URDF 관절 시각화</li><li>ROS 패키지 기반 SLAM·지정 목표점 자율주행</li><li>RoboDK 명령·이벤트 중계와 AGV 경로 조정</li></ul>
-              <p class="aqis-credit">팀원 기여 · 깊이 처리·Roboflow 자산, RoboDK 장면·공정 스크립트, Simulation Dashboard. 수집·학습 규모와 영상 개선 수치는 작성자가 확인한 당시 경험 기록입니다.</p>
+              <p class="aqis-credit">팀원 기여 · 깊이 처리·Roboflow 자산, RoboDK 장면·공정 스크립트, Simulation Dashboard</p>
               <a class="source-link" href="https://github.com/SSAFY-15th-HK/AQIS-for-SmartFactory" rel="noreferrer">팀 GitHub · 소스와 공개 시연 ↗</a>
             </div>
           </section>
