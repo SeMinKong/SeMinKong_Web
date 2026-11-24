@@ -234,6 +234,8 @@
   font-size: var(--type-body-sm);
   font-weight: var(--weight-support);
   line-height: 1.55;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .case-media {
@@ -1150,7 +1152,7 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 .case-next {
   display: grid;
   grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
-  margin-top: clamp(92px, 12vw, 150px);
+  margin-top: clamp(48px, 7vw, 88px);
   border-top: 1px solid var(--line-strong);
   border-bottom: 1px solid var(--line);
 }
@@ -1794,6 +1796,29 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 
   .case-hero--thing .case-media--thing-demo {
     margin-top: 12px;
+  }
+
+  .case-local-nav {
+    position: static;
+  }
+
+  .case-local-nav > div {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 8px;
+    overflow: visible;
+  }
+
+  .case-local-nav a {
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+    word-break: keep-all;
+  }
+
+  :is(.case-section, .case-media, .case-video, .case-aside, .case-technical, .aqis-chapter)[id] {
+    scroll-margin-top: calc(var(--nav-height) + 16px);
   }
 
   .case-hero__actions {

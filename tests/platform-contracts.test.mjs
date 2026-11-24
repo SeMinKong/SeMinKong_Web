@@ -273,8 +273,8 @@ test('progressive navigation and motion remain optional and non-blocking', async
   const heroSection = homeHtml.match(/<section class="hero-story"[\s\S]*?<\/section>/)?.[0] ?? '';
 
   assert.doesNotMatch(homeHtml, /AI &amp; Robotics Software Developer/);
-  assert.match(homeHtml, /<span data-hero-line>안녕하세요!<\/span>/);
-  assert.match(homeHtml, /<span data-hero-line>새로운 것을 배우고 직접 만드는 일이 즐겁습니다\.<\/span>/);
+  assert.match(heroSection, /<p[^>]*data-hero-line>로봇 제어와 VR 전시를 만드는 개발자 공세민입니다\.<\/p>/);
+  assert.equal(heroSection.match(/data-hero-line/g)?.length, 1);
   assert.doesNotMatch(heroSection, /<em>/);
   assert.match(kineticStyles, /\.home-page \.hero-identity__statement \{[\s\S]*?font-family: var\(--font-display\)/);
   assert.doesNotMatch(homeStyles, /\.hero-identity__statement em/);
@@ -411,7 +411,8 @@ test('current residence is consistently Suwon across the website', async () => {
     assert.match(html, /Suwon, Republic of Korea/);
     assert.doesNotMatch(html, /Seoul|서울/);
   }
-  assert.match(await readFile(sourceUrl('about/index.html'), 'utf8'), /Software Developer · Suwon/);
+  const about = await readFile(sourceUrl('about/index.html'), 'utf8');
+  assert.equal(about.match(/Suwon, Republic of Korea/g)?.length, 1);
 });
 
 test('the reviewed static portfolio is downloadable without exposing working files', async () => {
@@ -430,10 +431,10 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 6850531);
+  assert.equal(pdf.length, 6850278);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    'EBED6C1122AD87463D34D8C6D77185D03D5599E9B4840BF8C410EEB0D79D8DE7',
+    '76FF12E1722DFC7FAA1E2582FA870E7D87663E058AD17BE1177472143459A7D0',
     'Published PDF must match the reviewed eleven-page project portfolio'
   );
 });

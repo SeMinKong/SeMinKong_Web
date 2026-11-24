@@ -206,13 +206,15 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(caseStyles, /@media \(max-width: 840px\) \{[\s\S]*?\.case-section,[\s\S]*?grid-template-columns: minmax\(0, 1fr\)/);
   assert.match(caseStyles, /\.case-metrics strong \{\s*font-size: clamp\(2\.35rem, 12\.5vw, 2\.8rem\)/);
   assert.match(caseStyles, /\.thing-story-enabled \.thing-demo-card \{[\s\S]*?position: sticky/);
-  assert.match(caseStyles, /\.thing-story-enabled \.thing-demo-card__chapter \{[\s\S]*?display: block/);
   assert.match(caseStyles, /\.thing-story-enabled \.thing-demo-card__media::before \{[\s\S]*?var\(--demo-frame-progress\)/);
   assert.match(caseStyles, /\.thing-story-enabled \.thing-demo-card__media video \{[\s\S]*?max-height: calc\(100svh - var\(--nav-height\) - 90px\)/);
   assert.match(caseStyles, /\.thing-story-enabled #system-path \.case-flow::before \{[\s\S]*?width: 2px;[\s\S]*?scaleY\(var\(--flow-progress, 0\)\)/);
-  assert.equal(thingHtml.match(/thing-demo-card__chapter/g)?.length, 4);
-  for (const chapter of ['01 / 04', '02 / 04', '03 / 04', '04 / 04']) {
-    assert.match(thingHtml, new RegExp(chapter.replace('/', '\\/')));
+  const demonstrations = [...thingHtml.matchAll(/<figure class="thing-demo-card">([\s\S]*?)<\/figure>/g)];
+  assert.equal(demonstrations.length, 4);
+  for (const [, figure] of demonstrations) {
+    assert.match(figure, /<video\b[^>]*\bcontrols\b/);
+    assert.match(figure, /<h3>[^<]+<\/h3><span>\d{2}:\d{2}<\/span>/);
+    assert.doesNotMatch(figure, /thing-demo-card__chapter|\d{2} \/ \d{2}/);
   }
   assert.match(thingStory, /\.fromTo\(media, \{ '--demo-frame-progress': 0 \}/);
   assert.doesNotMatch(thingStory, /\.fromTo\(media,\s*\{[^}]*\b(?:autoAlpha|opacity|scale|y)\b/s);

@@ -17,7 +17,7 @@ body {
 .exhibit-case .exhibit-hero__story {
   display: grid;
   justify-items: start;
-  gap: clamp(14px, 1.8vw, 22px);
+  gap: clamp(12px, 1.6vw, 20px);
   min-width: 0;
 }
 
