@@ -334,6 +334,18 @@
   font-weight: var(--weight-meta);
 }
 
+.award-project-badge {
+  display: inline-block;
+  padding: 0.4em 0.8em;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-md);
+  background-color: var(--award-gold);
+  color: var(--award-ink);
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  line-height: 1.45;
+}
+
 .resume-awards > article {
   padding-block: 18px;
 }

@@ -380,6 +380,26 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.match(workStory, /focus\(\{ preventScroll: true \}\)/);
 });
 
+test('both SSAFY cases are public destinations and the autonomous project badge carries only its name', async () => {
+  const slugs = ['tac-touch', 'bondi'];
+  for (const path of ['index.html', 'work/index.html', 'about/index.html', 'resume/index.html']) {
+    const html = await readFile(sourceUrl(path), 'utf8');
+    for (const slug of slugs) {
+      const prefix = path === 'index.html' ? './work/' : path === 'work/index.html' ? './' : '../work/';
+      assert.ok(html.includes('href="' + prefix + slug + '/"'), path + ' links to ' + slug);
+    }
+  }
+
+  const resume = await readFile(sourceUrl('resume/index.html'), 'utf8');
+  const awards = resume.match(/<div class="resume-list resume-awards">([\s\S]*?)<\/section>/)?.[1] ?? '';
+  const articles = awards.match(/<article\b[\s\S]*?<\/article>/g) ?? [];
+  const tactile = articles.find((article) => article.includes('href="../work/tac-touch/"')) ?? '';
+  const museum = articles.find((article) => article.includes('href="../work/bondi/"')) ?? '';
+  assert.match(tactile, /class="award-project-badge">SSAFY 자율프로젝트 · Tac-Touch<\/span>/);
+  assert.doesNotMatch(tactile, /\d\s*등|\d(?:st|nd|rd|th) place|금상|대상|우수상/i);
+  assert.match(museum, /<p>2등<\/p>/);
+});
+
 test('current residence is consistently Suwon across the website', async () => {
   for (const path of ['index.html', 'about/index.html', 'resume/index.html']) {
     const html = await readFile(sourceUrl(path), 'utf8');
@@ -400,16 +420,16 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(resume, /href="\.\.\/portfolio\/SeMinKong-Portfolio\.pdf" download="SeMinKong-Portfolio\.pdf"/);
   assert.match(resume, /href="\.\.\/portfolio\/SeMinKong-Portfolio\.pdf" target="_blank" rel="noreferrer"/);
   assert.match(home, /href="\.\/portfolio\/SeMinKong-Portfolio\.pdf" download="SeMinKong-Portfolio\.pdf"/);
-  assert.match(resume, /9 pages · A4 landscape · PDF · 4\.5 MB · 2026\.09\.12/);
+  assert.match(resume, /11 pages · A4 landscape · PDF · 6\.9 MB · 2026\.11\.24/);
   assert.doesNotMatch(home, /home-about__portrait|assets\/profile\/se-min-kong|se-min-kong-profile/);
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 4527050);
+  assert.equal(pdf.length, 6850531);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    '5D004F8E4DFB71DCF5EA43F8BA4921363EE17D77EE249707B04BF1FE264D8E31',
-    'Published PDF must match the reviewed image-description-reflection and implementation-troubleshooting edition'
+    'EBED6C1122AD87463D34D8C6D77185D03D5599E9B4840BF8C410EEB0D79D8DE7',
+    'Published PDF must match the reviewed eleven-page project portfolio'
   );
 });
 

@@ -12,11 +12,11 @@ import {
 } from '../src/motion/home-intro-wordmark.js';
 
 test('route manifest keeps unique build inputs and outputs', () => {
-  assert.equal(SITE_ROUTES.length, 11);
+  assert.equal(SITE_ROUTES.length, 13);
   assert.equal(new Set(SITE_ROUTES.map(({ name }) => name)).size, SITE_ROUTES.length);
   assert.equal(new Set(SITE_ROUTES.map(({ source }) => source)).size, SITE_ROUTES.length);
   assert.equal(new Set(SITE_ROUTES.map(({ output }) => output)).size, SITE_ROUTES.length);
-  assert.equal(SITE_ROUTES.filter(({ kind }) => kind === 'case-study').length, 6);
+  assert.equal(SITE_ROUTES.filter(({ kind }) => kind === 'case-study').length, 8);
   assert.equal(EXPECTED_DEPLOYMENT_FILES.length, SITE_ROUTES.length + STATIC_DEPLOYMENT_FILES.length);
 });
 
@@ -108,19 +108,24 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(workHtml, /data-work-viewport/);
   assert.match(workHtml, /data-work-track/);
   assert.doesNotMatch(workHtml, /work-row__chapter|data-work-current|Scroll to browse|06 projects/);
-  assert.equal(workHtml.match(/data-work-beat/g)?.length, 6);
-  assert.equal(workHtml.match(/data-work-artifact/g)?.length, 6);
-  assert.equal(workHtml.match(/data-work-title/g)?.length, 6);
-  assert.equal(workHtml.match(/data-work-placard/g)?.length, 6);
-  assert.equal(workHtml.match(/class="work-row__summary"/g)?.length, 6);
-  assert.equal(workHtml.match(/class="work-row__cta"/g)?.length, 6);
-  assert.equal(workHtml.match(/class="work-row__composition"/g)?.length, 6);
+  const caseCount = SITE_ROUTES.filter(({ kind }) => kind === 'case-study').length;
+  assert.equal(workHtml.match(/data-work-beat/g)?.length, caseCount);
+  assert.equal(workHtml.match(/data-work-artifact/g)?.length, caseCount);
+  assert.equal(workHtml.match(/data-work-title/g)?.length, caseCount);
+  assert.equal(workHtml.match(/data-work-placard/g)?.length, caseCount);
+  assert.equal(workHtml.match(/class="work-row__summary"/g)?.length, caseCount);
+  assert.equal(workHtml.match(/class="work-row__cta"/g)?.length, caseCount);
+  assert.equal(workHtml.match(/class="work-row__composition"/g)?.length, caseCount);
   assert.doesNotMatch(workHtml, /work-row__proofs|aria-label="주요 기술"|work-row__media-caption|work-row__arrow/);
   assert.match(workHtml, /class="skip-link" href="#work-list"/);
   assert.match(workHtml, /<nav class="work-fast-path page-width" id="work-list" tabindex="-1"/);
   const fastPath = workHtml.match(/<nav class="work-fast-path[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? '';
   const projectHrefs = [...workHtml.matchAll(/class="work-row__composition" href="([^"]+)"/g)].map((match) => match[1]);
   assert.deepEqual([...fastPath.matchAll(/href="([^"]+)"/g)].map((match) => match[1]), projectHrefs);
+  const expectedHrefs = SITE_ROUTES
+    .filter(({ kind }) => kind === 'case-study')
+    .map(({ source }) => source.replace(/^work\//, './').replace(/index\.html$/, ''));
+  assert.deepEqual(projectHrefs, expectedHrefs);
   assert.doesNotMatch(workHtml, /<video\b/);
   assert.match(workStory, /min-width: 961px/);
   assert.match(workStory, /min-height: 640px/);

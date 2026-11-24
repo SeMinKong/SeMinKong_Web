@@ -12,14 +12,14 @@
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Se Min Kong의 로보틱스, Computer Vision, real-time software, AI 프로젝트입니다." />
+    <meta name="description" content="Tac-Touch, Bondi, THING, AQIS 등 공세민이 참여한 여덟 프로젝트의 실제 화면과 담당 구현을 살펴보세요." />
     <link rel="canonical" href="https://seminkong.github.io/SeMinKong_Web/work/" />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta property="og:site_name" content="Se Min Kong Portfolio" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Work — Se Min Kong" />
-    <meta property="og:description" content="Se Min Kong의 로보틱스, Computer Vision, real-time software, AI 프로젝트입니다." />
+    <meta property="og:description" content="Tac-Touch, Bondi, THING, AQIS 등 공세민이 참여한 여덟 프로젝트의 실제 화면과 담당 구현을 살펴보세요." />
     <meta property="og:url" content="https://seminkong.github.io/SeMinKong_Web/work/" />
     <meta property="og:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -28,7 +28,7 @@
     <meta property="og:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Work — Se Min Kong" />
-    <meta name="twitter:description" content="로보틱스, Computer Vision, real-time software, AI 프로젝트 모음입니다." />
+    <meta name="twitter:description" content="Tac-Touch, Bondi, THING, AQIS 등 공세민이 참여한 여덟 프로젝트의 실제 화면과 담당 구현을 살펴보세요." />
     <meta name="twitter:image" content="https://seminkong.github.io/SeMinKong_Web/social/portfolio-1200x630.jpg" />
     <meta name="twitter:image:alt" content="Se Min Kong의 AI, 로보틱스, 소프트웨어 시스템 포트폴리오" />
     <meta name="rights" content="© 2026 Se Min Kong. All rights reserved except where a separate license applies." />
@@ -84,10 +84,12 @@
         <div class="work-index__title">
           <h1 lang="en">Projects</h1>
         </div>
-        <p>프로젝트를 선택하면 만든 과정과 결과를 자세히 볼 수 있습니다.</p>
+        <p>손끝의 움직임을 읽는 로봇부터 토기를 손에 들어 보는 VR 박물관까지, 각 작업의 실제 화면과 구현 과정을 담았습니다.</p>
       </header>
 
       <nav class="work-fast-path page-width" id="work-list" tabindex="-1" aria-label="프로젝트 바로가기">
+        <a href="./tac-touch/" lang="en">Tac-Touch</a>
+        <a href="./bondi/" lang="en">Bondi</a>
         <a href="./thing/" lang="en">THING</a>
         <a href="./aqis/" lang="en">AQIS</a>
         <a href="./brain-tumor-mri/" lang="en">Brain Tumor MRI</a>
@@ -99,7 +101,41 @@
       <section class="work-showcase" data-work-showcase aria-label="프로젝트 쇼케이스">
         <div class="work-showcase__viewport" data-work-viewport>
           <section class="work-list page-width" aria-label="프로젝트" data-work-track>
-            <article class="work-row work-row--featured" data-work-beat data-reveal="row">
+            <article class="work-row" data-project="tac-touch" data-work-beat data-reveal="row">
+              <div class="work-row__scene">
+                <a class="work-row__composition" href="./tac-touch/" aria-label="Tac-Touch 프로젝트 상세 보기">
+                  <div class="work-row__media-stage" data-work-artifact>
+                    <div class="work-row__media work-row__media--window" aria-hidden="true">
+                      <img src="/src/assets/projects/tac-touch/dashboard.webp" width="1980" height="1120" alt="" loading="lazy" decoding="async" />
+                    </div>
+                  </div>
+                  <div class="work-row__copy" data-work-placard>
+                    <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>Tac-Touch</span></span></h2>
+                    <p class="work-row__summary">로봇 그리퍼의 양쪽 손끝에서 읽은 움직임을 3D 모델과 그래프로 확인하는 실험 도구입니다.</p>
+                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                  </div>
+                </a>
+              </div>
+            </article>
+
+            <article class="work-row" data-project="bondi" data-work-beat data-reveal="row">
+              <div class="work-row__scene">
+                <a class="work-row__composition" href="./bondi/" aria-label="Bondi 프로젝트 상세 보기">
+                  <div class="work-row__media-stage" data-work-artifact>
+                    <div class="work-row__media work-row__media--window" aria-hidden="true">
+                      <img src="/src/assets/projects/bondi/exhibit.webp" width="1600" height="789" alt="" loading="lazy" decoding="async" />
+                    </div>
+                  </div>
+                  <div class="work-row__copy" data-work-placard>
+                    <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>Bondi</span></span></h2>
+                    <p class="work-row__summary">깨진 토기의 사진에서 3D 형상을 추정하고, VR 전시실에서 복원 전후를 손으로 돌려 보는 박물관입니다.</p>
+                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                  </div>
+                </a>
+              </div>
+            </article>
+
+            <article class="work-row work-row--featured" data-project="thing" data-work-beat data-reveal="row">
               <div class="work-row__scene">
                 <a class="work-row__composition" href="./thing/" aria-label="THING 프로젝트 상세 보기">
                   <div class="work-row__media-stage work-row__media-stage--portrait work-row__media-stage--poster" data-work-artifact>
@@ -116,7 +152,7 @@
               </div>
             </article>
 
-            <article class="work-row" data-work-beat data-reveal="row">
+            <article class="work-row" data-project="aqis" data-work-beat data-reveal="row">
               <div class="work-row__scene">
                 <a class="work-row__composition" href="./aqis/" aria-label="AQIS 프로젝트 상세 보기">
                   <div class="work-row__media-stage" data-work-artifact>
@@ -133,7 +169,7 @@
               </div>
             </article>
 
-            <article class="work-row" data-work-beat data-reveal="row">
+            <article class="work-row" data-project="brain-tumor-mri" data-work-beat data-reveal="row">
               <div class="work-row__scene">
                 <a class="work-row__composition" href="./brain-tumor-mri/" aria-label="Brain Tumor MRI 프로젝트 상세 보기">
                   <div class="work-row__media-stage" data-work-artifact>
@@ -150,7 +186,7 @@
               </div>
             </article>
 
-            <article class="work-row" data-work-beat data-reveal="row">
+            <article class="work-row" data-project="alkkagi" data-work-beat data-reveal="row">
               <div class="work-row__scene">
                 <a class="work-row__composition" href="./alkkagi/" aria-label="Alkkagi.io 프로젝트 상세 보기">
                   <div class="work-row__media-stage work-row__media-stage--poster" data-work-artifact>
@@ -167,7 +203,7 @@
               </div>
             </article>
 
-            <article class="work-row" data-work-beat data-reveal="row">
+            <article class="work-row" data-project="briefit" data-work-beat data-reveal="row">
               <div class="work-row__scene">
                 <a class="work-row__composition" href="./briefit/" aria-label="Briefit 프로젝트 상세 보기">
                   <div class="work-row__media-stage" data-work-artifact>
@@ -184,7 +220,7 @@
               </div>
             </article>
 
-            <article class="work-row" data-work-beat data-reveal="row">
+            <article class="work-row" data-project="project-prompt-generator" data-work-beat data-reveal="row">
               <div class="work-row__scene">
                 <a class="work-row__composition" href="./project-prompt-generator/" aria-label="Project Prompt Generator 프로젝트 상세 보기">
                   <div class="work-row__media-stage" data-work-artifact>

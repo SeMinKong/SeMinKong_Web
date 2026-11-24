@@ -299,7 +299,7 @@
 }
 
 .project-deck {
-  --deck-count: 6;
+  --deck-count: 8;
   --deck-card-height: clamp(500px, 43vw, 548px);
   position: relative;
   clip-path: none !important;

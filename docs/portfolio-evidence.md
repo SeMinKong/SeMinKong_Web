@@ -1,6 +1,11 @@
 # Static portfolio evidence register
 
-Reviewed 2026-09-12. Current output is the nine-page edition described in [portfolio-migration.md](portfolio-migration.md). The former 27-page technical explanations are retained in the six repositories' READMEs and linked implementation documents. The source records below remain evidence for those documents; historical page numbers and bounded reproductions do not describe the current PDF layout or establish fresh hardware, model-quality or production-performance results.
+Updated 2026-11-24. The current PDF contains eight projects across eleven pages. The [September migration](portfolio-migration.md) records the six earlier projects and their source documents.
+
+## Tac-Touch and Bondi
+
+- [Tac-Touch](../work/tac-touch/index.html) is the SSAFY autonomous project with TacRobot. The author implemented channel-level sensor acquisition and the desktop MCP editing workflow. The exhibition screen uses simulated input. The physical sensor check covered data arriving on the PC. The project badge carries its name.
+- [Bondi](../work/bondi/index.html) is the SSAFY specialization project. The author experimented with comb-pattern pottery reconstruction, designed the VR gallery and implemented OpenXR hand interaction. Reconstructed geometry is an estimate. The owner confirmed the project's existing second-place entry.
 
 ## Owner-confirmed experience — 2026-09-12
 

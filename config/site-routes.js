@@ -14,6 +14,20 @@ export const SITE_ROUTES = Object.freeze([
     kind: 'work'
   },
   {
+    name: 'tac-touch',
+    source: 'work/tac-touch/index.html',
+    output: 'work/tac-touch/index.html',
+    entry: '/src/entries/case-study.js',
+    kind: 'case-study'
+  },
+  {
+    name: 'bondi',
+    source: 'work/bondi/index.html',
+    output: 'work/bondi/index.html',
+    entry: '/src/entries/case-study.js',
+    kind: 'case-study'
+  },
+  {
     name: 'thing',
     source: 'work/thing/index.html',
     output: 'work/thing/index.html',

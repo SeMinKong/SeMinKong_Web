@@ -38,6 +38,8 @@
   --signal-on-dark: #e84a32;
   --signal: var(--signal-on-dark);
   --signal-on-light: #a73524;
+  --award-gold: #f2d77f;
+  --award-ink: #49340e;
   --paper: #f1eee6;
   --paper-raised: #faf8f3;
   --paper-ink: #171512;

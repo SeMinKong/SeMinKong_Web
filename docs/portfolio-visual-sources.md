@@ -1,5 +1,9 @@
 # Portfolio visual sources and bounded reproduction
 
+## Tac-Touch and Bondi — 2026-11-24
+
+The Tac-Touch team exhibition screenshot displays simulated tactile readings on the desktop dashboard. The Bondi team exhibition screenshot shows the hand interaction guide and the pottery pedestal in the VR museum. The WebP covers are derived from these project captures at their original aspect ratios. Portfolio and profile links lead to the public case studies.
+
 ## THING / AQIS web architecture — 2026-09-12
 
 The approved `thing-architecture-source.png` (3502×2298, 1,564,147 bytes) and `aqis-architecture-source.png` (1419×1031, 325,280 bytes) are copied byte-for-byte to `src/assets/projects/{thing,aqis}/architecture.png`. The existing source hashes below are preserved. No resizing, recompression, redrawing or background removal is performed. Both case studies use the shared architecture figure style, explicit dimensions, lazy/async loading and native full-size image links. The PDF is unchanged.
