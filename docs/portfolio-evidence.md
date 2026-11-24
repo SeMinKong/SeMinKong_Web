@@ -107,7 +107,7 @@ Pages 4/8/11/13/15/17 replace the previous architecture commentary within the sa
 
 The following privacy and delivery rules apply to both the published edition and the locally implemented revision below.
 
-- PDF links to the canonical web URL, six case pages and public code/evidence. Searchable embedded Korean text, bookmarks and link annotations. QR has readable URL alternative.
+- PDF links to the canonical web URL, eight public case pages and supporting material for the previously published projects. Searchable embedded Korean text, bookmarks and link annotations. QR has readable URL alternative.
 - No phone number, birth date, third-party recipient data, certificate serial numbers or private Drive links in the PDF. Awards are a concise list with a web display-gallery link.
 - Stable public PDF target: `public/portfolio/SeMinKong-Portfolio.pdf`. Keep editable source in `scripts/portfolio/`; rendering/QA intermediates are not public assets.
 - Do not expose a design sample as the final download. Validate complete PDF before public linking and upload the same final bytes into a private Portfolio folder under the user-designated Drive folder. Preserve original awards in Drive.

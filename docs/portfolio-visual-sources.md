@@ -2,7 +2,7 @@
 
 ## Tac-Touch and Bondi — 2026-11-24
 
-The Tac-Touch team exhibition screenshot displays simulated tactile readings on the desktop dashboard. The Bondi team exhibition screenshot shows the hand interaction guide and the pottery pedestal in the VR museum. The WebP covers are derived from these project captures at their original aspect ratios. Portfolio and profile links lead to the public case studies.
+The Tac-Touch team exhibition screenshot displays simulated tactile readings on the desktop dashboard. The Bondi team exhibition screenshot shows the hand interaction guide and the pottery pedestal in the VR museum. The WebP covers use the original aspect ratios. Bondi’s comparison image documents the team’s reconstruction of a pedestal bowl. Three exhibition captures show grabbing, rotating and releasing an object in the Silla gallery. The author’s own reconstruction experiment used comb-pattern pottery. Portfolio and profile links lead to the public case studies.
 
 ## THING / AQIS web architecture — 2026-09-12
 
