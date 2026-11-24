@@ -53,64 +53,63 @@
         <header class="exhibit-hero page-width">
           <div class="exhibit-hero__story" data-intro>
             <h1 lang="en">Bondi</h1>
-            <p class="case-hero__lede">본디는 깨진 유물의 빈 부분을 AI로 추정하고, 손으로 돌려 복원 전후를 살펴보는 VR 박물관입니다.</p>
-            <div class="case-hero__actions"><a class="button button--primary button--small" href="#restoration">토기 복원 과정 보기 <span aria-hidden="true">↓</span></a></div>
+            <p class="case-hero__lede">깨진 토기와 AI로 복원한 모형을 손으로 돌려 보는 VR 박물관입니다.</p>
+            <div class="case-hero__actions"><a class="button button--primary button--small" href="#restoration">토기 복원 보기 <span aria-hidden="true">↓</span></a></div>
           </div>
           <figure class="exhibit-figure" data-intro>
             <img src="/src/assets/projects/bondi/exhibit.webp" width="1600" height="789" alt="왼쪽은 손동작 안내판이 놓인 VR 박물관 입구, 오른쪽은 좌대 위의 빗살무늬토기" decoding="async" fetchpriority="high" />
             <figcaption><span>메인 홀과 빗살무늬토기 전시실</span><a href="/src/assets/projects/bondi/exhibit.webp">큰 이미지 보기</a></figcaption>
           </figure>
           <dl class="case-facts" aria-label="Bondi 프로젝트 정보">
-            <div><dt>프로젝트</dt><dd>SSAFY 15기 특화프로젝트</dd></div>
-            <div><dt>기간과 팀</dt><dd>2026년, 4주<br />7명</dd></div>
-            <div><dt>공세민의 역할</dt><dd>토기 AI 복원 실험<br />전시 공간과 손 추적 구현</dd></div>
-            <div><dt>사용 도구</dt><dd>TRELLIS, AdaPoinTr<br />Blender, Unreal Engine, OpenXR</dd></div>
+            <div><dt>프로젝트</dt><dd>SSAFY 15기 특화프로젝트 2등</dd></div>
+            <div><dt>기간 · 팀</dt><dd>2026년, 4주 (7명)</dd></div>
+            <div><dt>담당</dt><dd>토기 복원 실험, VR 전시장과 손 추적</dd></div>
           </dl>
         </header>
 
         <nav class="case-local-nav" aria-label="Bondi 페이지 안에서 이동">
           <div class="page-width">
             <a href="#restoration">토기 복원</a>
-            <a href="#interaction">손으로 보는 전시</a>
-            <a href="#headset">헤드셋 검증</a>
+            <a href="#interaction">손 조작</a>
+            <a href="#headset">도착 오차</a>
           </div>
         </nav>
 
         <div class="case-body case-body--technical page-width">
           <section class="case-technical" id="restoration" aria-labelledby="restoration-title" data-reveal="group">
-            <header class="case-technical__head"><h2 id="restoration-title">사진 한 장에서 토기의 빈 부분까지</h2></header>
+            <header class="case-technical__head"><h2 id="restoration-title">빗살무늬토기 복원</h2></header>
             <div class="case-technical__body">
-              <p>제가 맡은 유물은 빗살무늬토기였습니다. 먼저 TRELLIS로 손상된 토기의 3D 형상을 만들었습니다. 표면에서 뽑은 점들의 중심과 크기를 맞춘 뒤 AdaPoinTr에 넣어, 남아 있는 가장자리에서 어느 방향으로 표면이 이어질지 추정했습니다.</p>
-              <p>한 장의 사진에는 토기의 뒤쪽과 안쪽이 보이지 않습니다. 입력 점과 예측 점을 겹쳐 새로 보탠 부분을 확인하고, 전시장 설명에는 자료의 출처와 추정 근거를 함께 적었습니다.</p>
+              <p>빗살무늬토기 사진 한 장을 TRELLIS에 넣어 3D 형상을 만들었습니다. 표면의 점들을 같은 중심과 크기로 맞춘 뒤 AdaPoinTr로 결손 부위를 추정했습니다.</p>
+              <p>사진에 보이지 않는 뒤쪽과 안쪽은 추정한 형상입니다. 입력 점과 예측 점을 겹쳐 보완 범위를 확인하고, 전시 설명에 자료 출처와 추정 근거를 적었습니다.</p>
               <figure class="exhibit-figure">
                 <img src="/src/assets/projects/bondi/restoration.webp" width="1450" height="572" alt="굽다리바리의 손상 사진, 손상된 3D 형상, 빠진 몸체를 채운 복원 모델을 차례로 비교한 그림" loading="lazy" decoding="async" />
-                <figcaption><span>팀의 굽다리바리 사례. 왼쪽부터 원본 사진, 손상 형상, 복원 형상입니다.</span></figcaption>
+                <figcaption><span>팀의 굽다리바리 사례 · 원본 사진, 손상 형상, 복원 형상</span></figcaption>
               </figure>
             </div>
           </section>
 
           <section class="case-technical" id="interaction" aria-labelledby="interaction-title" data-reveal="group">
-            <header class="case-technical__head"><h2 id="interaction-title">좌대의 버튼을 누르고 유물을 돌려 보기</h2></header>
+            <header class="case-technical__head"><h2 id="interaction-title">손으로 조작하는 전시</h2></header>
             <div class="case-technical__body">
-              <p>Blender에서 메인 홀과 전시실의 벽, 아치, 좌대를 모델링해 Unreal에 배치했습니다. 관람객이 입장하면 손 조작 안내와 전시실로 가는 포털이 먼저 보입니다.</p>
-              <p>OpenXR의 손 관절을 읽어 검지 끝으로 좌대의 버튼을 누르면 손상 모델과 복원 모델이 같은 자리에 교대하도록 했습니다. 엄지와 검지를 맞대면 유물을 집어 바닥까지 살펴볼 수 있고, 손을 펴면 원래 전시 위치로 돌아갑니다.</p>
+              <p>Blender로 메인 홀과 전시실을 모델링하고 Unreal에 배치했습니다.</p>
+              <p>OpenXR로 손을 추적해 검지로 버튼을 누르면 두 모델이 같은 자리에서 바뀌도록 했습니다. 엄지와 검지를 맞대면 유물을 들어 돌릴 수 있고, 손을 펴면 제자리로 돌아갑니다.</p>
               <figure class="exhibit-figure">
                 <div class="exhibit-sequence">
                   <img src="/src/assets/projects/bondi/grasp.webp" width="500" height="577" alt="손가락을 모아 신라관의 유물을 집는 장면" loading="lazy" decoding="async" />
                   <img src="/src/assets/projects/bondi/rotate.webp" width="500" height="554" alt="손에 든 금동 유물의 옆면을 돌려 보는 장면" loading="lazy" decoding="async" />
                   <img src="/src/assets/projects/bondi/return.webp" width="500" height="574" alt="손을 펴자 유물이 전시 위치로 돌아가는 장면" loading="lazy" decoding="async" />
                 </div>
-                <figcaption><span>신라관 손 추적 시연. 집기, 회전, 제자리 복귀 순서입니다.</span></figcaption>
+                <figcaption><span>신라관 시연 · 집기, 회전, 복귀</span></figcaption>
               </figure>
             </div>
           </section>
 
           <section class="case-technical" id="headset" aria-labelledby="headset-title" data-reveal="group">
-            <header class="case-technical__head"><h2 id="headset-title">포털을 지나도 같은 자리에 서도록</h2></header>
+            <header class="case-technical__head"><h2 id="headset-title">포털 도착 오차</h2></header>
             <div class="case-technical__body">
-              <p>헤드셋을 쓰고 실제로 몇 걸음 걸은 뒤 포털에 들어가면 가상 전시실의 도착점이 어긋났습니다. 화면이 어두워지는 순간 헤드셋의 위치와 방향 기준을 다시 잡은 뒤, 관람객을 목적지 표식에 배치했습니다.</p>
+              <p>관람객이 실제로 걸으면 포털의 도착점이 어긋났습니다. 화면 전환 중 헤드셋 위치와 방향을 다시 잡고 목적지 표식에 배치했습니다.</p>
               <table class="exhibit-table">
-                <caption>Quest 2에서 수동으로 위치를 재설정하지 않고 측정한 도착 오차</caption>
+                <caption>Quest 2 실기 측정 · 수동 위치 재설정 없음</caption>
                 <thead><tr><th scope="col">도착 지점</th><th scope="col">수정 전</th><th scope="col">수정 후</th></tr></thead>
                 <tbody>
                   <tr><th scope="row">토기 전시실</th><td>369 cm</td><td><strong>13 cm</strong></td></tr>

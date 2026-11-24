@@ -53,41 +53,39 @@
         <header class="exhibit-hero page-width">
           <div class="exhibit-hero__story" data-intro>
             <h1 lang="en">Tac-Touch</h1>
-            <p class="case-hero__lede">로봇이 물체를 쥘 때 손끝에서 어떤 움직임이 생길까요? 그리퍼 양쪽의 촉각 신호를 모아 PC에서 3D 기구와 함께 살펴봅니다.</p>
-            <div class="case-hero__actions"><a class="button button--primary button--small" href="#sensor">센서 검증 과정 보기 <span aria-hidden="true">↓</span></a></div>
+            <p class="case-hero__lede">그리퍼 양쪽 손끝의 움직임을 촉각 센서로 읽고 PC에서 3D 기구와 함께 보여 줍니다.</p>
+            <div class="case-hero__actions"><a class="button button--primary button--small" href="#sensor">센서 수집 보기 <span aria-hidden="true">↓</span></a></div>
           </div>
           <figure class="exhibit-figure" data-intro>
             <img src="/src/assets/projects/tac-touch/dashboard.webp" width="1980" height="1120" alt="로봇팔 3D 모델 양쪽으로 손끝 방향 화살표가, 아래로 두 센서의 변화 그래프가 보이는 모의 전시 화면" decoding="async" fetchpriority="high" />
-            <figcaption><span>팀 PC 앱 전시 화면. 모의 센서 입력으로 표시한 장면입니다.</span><a href="/src/assets/projects/tac-touch/dashboard.webp">큰 이미지 보기</a></figcaption>
+            <figcaption><span>PC 앱 전시 화면 · 모의 센서 입력</span><a href="/src/assets/projects/tac-touch/dashboard.webp">큰 이미지 보기</a></figcaption>
           </figure>
           <dl class="case-facts" aria-label="Tac-Touch 프로젝트 정보">
-            <div><dt>프로젝트</dt><dd>SSAFY 15기 자율프로젝트<br />택로봇 기업 연계</dd></div>
-            <div><dt>기간과 팀</dt><dd>2026년 10월~11월<br />6명</dd></div>
-            <div><dt>공세민의 역할</dt><dd>센서 수집 펌웨어<br />PC 앱 MCP 연동</dd></div>
-            <div><dt>작업 대상</dt><dd>그리퍼 손끝 센서<br />기구 설정과 3D 작업 화면</dd></div>
+            <div><dt>프로젝트</dt><dd>SSAFY 15기 자율프로젝트, 택로봇 기업 연계</dd></div>
+            <div><dt>기간 · 팀</dt><dd>2026년 10–11월, 6명</dd></div>
+            <div><dt>담당</dt><dd>센서 수집 펌웨어와 PC 앱 MCP 연동</dd></div>
           </dl>
         </header>
 
         <nav class="case-local-nav" aria-label="Tac-Touch 페이지 안에서 이동">
           <div class="page-width">
             <a href="#sensor">센서 수집</a>
-            <a href="#bench">실물 보드 확인</a>
+            <a href="#bench">보드 검증</a>
             <a href="#mcp">기구 편집</a>
           </div>
         </nav>
 
         <div class="case-body case-body--technical page-width">
           <section class="case-technical" id="sensor" aria-labelledby="sensor-title" data-reveal="group">
-            <header class="case-technical__head"><h2 id="sensor-title">손끝이 멈췄을 때의 0</h2></header>
+            <header class="case-technical__head"><h2 id="sensor-title">움직임이 없는 0과 읽기 실패</h2></header>
             <div class="case-technical__body">
-              <p>미끄러짐을 판단하려면 센서의 숫자가 실제 측정에서 나왔는지 알아야 합니다. 움직임이 없는 손끝과 읽기에 실패한 채널은 화면에서 모두 0처럼 보일 수 있기 때문입니다.</p>
-              <p>저는 센서 수집 펌웨어가 채널마다 이번 읽기의 성공 여부와 마지막 정상 측정을 따로 기억하도록 했습니다. 읽기에 실패한 뒤 다시 수집을 시작할 때도 어떤 값이 새 측정인지 구별할 수 있습니다.</p>
+              <p>멈춘 손끝과 응답하지 않는 센서는 화면에서 모두 0처럼 보일 수 있습니다. 펌웨어에서 채널별 읽기 결과와 마지막 정상 측정값을 따로 보관했습니다.</p>
               <table class="exhibit-table">
-                <caption>채널을 읽을 때 확인하는 두 가지 상태</caption>
+                <caption>채널별 읽기 결과</caption>
                 <thead><tr><th scope="col">읽기 결과</th><th scope="col">신호의 의미</th></tr></thead>
                 <tbody>
-                  <tr><th scope="row">정상적으로 0을 받음</th><td>이번 측정에서 움직임이 없었습니다.</td></tr>
-                  <tr><th scope="row">읽기 실패</th><td>이번 읽기에서 새 측정값을 얻지 못했습니다.</td></tr>
+                  <tr><th scope="row">정상 수신, 값 0</th><td>측정한 움직임 없음</td></tr>
+                  <tr><th scope="row">읽기 실패</th><td>새 측정값 없음</td></tr>
                 </tbody>
               </table>
             </div>
@@ -96,17 +94,15 @@
           <section class="case-technical" id="bench" aria-labelledby="bench-title" data-reveal="group">
             <header class="case-technical__head"><h2 id="bench-title">보드 출력과 PC 수신값</h2></header>
             <div class="case-technical__body">
-              <p>실물 보드에서 같은 시점의 센서 출력과 PC 수신값을 대조했습니다. 움직임이 없어 정상적으로 0을 보낸 채널과 수집에서 제외된 채널을 PC에서도 구별할 수 있었습니다.</p>
-              <p>이 시험으로 확인한 구간은 손끝 센서부터 PC 수신까지입니다. 위 전시 화면에서는 모의 입력을 넣어 양쪽 손끝의 방향과 시간에 따른 변화를 보여 줍니다.</p>
+              <p>실물 보드의 출력과 같은 시점의 PC 수신값을 대조했습니다. PC에서도 0을 보낸 채널과 수집에서 제외된 채널을 구분했습니다.</p>
             </div>
           </section>
 
           <section class="case-technical" id="mcp" aria-labelledby="mcp-title" data-reveal="group">
-            <header class="case-technical__head"><h2 id="mcp-title">선택한 기구의 장착 각도만 바꾸기</h2></header>
+            <header class="case-technical__head"><h2 id="mcp-title">그리퍼 장착 각도 편집</h2></header>
             <div class="case-technical__body">
-              <blockquote class="exhibit-quote">“지금 선택한 그리퍼의 장착 각도만 바꿔서 사본으로 저장하고, 3D 화면에 열어 줘.”</blockquote>
-              <p>이 요청에서 ‘지금 선택한’ 대상은 PC 앱의 작업 화면에 있습니다. 저는 MCP(Model Context Protocol)를 앱에 연결해 AI 도구가 현재 선택을 읽고, 지정한 축을 수정한 사본을 저장한 다음 화면에 열 수 있게 했습니다.</p>
-              <p>Nova 2 로봇팔과 AG-160-95 그리퍼의 3D 모델에서 사본을 다시 읽어 장착 거리와 변경된 각도를 대조했습니다. 저장한 사본이 메인 화면에 열리는 것까지 확인했습니다.</p>
+              <p>MCP(Model Context Protocol)를 통해 AI 도구가 PC 앱의 현재 선택을 읽고, 지정한 축의 장착 각도를 바꾼 사본을 저장하도록 했습니다.</p>
+              <p>Nova 2 로봇팔과 AG-160-95 그리퍼의 사본에서 기존 장착 거리와 새 각도를 대조하고, 파일이 3D 화면에 열리는 것을 확인했습니다.</p>
             </div>
           </section>
         </div>
