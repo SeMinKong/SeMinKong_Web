@@ -1,7 +1,7 @@
-"""Patch the reviewed Drive Resume; preserve every original formatting component.
+"""Update the one-page resume using the reviewed Drive document as its template.
 
-Run with bundled Python and --template <unchanged Drive DOCX>. Render in Word,
-inspect the one-page PDF, and sync the public DOCX/PDF/preview after verification.
+Run with bundled Python and --template <unchanged Drive DOCX>. Export from Word
+as PDF/A to embed the fonts, then verify the one-page PDF and its 150 dpi preview.
 """
 import argparse
 from copy import deepcopy
@@ -33,19 +33,67 @@ def black_rules(root):
             rule.attrib.pop('{%s}%s' % (NS['w'], attr), None)
 
 
+def add_featured_projects(body, template_rows, relationships):
+    cases = [
+        (
+            'Tac-Touch', 'SSAFY Autonomous Project with TacRobot', 'Oct 2026 - Nov 2026',
+            'C++ | Arduino | Model Context Protocol',
+            'Wrote firmware to distinguish still fingertips from failed sensor reads and verified both cases on the desktop.',
+            "Connected the desktop editor to MCP so an AI tool can adjust a gripper's mounting angle and save a copy.",
+            'tac-touch',
+        ),
+        (
+            'Bondi', 'SSAFY Specialization Project, VR Museum', '2026 (4 weeks)',
+            'TRELLIS | AdaPoinTr | Blender | Unreal Engine | OpenXR',
+            'Tested point-cloud completion on a 3D model built from one photo of a damaged comb-pattern pottery vessel.',
+            'Built VR galleries and hand controls to grasp, rotate and compare damaged and reconstructed pottery.',
+            'bondi',
+        ),
+    ]
+    position = body.index(template_rows[0])
+    for number, (name, role, date, stack, first, second, slug) in enumerate(cases, start=14):
+        relationship_id = f'rId{number}'
+        etree.SubElement(relationships, relationships[0].tag, Id=relationship_id,
+                         Type=NS['r'] + '/hyperlink', TargetMode='External',
+                         Target=f'https://seminkong.github.io/SeMinKong_Web/work/{slug}/')
+        title, technologies, first_bullet, second_bullet = map(deepcopy, template_rows)
+        set_texts(title, [name, ' | ' + role, date])
+        set_texts(technologies, [stack + ' | ', 'Case Study'])
+        technologies.find('w:hyperlink', NS).set('{%s}id' % NS['r'], relationship_id)
+        set_texts(first_bullet, [first])
+        set_texts(second_bullet, [second])
+        for paragraph in [title, technologies, first_bullet, second_bullet]:
+            body.insert(position, paragraph)
+            position += 1
+
+
+def tac_touch_badge(award_template):
+    badge = deepcopy(award_template)
+    for run in badge.findall('w:r', NS)[1:]:
+        badge.remove(run)
+    set_texts(badge, [' Tac-Touch '])
+    properties = badge.find('w:r/w:rPr', NS)
+    properties.find('w:color', NS).set('{%s}val' % NS['w'], '332506')
+    properties.find('w:shd', NS).set('{%s}fill' % NS['w'], 'E8C477')
+    return badge
+
+
 def build(template, output):
     if hashlib.sha256(template.read_bytes()).hexdigest() != TEMPLATE_SHA256:
         raise ValueError('Use the unchanged reviewed Drive template; re-audit other versions before editing.')
     with ZipFile(template) as source:
         parts = {name: source.read(name) for name in source.namelist()}
         doc = etree.fromstring(parts['word/document.xml'])
+        relationships = etree.fromstring(parts['word/_rels/document.xml.rels'])
         body = doc.find('w:body', NS)
         p = body.findall('w:p', NS)
         assert len(p) == 42
         # English updates reflect the current web Resume; original layout stays.
         replacements = {
             1: ['SOFTWARE DEVELOPER'],
-            4: ['Software engineering graduate with experience connecting computer vision, ROS 2, backend services, and hardware integration to build working systems. I enjoy learning new technologies and turning ideas into systems that I can build and test.'],
+            4: ['I build software for robots and immersive exhibits. My recent work spans tactile sensor firmware, desktop gripper tools and 3D reconstruction for a VR museum.'],
+            13: ['Robotics & XR: ', 'ROS 2, DYNAMIXEL XL330, Jetson, Raspberry Pi 5, RealSense, Dobot, Isaac Sim / Isaac Lab, OpenXR'],
+            17: ['Building robotics and computer vision systems through team projects in firmware, perception and interactive 3D applications.'],
             22: ['ROS 2 | MediaPipe | OpenCV | Jetson | Raspberry Pi 5 | DYNAMIXEL | React | Django | AWS EC2 | ', 'Case Study'],
             23: ['Team project mapping 21 MediaPipe hand landmarks to a seven-axis HandCommand.'],
             24: ['Handled Blender modeling, 3D printing, synchronized seven-motor control and U2D2 communication, ROS bridge and Cyclone DDS configuration, and tendon mechanism integration.'],
@@ -59,6 +107,7 @@ def build(template, output):
         }
         for index, values in replacements.items():
             set_texts(p[index], values)
+        add_featured_projects(body, p[21:25], relationships)
         # Clone the existing header, italic stack and two-bullet project pattern.
         briefit = [deepcopy(p[i]) for i in [33, 34, 35, 36]]
         set_texts(briefit[0], ['Briefit', ' | Team AI Engineer, AI-Based News Curation', 'May 2025 - Sep 2025'])
@@ -73,6 +122,7 @@ def build(template, output):
         # Reuse the original bold title / supporting copy / right-date award row.
         award_template = deepcopy(p[38])
         awards = [
+            ('SSAFY Specialization Project - 2nd Place', ' | Bondi', '2026'),
             ('SSAFY Common Project - Excellence Award', ' | AIoT Track, Gwangju Class 1 (1st Place)', '10 Aug 2026'),
             ('2025 IT Project Pro League - Encouragement Award', ' | Soongsil University Spartan SW Education Center', '22 Nov 2025'),
             ('15th Soongsil Capstone Design Competition - Encouragement Award', ' | Soongsil University', '1 Oct 2025'),
@@ -82,6 +132,8 @@ def build(template, output):
         position = body.index(p[38])
         for old in p[38:41]:
             body.remove(old)
+        body.insert(position, tac_touch_badge(award_template))
+        position += 1
         for values in awards:
             body.insert(position, set_texts(deepcopy(award_template), values))
             position += 1
@@ -89,6 +141,7 @@ def build(template, output):
         styles = etree.fromstring(parts['word/styles.xml'])
         black_rules(styles)
         parts['word/document.xml'] = etree.tostring(doc, encoding='UTF-8', xml_declaration=True, standalone=True)
+        parts['word/_rels/document.xml.rels'] = etree.tostring(relationships, encoding='UTF-8', xml_declaration=True, standalone=True)
         parts['word/styles.xml'] = etree.tostring(styles, encoding='UTF-8', xml_declaration=True, standalone=True)
         output.parent.mkdir(parents=True, exist_ok=True)
         with ZipFile(output, 'w') as target:
