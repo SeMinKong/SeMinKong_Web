@@ -485,7 +485,7 @@ test('vLLM and Jira use sourced local SVG icons with native accessible name togg
   const manifest = JSON.parse(await readFile(sourceUrl('src/assets/tech-stack/sources.json'), 'utf8'));
   assert.doesNotMatch(about, /tech-stack-mark/);
   for (const [name, slug, color] of [['vLLM', 'vllm', '30A2FF'], ['Jira', 'jira', '0052CC']]) {
-    const expected = `<details class="tech-stack-tool"><summary aria-label="${name}" title="${name}"><img src="/src/assets/tech-stack/${slug}.svg" alt="" width="56" height="56" loading="lazy" decoding="async" /></summary><span lang="en">${name}</span></details>`;
+    const expected = `<details class="tech-stack-tool" open><summary aria-label="${name}" title="${name}"><img src="/src/assets/tech-stack/${slug}.svg" alt="" width="56" height="56" loading="lazy" decoding="async" /></summary><span lang="en">${name}</span></details>`;
     assert.ok(about.includes(expected), `${name} keeps its native name toggle and explicit image dimensions`);
     const path = `src/assets/tech-stack/${slug}.svg`;
     const svg = await readFile(sourceUrl(path), 'utf8');

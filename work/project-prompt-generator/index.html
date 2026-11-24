@@ -1,15 +1,6 @@
 <!doctype html>
 <html lang="ko">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-8VBR1KCEKY');
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="영역별 대화 상태와 WebSocket으로 프로젝트 요구사항을 정리하는 Project Prompt Generator." />
@@ -66,7 +57,7 @@
         </nav>
 
         <figure class="case-media case-media--prompt page-width" id="prompt-flow" data-reveal="media">
-          <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="프로젝트 입력을 6개 설계 영역으로 나눈 뒤 최종 문서로 모으는 원본 설계 흐름도" decoding="async" />
+          <img src="/src/assets/projects/prompt-generator/flow.webp" width="1184" height="531" alt="프로젝트 입력을 6개 설계 영역으로 나눈 뒤 최종 문서로 모으는 원본 설계 흐름도" fetchpriority="high" decoding="async" />
           <figcaption>초기 설계 흐름도</figcaption>
         </figure>
 
@@ -79,7 +70,7 @@
             </div>
           </section>
           <figure class="case-architecture">
-            <img src="/src/assets/projects/prompt-generator/architecture.svg" width="5416" height="4110" alt="브라우저, FastAPI 메모리 세션, 영역별 대화와 Solar Pro API의 연결 구조" loading="eager" decoding="async" />
+            <img src="/src/assets/projects/prompt-generator/architecture.svg" width="5416" height="4110" alt="브라우저, FastAPI 메모리 세션, 영역별 대화와 Solar Pro API의 연결 구조" loading="lazy" decoding="async" />
           </figure>
           <section class="case-technical" id="prompt-context" data-reveal="group">
             <header class="case-technical__head">
@@ -150,5 +141,12 @@
       <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../../#contact">Contact ↗</a></nav>
     </footer>
     <script type="module" src="/src/entries/case-study.js"></script>
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8VBR1KCEKY');
+    </script>
   </body>
 </html>

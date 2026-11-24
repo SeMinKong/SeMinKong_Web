@@ -1,15 +1,6 @@
 <!doctype html>
 <html lang="ko">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-8VBR1KCEKY');
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="손동작 21개 랜드마크를 안전한 7축 명령으로 변환해 텐던 로봇 핸드를 구동하는 THING 프로젝트." />
@@ -93,7 +84,7 @@
                 <li>
                   <figure class="thing-demo-card">
                     <div class="thing-demo-card__media">
-                      <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" controls playsinline preload="none" data-demo-video aria-label="THING 로봇 핸드가 손가락을 펴고 접고 벌리는 짧은 시연"></video>
+                      <video src="/src/assets/projects/thing/final-demo.mp4" poster="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" controls playsinline preload="none" loading="lazy" data-demo-video aria-label="THING 로봇 핸드가 손가락을 펴고 접고 벌리는 짧은 시연"></video>
                     </div>
                     <figcaption>
                       <div class="thing-demo-card__title"><h3>가동 범위</h3><span>00:07</span></div>
@@ -104,7 +95,7 @@
                 <li>
                   <figure class="thing-demo-card">
                     <div class="thing-demo-card__media">
-                      <video src="/src/assets/projects/thing/demos/finger-wave.mp4" poster="/src/assets/projects/thing/demos/finger-wave-poster.webp" width="720" height="1280" controls playsinline preload="none" data-demo-video aria-label="THING 로봇 핸드의 손가락이 차례로 움직이는 웨이브 시연"></video>
+                      <video src="/src/assets/projects/thing/demos/finger-wave.mp4" poster="/src/assets/projects/thing/demos/finger-wave-poster.webp" width="720" height="1280" controls playsinline preload="none" loading="lazy" data-demo-video aria-label="THING 로봇 핸드의 손가락이 차례로 움직이는 웨이브 시연"></video>
                     </div>
                     <figcaption>
                       <div class="thing-demo-card__title"><h3>순차 손가락 제어</h3><span>00:10</span></div>
@@ -115,7 +106,7 @@
                 <li>
                   <figure class="thing-demo-card">
                     <div class="thing-demo-card__media">
-                      <video src="/src/assets/projects/thing/demos/can-grasp.mp4" poster="/src/assets/projects/thing/demos/can-grasp-poster.webp" width="720" height="1280" controls playsinline preload="none" data-demo-video aria-label="THING 로봇 핸드가 원통형 캔을 감싸 쥐는 시연"></video>
+                      <video src="/src/assets/projects/thing/demos/can-grasp.mp4" poster="/src/assets/projects/thing/demos/can-grasp-poster.webp" width="720" height="1280" controls playsinline preload="none" loading="lazy" data-demo-video aria-label="THING 로봇 핸드가 원통형 캔을 감싸 쥐는 시연"></video>
                     </div>
                     <figcaption>
                       <div class="thing-demo-card__title"><h3>원통 파지</h3><span>00:11</span></div>
@@ -126,7 +117,7 @@
                 <li>
                   <figure class="thing-demo-card">
                     <div class="thing-demo-card__media">
-                      <video src="/src/assets/projects/thing/demos/soft-grasp.mp4" poster="/src/assets/projects/thing/demos/soft-grasp-poster.webp" width="720" height="1280" controls playsinline preload="none" data-demo-video aria-label="THING 로봇 핸드가 말랑한 물체의 모양에 맞춰 쥐는 시연"></video>
+                      <video src="/src/assets/projects/thing/demos/soft-grasp.mp4" poster="/src/assets/projects/thing/demos/soft-grasp-poster.webp" width="720" height="1280" controls playsinline preload="none" loading="lazy" data-demo-video aria-label="THING 로봇 핸드가 말랑한 물체의 모양에 맞춰 쥐는 시연"></video>
                     </div>
                     <figcaption>
                       <div class="thing-demo-card__title"><h3>유연 물체 파지</h3><span>00:10</span></div>
@@ -176,7 +167,7 @@
                 </ul>
               </div>
               <figure class="case-architecture">
-                <img src="/src/assets/projects/thing/architecture.svg" width="3502" height="2298" alt="THING의 Jetson 비전 처리, Raspberry Pi 5 ROS 2 제어, 로봇 손, 웹 관제와 AWS EC2 기록 서버 연결 구성도" loading="eager" decoding="async" />
+                <img src="/src/assets/projects/thing/architecture-web.svg" width="3502" height="2298" alt="THING의 Jetson 비전 처리, Raspberry Pi 5 ROS 2 제어, 로봇 손, 웹 관제와 AWS EC2 기록 서버 연결 구성도" loading="lazy" decoding="async" />
               </figure>
             </section>
           </div>
@@ -200,5 +191,12 @@
       <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../../#contact">Contact ↗</a></nav>
     </footer>
     <script type="module" src="/src/entries/case-study.js"></script>
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8VBR1KCEKY');
+    </script>
   </body>
 </html>

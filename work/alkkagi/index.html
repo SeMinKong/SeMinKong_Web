@@ -1,15 +1,6 @@
 <!doctype html>
 <html lang="ko">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-8VBR1KCEKY');
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="직접 만든 물리 모듈과 Socket.io로 구현한 실시간 멀티플레이 게임 Alkkagi.io." />
@@ -66,7 +57,7 @@
         </nav>
 
         <figure class="case-media case-media--video page-width" id="alkkagi-demo">
-          <video src="/src/assets/projects/alkkagi/demo.mp4" poster="/src/assets/projects/alkkagi/demo-poster.png" width="1276" height="1270" muted loop playsinline controls preload="none" data-demo-video data-reveal="video" aria-label="Alkkagi.io 실제 플레이 영상"></video>
+          <video src="/src/assets/projects/alkkagi/demo.mp4" poster="/src/assets/projects/alkkagi/demo-poster.webp" width="1276" height="1270" muted loop playsinline controls preload="none" data-demo-video data-reveal="video" aria-label="Alkkagi.io 실제 플레이 영상"></video>
           <figcaption data-reveal="text">멀티플레이 시연</figcaption>
         </figure>
 
@@ -79,7 +70,7 @@
             </div>
           </section>
           <figure class="case-architecture">
-            <img src="/src/assets/projects/alkkagi/architecture.svg" width="5556" height="4064" alt="React 클라이언트들이 입력을 보내고 서버 물리 계산 결과를 공유하는 Alkkagi 구조" loading="eager" decoding="async" />
+            <img src="/src/assets/projects/alkkagi/architecture.svg" width="5556" height="4064" alt="React 클라이언트들이 입력을 보내고 서버 물리 계산 결과를 공유하는 Alkkagi 구조" loading="lazy" decoding="async" />
           </figure>
           <section class="case-technical" id="alkkagi-physics" data-reveal="group">
             <header class="case-technical__head">
@@ -154,5 +145,12 @@
       <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../../#contact">Contact ↗</a></nav>
     </footer>
     <script type="module" src="/src/entries/case-study.js"></script>
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8VBR1KCEKY');
+    </script>
   </body>
 </html>

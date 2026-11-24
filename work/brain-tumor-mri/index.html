@@ -1,15 +1,6 @@
 <!doctype html>
 <html lang="ko">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-8VBR1KCEKY');
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="YOLO11을 활용한 뇌 MRI 종양 분류 및 영역 분할 프로젝트." />
@@ -66,7 +57,7 @@
         </nav>
 
         <figure class="case-media case-media--image page-width" id="mri-evidence" data-reveal="media">
-          <img src="/src/assets/projects/brain-mri/classification-demo.png" width="2700" height="1500" alt="실제 웹 데모에서 출력한 10개 뇌 MRI 분류 결과" />
+          <img src="/src/assets/projects/brain-mri/classification-demo.webp" width="2700" height="1500" alt="실제 웹 데모에서 출력한 10개 뇌 MRI 분류 결과" fetchpriority="high" decoding="async" />
           <figcaption>웹 데모의 MRI 분류 결과 10건</figcaption>
         </figure>
 
@@ -78,7 +69,7 @@
             </div>
           </section>
           <figure class="case-architecture">
-            <img src="/src/assets/projects/brain-mri/architecture.svg" width="5336" height="4036" alt="같은 MRI를 분류와 분할 모델에 각각 입력하고 결과를 함께 표시하는 구조" loading="eager" decoding="async" />
+            <img src="/src/assets/projects/brain-mri/architecture.svg" width="5336" height="4036" alt="같은 MRI를 분류와 분할 모델에 각각 입력하고 결과를 함께 표시하는 구조" loading="lazy" decoding="async" />
           </figure>
           <section class="case-technical" id="mri-labels" data-reveal="group">
             <header class="case-technical__head">
@@ -134,7 +125,7 @@
             </div>
           </section>
           <figure class="case-video case-video--native case-technical-demo" id="mri-demo">
-            <video src="/src/assets/projects/brain-mri/demo.mp4" poster="/src/assets/projects/brain-mri/classification-demo.png" width="1320" height="1032" controls playsinline preload="none" data-demo-video data-reveal="video" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
+            <video src="/src/assets/projects/brain-mri/demo.mp4" poster="/src/assets/projects/brain-mri/classification-demo.webp" width="1320" height="1032" controls playsinline preload="none" loading="lazy" data-demo-video data-reveal="video" aria-label="Brain Tumor MRI 분류 및 분할 웹 데모 영상"></video>
             <figcaption data-reveal="text">분류 결과와 분할 마스크를 함께 표시한 웹 데모</figcaption>
           </figure>
           <section class="case-section" id="mri-validation" data-reveal="group">
@@ -158,5 +149,12 @@
       <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../../#contact">Contact ↗</a></nav>
     </footer>
     <script type="module" src="/src/entries/case-study.js"></script>
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8VBR1KCEKY');
+    </script>
   </body>
 </html>

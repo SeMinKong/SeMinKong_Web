@@ -1,3 +1,4 @@
+import '@fontsource-variable/noto-sans-kr';
 import { initEnvironment } from '../motion/environment.js';
 import { initPageTransitions } from '../motion/page-transitions.js';
 import { initSmoothScroll } from '../motion/smooth-scroll.js';

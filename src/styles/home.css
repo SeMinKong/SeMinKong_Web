@@ -362,7 +362,16 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px 4px 0;
+  padding: 14px 4px 0;
+}
+
+.project-card--deck .project-card__meta {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: var(--weight-meta);
+  letter-spacing: 0.03em;
+  line-height: 1.25;
 }
 
 .project-card--deck .project-card__copy h3 {

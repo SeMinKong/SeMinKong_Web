@@ -9,7 +9,7 @@
   --muted: var(--paper-muted);
   --line: var(--paper-line);
   --line-strong: var(--paper-line-strong);
-  --resume-divider: #000;
+  --resume-divider: var(--paper-line-strong);
   color-scheme: light;
   background: var(--paper);
 }

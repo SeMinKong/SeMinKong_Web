@@ -1,15 +1,6 @@
 <!doctype html>
 <html lang="ko">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-8VBR1KCEKY');
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="뉴스 수집·본문 정제와 KoBART 학습·생성·평가 스크립트를 구현한 Briefit 팀 프로젝트." />
@@ -66,7 +57,7 @@
         </nav>
 
         <figure class="case-media case-media--image page-width" id="briefit-product" data-reveal="media">
-          <img src="/src/assets/projects/briefit/cover.webp" width="2400" height="1350" alt="Briefit 뉴스 목록과 기사 요약 화면으로 구성된 공식 팀 제품 이미지" />
+          <img src="/src/assets/projects/briefit/cover.webp" width="2400" height="1350" alt="Briefit 뉴스 목록과 기사 요약 화면으로 구성된 공식 팀 제품 이미지" fetchpriority="high" decoding="async" />
           <figcaption>팀의 뉴스 서비스 화면</figcaption>
         </figure>
 
@@ -79,7 +70,7 @@
             </div>
           </section>
           <figure class="case-architecture">
-            <img src="/src/assets/projects/briefit/architecture.svg" width="5560" height="4052" alt="Briefit의 뉴스 수집, KoBART 학습·평가와 로컬 요약 구조" loading="eager" decoding="async" />
+            <img src="/src/assets/projects/briefit/architecture.svg" width="5560" height="4052" alt="Briefit의 뉴스 수집, KoBART 학습·평가와 로컬 요약 구조" loading="lazy" decoding="async" />
           </figure>
           <section class="case-technical" id="briefit-pipeline" data-reveal="group">
             <header class="case-technical__head">
@@ -155,5 +146,12 @@
       <nav class="site-footer__links" aria-label="하단 링크"><a href="../../copyright/">Copyright</a><a href="../../#contact">Contact ↗</a></nav>
     </footer>
     <script type="module" src="/src/entries/case-study.js"></script>
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-8VBR1KCEKY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8VBR1KCEKY');
+    </script>
   </body>
 </html>
