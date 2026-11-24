@@ -81,21 +81,18 @@
 
     <main class="work-index">
       <header class="work-index__hero page-width">
-        <div class="work-index__title">
-          <h1 lang="en">Projects</h1>
-        </div>
-        <p>손끝의 움직임을 읽는 로봇부터 토기를 손에 들어 보는 VR 박물관까지, 각 작업의 실제 화면과 구현 과정을 담았습니다.</p>
+        <h1 lang="en">Projects</h1>
       </header>
 
       <nav class="work-fast-path page-width" id="work-list" tabindex="-1" aria-label="프로젝트 바로가기">
-        <a href="./tac-touch/" lang="en">Tac-Touch</a>
-        <a href="./bondi/" lang="en">Bondi</a>
-        <a href="./thing/" lang="en">THING</a>
-        <a href="./aqis/" lang="en">AQIS</a>
-        <a href="./brain-tumor-mri/" lang="en">Brain Tumor MRI</a>
-        <a href="./alkkagi/" lang="en">Alkkagi.io</a>
-        <a href="./briefit/" lang="en">Briefit</a>
-        <a href="./project-prompt-generator/" lang="en">Project Prompt Generator</a>
+        <a href="./tac-touch/"><strong lang="en">Tac-Touch</strong><small>그리퍼 촉각 모니터</small></a>
+        <a href="./bondi/"><strong lang="en">Bondi</strong><small>유물 복원 VR 박물관</small></a>
+        <a href="./thing/"><strong lang="en">THING</strong><small>손동작을 따라 하는 로봇 손</small></a>
+        <a href="./aqis/"><strong lang="en">AQIS</strong><small>뚜껑 불량 검사와 로봇 분류</small></a>
+        <a href="./brain-tumor-mri/"><strong lang="en">Brain Tumor MRI</strong><small>뇌 MRI 영상 분석</small></a>
+        <a href="./alkkagi/"><strong lang="en">Alkkagi.io</strong><small>온라인 알까기</small></a>
+        <a href="./briefit/"><strong lang="en">Briefit</strong><small>같은 이슈의 뉴스 묶음</small></a>
+        <a href="./project-prompt-generator/"><strong lang="en">Project Prompt Generator</strong><small>요구사항·프롬프트 작성</small></a>
       </nav>
 
       <section class="work-showcase" data-work-showcase aria-label="프로젝트 쇼케이스">
@@ -103,16 +100,16 @@
           <section class="work-list page-width" aria-label="프로젝트" data-work-track>
             <article class="work-row" data-project="tac-touch" data-work-beat data-reveal="row">
               <div class="work-row__scene">
-                <a class="work-row__composition" href="./tac-touch/" aria-label="Tac-Touch 프로젝트 상세 보기">
+                <a class="work-row__composition" href="./tac-touch/" aria-label="Tac-Touch 상세 보기" aria-describedby="tac-touch-summary">
                   <div class="work-row__media-stage" data-work-artifact>
-                    <div class="work-row__media work-row__media--window" aria-hidden="true">
-                      <img src="/src/assets/projects/tac-touch/dashboard.webp" width="1980" height="1120" alt="" loading="lazy" decoding="async" />
+                    <div class="work-row__media work-row__media--window">
+                      <img src="/src/assets/projects/tac-touch/dashboard.webp" width="1980" height="1120" alt="3D 로봇팔 옆에 모의 손끝 신호가 표시된 전시 화면" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
                     <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>Tac-Touch</span></span></h2>
-                    <p class="work-row__summary">로봇 그리퍼 양쪽 손끝의 움직임을 3D 모델과 그래프로 확인하는 실험 도구입니다. 화면에는 모의 센서 입력을 표시했습니다.</p>
-                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                    <p class="work-row__summary" id="tac-touch-summary">그리퍼 양쪽 손끝의 촉각 신호를 3D 모델과 함께 보여 주는 PC 앱 <small class="project-image-note">(모의 입력 화면)</small></p>
+                    <span class="work-row__cta" aria-hidden="true"><i>→</i></span>
                   </div>
                 </a>
               </div>
@@ -120,16 +117,16 @@
 
             <article class="work-row" data-project="bondi" data-work-beat data-reveal="row">
               <div class="work-row__scene">
-                <a class="work-row__composition" href="./bondi/" aria-label="Bondi 프로젝트 상세 보기">
+                <a class="work-row__composition" href="./bondi/" aria-label="Bondi 상세 보기" aria-describedby="bondi-summary">
                   <div class="work-row__media-stage" data-work-artifact>
-                    <div class="work-row__media work-row__media--window" aria-hidden="true">
-                      <img src="/src/assets/projects/bondi/exhibit.webp" width="1600" height="789" alt="" loading="lazy" decoding="async" />
+                    <div class="work-row__media work-row__media--window">
+                      <img src="/src/assets/projects/bondi/exhibit.webp" width="1600" height="789" alt="VR 박물관의 손 조작 안내판과 빗살무늬토기 전시대" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
                     <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>Bondi</span></span></h2>
-                    <p class="work-row__summary">깨진 토기의 사진에서 3D 형상을 추정하고, VR 전시실에서 복원 전후를 손으로 돌려 보는 박물관입니다.</p>
-                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                    <p class="work-row__summary" id="bondi-summary">AI로 복원한 유물을 손으로 돌려 보며 손상된 모습과 비교하는 VR 박물관</p>
+                    <span class="work-row__cta" aria-hidden="true"><i>→</i></span>
                   </div>
                 </a>
               </div>
@@ -137,16 +134,16 @@
 
             <article class="work-row work-row--featured" data-project="thing" data-work-beat data-reveal="row">
               <div class="work-row__scene">
-                <a class="work-row__composition" href="./thing/" aria-label="THING 프로젝트 상세 보기">
+                <a class="work-row__composition" href="./thing/" aria-label="THING 상세 보기" aria-describedby="thing-summary">
                   <div class="work-row__media-stage work-row__media-stage--portrait work-row__media-stage--poster" data-work-artifact>
-                    <div class="work-row__media work-row__media--thing work-row__media--poster" aria-hidden="true">
-                      <img src="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" alt="" loading="lazy" decoding="async" />
+                    <div class="work-row__media work-row__media--thing work-row__media--poster">
+                      <img src="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" alt="실물 로봇 손의 손가락 구동 시연" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
                     <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>THING</span></span></h2>
-                    <p class="work-row__summary">손동작을 인식해 7축 텐던 로봇 핸드를 실시간으로 움직이는 시스템.</p>
-                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                    <p class="work-row__summary" id="thing-summary">카메라로 읽은 손동작에 맞춰 손가락을 굽히고 펴는 로봇 손</p>
+                    <span class="work-row__cta" aria-hidden="true"><i>→</i></span>
                   </div>
                 </a>
               </div>
@@ -154,16 +151,16 @@
 
             <article class="work-row" data-project="aqis" data-work-beat data-reveal="row">
               <div class="work-row__scene">
-                <a class="work-row__composition" href="./aqis/" aria-label="AQIS 프로젝트 상세 보기">
+                <a class="work-row__composition" href="./aqis/" aria-label="AQIS 상세 보기" aria-describedby="aqis-summary">
                   <div class="work-row__media-stage" data-work-artifact>
-                    <div class="work-row__media work-row__media--window work-row__media--aqis" aria-hidden="true">
-                      <img src="/src/assets/projects/aqis/real-ops.png" width="960" height="540" alt="" loading="lazy" decoding="async" />
+                    <div class="work-row__media work-row__media--window work-row__media--aqis">
+                      <img src="/src/assets/projects/aqis/real-ops.png" width="960" height="540" alt="Dobot 3D 모델과 검사 상태를 보여 주는 공정 관제 화면" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
                     <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>AQIS</span></span></h2>
-                    <p class="work-row__summary">실제 검사·분류와 RoboDK 공정, SLAM·로봇 관제를 연결한 스마트 팩토리.</p>
-                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                    <p class="work-row__summary" id="aqis-summary">카메라로 뚜껑 불량을 검사하고 로봇팔로 제품을 분류하는 생산 공정</p>
+                    <span class="work-row__cta" aria-hidden="true"><i>→</i></span>
                   </div>
                 </a>
               </div>
@@ -171,16 +168,16 @@
 
             <article class="work-row" data-project="brain-tumor-mri" data-work-beat data-reveal="row">
               <div class="work-row__scene">
-                <a class="work-row__composition" href="./brain-tumor-mri/" aria-label="Brain Tumor MRI 프로젝트 상세 보기">
+                <a class="work-row__composition" href="./brain-tumor-mri/" aria-label="Brain Tumor MRI 상세 보기" aria-describedby="brain-tumor-mri-summary">
                   <div class="work-row__media-stage" data-work-artifact>
-                    <div class="work-row__media work-row__media--window work-row__media--mri" aria-hidden="true">
-                      <img src="/src/assets/projects/brain-mri/classification-demo.png" width="2700" height="1500" alt="" loading="lazy" decoding="async" />
+                    <div class="work-row__media work-row__media--window work-row__media--mri">
+                      <img src="/src/assets/projects/brain-mri/classification-demo.png" width="2700" height="1500" alt="10개 뇌 MRI 영상의 분류 결과를 나란히 보여 주는 화면" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
                     <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>Brain Tumor MRI</span></span></h2>
-                    <p class="work-row__summary">MRI 영상에서 뇌종양을 분류하고 위치를 시각화하는 모델.</p>
-                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                    <p class="work-row__summary" id="brain-tumor-mri-summary">뇌 MRI에서 종양의 유형을 분류하고 윤곽을 표시하는 영상 분석 도구</p>
+                    <span class="work-row__cta" aria-hidden="true"><i>→</i></span>
                   </div>
                 </a>
               </div>
@@ -188,16 +185,16 @@
 
             <article class="work-row" data-project="alkkagi" data-work-beat data-reveal="row">
               <div class="work-row__scene">
-                <a class="work-row__composition" href="./alkkagi/" aria-label="Alkkagi.io 프로젝트 상세 보기">
+                <a class="work-row__composition" href="./alkkagi/" aria-label="Alkkagi.io 상세 보기" aria-describedby="alkkagi-summary">
                   <div class="work-row__media-stage work-row__media-stage--poster" data-work-artifact>
-                    <div class="work-row__media work-row__media--alkkagi work-row__media--poster" aria-hidden="true">
-                      <img src="/src/assets/projects/alkkagi/demo-poster.png" width="400" height="400" alt="" loading="lazy" decoding="async" />
+                    <div class="work-row__media work-row__media--alkkagi work-row__media--poster">
+                      <img src="/src/assets/projects/alkkagi/demo-poster.png" width="400" height="400" alt="보드 위의 돌을 조준하는 온라인 알까기 화면" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
                     <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>Alkkagi.io</span></span></h2>
-                    <p class="work-row__summary">브라우저에서 실시간으로 함께 즐기는 멀티플레이 알까기 게임.</p>
-                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                    <p class="work-row__summary" id="alkkagi-summary">브라우저에서 돌을 튕겨 상대 돌을 밀어내는 온라인 알까기 게임</p>
+                    <span class="work-row__cta" aria-hidden="true"><i>→</i></span>
                   </div>
                 </a>
               </div>
@@ -205,16 +202,16 @@
 
             <article class="work-row" data-project="briefit" data-work-beat data-reveal="row">
               <div class="work-row__scene">
-                <a class="work-row__composition" href="./briefit/" aria-label="Briefit 프로젝트 상세 보기">
+                <a class="work-row__composition" href="./briefit/" aria-label="Briefit 상세 보기" aria-describedby="briefit-summary">
                   <div class="work-row__media-stage" data-work-artifact>
-                    <div class="work-row__media work-row__media--window work-row__media--briefit" aria-hidden="true">
-                      <img src="/src/assets/projects/briefit/cover.webp" width="2400" height="1350" alt="" loading="lazy" decoding="async" />
+                    <div class="work-row__media work-row__media--window work-row__media--briefit">
+                      <img src="/src/assets/projects/briefit/cover.webp" width="2400" height="1350" alt="뉴스 목록과 기사 요약을 나란히 표시한 Briefit 화면" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
                     <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>Briefit</span></span></h2>
-                    <p class="work-row__summary">여러 뉴스 기사를 모아 비슷한 주제로 묶고 핵심을 요약하는 서비스.</p>
-                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                    <p class="work-row__summary" id="briefit-summary">같은 이슈의 기사를 묶고 긴 기사에서 핵심을 추려 주는 뉴스 서비스</p>
+                    <span class="work-row__cta" aria-hidden="true"><i>→</i></span>
                   </div>
                 </a>
               </div>
@@ -222,16 +219,16 @@
 
             <article class="work-row" data-project="project-prompt-generator" data-work-beat data-reveal="row">
               <div class="work-row__scene">
-                <a class="work-row__composition" href="./project-prompt-generator/" aria-label="Project Prompt Generator 프로젝트 상세 보기">
+                <a class="work-row__composition" href="./project-prompt-generator/" aria-label="Project Prompt Generator 상세 보기" aria-describedby="project-prompt-generator-summary">
                   <div class="work-row__media-stage" data-work-artifact>
-                    <div class="work-row__media work-row__media--window work-row__media--prompt" aria-hidden="true">
-                      <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="" loading="lazy" decoding="async" />
+                    <div class="work-row__media work-row__media--window work-row__media--prompt">
+                      <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="질문과 답변을 거쳐 개발 문서를 만드는 흐름도" loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <div class="work-row__copy" data-work-placard>
                     <h2 lang="en"><span class="work-row__title-mask"><span class="work-row__title-text" data-work-title>Project Prompt Generator</span></span></h2>
-                    <p class="work-row__summary">프로젝트 아이디어를 실행 가능한 요구사항과 프롬프트로 정리하는 도구.</p>
-                    <span class="work-row__cta">상세 보기 <i aria-hidden="true">→</i></span>
+                    <p class="work-row__summary" id="project-prompt-generator-summary">아이디어에 관한 질문과 답변을 요구사항과 개발용 프롬프트로 정리하는 도구</p>
+                    <span class="work-row__cta" aria-hidden="true"><i>→</i></span>
                   </div>
                 </a>
               </div>

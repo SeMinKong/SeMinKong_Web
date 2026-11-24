@@ -122,6 +122,7 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   const fastPath = workHtml.match(/<nav class="work-fast-path[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? '';
   const projectHrefs = [...workHtml.matchAll(/class="work-row__composition" href="([^"]+)"/g)].map((match) => match[1]);
   assert.deepEqual([...fastPath.matchAll(/href="([^"]+)"/g)].map((match) => match[1]), projectHrefs);
+  assert.equal([...fastPath.matchAll(/<strong lang="en">[^<]+<\/strong><small>[^<]+<\/small>/g)].length, projectHrefs.length);
   const expectedHrefs = SITE_ROUTES
     .filter(({ kind }) => kind === 'case-study')
     .map(({ source }) => source.replace(/^work\//, './').replace(/index\.html$/, ''));
@@ -186,7 +187,7 @@ test('motion runtimes stay route-scoped and keep static fallbacks', async () => 
   assert.match(workHtml, /workStoryExpired/);
   assert.match(workStory, /data-work-story-expired/);
   assert.match(workStory, /data-work-story-ready/);
-  assert.match(workStyles, /@media \(max-width: 840px\) \{[\s\S]*?\.work-index__hero \{[\s\S]*?grid-template-columns: minmax\(0, 1fr\)/);
+  assert.match(workStyles, /@media \(max-width: 840px\) \{\s*\.work-fast-path \{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
   assert.doesNotMatch(workStyles, /14\.5vw|9\.6vw|7\.3vw|6\.8vw/);
   assert.doesNotMatch(workStyles, /border-right: 1px solid var\(--line-strong\)/);
   assert.doesNotMatch(workStory, /--work-progress|--work-connector-progress/);

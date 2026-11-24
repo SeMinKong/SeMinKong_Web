@@ -26,16 +26,7 @@
 }
 
 .work-index__hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
-  gap: clamp(48px, 8vw, 110px);
-  align-items: end;
-  padding-top: clamp(72px, 8vw, 96px);
-  padding-bottom: clamp(64px, 7vw, 88px);
-}
-
-.work-index__hero .eyebrow {
-  grid-column: 1 / -1;
+  padding-block: clamp(40px, 5vw, 72px) clamp(24px, 3vw, 40px);
 }
 
 .work-index__hero h1 {
@@ -45,37 +36,40 @@
   letter-spacing: -0.012em;
 }
 
-.work-index__title {
-  min-width: 0;
-}
-
-.work-index__hero > p:last-child {
-  max-width: 490px;
-  color: var(--text-soft);
-  font-size: clamp(0.96rem, calc(0.92rem + 0.12vw), 1.04rem);
-  line-height: 1.62;
-}
-
 .work-fast-path {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-bottom: clamp(42px, 6vw, 72px);
+  margin-bottom: clamp(36px, 4vw, 56px);
   border-top: 1px solid var(--line-strong);
   border-bottom: 1px solid var(--line-strong);
 }
 
 .work-fast-path > a {
   min-width: 0;
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 10px clamp(12px, 1.4vw, 20px);
+  min-height: 74px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  padding: 12px clamp(12px, 1.4vw, 20px);
   border-left: 1px solid var(--line);
   color: var(--text);
   font-size: var(--type-label);
   font-weight: var(--weight-ui);
   line-height: 1.38;
   transition: background-color 180ms ease, color 180ms ease;
+}
+
+.work-fast-path strong {
+  font-family: var(--font-display);
+  font-size: var(--type-body-lg);
+  line-height: 1.16;
+}
+
+.work-fast-path small {
+  color: var(--text-soft);
+  font-size: var(--type-label);
+  font-weight: var(--weight-body);
+  word-break: keep-all;
 }
 
 .work-fast-path > a:nth-child(4n + 1) {
@@ -121,12 +115,12 @@
 
 .work-row__scene {
   position: relative;
-  padding-block: clamp(38px, 5vw, 60px);
+  padding-block: clamp(28px, 4vw, 48px);
 }
 
 .work-row__composition {
   position: relative;
-  min-height: 480px;
+  min-height: clamp(300px, 32vw, 420px);
   display: grid;
   grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
   gap: clamp(24px, 3.6vw, 52px);
@@ -137,7 +131,7 @@
 }
 
 .work-row--featured .work-row__scene {
-  padding-block: clamp(52px, 6vw, 78px);
+  padding-block: clamp(32px, 4vw, 52px);
 }
 
 .work-row--featured .work-row__composition {
@@ -182,7 +176,6 @@ html.work-story-pending .work-showcase__viewport {
 }
 
 .work-list.work-story-enabled {
-  --work-copy-indent: clamp(14px, 1.3vw, 19px);
   --work-title-size: clamp(3.75rem, 6.6vw, 5rem);
   --work-title-featured-size: clamp(4.25rem, 8vw, 5.42rem);
   width: max-content;
@@ -302,7 +295,6 @@ html.work-story-pending .work-showcase__viewport {
   grid-row: 3 / 4;
   align-self: end;
   max-width: 32rem;
-  padding-inline-start: var(--work-copy-indent);
   font-size: clamp(1rem, calc(0.97rem + 0.1vw), 1.06rem);
   font-weight: var(--weight-support);
   line-height: 1.6;
@@ -313,7 +305,7 @@ html.work-story-pending .work-showcase__viewport {
   grid-column: 8 / 12;
   grid-row: 4 / 5;
   align-self: start;
-  margin: clamp(7px, 1vh, 12px) 0 0 calc(var(--work-copy-indent) + 2px);
+  margin: 4px 0 0;
 }
 
 .work-list.work-story-enabled .work-row[data-project="thing"] .work-row__media-stage {
@@ -559,8 +551,6 @@ html.work-story-pending .work-showcase__viewport {
 .work-row__summary {
   max-width: 610px;
   color: var(--text-soft);
-  padding-inline-start: 14px;
-  border-inline-start: 2px solid color-mix(in srgb, var(--signal) 72%, var(--line-strong));
   font-family: var(--font-body);
   font-size: clamp(0.98rem, calc(0.95rem + 0.1vw), 1.04rem);
   font-weight: var(--weight-support);
@@ -576,8 +566,15 @@ html.work-story-pending .work-showcase__viewport {
   line-height: 1.62;
 }
 
-.work-row__cta {
-  margin-inline-start: 16px;
+.work-list:not(.work-story-enabled) .work-row__copy {
+  position: relative;
+  padding-inline-end: 36px;
+}
+
+.work-list:not(.work-story-enabled) .work-row__cta {
+  position: absolute;
+  inset: 0 0 auto auto;
+  margin: 0;
 }
 
 .directory-contact {
@@ -643,22 +640,9 @@ html.work-story-pending .work-showcase__viewport {
 
 }
 
-@media (max-width: 840px) {
-  .work-index__hero {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-
-  .work-index__hero .eyebrow {
-    grid-column: auto;
-  }
-}
-
 @media (max-width: 720px) {
-
   .work-index__hero {
-    gap: 22px;
-    padding-top: 76px;
+    padding-block: 40px 24px;
   }
 
   .work-row__scene {

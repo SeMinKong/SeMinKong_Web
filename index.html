@@ -111,10 +111,7 @@
                   </svg>
                 </span>
               </h1>
-              <p class="hero-identity__statement" id="hero-summary">
-                <span data-hero-line>안녕하세요!</span>
-                <span data-hero-line>새로운 것을 배우고 직접 만드는 일이 즐겁습니다.</span>
-              </p>
+              <p class="hero-identity__statement" id="hero-summary" data-hero-line>로봇 제어와 VR 전시를 만드는 개발자 공세민입니다.</p>
               <nav class="hero-story__actions" aria-label="주요 페이지 바로가기" data-hero-actions>
                 <a class="button button--primary" href="./work/" aria-label="프로젝트 목록 보기">프로젝트 <span aria-hidden="true">→</span></a>
                 <a class="button button--text" href="#contact" aria-label="연락처 바로가기">Contact <span aria-hidden="true">→</span></a>
@@ -136,176 +133,102 @@
             <div class="project-deck__stage" data-deck-stage>
               <div class="project-deck__slot" data-deck-card style="--deck-index: 0; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <div class="project-card__topline"><span>2026.10—11</span></div>
-                  <div class="project-card__media project-card__media--window" aria-hidden="true">
-                    <img src="/src/assets/projects/tac-touch/dashboard.webp" width="1980" height="1120" alt="" loading="lazy" decoding="async" />
+                  <div class="project-card__media project-card__media--window project-card__media--capture">
+                    <img src="/src/assets/projects/tac-touch/dashboard.webp" width="1980" height="1120" alt="3D 로봇팔 옆에 모의 손끝 신호가 표시된 전시 화면" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
-                    <p>SSAFY 자율프로젝트</p>
-                    <h3><a href="./work/tac-touch/" lang="en" aria-label="Tac-Touch 프로젝트 살펴보기">Tac-Touch</a></h3>
-                    <p class="project-card__summary">두 손끝의 신호를 읽는 그리퍼 센서. 사진은 모의 입력을 표시한 전시 화면입니다.</p>
-                    <ul class="project-card__facts" aria-label="Tac-Touch에서 맡은 기술">
-                      <li><strong>촉각 센서</strong><span>수집 펌웨어</span></li>
-                      <li><strong>MCP</strong><span>PC 앱 연동</span></li>
-                    </ul>
-                    <span class="project-card__cta">상세 보기 <i aria-hidden="true">↗</i></span>
+                    <h3><a href="./work/tac-touch/" lang="en" aria-label="Tac-Touch 상세 보기">Tac-Touch</a></h3>
+                    <p class="project-card__summary">그리퍼 양쪽 손끝의 촉각 신호를 3D 모델과 함께 보여 주는 PC 앱</p>
+                    <small class="project-image-note">모의 입력 화면</small>
                   </div>
                 </article>
               </div>
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 1; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <div class="project-card__topline"><span>2026</span></div>
-                  <div class="project-card__media project-card__media--window" aria-hidden="true">
-                    <img src="/src/assets/projects/bondi/exhibit.webp" width="1600" height="789" alt="" loading="lazy" decoding="async" />
+                  <div class="project-card__media project-card__media--window project-card__media--capture">
+                    <img src="/src/assets/projects/bondi/exhibit.webp" width="1600" height="789" alt="VR 박물관의 손 조작 안내판과 빗살무늬토기 전시대" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
-                    <p>SSAFY 특화프로젝트</p>
-                    <h3><a href="./work/bondi/" lang="en" aria-label="Bondi 프로젝트 살펴보기">Bondi</a></h3>
-                    <p class="project-card__summary">손안에서 비교하는 빗살무늬토기의 복원 전후</p>
-                    <ul class="project-card__facts" aria-label="Bondi에서 맡은 기술">
-                      <li><strong>점군 복원</strong><span>AdaPoinTr</span></li>
-                      <li><strong>OpenXR</strong><span>손 추적</span></li>
-                    </ul>
-                    <span class="project-card__cta">상세 보기 <i aria-hidden="true">↗</i></span>
+                    <h3><a href="./work/bondi/" lang="en" aria-label="Bondi 상세 보기">Bondi</a></h3>
+                    <p class="project-card__summary">AI로 복원한 유물을 손으로 돌려 보며 손상된 모습과 비교하는 VR 박물관</p>
                   </div>
                 </article>
               </div>
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 2; --project-accent: var(--signal);">
-                <article class="project-card project-card--deck project-card--deck-thing">
-                  <span class="project-card__edge" aria-hidden="true">THING</span>
-                  <div class="project-card__topline"><span>2026.07—08</span></div>
-                  <div class="project-card__media project-card__media--thing" aria-hidden="true">
-                    <img src="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" alt="" loading="lazy" decoding="async" />
+                <article class="project-card project-card--deck">
+                  <div class="project-card__media project-card__media--thing">
+                    <img src="/src/assets/projects/thing/final-demo-poster.webp" width="720" height="1280" alt="실물 로봇 손의 손가락 구동 시연" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
-                    <p>Team · Robotics &amp; Edge AI</p>
-                    <h3><a href="./work/thing/" lang="en" aria-label="THING 프로젝트 살펴보기">THING</a></h3>
-                    <p class="project-card__summary">21 landmarks · ROS 2 · 7축 텐던 구동</p>
-                    <ul class="project-card__facts" aria-label="THING 핵심 근거">
-                      <li><strong>21</strong><span>landmarks</span></li>
-                      <li><strong>ROS 2</strong><span>edge control</span></li>
-                    </ul>
-                    <span class="project-card__cta">상세 보기 <i aria-hidden="true">↗</i></span>
+                    <h3><a href="./work/thing/" lang="en" aria-label="THING 상세 보기">THING</a></h3>
+                    <p class="project-card__summary">카메라로 읽은 손동작에 맞춰 손가락을 굽히고 펴는 로봇 손</p>
                   </div>
                 </article>
               </div>
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 3; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <span class="project-card__edge" aria-hidden="true">AQIS</span>
-                  <div class="project-card__topline"><span>2026</span></div>
-                  <div class="project-card__media project-card__media--window project-card__media--aqis" aria-hidden="true">
-                    <img src="/src/assets/projects/aqis/real-ops.png" width="960" height="540" alt="" loading="lazy" decoding="async" />
+                  <div class="project-card__media project-card__media--window project-card__media--aqis">
+                    <img src="/src/assets/projects/aqis/real-ops.png" width="960" height="540" alt="Dobot 3D 모델과 검사 상태를 보여 주는 공정 관제 화면" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
-                    <p>Team Lead · AI Inspection &amp; Robotics</p>
-                    <h3><a href="./work/aqis/" lang="en" aria-label="AQIS 프로젝트 살펴보기">AQIS</a></h3>
-                    <p class="project-card__summary">실제 검사·분류 · RoboDK 공정 · SLAM·로봇 관제</p>
-                    <ul class="project-card__facts" aria-label="AQIS 핵심 근거">
-                      <li><strong>AI</strong><span>inspection</span></li>
-                      <li><strong>Live</strong><span>operations</span></li>
-                    </ul>
-                    <span class="project-card__cta">상세 보기 <i aria-hidden="true">↗</i></span>
+                    <h3><a href="./work/aqis/" lang="en" aria-label="AQIS 상세 보기">AQIS</a></h3>
+                    <p class="project-card__summary">카메라로 뚜껑 불량을 검사하고 로봇팔로 제품을 분류하는 생산 공정</p>
                   </div>
                 </article>
               </div>
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 4; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <span class="project-card__edge" aria-hidden="true">MRI</span>
-                  <div class="project-card__topline"><span>2026</span></div>
-                  <div class="project-card__media project-card__media--window" aria-hidden="true">
-                    <img src="/src/assets/projects/brain-mri/classification-demo.png" width="2700" height="1500" alt="" loading="lazy" decoding="async" />
+                  <div class="project-card__media project-card__media--window">
+                    <img src="/src/assets/projects/brain-mri/classification-demo.png" width="2700" height="1500" alt="10개 뇌 MRI 영상의 분류 결과를 나란히 보여 주는 화면" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
-                    <p>Personal · Computer Vision</p>
-                    <h3><a href="./work/brain-tumor-mri/" lang="en" aria-label="Brain Tumor MRI 프로젝트 살펴보기">Brain Tumor MRI</a></h3>
-                    <p class="project-card__summary">YOLO11 · MRI 4-class 분류 · 종양 영역 분할</p>
-                    <ul class="project-card__facts" aria-label="Brain Tumor MRI 핵심 근거">
-                      <li><strong>4</strong><span>classes</span></li>
-                      <li><strong>YOLO11</strong><span>segmentation</span></li>
-                    </ul>
-                    <span class="project-card__cta">상세 보기 <i aria-hidden="true">↗</i></span>
+                    <h3><a href="./work/brain-tumor-mri/" lang="en" aria-label="Brain Tumor MRI 상세 보기">Brain Tumor MRI</a></h3>
+                    <p class="project-card__summary">뇌 MRI에서 종양의 유형을 분류하고 윤곽을 표시하는 영상 분석 도구</p>
                   </div>
                 </article>
               </div>
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 5; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <span class="project-card__edge" aria-hidden="true">ALKKAGI</span>
-                  <div class="project-card__topline"><span>2026.03—04</span></div>
-                  <div class="project-card__media project-card__media--window" aria-hidden="true">
-                    <img src="/src/assets/projects/alkkagi/demo-poster.png" width="1276" height="1270" alt="" loading="lazy" decoding="async" />
+                  <div class="project-card__media project-card__media--window">
+                    <img src="/src/assets/projects/alkkagi/demo-poster.png" width="1276" height="1270" alt="보드 위의 돌을 조준하는 온라인 알까기 화면" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
-                    <p>Personal · Real-time Web</p>
-                    <h3><a href="./work/alkkagi/" lang="en" aria-label="Alkkagi.io 프로젝트 살펴보기">Alkkagi.io</a></h3>
-                    <p class="project-card__summary">서버 권위 판정 · 60Hz 루프 · Socket.io 멀티플레이</p>
-                    <ul class="project-card__facts" aria-label="Alkkagi.io 핵심 근거">
-                      <li><strong>60Hz</strong><span>game loop</span></li>
-                      <li><strong>Server</strong><span>authoritative</span></li>
-                    </ul>
-                    <span class="project-card__cta">상세 보기 <i aria-hidden="true">↗</i></span>
+                    <h3><a href="./work/alkkagi/" lang="en" aria-label="Alkkagi.io 상세 보기">Alkkagi.io</a></h3>
+                    <p class="project-card__summary">브라우저에서 돌을 튕겨 상대 돌을 밀어내는 온라인 알까기 게임</p>
                   </div>
                 </article>
               </div>
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 6; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <span class="project-card__edge" aria-hidden="true">BRIEFIT</span>
-                  <div class="project-card__topline"><span>2025.05—09</span></div>
-                  <div class="project-card__media project-card__media--window" aria-hidden="true">
-                    <img src="/src/assets/projects/briefit/cover.webp" width="2400" height="1350" alt="" loading="lazy" decoding="async" />
+                  <div class="project-card__media project-card__media--window">
+                    <img src="/src/assets/projects/briefit/cover.webp" width="2400" height="1350" alt="뉴스 목록과 기사 요약을 나란히 표시한 Briefit 화면" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
-                    <p>Team · NLP</p>
-                    <h3><a href="./work/briefit/" lang="en" aria-label="Briefit 프로젝트 살펴보기">Briefit</a></h3>
-                    <p class="project-card__summary">뉴스 수집·정제 · KoBART 학습 · 긴 기사 요약</p>
-                    <ul class="project-card__facts" aria-label="Briefit 핵심 근거">
-                      <li><strong>KoBART</strong><span>summarization</span></li>
-                      <li><strong>Crawl4AI</strong><span>collection</span></li>
-                    </ul>
-                    <span class="project-card__cta">상세 보기 <i aria-hidden="true">↗</i></span>
+                    <h3><a href="./work/briefit/" lang="en" aria-label="Briefit 상세 보기">Briefit</a></h3>
+                    <p class="project-card__summary">같은 이슈의 기사를 묶고 긴 기사에서 핵심을 추려 주는 뉴스 서비스</p>
                   </div>
                 </article>
               </div>
 
               <div class="project-deck__slot" data-deck-card style="--deck-index: 7; --project-accent: var(--signal);">
                 <article class="project-card project-card--deck">
-                  <span class="project-card__edge" aria-hidden="true">PROMPT</span>
-                  <div class="project-card__topline"><span>2026</span></div>
-                  <div class="project-card__media project-card__media--window" aria-hidden="true">
-                    <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="" loading="lazy" decoding="async" />
+                  <div class="project-card__media project-card__media--window">
+                    <img src="/src/assets/projects/prompt-generator/flow.png" width="1184" height="531" alt="질문과 답변을 거쳐 개발 문서를 만드는 흐름도" loading="lazy" decoding="async" />
                   </div>
                   <div class="project-card__copy">
-                    <p>Personal · LLM Workflow</p>
-                    <h3><a href="./work/project-prompt-generator/" lang="en" aria-label="Project Prompt Generator 프로젝트 살펴보기">Project Prompt Generator</a></h3>
-                    <p class="project-card__summary">6개 설계 영역 대화 상태 · FastAPI · WebSocket</p>
-                    <ul class="project-card__facts" aria-label="Project Prompt Generator 핵심 근거">
-                      <li><strong>6</strong><span>design domains</span></li>
-                      <li><strong>FastAPI</strong><span>agent runtime</span></li>
-                    </ul>
-                    <span class="project-card__cta">상세 보기 <i aria-hidden="true">↗</i></span>
+                    <h3><a href="./work/project-prompt-generator/" lang="en" aria-label="Project Prompt Generator 상세 보기">Project Prompt Generator</a></h3>
+                    <p class="project-card__summary">아이디어에 관한 질문과 답변을 요구사항과 개발용 프롬프트로 정리하는 도구</p>
                   </div>
                 </article>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section class="focus-section" aria-labelledby="focus-title">
-        <div class="page-width focus-layout">
-          <header>
-            <h2 id="focus-title" data-reveal="title">Focus</h2>
-          </header>
-          <ul class="focus-list">
-            <li data-reveal="row"><h3 lang="en">Vision</h3></li>
-            <li data-reveal="row"><h3 lang="en">Robotics</h3></li>
-            <li data-reveal="row"><h3 lang="en">Systems</h3></li>
-          </ul>
         </div>
       </section>
 
@@ -315,11 +238,7 @@
             <h2 id="about-title" data-reveal="title">About</h2>
           </div>
           <div class="home-about__copy" data-reveal="text">
-            <p>카메라와 센서에서 얻은 데이터를 사람이 보고 조작할 수 있는 소프트웨어로 만듭니다. 최근에는 로봇 그리퍼의 손끝 신호를 PC에서 읽고, 사진으로 복원한 토기를 VR 전시실에서 손으로 살펴보는 경험을 구현했습니다.</p>
-            <dl class="home-profile" aria-label="현재 관심 분야">
-              <div><dt>Now</dt><dd>SSAFY Robotics Track</dd></div>
-              <div><dt>Focus</dt><dd>Computer Vision · ROS 2 · Physical AI</dd></div>
-            </dl>
+            <p>숭실대학교에서 소프트웨어를 전공했고, SSAFY 15기 로보틱스 트랙에서 공부하고 있습니다.</p>
             <a class="text-link" href="./about/">소개 보기 <span aria-hidden="true">→</span></a>
           </div>
         </div>
