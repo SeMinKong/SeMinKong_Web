@@ -26,7 +26,7 @@ Each route loads only the entry and stylesheet layers it owns. Shared page behav
 | --- | --- | --- |
 | Home | `src/entries/home.js` | `portfolio-shared.css`, `home.css`, `kinetic-home.css` |
 | Work | `src/entries/work.js` | `portfolio-shared.css`, `work.css` |
-| Eight case studies | `src/entries/case-study.js` | `case-study.css` | Two exhibition pages also use the scoped `work/project-exhibit.css`.
+| Eight case studies | `src/entries/case-study.js` | `case-study.css`, plus `work/project-exhibit.css` on the two exhibition pages |
 | About | `src/entries/about.js` | `about.css` |
 | Resume | `src/entries/resume.js` | `resume.css` |
 | Copyright | `src/entries/legal.js` | `legal.css` |
