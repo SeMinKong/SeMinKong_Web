@@ -96,8 +96,7 @@ def verify(path):
     assert not any(e['kind'] == 'page_number' for e in elements)
     assert sum(e['kind'] == 'trophy' for e in elements) == 5
     badges = [e for e in elements if e['kind'] == 'gold_badge']
-    assert [(e['page'], e['text']) for e in badges] == [(1, 'SSAFY 자율프로젝트 · Tac-Touch'),
-                                                        (3, 'SSAFY 자율프로젝트 · Tac-Touch')]
+    assert [(e['page'], e['text']) for e in badges] == [(1, 'Tac-Touch'), (3, 'Tac-Touch')]
     overlaps = []
     for i, a in enumerate(elements):
         for b in elements[i+1:]:

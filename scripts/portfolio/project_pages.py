@@ -30,7 +30,7 @@ PROJECTS = [
   'stack': '촉각 센서 · MCU 펌웨어 · 3D 기구 편집 · MCP',
   'figure': ('tac-touch/dashboard.webp', (0, 0, 1, 1)),
   'caption': '모의 센서 입력으로 손끝 움직임을 표시한 팀 전시 화면',
-  'badge': 'SSAFY 자율프로젝트 · Tac-Touch',
+  'badge': 'Tac-Touch',
   'awards': [],
   'case': 'work/tac-touch/'},
  {'key': 'bondi',
