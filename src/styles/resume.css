@@ -17,24 +17,23 @@
 .resume {
   width: min(calc(100% - 80px), 1040px);
   margin-inline: auto;
-  padding-top: calc(var(--nav-height) + clamp(72px, 9vw, 112px));
+  padding-top: calc(var(--nav-height) + clamp(32px, 5vw, 64px));
 }
 
 .resume-hero {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.55fr);
-  gap: 56px;
+  gap: 32px;
   align-items: end;
-  padding-bottom: clamp(64px, 8vw, 92px);
+  padding-bottom: clamp(28px, 5vw, 56px);
 }
 
 .resume-label {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--type-label);
-  font-weight: var(--weight-meta);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--type-lead);
+  font-weight: var(--weight-heading);
   line-height: 1.4;
-  letter-spacing: 0.04em;
 }
 
 .resume-hero h1 {
@@ -93,7 +92,7 @@
 .resume-portfolio__content {
   min-width: 0;
   display: grid;
-  gap: 18px;
+  gap: 9px;
 }
 
 .resume-portfolio__content > p {
@@ -110,26 +109,19 @@
   line-height: 1.5;
 }
 
-.resume-original__content > header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 34px;
-  align-items: end;
-}
-
-.resume-original__content h2 {
-  font-size: clamp(1.45rem, calc(1.32rem + 0.55vw), 1.8rem);
-  font-weight: var(--weight-heading);
-  line-height: 1.2;
-  letter-spacing: -0.008em;
-}
-
-.resume-original__content header p {
-  max-width: 630px;
-  margin-top: 14px;
+.resume-preview summary {
+  width: fit-content;
+  min-height: 44px;
+  margin-inline: auto;
   color: var(--text-soft);
   font-size: var(--type-body-sm);
-  line-height: 1.72;
+  line-height: 44px;
+  cursor: pointer;
+}
+
+.resume-preview summary:hover,
+.resume-preview summary:focus-visible {
+  color: var(--signal);
 }
 
 .resume-original__actions {
@@ -177,7 +169,7 @@
 }
 
 .resume-document {
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .resume-document > a {
@@ -213,30 +205,9 @@
 .resume-block {
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr);
-  gap: clamp(42px, 7vw, 82px);
-  padding-block: clamp(48px, 6vw, 70px);
+  gap: clamp(24px, 4vw, 52px);
+  padding-block: clamp(26px, 4vw, 48px);
   border-top: 1px solid var(--resume-divider);
-}
-
-.resume-summary > div {
-  max-width: 760px;
-}
-
-.resume-summary > div h2 {
-  max-width: 720px;
-  font-size: clamp(1.45rem, calc(1.32rem + 0.55vw), 1.8rem);
-  line-height: 1.2;
-  letter-spacing: -0.008em;
-}
-
-.resume-summary > div > p {
-  max-width: 680px;
-  margin-top: 0;
-  color: var(--text-soft);
-  max-width: var(--measure);
-  font-size: var(--type-body-lg);
-  font-weight: var(--weight-body);
-  line-height: 1.74;
 }
 
 .resume-list {
@@ -244,7 +215,7 @@
 }
 
 .resume-list > article {
-  padding-block: 26px;
+  padding-block: 20px;
   border-top: 1px solid var(--resume-divider);
 }
 
@@ -304,34 +275,11 @@
 
 .resume-list article > p {
   max-width: 720px;
-  margin-top: 15px;
+  margin-top: 8px;
   color: var(--text-soft);
   font-size: var(--type-body);
   font-weight: var(--weight-body);
   line-height: 1.72;
-}
-
-.resume-projects > article {
-  padding-block: 34px;
-}
-
-.resume-projects ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin: 17px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.resume-projects li {
-  padding: 4px 8px;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--type-meta);
-  font-weight: var(--weight-meta);
 }
 
 .award-project-badge {
@@ -570,14 +518,6 @@ html.award-dialog-open body {
     gap: 28px;
   }
 
-  .resume-original__content > header {
-    grid-template-columns: 1fr;
-  }
-
-  .resume-original__actions {
-    justify-content: flex-start;
-  }
-
   .resume-item__head {
     grid-template-columns: 1fr;
     gap: 8px;
@@ -615,27 +555,22 @@ html.award-dialog-open body {
 @media (max-width: 600px) {
   .resume {
     width: min(calc(100% - 32px), 1040px);
-    padding-top: calc(var(--nav-height) + 64px);
+    padding-top: calc(var(--nav-height) + 30px);
   }
 
   .resume-hero {
-    padding-bottom: 56px;
+    padding-bottom: 28px;
   }
 
-  .resume-original__actions {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .resume-original__actions a {
-    justify-content: space-between;
+  .resume-preview summary {
+    margin-inline: 0;
   }
 
   .resume-block,
   .resume-cta {
     grid-template-columns: 1fr;
-    gap: 25px;
-    padding-block: 48px;
+    gap: 16px;
+    padding-block: 28px;
   }
 
   .resume-item__head {

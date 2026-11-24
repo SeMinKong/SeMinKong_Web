@@ -54,36 +54,35 @@
           <h1 data-about-intro lang="en">About</h1>
         </div>
         <div class="about-hero__statement" data-about-intro>
-          <p><strong>센서가 읽은 값이 화면에 닿기까지의 과정을 만듭니다.</strong></p>
-          <span>Software Developer · Suwon</span>
+          <p>로봇 센서와 VR 전시를 개발하는 <strong>공세민</strong>입니다.</p>
         </div>
       </header>
 
       <section class="about-story page-width" aria-labelledby="about-story-title">
         <dl class="about-facts" data-about-reveal aria-label="프로필 요약">
-          <div><dt>Based in</dt><dd>Suwon, Republic of Korea</dd></div>
-          <div><dt>Now</dt><dd>SSAFY Robotics Track</dd></div>
-          <div><dt>Education</dt><dd>Soongsil University <br /> B.E. in Software</dd></div>
-          <div><dt>Focus</dt><dd>Computer Vision · Robotics <br /> Tactile sensing · XR</dd></div>
+          <div><dt>거주지</dt><dd lang="en">Suwon, Republic of Korea</dd></div>
+          <div><dt>현재</dt><dd>SSAFY 15기 로보틱스 트랙</dd></div>
+          <div><dt>학력</dt><dd>숭실대학교 소프트웨어학부 학사</dd></div>
         </dl>
 
         <article class="about-narrative" data-about-reveal>
-          <h2 id="about-story-title">시스템 통합</h2>
-          <p>숭실대학교에서 Software Engineering을 전공했고, 현재 SSAFY Robotics Track에서 Computer Vision, ROS 2, robot control을 공부하고 있습니다.</p>
-          <p>Tac-Touch에서는 손끝 센서의 정상 측정과 수집 실패를 구분하는 펌웨어를 만들었습니다. Bondi에서는 관람자가 빗살무늬토기를 집어 돌려 보며 복원 전후를 같은 위치에서 비교하도록 VR 전시를 구성했습니다.</p>
-          <p>THING에서는 모터 통신·점검 스크립트와 스풀·텐던 조립을 맡았고, AQIS에서는 검사 결과를 ROS 2, Dobot, 실시간 관제 화면으로 연결했습니다.</p>
+          <h2 id="about-story-title">최근 작업</h2>
+          <dl class="project-tools">
+            <div><dt><a href="../work/tac-touch/">Tac-Touch</a></dt><dd>손끝 센서의 정상 측정과 읽기 실패를 구분하는 펌웨어를 만들고, PC 앱의 기구 편집 기능을 MCP에 연결했습니다.</dd></div>
+            <div><dt><a href="../work/bondi/">Bondi</a></dt><dd>TRELLIS와 AdaPoinTr로 빗살무늬토기의 결손부를 추정하고, OpenXR로 유물을 집어 돌려 보는 VR 전시를 구현했습니다.</dd></div>
+          </dl>
         </article>
       </section>
 
       <section class="about-questions" aria-labelledby="questions-title">
         <div class="page-width">
           <header class="about-section-heading" data-about-reveal>
-            <h2 id="questions-title">요즘 붙잡고 있는 질문</h2>
+            <h2 id="questions-title">관심 분야</h2>
           </header>
           <ul class="about-questions__list">
-            <li data-about-reveal><span class="about-questions__topic" lang="en">Retargeting</span><h3>21개 손 랜드마크를 7-DoF 텐던 핸드의 안전한 관절 명령으로 retargeting하려면 어떤 보정이 필요할까?</h3><p>THING의 제어 경로를 출발점으로 joint limit, 입력 평활화, 영점 보정이 실제 손 모양과 모터 동작에 미치는 영향을 정리하고 있습니다.</p></li>
-            <li data-about-reveal><span class="about-questions__topic" lang="en">Sim-to-real</span><h3>시뮬레이션의 동작을 실제 로봇으로 옮길 때 sensor noise·latency·contact dynamics의 domain gap을 어떻게 줄일까?</h3><p>Isaac Sim과 Isaac Lab에서 통신 지연, 센서 오차, 접촉·마찰 차이를 실패 조건과 함께 비교하는 방법을 배우고 있습니다.</p></li>
-            <li data-about-reveal><span class="about-questions__topic" lang="en">Edge inference</span><h3>Jetson·Raspberry Pi 같은 엣지 디바이스에서 AI 추론을 운영하려면 latency·memory budget·observability를 어떻게 함께 설계할까?</h3><p>Ollama와 llama.cpp에서 양자화, context 길이, 초당 토큰 수, RAM·VRAM 사용량을 비교하며 로그와 상태 확인까지 포함한 배포 기준을 정리하고 있습니다.</p></li>
+            <li data-about-reveal><h3>로봇 손 제어</h3><p>손가락 좌표를 로봇 손의 관절 각도로 바꾸는 보정 방법</p></li>
+            <li data-about-reveal><h3>시뮬레이션</h3><p>통신 지연과 접촉 마찰이 실제 로봇의 동작에 미치는 영향</p></li>
+            <li data-about-reveal><h3>엣지 추론</h3><p>소형 보드에서 모델 크기에 따른 메모리 사용량과 응답 시간</p></li>
           </ul>
         </div>
       </section>
@@ -93,10 +92,6 @@
           <h2 id="now-title">기술 스택</h2>
         </header>
         <div class="about-now__content">
-          <dl class="project-tools">
-            <div><dt><a href="../work/tac-touch/">Tac-Touch</a></dt><dd>MCU에서 센서 채널별 수집 상태를 기록했습니다. PC 앱에서는 MCP를 통해 그리퍼의 장착 각도를 바꾼 사본을 저장하고 3D 화면에서 확인했습니다.</dd></div>
-            <div><dt><a href="../work/bondi/">Bondi</a></dt><dd>TRELLIS와 AdaPoinTr로 빗살무늬토기의 손상부 복원을 실험했습니다. Blender로 전시 공간을 만들고 Unreal Engine에서 OpenXR 손 추적을 연결했습니다.</dd></div>
-          </dl>
           <div class="tech-stack-languages">
             <h3>사용 언어</h3>
             <ul class="tech-stack-tools" aria-label="사용 언어">
@@ -143,16 +138,11 @@
         </div>
       </section>
 
-      <section class="about-next page-width" data-about-reveal aria-labelledby="about-next-title">
-        <div>
-          <h2 id="about-next-title">프로젝트 · 이력서</h2>
-        </div>
-        <nav aria-label="다음 페이지">
-          <a class="button button--primary" href="../work/">View projects <span aria-hidden="true">→</span></a>
-          <a class="button button--quiet" href="../resume/">Resume <span aria-hidden="true">→</span></a>
-          <a class="text-link" href="../#contact">Contact <span aria-hidden="true">↗</span></a>
-        </nav>
-      </section>
+      <nav id="about-next-title" class="about-next page-width" data-about-reveal aria-label="관련 페이지">
+        <a href="../work/">전체 프로젝트</a>
+        <a href="../resume/">이력서</a>
+        <a href="../#contact">연락처</a>
+      </nav>
     </main>
 
     <footer class="page-width site-footer">
