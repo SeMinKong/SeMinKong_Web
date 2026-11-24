@@ -1,4 +1,4 @@
-"""Editable 9-page landscape portfolio: one page per project.
+"""Editable landscape portfolio with one page per project.
 
 Each project page carries the introduction, personal implementation, design
 decisions and validation limits; implementation detail lives in the repository READMEs
@@ -38,7 +38,7 @@ from reportlab.graphics import renderPDF
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / 'src/assets/projects'
 FIGURES = ROOT / 'scripts/portfolio/assets'
-PAGE_COUNT = 9
+PAGE_COUNT = 11
 PHOTO_IMAGES = {
     'thing/integrated-robot-hand-portrait.webp',
     'thing/jetson-mediapipe-hands-test-1600.webp',
@@ -51,7 +51,7 @@ M, CW = 38, W - 76
 BOTTOM = 535
 INK, MUTED, PAPER, LINE, ACCENT, TINT = map(
     HexColor, ['#171512', '#625e56', '#f7f5ef', '#d4d0c5', '#a73524', '#eeeae1'])
-VERSION = '2026.09.12'
+VERSION = '2026.11.24'
 FONT_FILES = {
     'Korean': ('NanumGothic-Regular.ttf', 'NanumGothic.ttf'),
     'KoreanBold': ('NanumGothic-Bold.ttf', 'NanumGothicBold.ttf'),
@@ -130,7 +130,7 @@ class Book:
         self.c = canvas.Canvas(str(target), pagesize=(W, H), pageCompression=1, invariant=1)
         self.c.setTitle('공세민 | Software Developer Portfolio')
         self.c.setAuthor('공세민 / Se Min Kong')
-        self.c.setSubject('Introduction, six project cases, implementation decisions and awards')
+        self.c.setSubject('Eight project cases in robotics, VR and software with implementation decisions and awards')
         self.c.setKeywords('공세민, Se Min Kong, Software, Robotics, Portfolio')
         self.c.setViewerPreference('DisplayDocTitle', 'true')
         self.sample, self.n = sample, 0
@@ -193,6 +193,19 @@ class Book:
         for (title, url), width in zip(sources, widths):
             self.center_link(title, url, x + width / 2, top, size, limit=H - 20)
             x += width + gap
+
+    def gold_badge(self, text, center, top):
+        size = 9.3
+        width = pdfmetrics.stringWidth(text, 'KoreanBold', size)
+        self.c.saveState()
+        self.c.setFillColor(HexColor('#f1dfac'))
+        self.c.setStrokeColor(HexColor('#bb9140'))
+        self.c.setLineWidth(.65)
+        self.c.roundRect(center - width / 2 - 7, H - top - 12, width + 14, 14,
+                         4, stroke=1, fill=1)
+        self.c.restoreState()
+        self.text(text, center - width / 2, top, size, 'KoreanBold', HexColor('#584010'), limit=H - 20)
+        self.checks[-1].update(kind='gold_badge', center_x=round(center, 2))
 
     def trophy(self, x, top, size=12):
         """Small vector trophy; independent of emoji/font fallback."""
@@ -429,7 +442,7 @@ def introduction(b):
     b.start('공세민', key='introduction')
     b.text('Se Min Kong', M, 108, 34, 'Helvetica-Bold')
     b.para('로봇·소프트웨어 개발', M, 162, 380, 18, 26, bold=True)
-    b.para('센서 입력, 제어 명령, 실제 장비를 연결하는<br/>소프트웨어를 만듭니다.<br/><br/>숭실대학교 소프트웨어학부를 졸업하고<br/>SSAFY Robotics Track에서 공부하고 있습니다.',
+    b.para('로봇 손끝의 움직임을 읽는 센서 펌웨어와<br/>손으로 유물을 돌려보는 VR 전시를 만들었습니다.<br/><br/>숭실대학교 소프트웨어학부를 졸업하고<br/>SSAFY Robotics Track에서 공부하고 있습니다.',
            M, 204, 380, 11.6, 20, keep_words=True)
     b.image('@se-min-kong-profile.png', 448, 137, 180, 168)
     b.label('연락처', 650, 137)
@@ -456,12 +469,20 @@ def introduction(b):
         '숭실 캡스톤디자인 경진대회<br/>장려상',
         'IT 프로젝트 프로리그<br/>장려상',
     ]
+    for i, spec in enumerate(s for s in project_pages.PROJECTS if 'badge' in s or 'award_label' in s):
+        x = 430 + i * 192
+        b.rule(359, x, 176, LINE, .7)
+        if 'badge' in spec:
+            b.gold_badge(spec['badge'], x + 88, 370)
+        else:
+            b.para(spec['award_label'], x, 364, 176, 10.1, 14, bold=True, align='center')
+            b.para(spec['name'], x, 379, 176, 9.3, 13, MUTED, align='center')
     for index, (project, title, date, asset) in enumerate(AWARDS):
-        top = 359 + (index // 2) * 64
+        top = 398 + (index // 2) * 46
         x = 430 + (index % 2) * 192
         b.rule(top, x, 176, LINE, .7)
-        b.para(award_lines[index], x, top + 8, 176, 10.1, 14, bold=True, align='center')
-        b.para(f'{date} · {project}', x, top + 43, 176, 9.3, 14, MUTED, align='center')
+        b.para(award_lines[index], x, top + 3, 176, 10.1, 13, bold=True, align='center')
+        b.para(f'{date} · {project}', x, top + 30, 176, 9.3, 13, MUTED, align='center')
 
     b.rule(493)
     facts = [
@@ -480,7 +501,9 @@ def introduction(b):
 
 def capability(b):
     b.start('구현 경험', key='capability')
-    titles = ['카메라 입력과 로봇 제어를 연결한 시스템 구현',
+    titles = ['손끝 센서의 신호 유효성 검사와 PC 앱 연동',
+              '토기 형상 복원과 VR 손 추적 조작',
+              '카메라 입력과 로봇 제어를 연결한 시스템 구현',
               'ROS 2와 웹 서버 간 비동기 데이터 연동',
               '다축 모터 제어와 텐던 구동계 통합',
               '학습·추론을 위한 데이터 변환 파이프라인 구축',
@@ -490,12 +513,14 @@ def capability(b):
     width = (CW - gap) / 2
     for i, title in enumerate(titles):
         x = M + (i % 2) * (width + gap)
-        top = 132 + (i // 2) * 64
+        top = 110 + (i // 2) * 52
         b.rule(top, x, width, ACCENT, .9)
         b.para(title, x, top + 19, width, 13.3, 20, bold=True, align='center', keep_words=True)
 
     b.rule(329)
     b.para('기술 스택', M, 345, CW, 14, 21, bold=True, align='center')
+    b.para('VR 전시는 Unreal Engine과 OpenXR로 구현하고 촉각 모니터링 앱의 기구 편집은 MCP에 연결했습니다.',
+           M, 369, CW, 9.3, 14, MUTED, align='center')
     column = CW / len(STACK)
     group_labels = ['Robotics · Simulation', 'Languages', 'AI · Vision',
                     'LLM · Backend', 'Platform · Collaboration']
@@ -514,10 +539,10 @@ def capability(b):
 
 
 def closing(b):
-    b.start('프로젝트 자료', 'README · 기술 문서 · 시연', key='closing', title_align='center')
+    b.start('프로젝트 자료', '공개 사례 · README · 기술 문서', key='closing', title_align='center')
     guide = [('README', '개요 · 역할 · 실행 방법'),
              ('기술 문서', '코드 · 계산식 · 검증 범위'),
-             ('프로젝트 시연', '영상 · 실제 화면 · 결과 자료')]
+             ('공개 프로젝트 사례', '본인 기여 · 실제 화면 · 검증 범위')]
     gap = 30
     width = (CW - gap * 2) / 3
     for i, (title, body) in enumerate(guide):
@@ -527,13 +552,13 @@ def closing(b):
         b.para(body, x, 181, width, 10, 15, MUTED, align='center')
 
     b.rule(225)
+    item_width = (CW - gap * 3) / 4
     for i, spec in enumerate(project_pages.PROJECTS):
-        x = M + (i % 3) * (width + gap)
-        top = 250 + (i // 3) * 83
-        b.para(spec['name'], x, top, width, 12, 18, bold=True, align='center')
-        b.link_row([('README', spec['repo'] + 'blob/main/README.md'),
-                    ('기술 문서', spec['repo'] + 'blob/main/' + spec['detail'])],
-                   top + 31, size=10.2, center=x + width / 2, gap=25)
+        x = M + (i % 4) * (item_width + gap)
+        top = 250 + (i // 4) * 83
+        b.para(spec['name'], x, top, item_width, 12, 18, bold=True, align='center')
+        b.link_row(project_pages.source_links(spec, WEB)[:2], top + 31,
+                   size=10.2, center=x + item_width / 2, gap=25)
 
     b.rule(402)
     widget = qr.QrCodeWidget(WEB)

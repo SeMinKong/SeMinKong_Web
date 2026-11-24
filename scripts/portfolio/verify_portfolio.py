@@ -1,4 +1,4 @@
-"""Read-only checks for the nine-page portfolio and its retained-source links."""
+"""Read-only checks for the portfolio, approved project text and public links."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -14,18 +14,19 @@ from project_pages import PROJECTS, M, CW, LEFT_WIDTH, RIGHT_X, RIGHT_WIDTH, CON
 
 ROOT = Path(__file__).resolve().parents[2]
 WEB = 'https://seminkong.github.io/SeMinKong_Web/'
-PAGE_KEYS = ['introduction', 'capability', 'thing', 'aqis', 'briefit', 'mri', 'prompt', 'alkkagi', 'closing']
+PAGE_KEYS = ['introduction', 'capability', 'tac-touch', 'bondi',
+             'thing', 'aqis', 'briefit', 'mri', 'prompt', 'alkkagi', 'closing']
 
 
 def verify(path):
     reader = PdfReader(path)
-    assert len(reader.pages) == 9 and len(reader.outline) == 9, 'Nine pages and bookmarks required'
+    assert len(reader.pages) == len(reader.outline) == len(PAGE_KEYS), 'Missing pages or bookmarks'
     catalog = reader.trailer['/Root']
     assert not any(k in catalog for k in ['/OpenAction', '/AA', '/AcroForm'])
     assert not any(k in catalog.get('/Names', {}) for k in ['/JavaScript', '/EmbeddedFiles'])
     layout = json.loads(path.with_suffix('.layout.json').read_text(encoding='utf-8'))
     assert [p['key'] for p in layout['pages']] == PAGE_KEYS
-    assert layout['version'] == '2026.09.12'
+    assert layout['version'] == '2026.11.24'
     texts, links_by_page, sizes = [], [], []
     with pdfplumber.open(path) as doc:
         for n, page in enumerate(doc.pages, 1):
@@ -62,7 +63,8 @@ def verify(path):
             assert action['/S'] == '/URI'
             uri = str(action['/URI'])
             assert uri.isascii() and urlsplit(uri).scheme in {'https', 'mailto'}
-            assert all(part not in uri for part in ['drive.google.com', 'canva.com', '.private', 'localhost'])
+            assert all(part not in uri for part in ['drive.google.com', 'canva.com', '.private', 'localhost',
+                                                    'github.com/SeMinKong/TacRobot', 'github.com/SeMinKong/Bondi'])
             links.append(uri)
         links_by_page.append(links)
     all_text = '\n'.join(texts)
@@ -70,7 +72,9 @@ def verify(path):
     assert not re.search(r'010[- ]?\d{4}[- ]?\d{4}|\d{6}-[1-4]\d{6}', all_text)
     for label in ['공세민', 'Se Min Kong', '정보처리기사', 'OPIc English IH', 'Suwon']:
         assert label in texts[0], f'Cover missing {label}'
-    assert not any(label in texts[0] for label in ['이 문서', '2026.09.12', '9쪽', 'A4 가로'])
+    assert not any(label in texts[0] for label in ['이 문서', '2026.11.24', '11쪽', 'A4 가로'])
+    assert 'SSAFY 특화프로젝트 2등' in texts[0] and 'SSAFY 특화프로젝트 2등' in texts[3]
+    assert not re.search(r'\d+\s*등|금상|대상|최우수상|우수상', texts[2])
     assert '구현 경험' in texts[1]
     assert not any(label in all_text for label in ['Torque OFF', '구현을 더 자세히 읽기', '프로젝트의 입구'])
     assert not any(e['page'] == 2 and e['kind'] == 'annotation' for e in layout['elements'])
@@ -91,6 +95,9 @@ def verify(path):
     elements = layout['elements']
     assert not any(e['kind'] == 'page_number' for e in elements)
     assert sum(e['kind'] == 'trophy' for e in elements) == 5
+    badges = [e for e in elements if e['kind'] == 'gold_badge']
+    assert [(e['page'], e['text']) for e in badges] == [(1, 'SSAFY 자율프로젝트 · Tac-Touch'),
+                                                        (3, 'SSAFY 자율프로젝트 · Tac-Touch')]
     overlaps = []
     for i, a in enumerate(elements):
         for b in elements[i+1:]:
@@ -149,8 +156,8 @@ def verify(path):
         assert metadata['x'] == M and metadata['top'] == 90 and abs(metadata['width'] - CW) < .02
         stack = next(e for e in page_elements if e['text'] == spec['stack'].replace('<br/>', ' · '))
         assert stack['x'] == M and stack['top'] == 534
-        links = [next(e for e in page_elements if e['text'] == label)
-                 for label in ['README', '기술 문서', '프로젝트 시연']]
+        labels = ['README', '기술 문서', '프로젝트 시연'] if 'repo' in spec else ['공개 프로젝트 사례']
+        links = [next(e for e in page_elements if e['text'] == label) for label in labels]
         assert all(e['top'] == 564 for e in links)
         assert abs((links[0]['x'] + links[-1]['x'] + links[-1]['width']) / 2 - 841.89 / 2) < .02
         assert sum(e['kind'] == 'trophy' for e in page_elements) == len(spec['awards'])
@@ -159,9 +166,11 @@ def verify(path):
             left = min(e['x'] for e in award_items)
             right = max(e['x'] + e['width'] for e in award_items)
             assert abs((left + right) / 2 - 841.89 / 2) < .02
-        expected = [spec['repo']+'blob/main/README.md', spec['repo']+'blob/main/'+spec['detail'], WEB+spec['case']]
+        expected = [WEB + spec['case']]
+        if 'repo' in spec:
+            expected = [spec['repo']+'blob/main/README.md', spec['repo']+'blob/main/'+spec['detail'], *expected]
         assert all(url in links_by_page[n-1] for url in expected), f'Page {n}: missing direct detail links'
-        assert all(url in links_by_page[8] for url in expected[:2]), f'Index missing project {spec["key"]}'
+        assert all(url in links_by_page[-1] for url in expected[:2]), f'Index missing project {spec["key"]}'
         figure = next(e for e in elements if e['page'] == n and e['kind'] == 'image')
         caption = next(e for e in elements if e['page'] == n and e['text'] == spec['caption'])
         assert figure['text'] == spec['figure'][0]
@@ -208,12 +217,13 @@ def verify(path):
                 assert abs(center-e['center_x']) < .35, f'Off-center text: {e["text"]}'
     for n, bookmark in enumerate(reader.outline):
         assert reader.get_destination_page_number(bookmark) == n
-    return dict(pages=9, bookmarks=9, external_links=len(all_links),
-                direct_project_links=18, repository_index_links=12,
+    return dict(pages=len(reader.pages), bookmarks=len(reader.outline), external_links=len(all_links),
+                direct_project_links=sum(3 if 'repo' in spec else 1 for spec in PROJECTS),
+                project_index_links=sum(2 if 'repo' in spec else 1 for spec in PROJECTS),
                 min_font_pt=round(min(sizes), 2), layout_overlaps=0,
-                aligned_captions=6, centered_text_blocks=len(centered), unchanged_source_images=6,
-                complete_project_texts=6, aligned_project_grids=6,
-                page_numbers=0, trophy_icons=5, approved_stack_ratings=16,
+                aligned_captions=len(PROJECTS), centered_text_blocks=len(centered), unchanged_source_images=len(PROJECTS),
+                complete_project_texts=len(PROJECTS), aligned_project_grids=len(PROJECTS),
+                page_numbers=0, trophy_icons=5, gold_project_badges=len(badges), approved_stack_ratings=16,
                 bytes=path.stat().st_size, sha256=hashlib.sha256(path.read_bytes()).hexdigest().upper())
 
 

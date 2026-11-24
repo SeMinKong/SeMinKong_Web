@@ -20,7 +20,32 @@ BODY_SIZE, BODY_LEADING = 10.3, 15.5
 CONTENT_TOP, CONTENT_BOTTOM = 128, 522
 MUTED, LINE, ACCENT, TINT = map(HexColor, ['#625e56', '#d4d0c5', '#a73524', '#eeeae1'])
 
-PROJECTS = [{'key': 'thing',
+PROJECTS = [
+ {'key': 'tac-touch',
+  'name': 'Tac-Touch',
+  'tagline': '손끝 촉각 신호를 읽는 로봇 모니터링',
+  'period': '2026.10 - 11',
+  'role': '센서 수집 펌웨어 · PC 앱 MCP 연동',
+  'team': '6인 팀',
+  'stack': '촉각 센서 · MCU 펌웨어 · 3D 기구 편집 · MCP',
+  'figure': ('tac-touch/dashboard.webp', (0, 0, 1, 1)),
+  'caption': '모의 센서 입력으로 손끝 움직임을 표시한 팀 전시 화면',
+  'badge': 'SSAFY 자율프로젝트 · Tac-Touch',
+  'awards': [],
+  'case': 'work/tac-touch/'},
+ {'key': 'bondi',
+  'name': 'Bondi',
+  'tagline': '본디, 손으로 살펴보는 유물 복원 VR 전시',
+  'period': '2026년 · 4주',
+  'role': '토기 AI 복원 실험 · VR 전시장 · 손 추적',
+  'team': '7인 팀',
+  'stack': 'TRELLIS · AdaPoinTr · Blender · Unreal Engine · OpenXR',
+  'figure': ('bondi/exhibit.webp', (0, 0, 1, 1)),
+  'caption': '본디 VR 전시의 손 조작 안내와 빗살무늬토기 좌대',
+  'award_label': 'SSAFY 특화프로젝트 2등',
+  'awards': [],
+  'case': 'work/bondi/'},
+ {'key': 'thing',
   'name': 'THING',
   'tagline': '7축 텐던 로봇 핸드',
   'period': '2026.07 - 08',
@@ -114,6 +139,14 @@ def text_height(text, width, size, leading, bold=False):
     return Paragraph(text, style).wrap(width, H)[1]
 
 
+def source_links(spec, web):
+    if 'repo' not in spec:
+        return [('공개 프로젝트 사례', web + spec['case'])]
+    return [('README', spec['repo'] + 'blob/main/README.md'),
+            ('기술 문서', spec['repo'] + 'blob/main/' + spec['detail']),
+            ('프로젝트 시연', web + spec['case'])]
+
+
 def project_page(b, spec, web, awards):
     b.start(spec['name'], key=spec['key'])
     metadata = f"{spec['period']} · {spec['team']} <font color='#d4d0c5'>|</font> <b>역할</b> {spec['role']}"
@@ -168,9 +201,11 @@ def footer(b, spec, web, awards):
     if spec['awards']:
         b.award_links([(titles[index], web + 'resume/' + awards[index][3])
                        for index in spec['awards']], 549, size=9.3, gap=26)
+    if 'badge' in spec:
+        b.gold_badge(spec['badge'], W / 2, 549)
+    if 'award_label' in spec:
+        b.para(spec['award_label'], M, 549, CW, 9.3, 12, MUTED, bold=True,
+               align='center', limit=H - 20)
     b.rule(530)
-    links = [('README', spec['repo'] + 'blob/main/README.md'),
-             ('기술 문서', spec['repo'] + 'blob/main/' + spec['detail']),
-             ('프로젝트 시연', web + spec['case'])]
-    b.link_row(links, 564, size=9.3, gap=30)
+    b.link_row(source_links(spec, web), 564, size=9.3, gap=30)
     b.end(rule_top=None)
