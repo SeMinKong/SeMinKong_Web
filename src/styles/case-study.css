@@ -725,8 +725,8 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 }
 
 .case-architecture__trigger {
-  position: relative;
-  display: block;
+  display: grid;
+  gap: 10px;
   width: 100%;
   padding: 0;
   border: 0;
@@ -742,27 +742,22 @@ html.js .case-section:not(.is-revealed):not([data-thing-story]) h2 {
 }
 
 .case-architecture__hint {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  padding: 6px 10px;
-  border: 1px solid rgba(23, 21, 18, 0.2);
-  border-radius: 4px;
-  background: rgba(245, 241, 233, 0.92);
-  color: #171512;
+  justify-self: end;
+  color: var(--paper-soft);
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: var(--weight-ui);
-  line-height: 1;
-  opacity: 0.88;
-  transition: opacity 180ms ease, border-color 180ms ease, color 180ms ease;
+  font-weight: var(--weight-meta);
+  line-height: 1.2;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.25em;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
 }
 
 .case-architecture__trigger:hover .case-architecture__hint,
 .case-architecture__trigger:focus-visible .case-architecture__hint {
-  opacity: 1;
-  border-color: var(--signal-on-light);
   color: var(--signal-on-light);
+  text-decoration-color: currentColor;
 }
 
 .architecture-dialog {
