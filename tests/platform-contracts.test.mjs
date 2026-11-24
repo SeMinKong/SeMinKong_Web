@@ -273,7 +273,7 @@ test('progressive navigation and motion remain optional and non-blocking', async
   const heroSection = homeHtml.match(/<section class="hero-story"[\s\S]*?<\/section>/)?.[0] ?? '';
 
   assert.doesNotMatch(homeHtml, /AI &amp; Robotics Software Developer/);
-  assert.match(heroSection, /<p[^>]*data-hero-line>로봇 제어와 VR 전시를 만드는 개발자 공세민입니다\.<\/p>/);
+  assert.match(heroSection, /<p[^>]*data-hero-line>상상을 현실로 이끄는 개발자<\/p>/);
   assert.equal(heroSection.match(/data-hero-line/g)?.length, 1);
   assert.doesNotMatch(heroSection, /<em>/);
   assert.match(kineticStyles, /\.home-page \.hero-identity__statement \{[\s\S]*?font-family: var\(--font-display\)/);
