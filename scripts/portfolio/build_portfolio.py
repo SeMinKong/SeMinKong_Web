@@ -195,17 +195,19 @@ class Book:
             x += width + gap
 
     def gold_badge(self, text, center, top):
-        size = 9.3
+        size = 9.8
         width = pdfmetrics.stringWidth(text, 'KoreanBold', size)
+        mark = 4
+        gap = 6
+        total = mark + gap + width
+        left = center - total / 2
+        self.track('badge_mark', left, top, mark, size * 1.15, kind='badge_mark', limit=H - 20)
         self.c.saveState()
-        self.c.setFillColor(HexColor('#f1dfac'))
-        self.c.setStrokeColor(HexColor('#bb9140'))
-        self.c.setLineWidth(.65)
-        self.c.roundRect(center - width / 2 - 7, H - top - 12, width + 14, 14,
-                         4, stroke=1, fill=1)
+        self.c.setFillColor(ACCENT)
+        self.c.rect(left, H - top - size + 2.2, mark, mark, stroke=0, fill=1)
         self.c.restoreState()
-        self.text(text, center - width / 2, top, size, 'KoreanBold', HexColor('#584010'), limit=H - 20)
-        self.checks[-1].update(kind='gold_badge', center_x=round(center, 2))
+        self.text(text, left + mark + gap, top, size, 'KoreanBold', INK, limit=H - 20)
+        self.checks[-1].update(kind='gold_badge', center_x=round(left + mark + gap + width / 2, 2))
 
     def trophy(self, x, top, size=12):
         """Small vector trophy; independent of emoji/font fallback."""
@@ -441,9 +443,9 @@ class Book:
 def introduction(b):
     b.start('공세민', key='introduction')
     b.text('Se Min Kong', M, 108, 34, 'Helvetica-Bold')
-    b.para('로봇·소프트웨어 개발', M, 162, 380, 18, 26, bold=True)
-    b.para('로봇 손끝의 움직임을 읽는 센서 펌웨어와<br/>손으로 유물을 돌려보는 VR 전시를 만들었습니다.<br/><br/>숭실대학교 소프트웨어학부를 졸업하고<br/>SSAFY Robotics Track에서 공부하고 있습니다.',
-           M, 204, 380, 11.6, 20, keep_words=True)
+    b.para('상상을 현실로 이끄는 개발자', M, 162, 380, 18, 26, bold=True)
+    b.para('숭실대학교 소프트웨어학부를 졸업하고<br/>SSAFY Robotics Track에서 프로젝트를 진행하고 있습니다.',
+           M, 208, 380, 11.6, 20, keep_words=True)
     b.image('@se-min-kong-profile.png', 448, 137, 180, 168)
     b.label('연락처', 650, 137)
     b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', 650, 159, 10)
@@ -473,7 +475,8 @@ def introduction(b):
         x = 430 + i * 192
         b.rule(359, x, 176, LINE, .7)
         if 'badge' in spec:
-            b.gold_badge(spec['badge'], x + 88, 370)
+            b.gold_badge(spec['badge'], x + 88, 364)
+            b.para('택로봇 기업 연계', x, 379, 176, 9.3, 13, MUTED, align='center')
         else:
             b.para(spec['award_label'], x, 364, 176, 10.1, 14, bold=True, align='center')
             b.para(spec['name'], x, 379, 176, 9.3, 13, MUTED, align='center')
@@ -501,8 +504,8 @@ def introduction(b):
 
 def capability(b):
     b.start('구현 경험', key='capability')
-    titles = ['손끝 센서의 신호 유효성 검사와 PC 앱 연동',
-              '토기 형상 복원과 VR 손 추적 조작',
+    titles = ['센서 신호 유효성 검증과 PC 앱 연동',
+              '3D 결손 복원과 VR 핸드 트래킹 인터랙션',
               '카메라 입력과 로봇 제어를 연결한 시스템 구현',
               'ROS 2와 웹 서버 간 비동기 데이터 연동',
               '다축 모터 제어와 텐던 구동계 통합',
@@ -519,7 +522,7 @@ def capability(b):
 
     b.rule(329)
     b.para('기술 스택', M, 345, CW, 14, 21, bold=True, align='center')
-    b.para('VR 전시는 Unreal Engine과 OpenXR로 구현하고 촉각 모니터링 앱의 기구 편집은 MCP에 연결했습니다.',
+    b.para('프로젝트 성격에 따라 Unreal Engine · OpenXR · MCP 등 도메인 도구를 함께 활용합니다.',
            M, 369, CW, 9.3, 14, MUTED, align='center')
     column = CW / len(STACK)
     group_labels = ['Robotics · Simulation', 'Languages', 'AI · Vision',
@@ -542,7 +545,7 @@ def closing(b):
     b.start('프로젝트 자료', '공개 사례 · README · 기술 문서', key='closing', title_align='center')
     guide = [('README', '개요 · 역할 · 실행 방법'),
              ('기술 문서', '코드 · 계산식 · 검증 범위'),
-             ('공개 프로젝트 사례', '본인 기여 · 실제 화면 · 검증 범위')]
+             ('공개 프로젝트 사례', '담당 구현 · 시연 화면 · 프로젝트 상세')]
     gap = 30
     width = (CW - gap * 2) / 3
     for i, (title, body) in enumerate(guide):
