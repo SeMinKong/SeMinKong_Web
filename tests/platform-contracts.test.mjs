@@ -400,7 +400,7 @@ test('both SSAFY cases are public destinations and the autonomous project badge 
   const articles = awards.match(/<article\b[\s\S]*?<\/article>/g) ?? [];
   const tactile = articles.find((article) => article.includes('href="../work/tac-touch/"')) ?? '';
   const museum = articles.find((article) => article.includes('href="../work/bondi/"')) ?? '';
-  assert.match(tactile, /class="award-project-badge">SSAFY 자율프로젝트 · Tac-Touch<\/span>/);
+  assert.match(tactile, /class="award-project-badge">Tac-Touch<\/span>/);
   assert.doesNotMatch(tactile, /\d\s*등|\d(?:st|nd|rd|th) place|금상|대상|우수상/i);
   assert.match(museum, /<p>2등<\/p>/);
 });

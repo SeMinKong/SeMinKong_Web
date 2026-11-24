@@ -21,6 +21,10 @@ body {
   min-width: 0;
 }
 
+.exhibit-case .exhibit-hero__story .case-hero__actions {
+  justify-self: stretch;
+}
+
 .exhibit-case .exhibit-hero h1 {
   min-width: 0;
   font-size: var(--type-page);
