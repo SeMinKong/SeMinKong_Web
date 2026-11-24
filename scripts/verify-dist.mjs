@@ -198,7 +198,7 @@ if (optionalGsapAssets.length) {
   throw new Error(`Unapproved optional GSAP plugins entered production: ${optionalGsapAssets.join(', ')}`);
 }
 
-for (const requiredFont of ['signika-latin-wght-normal', 'noto-sans-kr-', 'manrope-latin-wght-normal']) {
+for (const requiredFont of ['signika-latin-wght-normal', 'jua-korean-400-normal', 'manrope-latin-wght-normal']) {
   if (!compiledFontNames.some((name) => name.startsWith(requiredFont))) {
     throw new Error(`Production is missing required self-hosted font asset: ${requiredFont}.`);
   }

@@ -51,8 +51,9 @@ test('gallery direction keeps static surfaces and restrained typography', async 
   assert.match(galleryStyles, /repeating-linear-gradient/);
   assert.match(tokenStyles, /Signika Variable/);
   assert.match(tokenStyles, /font-weight: 300 700/);
-  assert.match(tokenStyles, /Noto Sans KR Variable/);
-  assert.doesNotMatch(tokenStyles, /Asta Sans Variable|Geist Mono Variable|Dongle|Gowun Dodum|Jua/);
+  assert.match(tokenStyles, /Jua/);
+  assert.match(tokenStyles, /jua-korean-400-normal\.woff2/);
+  assert.doesNotMatch(tokenStyles, /Asta Sans Variable|Geist Mono Variable|Dongle|Gowun Dodum/);
   assert.match(deckSource, /pointerdown/);
   assert.match(deckSource, /pointermove/);
   assert.match(deckSource, /focusin/);

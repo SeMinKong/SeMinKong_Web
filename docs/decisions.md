@@ -7,7 +7,7 @@
 - 사용자 요청으로 웹 자산 경량화·로딩 최적화와 디자인·UX 마감을 함께 반영한다. 원본 PNG/SVG/영상 자산은 그대로 보존하고 웹 표시용 파생 자산을 사용한다.
 - `aqis/architecture.svg`(11.4 MB) 대신 `aqis/architecture.webp`(61.3 KB), `thing/architecture.svg`(1.9 MB) 대신 내장 사진만 WebP로 최적화한 `thing/architecture-web.svg`를 표시하며, `classification-demo.png`·`real-ops.png`·`slam-navigation.png`·`flow.png`·`demo-poster.png`도 WebP 파생본으로 교체한다.
 - 첫 화면 아래 아키텍처 이미지와 `<video>`에 `loading="lazy"`를 적용하고, 핵심 대표 이미지에는 `fetchpriority="high"`, 홈 3D 캐러셀 후순위 카드에는 `fetchpriority="low"`를 지정한다. `gtag.js`는 `<head>`에서 `<body>` 끝 `defer`로 이동하고, 긴 상세 페이지 하단 섹션에는 `content-visibility: auto`와 `contain-intrinsic-block-size`를 적용한다.
-- 한글 디스플레이 폰트를 단일 360 KB `Jua`에서 `unicode-range` 동적 서브셋이 적용된 `@fontsource-variable/noto-sans-kr`로 교체한다.
+- 한글 디스플레이 폰트는 기존 `@fontsource/jua`(`Jua`)를 그대로 유지한다.
 - 상세 페이지 스티키 목차(`.case-local-nav`)에 Scroll-spy 활성 표시(`aria-current="location"`)를 추가하고, 아키텍처 다이어그램 클릭 시 네이티브 `<dialog closedby="any">` 라이트박스(Safari용 pointerdown/up fallback 포함)로 확대할 수 있게 개선한다.
 - About 기술 스택의 `<details class="tech-stack-tool">`을 기본 `open`으로 두어 모든 도구명을 상시 표시하고, 홈 카드에 연도·도메인 메타 라벨을 추가하며, Resume 구분선(`--resume-divider`)과 텍스트 선택 범위를 다듬고 상세 페이지 타이틀 구분자를 `—`로 통일한다.
 
