@@ -391,6 +391,11 @@ test('both SSAFY cases are public destinations and the autonomous project badge 
   }
 
   const resume = await readFile(sourceUrl('resume/index.html'), 'utf8');
+  for (const slug of slugs) {
+    const html = await readFile(sourceUrl('work/' + slug + '/index.html'), 'utf8');
+    assert.ok(html.includes('href="https://github.com/SeMinKong"'), slug + ' links back to the author');
+    assert.doesNotMatch(html, /href="https:\/\/(?:lab\.ssafy\.com|github\.com\/SeMinKong\/(?:Bondi|TacRobot))\b/i);
+  }
   const awards = resume.match(/<div class="resume-list resume-awards">([\s\S]*?)<\/section>/)?.[1] ?? '';
   const articles = awards.match(/<article\b[\s\S]*?<\/article>/g) ?? [];
   const tactile = articles.find((article) => article.includes('href="../work/tac-touch/"')) ?? '';

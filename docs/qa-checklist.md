@@ -1,5 +1,10 @@
 # QA checklist
 
+## 2026-11-24 — Bondi와 Tac-Touch
+
+- npm.cmd run verify로 13개 경로와 26개 배포 항목을 검사했다. Chrome에서 홈·Work·About·Resume·신규 상세 2개를 390·768·1280px의 기본 및 모션 감소 모드에서 확인했다. 신규 사례 간 탐색, 키보드 포커스, 이미지 로딩, 가로 넘침, JavaScript를 끈 본문도 검사했다.
+- 11쪽 포트폴리오를 렌더링하고 이전 여섯 사례의 화면을 원본과 대조했다. 영문 이력서는 A4 한 쪽으로 출력하고 DOCX·PDF의 공개 사례 링크와 웹 미리보기를 확인했다.
+
 ## 2026-09-23 Google Analytics 측정 ID 교체
 
 - [x] 공개 source·dist HTML 각 11개에서 새 ID `G-8VBR1KCEKY`의 로더와 config가 각각 1회이며 이전 ID가 없음을 독립 감사로 확인했다. HTML diff는 ID 두 곳 교체뿐이며 `<head>` 직후 배치를 유지한다.
