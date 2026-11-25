@@ -11,6 +11,8 @@ from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph
 
+import visual_components as vc
+
 W, H = landscape(A4)
 M, CW = 38, W - 76
 LEFT_WIDTH = 300
@@ -32,7 +34,23 @@ PROJECTS = [
   'caption': '테스트 센서 입력으로 손끝 움직임을 표시한 PC 앱 화면',
   'award_label': 'SSAFY 자율프로젝트 1등',
   'awards': [],
-  'case': 'work/tac-touch/'},
+  'case': 'work/tac-touch/',
+  'visual': {
+      'flow': [
+          ('chip', '센서 · MCU', '읽기 상태·측정 분리'),
+          ('compare', '보드 · PC 검증', '정상 0 vs 실패 대조'),
+          ('sliders', 'PC 앱 · MCP', 'AI 기구 각도 편집'),
+      ],
+      'built_tags': [
+          ('chip', '센서 펌웨어'),
+          ('compare', '보드 검증'),
+          ('sliders', 'MCP 연동'),
+      ],
+      'trouble_tags': [
+          ('0값 혼동', '상태·수치 분리'),
+          ('수정 후 검증', '재확인·결과 분리'),
+      ],
+  }},
  {'key': 'bondi',
   'name': 'Bondi',
   'tagline': '손으로 돌려보며 비교하는 유물 복원 VR 박물관',
@@ -127,6 +145,11 @@ def project_page(b, spec, web, awards):
     b.para(metadata, M, 90, CW, 10, 15, MUTED, keep_words=True)
     b.rule(113)
 
+    if 'visual' in spec:
+        visual_project_body(b, spec)
+        footer(b, spec, web, awards)
+        return
+
     # The image adapts to the full approved copy, never the other way around.
     # Keep the source pixels and the previously approved display region intact.
     reflection_height = text_height(spec['reflection'], LEFT_WIDTH, 10, 15)
@@ -165,6 +188,70 @@ def project_page(b, spec, web, awards):
     if top - 8 > CONTENT_BOTTOM:
         raise ValueError(f"{spec['key']}: right column exceeds available space ({top - 8})")
     footer(b, spec, web, awards)
+
+
+def visual_project_body(b, spec):
+    """Harmonized editorial visual layout with 3-step flow, keyword tags and Problem->Solution cards."""
+    vis = spec['visual']
+
+    # Left column: unchanged source figure, tagline, summary and icon-anchored reflection
+    reflection_height = text_height(spec['reflection'], LEFT_WIDTH, 10, 15)
+    summary_height = text_height(spec['summary'], LEFT_WIDTH, 10.5, 16)
+    tagline_height = text_height(spec['tagline'], LEFT_WIDTH, 12.3, 18, bold=True)
+    image_height = min(194, CONTENT_BOTTOM - CONTENT_TOP - reflection_height
+                       - summary_height - tagline_height - 15 - 18 - 64)
+    if image_height < 130:
+        raise ValueError(f"{spec['key']}: full left-column copy leaves insufficient image space")
+    figure, region = spec['figure']
+    top = b.image(figure, M, CONTENT_TOP, LEFT_WIDTH, image_height,
+                  region=region, caption=spec['caption'],
+                  caption_size=9.8, caption_leading=15, caption_gap=10)
+    top = b.para(spec['tagline'], M, top + 14, LEFT_WIDTH, 12.3, 18,
+                 bold=True, keep_words=True)
+    top = b.para(spec['summary'], M, top + 6, LEFT_WIDTH, 10.5, 16,
+                 MUTED, keep_words=True)
+    b.rule(top + 12, M, LEFT_WIDTH)
+    top = vc.section_heading(b, 'insight', '회고', M, top + 24, LEFT_WIDTH)
+    left_end = b.para(spec['reflection'], M, top + 10, LEFT_WIDTH,
+                      10, 15, MUTED, keep_words=True)
+    if left_end > CONTENT_BOTTOM + .1:
+        raise ValueError(f"{spec['key']}: left column exceeds available space ({left_end})")
+
+    # Right column Zone 1: 3-step system flow strip
+    top = vc.flow_strip(b, vis['flow'], RIGHT_X, CONTENT_TOP, RIGHT_WIDTH, height=54, gap=18)
+
+    # Right column Zone 2: Direct contributions with left-rail keyword chips
+    top = vc.section_heading(b, 'layers', '직접 맡은 구현', RIGHT_X, top + 16, RIGHT_WIDTH) + 10
+    tag_w, tag_gap = 88, 12
+    body_x, body_w = RIGHT_X + tag_w + tag_gap, RIGHT_WIDTH - tag_w - tag_gap
+    for idx, (item, (icon_name, label)) in enumerate(zip(spec['built'], vis['built_tags'])):
+        vc.keyword_tag(b, icon_name, label, RIGHT_X, top + 1, width=tag_w, height=20)
+        row_end = b.para(item, body_x, top, body_w, 9.5, 14.2, keep_words=True)
+        top = max(top + 22, row_end) + 9
+        if idx + 1 < len(spec['built']):
+            b.rule(top - 4.5, RIGHT_X, RIGHT_WIDTH, LINE, 0.4)
+
+    # Right column Zone 3: Troubleshooting as two harmonized Problem -> Solution cards
+    b.rule(top + 2, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
+    top = vc.section_heading(b, 'wrench', '트러블슈팅', RIGHT_X, top + 13, RIGHT_WIDTH) + 10
+
+    card_gap = 12
+    card_w = (RIGHT_WIDTH - card_gap) / 2
+    inner_w = card_w - 20
+    # Measure tallest card body so both side-by-side cards share an exact uniform height
+    body_heights = [text_height(body, inner_w, 9.1, 13.5) for _, body in spec['troubleshooting']]
+    card_h = 11.5 + 15 + 6 + 17 + 8.5 + max(body_heights) + 11
+    if top + card_h > CONTENT_BOTTOM:
+        raise ValueError(f"{spec['key']}: troubleshooting cards exceed bottom ({top + card_h})")
+
+    for i, ((title, body), (issue_tag, sol_tag)) in enumerate(zip(spec['troubleshooting'], vis['trouble_tags'])):
+        cx = RIGHT_X + i * (card_w + card_gap)
+        vc.draw_rounded_box(b, cx, top, card_w, card_h, radius=4, fill=vc.SURFACE, stroke=LINE, stroke_width=0.6)
+        # Subtle top terracotta accent rule echoing Pages 1 & 2
+        b.rule(top, cx + 10, 28, ACCENT, 1.8)
+        b.text(title, cx + 10, top + 11.5, size=9.7, font='KoreanBold', color=vc.INK)
+        strip_end = vc.inline_transition_strip(b, issue_tag, sol_tag, cx + 10, top + 30.0, inner_w)
+        b.para(body, cx + 10, strip_end + 8.5, inner_w, 9.1, 13.5, MUTED, keep_words=True)
 
 
 def footer(b, spec, web, awards):

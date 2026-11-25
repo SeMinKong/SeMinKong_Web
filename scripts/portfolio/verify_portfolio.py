@@ -119,39 +119,51 @@ def verify(path):
                          *[part for pair in spec['troubleshooting'] for part in pair]]:
             assert compact(sentence) in page_text, f'Page {n}: approved text omitted or shortened: {sentence}'
         page_elements = [e for e in elements if e['page'] == n]
-        headings_by_label = {}
-        for label, x, width in [('직접 맡은 구현', RIGHT_X, RIGHT_WIDTH),
-                                ('트러블슈팅', RIGHT_X, RIGHT_WIDTH), ('회고', M, LEFT_WIDTH)]:
-            headings = [e for e in page_elements if e['text'] == label]
-            assert len(headings) == 1
-            assert abs(headings[0]['x'] - x) < .02
-            assert abs(headings[0]['width'] - width) < .02
-            headings_by_label[label] = headings[0]
         bottom = lambda e: e['top'] + e['height']
-        assert headings_by_label['직접 맡은 구현']['top'] == CONTENT_TOP
-        reflection = next(e for e in page_elements if e['text'] == spec['reflection'])
-        built = [next(e for e in page_elements if e['text'] == item) for item in spec['built']]
-        issues = [next(e for e in page_elements if e['text'] == f'<b>{title}</b> · {body}')
-                  for title, body in spec['troubleshooting']]
-        assert built[0]['top'] == CONTENT_TOP + 28
-        for previous, current in zip(built, built[1:]):
-            assert abs(current['top'] - bottom(previous) - 6) < .02
-        assert abs(headings_by_label['트러블슈팅']['top'] - bottom(built[-1]) - 23) < .02
-        assert abs(issues[0]['top'] - bottom(headings_by_label['트러블슈팅']) - 10) < .02
-        for previous, current in zip(issues, issues[1:]):
-            assert abs(current['top'] - bottom(previous) - 8) < .02
-        assert all(abs(e['x'] - RIGHT_X - 12) < .02 for e in built)
-        assert all(abs(e['x'] - RIGHT_X) < .02 for e in issues)
-        assert bottom(issues[-1]) <= CONTENT_BOTTOM
-        assert reflection['x'] == M and reflection['width'] == LEFT_WIDTH
-        assert abs(reflection['top'] - bottom(headings_by_label['회고']) - 10) < .02
-        assert bottom(reflection) <= CONTENT_BOTTOM
-        tagline = next(e for e in page_elements if e['text'] == spec['tagline'])
-        summary = next(e for e in page_elements if e['text'] == spec['summary'])
-        for e in [tagline, summary]:
-            assert e['x'] == M and e['width'] == LEFT_WIDTH
-        assert abs(summary['top'] - bottom(tagline) - 6) < .02
-        assert abs(headings_by_label['회고']['top'] - bottom(summary) - 24) < .02
+        if 'visual' in spec:
+            for label in ('직접 맡은 구현', '트러블슈팅', '회고'):
+                headings = [e for e in page_elements if e['text'] == label]
+                assert len(headings) == 1, f'Page {n}: missing visual heading {label}'
+            assert sum(e['kind'] == 'icon' for e in page_elements) >= 9, f'Page {n}: missing vector icons'
+            tagline = next(e for e in page_elements if e['text'] == spec['tagline'])
+            summary = next(e for e in page_elements if e['text'] == spec['summary'])
+            reflection = next(e for e in page_elements if e['text'] == spec['reflection'])
+            for e in [tagline, summary, reflection]:
+                assert e['x'] == M and e['width'] == LEFT_WIDTH
+                assert bottom(e) <= CONTENT_BOTTOM + .1
+        else:
+            headings_by_label = {}
+            for label, x, width in [('직접 맡은 구현', RIGHT_X, RIGHT_WIDTH),
+                                    ('트러블슈팅', RIGHT_X, RIGHT_WIDTH), ('회고', M, LEFT_WIDTH)]:
+                headings = [e for e in page_elements if e['text'] == label]
+                assert len(headings) == 1
+                assert abs(headings[0]['x'] - x) < .02
+                assert abs(headings[0]['width'] - width) < .02
+                headings_by_label[label] = headings[0]
+            assert headings_by_label['직접 맡은 구현']['top'] == CONTENT_TOP
+            reflection = next(e for e in page_elements if e['text'] == spec['reflection'])
+            built = [next(e for e in page_elements if e['text'] == item) for item in spec['built']]
+            issues = [next(e for e in page_elements if e['text'] == f'<b>{title}</b> · {body}')
+                      for title, body in spec['troubleshooting']]
+            assert built[0]['top'] == CONTENT_TOP + 28
+            for previous, current in zip(built, built[1:]):
+                assert abs(current['top'] - bottom(previous) - 6) < .02
+            assert abs(headings_by_label['트러블슈팅']['top'] - bottom(built[-1]) - 23) < .02
+            assert abs(issues[0]['top'] - bottom(headings_by_label['트러블슈팅']) - 10) < .02
+            for previous, current in zip(issues, issues[1:]):
+                assert abs(current['top'] - bottom(previous) - 8) < .02
+            assert all(abs(e['x'] - RIGHT_X - 12) < .02 for e in built)
+            assert all(abs(e['x'] - RIGHT_X) < .02 for e in issues)
+            assert bottom(issues[-1]) <= CONTENT_BOTTOM
+            assert reflection['x'] == M and reflection['width'] == LEFT_WIDTH
+            assert abs(reflection['top'] - bottom(headings_by_label['회고']) - 10) < .02
+            assert bottom(reflection) <= CONTENT_BOTTOM
+            tagline = next(e for e in page_elements if e['text'] == spec['tagline'])
+            summary = next(e for e in page_elements if e['text'] == spec['summary'])
+            for e in [tagline, summary]:
+                assert e['x'] == M and e['width'] == LEFT_WIDTH
+            assert abs(summary['top'] - bottom(tagline) - 6) < .02
+            assert abs(headings_by_label['회고']['top'] - bottom(summary) - 24) < .02
         metadata = next(e for e in page_elements if e['text'].startswith(spec['period'] + ' · '))
         assert metadata['x'] == M and metadata['top'] == 90 and abs(metadata['width'] - CW) < .02
         stack = next(e for e in page_elements if e['text'] == spec['stack'].replace('<br/>', ' · '))
