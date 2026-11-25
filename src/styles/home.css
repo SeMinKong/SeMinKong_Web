@@ -152,7 +152,7 @@
 }
 
 .home-contact {
-  padding-bottom: 0;
+  padding-block: clamp(36px, 4.5vw, 52px) 0;
   border-top: 0;
   background: var(--signal);
   color: var(--bg);
@@ -160,9 +160,10 @@
 
 .home-contact__panel {
   display: grid;
-  grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
-  gap: clamp(56px, 9vw, 132px);
-  padding: 0 0 clamp(72px, 9vw, 112px);
+  grid-template-columns: minmax(160px, 0.36fr) minmax(0, 1.64fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+  padding: 0 0 clamp(24px, 3vw, 36px);
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -178,17 +179,21 @@
 
 .home-contact__intro h2 {
   max-width: 520px;
+  margin-top: 0;
+  font-size: clamp(1.35rem, calc(1.15rem + 0.6vw), 1.75rem);
 }
 
 .home-contact__intro > p:last-child {
   max-width: 500px;
-  margin-top: 22px;
+  margin-top: 12px;
   color: rgba(9, 13, 11, 0.72);
-  line-height: 1.72;
+  line-height: 1.6;
 }
 
 .home-contact__details {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
   align-self: start;
   border-top: 1px solid rgba(9, 13, 11, 0.28);
   font-style: normal;
@@ -198,9 +203,10 @@
 .home-contact__details > div {
   min-width: 0;
   display: grid;
-  grid-template-columns: 82px minmax(0, 1fr);
-  gap: 20px;
-  padding-block: 17px;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding-block: 10px;
   border-bottom: 1px solid rgba(9, 13, 11, 0.22);
 }
 
@@ -215,7 +221,7 @@
   min-width: 0;
   color: var(--bg);
   font-family: var(--font-display);
-  font-size: clamp(0.95rem, calc(0.9rem + 0.18vw), 1.1rem);
+  font-size: clamp(0.9rem, calc(0.86rem + 0.14vw), 1rem);
   font-weight: var(--weight-heading);
   letter-spacing: 0;
   overflow-wrap: anywhere;
@@ -274,14 +280,19 @@
 
   .home-contact__panel {
     grid-template-columns: 1fr;
-    gap: 42px;
-    padding-bottom: 72px;
+    gap: 20px;
+    padding-bottom: 24px;
+  }
+
+  .home-contact__details {
+    grid-template-columns: 1fr;
+    column-gap: 0;
   }
 }
 
 @media (max-width: 420px) {
   .home-contact__panel {
-    padding: 0 0 64px;
+    padding: 0 0 20px;
   }
 
   .home-contact__details > a,
