@@ -35,20 +35,35 @@ PROJECTS = [
   'award_label': 'SSAFY 자율프로젝트 1등',
   'awards': [],
   'case': 'work/tac-touch/',
-  'visual': {
-      'flow': [
-          ('cpu', '센서 · MCU', '읽기 상태·측정 분리'),
-          ('arrow-left-right', '보드 · PC 대조', '정상 0 vs 실패 구분'),
-          ('sliders-horizontal', 'PC 앱 · MCP', 'AI 기구 각도 편집'),
+  'schematic': {
+      'short_summary': '손끝 촉각 신호와 3D 그리퍼를 함께 확인해 물체 미끄러짐을 판단하는 PC 앱입니다.',
+      'short_reflection': '센서값 자체보다 정상 측정 여부를 먼저 구분하는 설계가 핵심이었습니다. 실물 보드–PC 채널 동작을 검증했고, 시연은 테스트 입력 기준입니다.',
+      'section1_title': '촉각 센서 펌웨어 · 보드–PC 검증',
+      'sensor_flow': [
+          ('cpu', False, '센서 · MCU', '상태·직전 정상값 분리'),
+          ('arrow-left-right', True, '보드 ↔ PC 대조', '동시점 비교·재시도 복구'),
+          ('monitor', False, 'PC 앱 수신', '유효 채널만 화면 반영'),
       ],
-      'built_items': [
-          ('cpu', '센서 펌웨어', '채널 상태 분리'),
-          ('arrow-left-right', '보드 검증', '실물·PC 대조'),
-          ('sliders-horizontal', 'MCP 연동', '기구 각도 편집'),
+      'truth_headers': ('채널 상태', '기존 문제', '펌웨어 · PC 해결'),
+      'truth_rows': [
+          ('circle-check', '#171512', '정상 수신 (값 0)', '둘 다 0으로 표시', '<b>정지 상태</b>로 판별 · 정상 반영'),
+          ('circle-x', '#a73524', '읽기 실패 (무응답)', '고장 채널 오인식', '<b>수집 제외</b> · 복구 시 재갱신'),
       ],
-      'trouble_items': [
-          ('activity', '0값 혼동', '상태·수치 분리'),
-          ('file-check', '수정 후 검증', '재확인·결과 분리'),
+      'section2_title': 'PC 앱 3D 기구 편집 · MCP 연동',
+      'mcp_flow': [
+          ('terminal', False, 'AI 도구', 'MCP 호출'),
+          ('box', False, '선택 기구', '현재 모델 읽기'),
+          ('sliders-horizontal', True, '지정 축 수정', '장착 각도만 변경'),
+          ('file-check', False, '별도 저장', '3D 화면 열기'),
+      ],
+      'mcp_checks': [
+          ('check', '저장 파일 재검증', '수정 파일을 다시 읽어 <b>장착 각도만 변경 · 기존 장착 거리 유지</b>를 확인'),
+          ('split', '실행 응답 분리', '<b>파일 저장 결과</b>와 <b>3D 화면 열기 결과</b>를 독립 반환해 실패 지점 구분'),
+      ],
+      'required_facts': [
+          '센서 · MCU', '보드 ↔ PC 대조', 'PC 앱 수신',
+          '정상 수신 (값 0)', '읽기 실패 (무응답)', '정지 상태', '수집 제외',
+          'AI 도구', '지정 축 수정', '별도 저장', '장착 각도만 변경', '기존 장착 거리 유지', '실행 응답 분리',
       ],
   }},
  {'key': 'bondi',
@@ -145,8 +160,8 @@ def project_page(b, spec, web, awards):
     b.para(metadata, M, 90, CW, 10, 15, MUTED, keep_words=True)
     b.rule(113)
 
-    if 'visual' in spec:
-        visual_project_body(b, spec)
+    if 'schematic' in spec:
+        schematic_project_body(b, spec)
         footer(b, spec, web, awards)
         return
 
@@ -190,78 +205,51 @@ def project_page(b, spec, web, awards):
     footer(b, spec, web, awards)
 
 
-def visual_project_body(b, spec):
-    """Swiss-editorial structured project page: unboxed sequence, keyword rail, hairline split."""
-    vis = spec['visual']
+def schematic_project_body(b, spec):
+    """Pictogram-led project page replacing verbose prose with visual schematics and truth tables."""
+    sc = spec['schematic']
+    summary_text = sc['short_summary']
+    reflection_text = sc['short_reflection']
 
-    # Left column: unchanged source figure, tagline, summary and unadorned reflection
-    reflection_height = text_height(spec['reflection'], LEFT_WIDTH, 10, 15)
-    summary_height = text_height(spec['summary'], LEFT_WIDTH, 10.5, 16)
+    # Left column: unchanged source figure, concise summary and reflection
+    reflection_height = text_height(reflection_text, LEFT_WIDTH, 9.8, 14.8)
+    summary_height = text_height(summary_text, LEFT_WIDTH, 10.2, 15.5)
     tagline_height = text_height(spec['tagline'], LEFT_WIDTH, 12.3, 18, bold=True)
     image_height = min(194, CONTENT_BOTTOM - CONTENT_TOP - reflection_height
                        - summary_height - tagline_height - 15 - 18 - 64)
     if image_height < 130:
-        raise ValueError(f"{spec['key']}: full left-column copy leaves insufficient image space")
+        raise ValueError(f"{spec['key']}: left-column copy leaves insufficient image space")
     figure, region = spec['figure']
     top = b.image(figure, M, CONTENT_TOP, LEFT_WIDTH, image_height,
                   region=region, caption=spec['caption'],
                   caption_size=9.8, caption_leading=15, caption_gap=10)
     top = b.para(spec['tagline'], M, top + 14, LEFT_WIDTH, 12.3, 18,
                  bold=True, keep_words=True)
-    top = b.para(spec['summary'], M, top + 6, LEFT_WIDTH, 10.5, 16,
+    top = b.para(summary_text, M, top + 6, LEFT_WIDTH, 10.2, 15.5,
                  MUTED, keep_words=True)
-    b.rule(top + 12, M, LEFT_WIDTH)
-    top = b.para('회고', M, top + 24, LEFT_WIDTH, 12.3, 18, bold=True)
-    left_end = b.para(spec['reflection'], M, top + 10, LEFT_WIDTH,
-                      10, 15, MUTED, keep_words=True)
+    b.rule(top + 14, M, LEFT_WIDTH)
+    top = b.para('회고', M, top + 26, LEFT_WIDTH, 12.0, 17, bold=True)
+    left_end = b.para(reflection_text, M, top + 9, LEFT_WIDTH,
+                      9.8, 14.8, MUTED, keep_words=True)
     if left_end > CONTENT_BOTTOM + .1:
         raise ValueError(f"{spec['key']}: left column exceeds available space ({left_end})")
 
-    # Right column Zone 1: Genuine 01 -> 02 -> 03 signal/workflow sequence with bare Lucide icons
-    top = vc.sequence_flow(b, vis['flow'], RIGHT_X, CONTENT_TOP, RIGHT_WIDTH, col_gap=18)
+    # Right Column Section 01: Sensor Firmware & Board-PC Verification
+    top = vc.numbered_heading(b, '01', sc['section1_title'], RIGHT_X, CONTENT_TOP, RIGHT_WIDTH)
+    top = vc.pictogram_flow(b, sc['sensor_flow'], RIGHT_X, top + 14, RIGHT_WIDTH, icon_size=20.0, gap=18.0)
+    top = vc.truth_table(b, sc['truth_headers'], sc['truth_rows'],
+                         [144.0, 112.0, RIGHT_WIDTH - 256.0], RIGHT_X, top + 14)
 
-    # Generous section separation (space by relationship: large gap between groups, tight inside)
-    b.rule(top + 12, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
-    top = b.para('직접 맡은 구현', RIGHT_X, top + 22, RIGHT_WIDTH, 12.2, 17, bold=True) + 8
+    # Generous section separation between the two engineering domains
+    b.rule(top + 20, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
 
-    # Right column Zone 2: Bare Lucide icon + 2-line visual keyword rail + full approved sentences
-    kw_w, kw_gap = 96, 12
-    body_x, body_w = RIGHT_X + kw_w + kw_gap, RIGHT_WIDTH - kw_w - kw_gap
-    for idx, (item, (icon_name, keyword, sub_kw)) in enumerate(zip(spec['built'], vis['built_items'])):
-        rail_end = vc.keyword_rail_item(b, icon_name, keyword, sub_kw, RIGHT_X, top, kw_w)
-        body_end = b.para(item, body_x, top, body_w, 9.4, 14.0, vc.INK, keep_words=True)
-        top = max(rail_end, body_end) + 9
-        if idx + 1 < len(spec['built']):
-            b.rule(top - 4.5, RIGHT_X, RIGHT_WIDTH, LINE, 0.4)
-
-    # Right column Zone 3: Unboxed two-column troubleshooting with bare Lucide icons + neutral strips
-    b.rule(top + 6, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
-    top = b.para('트러블슈팅', RIGHT_X, top + 16, RIGHT_WIDTH, 12.2, 17, bold=True) + 9
-
-    col_gap = 24
-    col_w = (RIGHT_WIDTH - col_gap) / 2
-    col_ends = []
-    for i, ((title, body), (icon_name, issue, solution)) in enumerate(
-        zip(spec['troubleshooting'], vis['trouble_items'])
-    ):
-        cx = RIGHT_X + i * (col_w + col_gap)
-        vc.lucide_icon(b, icon_name, cx, top + 1.2, size=11.5, color_hex='#a73524', stroke_width='1.85')
-        t_end = b.para(title, cx + 16.5, top, col_w - 16.5, 10.0, 14.2, vc.INK, bold=True, keep_words=True)
-        tr_end = vc.neutral_transition_strip(b, issue, solution, cx, t_end + 5, col_w)
-        end_y = b.para(body, cx, tr_end + 7, col_w, 9.2, 13.6, MUTED, keep_words=True)
-        col_ends.append(end_y)
-
-    max_end = max(col_ends)
-    if max_end > CONTENT_BOTTOM + .1:
-        raise ValueError(f"{spec['key']}: troubleshooting columns exceed bottom ({max_end})")
-
-    # Quiet vertical hairline echoing Page 1's editorial divider
-    div_x = RIGHT_X + col_w + col_gap / 2
-    b.c.saveState()
-    b.c.setStrokeColor(LINE)
-    b.c.setLineWidth(0.55)
-    b.c.line(div_x, H - top, div_x, H - max_end)
-    b.c.restoreState()
+    # Right Column Section 02: PC App 3D Fixture Editing & MCP Integration
+    top = vc.numbered_heading(b, '02', sc['section2_title'], RIGHT_X, top + 34, RIGHT_WIDTH)
+    top = vc.pictogram_flow(b, sc['mcp_flow'], RIGHT_X, top + 14, RIGHT_WIDTH, icon_size=19.0, gap=14.0)
+    b.rule(top + 12, RIGHT_X, RIGHT_WIDTH, LINE, 0.45)
+    right_end = vc.check_rows(b, sc['mcp_checks'], RIGHT_X, top + 20, RIGHT_WIDTH, label_w=108.0)
+    if right_end > CONTENT_BOTTOM + .1:
+        raise ValueError(f"{spec['key']}: right column exceeds available space ({right_end})")
 
 
 def footer(b, spec, web, awards):

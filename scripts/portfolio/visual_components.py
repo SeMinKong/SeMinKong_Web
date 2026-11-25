@@ -1,10 +1,9 @@
-"""Swiss-editorial visual components using official Lucide icons (ISC license).
+"""Pictogram schematics and editorial tables using official Lucide icons (ISC license).
 
-Follows Kill AI Slop principles:
-- Real professionally designed vector icons (no AI-sketched SVGs)
-- Bare icons inheriting ink/accent color directly on paper (no tinted icon tiles)
-- No nested cards, no one-hue status pills, no colored border callouts
-- Visual keywords carry scannable meaning through alignment, weight, and neutral surface strips
+Replaces verbose prose with scannable visual diagrams while strictly avoiding AI slop:
+- Real professionally designed Lucide vector icons, rendered bare directly on paper
+- Flat editorial tables with hairlines and one quiet neutral header band
+- Zero nested cards, zero tinted icon squares, zero one-hue pill spam
 """
 from io import BytesIO
 from pathlib import Path
@@ -20,12 +19,12 @@ INK = HexColor('#171512')
 MUTED = HexColor('#625e56')
 LINE = HexColor('#d4d0c5')
 ACCENT = HexColor('#a73524')
-NEUTRAL_STRIP = HexColor('#ebe6dc')
+NEUTRAL_BAND = HexColor('#ebe6dc')
 
 _ICON_CACHE = {}
 
 
-def lucide_icon(b, name, x, top, size=12, color_hex='#a73524', stroke_width='1.85'):
+def lucide_icon(b, name, x, top, size=18, color_hex='#171512', stroke_width='1.75'):
     """Render an official Lucide SVG icon directly onto the PDF canvas (bare, no container)."""
     key = (name, color_hex, stroke_width)
     svg_bytes = _ICON_CACHE.get(key)
@@ -49,80 +48,97 @@ def lucide_icon(b, name, x, top, size=12, color_hex='#a73524', stroke_width='1.8
 
 
 def _arrow(b, x1, x2, mid_y, color=LINE, head_color=MUTED):
-    """Minimal directional line between ordered stages or Problem -> Solution keywords."""
+    """Minimal directional engineering connector between pictogram nodes."""
     c = b.c
     H = c._pagesize[1]
     y = H - mid_y
     c.saveState()
     c.setStrokeColor(color)
-    c.setLineWidth(0.75)
+    c.setLineWidth(0.85)
     c.setLineCap(1)
     c.line(x1, y, x2, y)
     c.setStrokeColor(head_color)
-    c.setLineWidth(0.85)
+    c.setLineWidth(0.95)
     c.setLineJoin(1)
-    c.line(x2 - 3.2, y + 2.4, x2, y)
-    c.line(x2 - 3.2, y - 2.4, x2, y)
+    c.line(x2 - 3.6, y + 2.8, x2, y)
+    c.line(x2 - 3.6, y - 2.8, x2, y)
     c.restoreState()
 
 
-def sequence_flow(b, steps, x, top, width, col_gap=18):
-    """Unboxed horizontal sequence pairing bare Lucide icons with ordered 01 -> 02 -> 03 stages."""
-    n = len(steps)
-    col_w = (width - col_gap * (n - 1)) / n
-    icon_size = 13.0
-    num_size = 9.2
-    line_y = top + 6.5
+def numbered_heading(b, ordinal, title, x, top, width):
+    """Clean Swiss-editorial numbered section heading (01 / 02)."""
+    b.text(ordinal, x, top + 1.4, size=10.2, font='Helvetica-Bold', color=ACCENT)
+    return b.para(title, x + 21, top, width - 21, 12.2, 17, INK, bold=True, keep_words=True)
 
-    for i, (icon_name, title, subtitle) in enumerate(steps):
-        cx = x + i * (col_w + col_gap)
-        lucide_icon(b, icon_name, cx, top, size=icon_size, color_hex='#171512', stroke_width='1.85')
-        ord_x = cx + icon_size + 5.5
-        ordinal = f'{i + 1:02d}'
-        ord_w = pdfmetrics.stringWidth(ordinal, 'Helvetica-Bold', num_size)
-        b.text(ordinal, ord_x, top + 0.8, size=num_size, font='Helvetica-Bold', color=ACCENT)
 
-        arrow_start = ord_x + ord_w + 7
+def pictogram_flow(b, nodes, x, top, width, icon_size=20.0, gap=18.0):
+    """Centered bare Lucide pictograms connected by horizontal arrows with concise 2-line captions."""
+    n = len(nodes)
+    node_w = (width - gap * (n - 1)) / n
+    icon_mid_y = top + icon_size / 2
+    max_end = top + icon_size
+
+    for i, (icon_name, accent, title, subtitle) in enumerate(nodes):
+        nx = x + i * (node_w + gap)
+        ix = nx + (node_w - icon_size) / 2
+        color_hex = '#a73524' if accent else '#171512'
+        lucide_icon(b, icon_name, ix, top, size=icon_size, color_hex=color_hex, stroke_width='1.7')
+
+        t_end = b.para(title, nx, top + icon_size + 7, node_w, 9.8, 13.5, INK,
+                       bold=True, align='center', keep_words=True)
+        s_end = b.para(subtitle, nx, t_end + 1.5, node_w, 9.0, 12.4, MUTED,
+                       align='center', keep_words=True)
+        max_end = max(max_end, s_end)
+
         if i + 1 < n:
-            next_x = x + (i + 1) * (col_w + col_gap)
-            _arrow(b, arrow_start, next_x - 8, line_y, color=LINE, head_color=MUTED)
-        else:
-            b.rule(line_y, arrow_start, max(0, cx + col_w - arrow_start), LINE, 0.75)
+            next_ix = x + (i + 1) * (node_w + gap) + (node_w - icon_size) / 2
+            _arrow(b, ix + icon_size + 9, next_ix - 9, icon_mid_y, color=LINE, head_color=MUTED)
 
-        title_end = b.para(title, cx, top + 18, col_w, 10.5, 14.2, INK, bold=True, keep_words=True)
-        b.para(subtitle, cx, title_end + 2.0, col_w, 9.1, 12.8, MUTED, keep_words=True)
-
-    return top + 50
+    return max_end
 
 
-def keyword_rail_item(b, icon_name, keyword, sub_keyword, x, top, width):
-    """Bare Lucide icon + bold visual keyword + muted sub-keyword on the left rail."""
-    icon_size = 12.0
-    lucide_icon(b, icon_name, x, top + 1.0, size=icon_size, color_hex='#a73524', stroke_width='1.85')
-    tx = x + icon_size + 6.0
-    tw = width - icon_size - 6.0
-    kw_end = b.para(keyword, tx, top, tw, 9.6, 13.5, INK, bold=True, keep_words=True)
-    sub_end = b.para(sub_keyword, tx, kw_end + 2.0, tw, 9.0, 12.2, MUTED, keep_words=True)
-    return sub_end
-
-
-def neutral_transition_strip(b, issue, solution, x, top, width):
-    """Flat neutral opaque surface strip (no border, no nested card, no one-hue tint)."""
-    size = 9.1
-    pad_x = 7.0
-    strip_h = 18.0
+def truth_table(b, headers, rows, col_widths, x, top):
+    """Flat Swiss-editorial comparison table (neutral header band + hairlines, zero card chrome)."""
+    total_w = sum(col_widths)
+    header_h = 20.0
+    row_h = 28.0
     c = b.c
     H = c._pagesize[1]
+
+    # Neutral opaque header band
     c.saveState()
-    c.setFillColor(NEUTRAL_STRIP)
-    c.roundRect(x, H - top - strip_h, width, strip_h, 2.0, stroke=0, fill=1)
+    c.setFillColor(NEUTRAL_BAND)
+    c.rect(x, H - top - header_h, total_w, header_h, stroke=0, fill=1)
     c.restoreState()
 
-    text_y = top + 3.6
-    w1 = pdfmetrics.stringWidth(issue, 'Korean', size)
-    arrow_gap = 17.0
-    b.text(issue, x + pad_x, text_y, size=size, font='Korean', color=MUTED)
-    _arrow(b, x + pad_x + w1 + 3.5, x + pad_x + w1 + arrow_gap - 3.5,
-           top + strip_h / 2, color=ACCENT, head_color=ACCENT)
-    b.text(solution, x + pad_x + w1 + arrow_gap, text_y, size=size, font='KoreanBold', color=INK)
-    return top + strip_h
+    cx = x
+    for label, w in zip(headers, col_widths):
+        b.text(label, cx + 8, top + 5.2, size=9.0, font='KoreanBold', color=MUTED)
+        cx += w
+
+    y = top + header_h
+    for idx, (icon_name, icon_color, state_label, problem, resolution) in enumerate(rows):
+        row_text_y = y + 8.6
+        lucide_icon(b, icon_name, x + 8, y + 8.2, size=11.5, color_hex=icon_color, stroke_width='1.85')
+        b.para(state_label, x + 24, row_text_y, col_widths[0] - 28, 9.3, 13.0, INK, bold=True, keep_words=True)
+        b.para(problem, x + col_widths[0] + 8, row_text_y, col_widths[1] - 12, 9.1, 13.0, MUTED, keep_words=True)
+        b.para(resolution, x + col_widths[0] + col_widths[1] + 8, row_text_y,
+               col_widths[2] - 14, 9.2, 13.0, INK, keep_words=True)
+        y += row_h
+        weight = 0.55 if idx + 1 == len(rows) else 0.4
+        b.rule(y, x, total_w, LINE, weight)
+
+    return y
+
+
+def check_rows(b, items, x, top, width, label_w=108.0):
+    """Concise pictogram-anchored verification takeaways replacing verbose troubleshooting prose."""
+    y = top
+    for idx, (icon_name, label, detail) in enumerate(items):
+        lucide_icon(b, icon_name, x, y + 1.2, size=11.5, color_hex='#a73524', stroke_width='1.9')
+        lbl_end = b.para(label, x + 17, y, label_w - 20, 9.4, 13.4, INK, bold=True, keep_words=True)
+        end_y = b.para(detail, x + label_w, y, width - label_w, 9.2, 13.4, MUTED, keep_words=True)
+        y = max(lbl_end, end_y) + 9
+        if idx + 1 < len(items):
+            b.rule(y - 4.5, x, width, LINE, 0.4)
+    return y - 9

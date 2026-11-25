@@ -109,32 +109,33 @@ def verify(path):
                 overlaps.append((a['page'], a['text'][:30], b['text'][:30]))
     assert not overlaps, f'Overlapping elements: {overlaps}'
     for n, spec in enumerate(PROJECTS, 3):
-        for label in [spec['name'], '직접 맡은 구현', '트러블슈팅', '회고']:
-            assert label in texts[n-1], f'Page {n}: missing {label}'
-        # Compare every approved sentence, ignoring extraction-only line wraps.
         compact = lambda value: re.sub(r'\s+', '', value)
         page_text = compact(texts[n-1])
-        for sentence in [spec['tagline'], spec['summary'], spec['role'], spec['period'], spec['team'],
-                         spec['stack'].replace('<br/>', ' · '), *spec['built'], spec['reflection'],
-                         *[part for pair in spec['troubleshooting'] for part in pair]]:
-            assert compact(sentence) in page_text, f'Page {n}: approved text omitted or shortened: {sentence}'
         page_elements = [e for e in elements if e['page'] == n]
         bottom = lambda e: e['top'] + e['height']
-        if 'visual' in spec:
-            for label, x, width in [('직접 맡은 구현', RIGHT_X, RIGHT_WIDTH),
-                                    ('트러블슈팅', RIGHT_X, RIGHT_WIDTH), ('회고', M, LEFT_WIDTH)]:
-                headings = [e for e in page_elements if e['text'] == label]
-                assert len(headings) == 1, f'Page {n}: missing visual heading {label}'
-                assert abs(headings[0]['x'] - x) < .02
-                assert abs(headings[0]['width'] - width) < .02
-            assert sum(e['kind'] == 'icon' for e in page_elements) == 8, f'Page {n}: expected 8 semantic Lucide icons'
+        if 'schematic' in spec:
+            sc = spec['schematic']
+            for label in [spec['name'], '회고', sc['section1_title'], sc['section2_title']]:
+                assert label in texts[n-1], f'Page {n}: missing {label}'
+            for fact in [spec['tagline'], spec['role'], spec['period'], spec['team'],
+                         spec['stack'].replace('<br/>', ' · '), sc['short_summary'],
+                         sc['short_reflection'], *sc['required_facts']]:
+                assert compact(fact) in page_text, f'Page {n}: schematic fact missing: {fact}'
+            assert sum(e['kind'] == 'icon' for e in page_elements) == 11, f'Page {n}: expected 11 Lucide pictograms'
             tagline = next(e for e in page_elements if e['text'] == spec['tagline'])
-            summary = next(e for e in page_elements if e['text'] == spec['summary'])
-            reflection = next(e for e in page_elements if e['text'] == spec['reflection'])
+            summary = next(e for e in page_elements if e['text'] == sc['short_summary'])
+            reflection = next(e for e in page_elements if e['text'] == sc['short_reflection'])
             for e in [tagline, summary, reflection]:
                 assert e['x'] == M and e['width'] == LEFT_WIDTH
                 assert bottom(e) <= CONTENT_BOTTOM + .1
         else:
+            for label in [spec['name'], '직접 맡은 구현', '트러블슈팅', '회고']:
+                assert label in texts[n-1], f'Page {n}: missing {label}'
+            # Compare every approved sentence, ignoring extraction-only line wraps.
+            for sentence in [spec['tagline'], spec['summary'], spec['role'], spec['period'], spec['team'],
+                             spec['stack'].replace('<br/>', ' · '), *spec['built'], spec['reflection'],
+                             *[part for pair in spec['troubleshooting'] for part in pair]]:
+                assert compact(sentence) in page_text, f'Page {n}: approved text omitted or shortened: {sentence}'
             headings_by_label = {}
             for label, x, width in [('직접 맡은 구현', RIGHT_X, RIGHT_WIDTH),
                                     ('트러블슈팅', RIGHT_X, RIGHT_WIDTH), ('회고', M, LEFT_WIDTH)]:
