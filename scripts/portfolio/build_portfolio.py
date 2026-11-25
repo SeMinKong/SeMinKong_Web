@@ -442,21 +442,22 @@ class Book:
 
 
 def introduction(b):
-    b.start('공세민', key='introduction', title_width=482)
-    b.text('Se Min Kong', M, 88, 36, 'Helvetica-Bold')
-    b.rule(146, M, 28, ACCENT, 2)
-    b.para('상상을 현실로 이끄는 개발자', M, 162, 482, 17, 24, bold=True)
-    b.para('숭실대학교 소프트웨어학부 · SSAFY Robotics Track', M, 198, 482, 10.5, 16, MUTED)
-    b.para('Computer Vision · Robotics / Physical AI', M, 218, 482, 10.2, 16, MUTED)
+    b.start('공세민', key='introduction', title_width=486)
+    b.text('Se Min Kong', M, 92, 48, 'Helvetica-Bold')
+    b.rule(164, M, 44, ACCENT, 2.4)
+    b.para('상상을 현실로 이끄는 개발자', M, 184, 486, 22, 30, bold=True)
+    b.para('숭실대학교 소프트웨어학부 · SSAFY Robotics Track', M, 232, 486, 12, 18, INK)
+    b.para('Computer Vision · Robotics / Physical AI', M, 256, 486, 11.2, 17, MUTED)
 
-    b.rule(264, M, 482, LINE, .7)
-    b.trophy(M, 288, 12.5)
-    b.para('수상', M + 18, 286, 120, 12, 18, bold=True)
+    # Quiet supporting awards block anchored near bottom of main column
+    b.rule(364, M, 486, LINE, .65)
+    b.trophy(M, 382, 11)
+    b.para('수상', M + 16, 380, 120, 9.8, 14, MUTED, bold=True)
 
     col_x = [M, 286]
-    col_w = 234
-    b.gold_badge('Tac-Touch', col_x[0], 326, align='left', size=10.4)
-    b.para('SSAFY 특화프로젝트 2등', col_x[1], 325, col_w, 10.4, 15, bold=True)
+    col_w = 236
+    b.gold_badge('Tac-Touch', col_x[0], 410, align='left', size=9.4)
+    b.para('SSAFY 특화프로젝트 2등', col_x[1], 408, col_w, 9.4, 14, MUTED)
 
     short_awards = [
         'SSAFY 공통 프로젝트 우수상',
@@ -465,39 +466,36 @@ def introduction(b):
         'IT 프로젝트 프로리그 장려상',
     ]
     for row in range(2):
-        rule_y = 358 + row * 50
-        text_y = 374 + row * 50
-        b.rule(rule_y, M, 482, LINE, .5)
-        b.para(short_awards[row * 2], col_x[0], text_y, col_w, 10.4, 15, bold=True)
-        b.para(short_awards[row * 2 + 1], col_x[1], text_y, col_w, 10.4, 15, bold=True)
-    b.rule(458, M, 482, LINE, .5)
+        text_y = 438 + row * 28
+        b.para(short_awards[row * 2], col_x[0], text_y, col_w, 9.4, 14, MUTED)
+        b.para(short_awards[row * 2 + 1], col_x[1], text_y, col_w, 9.4, 14, MUTED)
 
-    # Vertical hairline separating main column and right profile rail
-    b.c.saveState()
-    b.c.setStrokeColor(LINE)
-    b.c.setLineWidth(.7)
-    b.c.line(548, H - 52, 548, H - 510)
-    b.c.restoreState()
-
-    rail_x, rail_w = 576, 226
-    b.image('@se-min-kong-profile.png', rail_x, 52, 165, 220)
+    # Subtle vertical divider
     b.c.saveState()
     b.c.setStrokeColor(LINE)
     b.c.setLineWidth(.65)
-    b.c.rect(rail_x, H - 52 - 220, 165, 220, stroke=1, fill=0)
+    b.c.line(552, H - 52, 552, H - 508)
     b.c.restoreState()
 
-    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', rail_x, 294, 10)
-    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', rail_x, 318, 10)
-    b.para('Suwon, Republic of Korea', rail_x, 342, rail_w, 9.6, 15, MUTED)
+    rail_x, rail_w = 582, 220
+    b.image('@se-min-kong-profile.png', rail_x, 52, 174, 232)
+    b.c.saveState()
+    b.c.setStrokeColor(LINE)
+    b.c.setLineWidth(.6)
+    b.c.rect(rail_x, H - 52 - 232, 174, 232, stroke=1, fill=0)
+    b.c.restoreState()
 
-    b.rule(380, rail_x, rail_w, LINE, .7)
-    b.para('자격', rail_x, 398, rail_w, 11.8, 17, bold=True)
+    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', rail_x, 304, 9.8)
+    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', rail_x, 326, 9.8)
+    b.para('Suwon, Republic of Korea', rail_x, 348, rail_w, 9.3, 14, MUTED)
+
+    b.rule(384, rail_x, rail_w, LINE, .65)
+    b.para('자격', rail_x, 400, rail_w, 9.8, 14, MUTED, bold=True)
     cert_dates = ['2026.09', '~2027.10']
     for i, (title, _issuer, _valid, asset) in enumerate(CERTIFICATIONS):
-        top = 428 + i * 32
-        b.link(title, WEB + 'resume/' + asset, rail_x, top, 10.4)
-        b.para(cert_dates[i], rail_x + 118, top + 1, 108, 9.3, 14, MUTED)
+        top = 426 + i * 28
+        b.link(title, WEB + 'resume/' + asset, rail_x, top, 9.6)
+        b.para(cert_dates[i], rail_x + 112, top, 108, 9.1, 13, MUTED)
 
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/'),
            ('프로젝트', WEB + 'work/')])
