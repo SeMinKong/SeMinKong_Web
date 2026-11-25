@@ -2,6 +2,13 @@
 
 현재 유효한 결정과 새 변경만 기록한다. 2026-09-07까지의 전체 승인·변경 기록은 [결정 이력](history/decisions.md)에 보관한다.
 
+## 2026-11-25 — Project Prompt Generator·Alkkagi.io 제외
+
+- 사용자 요청으로 웹 포트폴리오, 9쪽 포트폴리오 PDF, 1쪽 영문 이력서에서 `Project Prompt Generator`와 `Alkkagi.io`를 제외한다.
+- 웹 포트폴리오는 11개 경로(핵심 5개 + 프로젝트 6개: `Tac-Touch`, `Bondi`, `THING`, `AQIS`, `Brain Tumor MRI`, `Briefit`)로 구성하고, 홈 카드 덱(`--deck-count: 6`)·Work 바로가기(데스크톱 3×2 격자)·상세 이전/다음 링크·`public/sitemap.xml`·`resume/index.html`을 이에 맞게 정리한다.
+- 포트폴리오 PDF(`public/portfolio/SeMinKong-Portfolio.pdf`)는 2쪽 구현 경험 6항목, 3~8쪽 프로젝트 6건, 9쪽 자료 인덱스 3×2 격자로 9쪽(`2026.11.25`)으로 재생성하고 바이트·SHA-256 계약을 동기화한다.
+- 영문 이력서(`SeMinKong-Resume.{docx,pdf}`, 미리보기 PNG)에서 `Alkkagi.io` 항목과 저장소 링크를 제거하고 Word PDF/A 내보내기 및 `config/resume-artifacts.json` 해시를 갱신한다.
+
 ## 2026-11-24 — 11쪽 포트폴리오 PDF 검수 및 카피·배지 정리
 
 - 11쪽 포트폴리오 PDF(`public/portfolio/SeMinKong-Portfolio.pdf`)를 웹과 같은 톤·기준으로 정리한다.

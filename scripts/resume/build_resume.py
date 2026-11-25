@@ -102,8 +102,6 @@ def build(template, output):
             28: ['Trained YOLO; configured the integrated ROS environment, RealOps and separate MJPEG video streams, package-based navigation to designated goals, and RoboDK command/state relay.'],
             31: ['Implemented YOLO11 classification and segmentation, mask-to-polygon preprocessing, and a unified inference interface.'],
             32: ['Performance verification with independent evaluation data and execution logs remains to be completed.'],
-            35: ['Built a real-time multiplayer game with React and Socket.io.'],
-            36: ['Implemented server-authoritative state, input limits, and collision, friction, and position-correction calculations.'],
         }
         for index, values in replacements.items():
             set_texts(p[index], values)
@@ -119,6 +117,11 @@ def build(template, output):
         for paragraph in briefit:
             body.insert(position, paragraph)
             position += 1
+        for removed in p[33:37]:
+            body.remove(removed)
+        for rel in list(relationships):
+            if rel.get('Id') == 'rId12':
+                relationships.remove(rel)
         # Reuse the original bold title / supporting copy / right-date award row.
         award_template = deepcopy(p[38])
         awards = [

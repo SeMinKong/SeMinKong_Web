@@ -38,7 +38,7 @@ from reportlab.graphics import renderPDF
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / 'src/assets/projects'
 FIGURES = ROOT / 'scripts/portfolio/assets'
-PAGE_COUNT = 11
+PAGE_COUNT = 9
 PHOTO_IMAGES = {
     'thing/integrated-robot-hand-portrait.webp',
     'thing/jetson-mediapipe-hands-test-1600.webp',
@@ -51,7 +51,7 @@ M, CW = 38, W - 76
 BOTTOM = 535
 INK, MUTED, PAPER, LINE, ACCENT, TINT = map(
     HexColor, ['#171512', '#625e56', '#f7f5ef', '#d4d0c5', '#a73524', '#eeeae1'])
-VERSION = '2026.11.24'
+VERSION = '2026.11.25'
 FONT_FILES = {
     'Korean': ('NanumGothic-Regular.ttf', 'NanumGothic.ttf'),
     'KoreanBold': ('NanumGothic-Bold.ttf', 'NanumGothicBold.ttf'),
@@ -509,14 +509,12 @@ def capability(b):
               '카메라 입력과 로봇 제어를 연결한 시스템 구현',
               'ROS 2와 웹 서버 간 비동기 데이터 연동',
               '다축 모터 제어와 텐던 구동계 통합',
-              '학습·추론을 위한 데이터 변환 파이프라인 구축',
-              '서버 기반 실시간 물리·게임 상태 관리',
-              '영역별 LLM 대화와 설계 문서 생성']
+              '학습·추론을 위한 데이터 변환 파이프라인 구축']
     gap = 36
     width = (CW - gap) / 2
     for i, title in enumerate(titles):
         x = M + (i % 2) * (width + gap)
-        top = 110 + (i // 2) * 52
+        top = 114 + (i // 2) * 66
         b.rule(top, x, width, ACCENT, .9)
         b.para(title, x, top + 19, width, 13.3, 20, bold=True, align='center', keep_words=True)
 
@@ -555,10 +553,10 @@ def closing(b):
         b.para(body, x, 181, width, 10, 15, MUTED, align='center')
 
     b.rule(225)
-    item_width = (CW - gap * 3) / 4
+    item_width = (CW - gap * 2) / 3
     for i, spec in enumerate(project_pages.PROJECTS):
-        x = M + (i % 4) * (item_width + gap)
-        top = 250 + (i // 4) * 83
+        x = M + (i % 3) * (item_width + gap)
+        top = 250 + (i // 3) * 83
         b.para(spec['name'], x, top, item_width, 12, 18, bold=True, align='center')
         b.link_row(project_pages.source_links(spec, WEB)[:2], top + 31,
                    size=10.2, center=x + item_width / 2, gap=25)

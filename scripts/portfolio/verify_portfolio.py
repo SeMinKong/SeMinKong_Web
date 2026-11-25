@@ -15,7 +15,7 @@ from project_pages import PROJECTS, M, CW, LEFT_WIDTH, RIGHT_X, RIGHT_WIDTH, CON
 ROOT = Path(__file__).resolve().parents[2]
 WEB = 'https://seminkong.github.io/SeMinKong_Web/'
 PAGE_KEYS = ['introduction', 'capability', 'tac-touch', 'bondi',
-             'thing', 'aqis', 'briefit', 'mri', 'prompt', 'alkkagi', 'closing']
+             'thing', 'aqis', 'briefit', 'mri', 'closing']
 
 
 def verify(path):
@@ -26,7 +26,7 @@ def verify(path):
     assert not any(k in catalog.get('/Names', {}) for k in ['/JavaScript', '/EmbeddedFiles'])
     layout = json.loads(path.with_suffix('.layout.json').read_text(encoding='utf-8'))
     assert [p['key'] for p in layout['pages']] == PAGE_KEYS
-    assert layout['version'] == '2026.11.24'
+    assert layout['version'] == '2026.11.25'
     texts, links_by_page, sizes = [], [], []
     with pdfplumber.open(path) as doc:
         for n, page in enumerate(doc.pages, 1):
@@ -72,7 +72,7 @@ def verify(path):
     assert not re.search(r'010[- ]?\d{4}[- ]?\d{4}|\d{6}-[1-4]\d{6}', all_text)
     for label in ['공세민', 'Se Min Kong', '정보처리기사', 'OPIc English IH', 'Suwon']:
         assert label in texts[0], f'Cover missing {label}'
-    assert not any(label in texts[0] for label in ['이 문서', '2026.11.24', '11쪽', 'A4 가로'])
+    assert not any(label in texts[0] for label in ['이 문서', '2026.11.25', '9쪽', 'A4 가로'])
     assert 'SSAFY 특화프로젝트 2등' in texts[0] and 'SSAFY 특화프로젝트 2등' in texts[3]
     assert not re.search(r'\d+\s*등|금상|대상|최우수상|우수상', texts[2])
     assert '구현 경험' in texts[1]

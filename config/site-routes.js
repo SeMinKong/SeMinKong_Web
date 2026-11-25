@@ -49,23 +49,9 @@ export const SITE_ROUTES = Object.freeze([
     kind: 'case-study'
   },
   {
-    name: 'alkkagi',
-    source: 'work/alkkagi/index.html',
-    output: 'work/alkkagi/index.html',
-    entry: '/src/entries/case-study.js',
-    kind: 'case-study'
-  },
-  {
     name: 'briefit',
     source: 'work/briefit/index.html',
     output: 'work/briefit/index.html',
-    entry: '/src/entries/case-study.js',
-    kind: 'case-study'
-  },
-  {
-    name: 'projectPromptGenerator',
-    source: 'work/project-prompt-generator/index.html',
-    output: 'work/project-prompt-generator/index.html',
     entry: '/src/entries/case-study.js',
     kind: 'case-study'
   },

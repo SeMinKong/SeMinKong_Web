@@ -317,7 +317,7 @@
 }
 
 .project-deck {
-  --deck-count: 8;
+  --deck-count: 6;
   position: relative;
   clip-path: none !important;
 }

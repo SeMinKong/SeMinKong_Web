@@ -38,7 +38,7 @@
 
 .work-fast-path {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-bottom: clamp(36px, 4vw, 56px);
   border-top: 1px solid var(--line-strong);
   border-bottom: 1px solid var(--line-strong);
@@ -72,11 +72,11 @@
   word-break: keep-all;
 }
 
-.work-fast-path > a:nth-child(4n + 1) {
+.work-fast-path > a:nth-child(3n + 1) {
   border-left: 0;
 }
 
-.work-fast-path > a:nth-child(n + 5) {
+.work-fast-path > a:nth-child(n + 4) {
   border-top: 1px solid var(--line);
 }
 
@@ -709,6 +709,10 @@ html.work-story-pending .work-showcase__viewport {
 @media (max-width: 840px) {
   .work-fast-path {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .work-fast-path > a:nth-child(even) {
+    border-left: 1px solid var(--line);
   }
 
   .work-fast-path > a:nth-child(odd) {

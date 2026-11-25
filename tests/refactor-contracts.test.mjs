@@ -12,11 +12,11 @@ import {
 } from '../src/motion/home-intro-wordmark.js';
 
 test('route manifest keeps unique build inputs and outputs', () => {
-  assert.equal(SITE_ROUTES.length, 13);
+  assert.equal(SITE_ROUTES.length, 11);
   assert.equal(new Set(SITE_ROUTES.map(({ name }) => name)).size, SITE_ROUTES.length);
   assert.equal(new Set(SITE_ROUTES.map(({ source }) => source)).size, SITE_ROUTES.length);
   assert.equal(new Set(SITE_ROUTES.map(({ output }) => output)).size, SITE_ROUTES.length);
-  assert.equal(SITE_ROUTES.filter(({ kind }) => kind === 'case-study').length, 8);
+  assert.equal(SITE_ROUTES.filter(({ kind }) => kind === 'case-study').length, 6);
   assert.equal(EXPECTED_DEPLOYMENT_FILES.length, SITE_ROUTES.length + STATIC_DEPLOYMENT_FILES.length);
 });
 
