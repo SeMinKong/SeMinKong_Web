@@ -194,20 +194,21 @@ class Book:
             self.center_link(title, url, x + width / 2, top, size, limit=H - 20)
             x += width + gap
 
-    def gold_badge(self, text, center, top):
-        size = 9.8
+    def gold_badge(self, text, pos, top, align='center', size=9.8):
         width = pdfmetrics.stringWidth(text, 'KoreanBold', size)
         mark = 4
         gap = 6
         total = mark + gap + width
-        left = center - total / 2
+        left = pos - total / 2 if align == 'center' else pos
         self.track('badge_mark', left, top, mark, size * 1.15, kind='badge_mark', limit=H - 20)
         self.c.saveState()
         self.c.setFillColor(ACCENT)
         self.c.rect(left, H - top - size + 2.2, mark, mark, stroke=0, fill=1)
         self.c.restoreState()
         self.text(text, left + mark + gap, top, size, 'KoreanBold', INK, limit=H - 20)
-        self.checks[-1].update(kind='gold_badge', center_x=round(left + mark + gap + width / 2, 2))
+        self.checks[-1]['kind'] = 'gold_badge'
+        if align == 'center':
+            self.checks[-1]['center_x'] = round(left + mark + gap + width / 2, 2)
 
     def trophy(self, x, top, size=12):
         """Small vector trophy; independent of emoji/font fallback."""
@@ -371,13 +372,13 @@ class Book:
         self.c.drawPath(head, fill=1, stroke=0)
         self.c.restoreState()
 
-    def start(self, title, subtitle='', key=None, title_align='left'):
+    def start(self, title, subtitle='', key=None, title_align='left', title_width=CW):
         self.n += 1
         self.c.setFillColor(PAPER)
         self.c.rect(0, 0, W, H, fill=1, stroke=0)
-        self.para(title, M, 46, CW, 25, 33, bold=True, align=title_align)
+        self.para(title, M, 46, title_width, 25, 33, bold=True, align=title_align)
         if subtitle:
-            self.para(subtitle, M, 91, CW, 10.5, 16, MUTED, align=title_align)
+            self.para(subtitle, M, 91, title_width, 10.5, 16, MUTED, align=title_align)
         key = key or f'p{self.n}'
         self.c.bookmarkPage(key)
         self.c.addOutlineEntry(title, key, level=0, closed=False)
@@ -441,35 +442,21 @@ class Book:
 
 
 def introduction(b):
-    b.start('공세민', key='introduction')
-    b.text('Se Min Kong', M, 108, 36, 'Helvetica-Bold')
-    b.para('상상을 현실로 이끄는 개발자', M, 166, 400, 18, 25, bold=True)
-    b.para('숭실대학교 소프트웨어학부 · SSAFY Robotics Track', M, 214, 400, 11, 17, MUTED)
-    b.para('Computer Vision · Robotics / Physical AI', M, 238, 400, 10.5, 16, MUTED)
+    b.start('공세민', key='introduction', title_width=482)
+    b.text('Se Min Kong', M, 88, 36, 'Helvetica-Bold')
+    b.rule(146, M, 28, ACCENT, 2)
+    b.para('상상을 현실로 이끄는 개발자', M, 162, 482, 17, 24, bold=True)
+    b.para('숭실대학교 소프트웨어학부 · SSAFY Robotics Track', M, 198, 482, 10.5, 16, MUTED)
+    b.para('Computer Vision · Robotics / Physical AI', M, 218, 482, 10.2, 16, MUTED)
 
-    b.image('@se-min-kong-profile.png', 466, 126, 180, 172)
+    b.rule(264, M, 482, LINE, .7)
+    b.trophy(M, 288, 12.5)
+    b.para('수상', M + 18, 286, 120, 12, 18, bold=True)
 
-    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', 642, 164, 10.2)
-    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', 642, 192, 10.2)
-    b.para('Suwon, Republic of Korea', 642, 220, 160, 9.8, 15, MUTED)
-
-    b.rule(334)
-    b.para('자격', M, 352, 340, 13, 19, bold=True, align='center')
-    cert_dates = ['2026.09', '~2027.10']
-    for i, (title, _issuer, _valid, asset) in enumerate(CERTIFICATIONS):
-        top = 384 + i * 56
-        b.rule(top, M, 340, LINE, .7)
-        b.center_link(title, WEB + 'resume/' + asset, M + 170, top + 12, 11.4)
-        b.para(cert_dates[i], M, top + 31, 340, 9.3, 14, MUTED, align='center')
-
-    b.trophy(586, 354, 13)
-    b.para('수상', 604, 352, 28, 13, 19, bold=True, align='center')
-    col_w = 180
-    col_x = [420, 622]
-    b.rule(384, col_x[0], col_w, LINE, .7)
-    b.gold_badge('Tac-Touch', col_x[0] + col_w / 2, 396)
-    b.rule(384, col_x[1], col_w, LINE, .7)
-    b.para('SSAFY 특화프로젝트 2등', col_x[1], 394, col_w, 10.2, 15, bold=True, align='center')
+    col_x = [M, 286]
+    col_w = 234
+    b.gold_badge('Tac-Touch', col_x[0], 326, align='left', size=10.4)
+    b.para('SSAFY 특화프로젝트 2등', col_x[1], 325, col_w, 10.4, 15, bold=True)
 
     short_awards = [
         'SSAFY 공통 프로젝트 우수상',
@@ -477,11 +464,40 @@ def introduction(b):
         '숭실 캡스톤디자인 장려상',
         'IT 프로젝트 프로리그 장려상',
     ]
-    for index, label in enumerate(short_awards):
-        top = 426 + (index // 2) * 42
-        x = col_x[index % 2]
-        b.rule(top, x, col_w, LINE, .7)
-        b.para(label, x, top + 11, col_w, 10.2, 15, bold=True, align='center')
+    for row in range(2):
+        rule_y = 358 + row * 50
+        text_y = 374 + row * 50
+        b.rule(rule_y, M, 482, LINE, .5)
+        b.para(short_awards[row * 2], col_x[0], text_y, col_w, 10.4, 15, bold=True)
+        b.para(short_awards[row * 2 + 1], col_x[1], text_y, col_w, 10.4, 15, bold=True)
+    b.rule(458, M, 482, LINE, .5)
+
+    # Vertical hairline separating main column and right profile rail
+    b.c.saveState()
+    b.c.setStrokeColor(LINE)
+    b.c.setLineWidth(.7)
+    b.c.line(548, H - 52, 548, H - 510)
+    b.c.restoreState()
+
+    rail_x, rail_w = 576, 226
+    b.image('@se-min-kong-profile.png', rail_x, 52, 165, 220)
+    b.c.saveState()
+    b.c.setStrokeColor(LINE)
+    b.c.setLineWidth(.65)
+    b.c.rect(rail_x, H - 52 - 220, 165, 220, stroke=1, fill=0)
+    b.c.restoreState()
+
+    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', rail_x, 294, 10)
+    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', rail_x, 318, 10)
+    b.para('Suwon, Republic of Korea', rail_x, 342, rail_w, 9.6, 15, MUTED)
+
+    b.rule(380, rail_x, rail_w, LINE, .7)
+    b.para('자격', rail_x, 398, rail_w, 11.8, 17, bold=True)
+    cert_dates = ['2026.09', '~2027.10']
+    for i, (title, _issuer, _valid, asset) in enumerate(CERTIFICATIONS):
+        top = 428 + i * 32
+        b.link(title, WEB + 'resume/' + asset, rail_x, top, 10.4)
+        b.para(cert_dates[i], rail_x + 118, top + 1, 108, 9.3, 14, MUTED)
 
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/'),
            ('프로젝트', WEB + 'work/')])
