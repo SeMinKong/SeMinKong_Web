@@ -306,6 +306,7 @@
 }
 
 .work-showcase {
+  --bg: var(--paper);
   --signal: var(--signal-on-light);
   --text: var(--paper-ink);
   --text-soft: var(--paper-soft);
@@ -582,6 +583,7 @@
 }
 
 .home-about {
+  --bg: var(--paper);
   --signal: var(--signal-on-light);
   --text: var(--paper-ink);
   --text-soft: var(--paper-soft);
