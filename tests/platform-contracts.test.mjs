@@ -280,7 +280,7 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.doesNotMatch(homeStyles, /\.hero-identity__statement em/);
   assert.doesNotMatch(kineticStyles, /\.home-page \.hero-identity__statement em/);
   assert.match(homeHtml, /href="\.\/work\/" aria-label="프로젝트 목록 보기">프로젝트/);
-  assert.match(homeHtml, /href="#contact" aria-label="연락처 바로가기">Contact/);
+  assert.match(homeHtml, /href="\.\/about\/" aria-label="소개 페이지 보기">About/);
   assert.doesNotMatch(homeHtml, /hero-identity__support/);
   assert.doesNotMatch(homeHtml, /Flagship/i);
   assert.match(heroSection, /data-kinetic-stage/);
