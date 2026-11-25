@@ -125,6 +125,7 @@ def build(template, output):
         # Reuse the original bold title / supporting copy / right-date award row.
         award_template = deepcopy(p[38])
         awards = [
+            ('SSAFY Autonomous Project - 1st Place', ' | Tac-Touch', '2026'),
             ('SSAFY Specialization Project - 2nd Place', ' | Bondi', '2026'),
             ('SSAFY Common Project - Excellence Award', ' | AIoT Track, Gwangju Class 1 (1st Place)', '10 Aug 2026'),
             ('2025 IT Project Pro League - Encouragement Award', ' | Soongsil University Spartan SW Education Center', '22 Nov 2025'),
@@ -135,8 +136,6 @@ def build(template, output):
         position = body.index(p[38])
         for old in p[38:41]:
             body.remove(old)
-        body.insert(position, tac_touch_badge(award_template))
-        position += 1
         for values in awards:
             body.insert(position, set_texts(deepcopy(award_template), values))
             position += 1

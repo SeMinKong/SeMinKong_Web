@@ -456,7 +456,7 @@ def introduction(b):
 
     col_x = [M, 286]
     col_w = 236
-    b.gold_badge('Tac-Touch', col_x[0], 410, align='left', size=9.4)
+    b.para('SSAFY 자율프로젝트 1등', col_x[0], 408, col_w, 9.4, 14, MUTED)
     b.para('SSAFY 특화프로젝트 2등', col_x[1], 408, col_w, 9.4, 14, MUTED)
 
     short_awards = [

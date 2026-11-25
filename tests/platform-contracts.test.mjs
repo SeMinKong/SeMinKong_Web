@@ -380,7 +380,7 @@ test('progressive navigation and motion remain optional and non-blocking', async
   assert.match(workStory, /focus\(\{ preventScroll: true \}\)/);
 });
 
-test('both SSAFY cases are public destinations and the autonomous project badge carries only its name', async () => {
+test('both SSAFY cases are public destinations and record their SSAFY awards', async () => {
   const slugs = ['tac-touch', 'bondi'];
   for (const path of ['index.html', 'work/index.html', 'about/index.html', 'resume/index.html']) {
     const html = await readFile(sourceUrl(path), 'utf8');
@@ -400,8 +400,8 @@ test('both SSAFY cases are public destinations and the autonomous project badge 
   const articles = awards.match(/<article\b[\s\S]*?<\/article>/g) ?? [];
   const tactile = articles.find((article) => article.includes('href="../work/tac-touch/"')) ?? '';
   const museum = articles.find((article) => article.includes('href="../work/bondi/"')) ?? '';
-  assert.match(tactile, /class="award-project-badge">Tac-Touch<\/span>/);
-  assert.doesNotMatch(tactile, /\d\s*등|\d(?:st|nd|rd|th) place|금상|대상|우수상/i);
+  assert.match(tactile, /SSAFY 자율프로젝트 · Tac-Touch/);
+  assert.match(tactile, /<p>1등<\/p>/);
   assert.match(museum, /<p>2등<\/p>/);
 });
 
@@ -431,10 +431,10 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 6639211);
+  assert.equal(pdf.length, 6639462);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    'A62C021E682980A1B1460C30ED111F17CF9E98A1856BB1076006E9CC13CB6783',
+    '0248B9A66989E4165A2FB5AA8B90002AFE60A44BFC3152D7D2B0450BAA9476FE',
     'Published PDF must match the reviewed nine-page project portfolio'
   );
 });

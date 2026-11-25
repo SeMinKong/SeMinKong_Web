@@ -30,7 +30,7 @@ PROJECTS = [
   'stack': '촉각 센서 · MCU 펌웨어 · 3D 기구 편집 · MCP',
   'figure': ('tac-touch/dashboard.webp', (0, 0, 1, 1)),
   'caption': '테스트 센서 입력으로 손끝 움직임을 표시한 PC 앱 화면',
-  'badge': 'Tac-Touch',
+  'award_label': 'SSAFY 자율프로젝트 1등',
   'awards': [],
   'case': 'work/tac-touch/'},
  {'key': 'bondi',

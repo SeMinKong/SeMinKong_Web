@@ -73,8 +73,8 @@ def verify(path):
     for label in ['공세민', 'Se Min Kong', '정보처리기사', 'OPIc English IH', 'Suwon']:
         assert label in texts[0], f'Cover missing {label}'
     assert not any(label in texts[0] for label in ['이 문서', '2026.11.25', '9쪽', 'A4 가로'])
+    assert 'SSAFY 자율프로젝트 1등' in texts[0] and 'SSAFY 자율프로젝트 1등' in texts[2]
     assert 'SSAFY 특화프로젝트 2등' in texts[0] and 'SSAFY 특화프로젝트 2등' in texts[3]
-    assert not re.search(r'\d+\s*등|금상|대상|최우수상|우수상', texts[2])
     assert '구현 경험' in texts[1]
     assert not any(label in all_text for label in ['Torque OFF', '구현을 더 자세히 읽기', '프로젝트의 입구'])
     assert not any(e['page'] == 2 and e['kind'] == 'annotation' for e in layout['elements'])
@@ -96,7 +96,7 @@ def verify(path):
     assert not any(e['kind'] == 'page_number' for e in elements)
     assert sum(e['kind'] == 'trophy' for e in elements) == 5
     badges = [e for e in elements if e['kind'] == 'gold_badge']
-    assert [(e['page'], e['text']) for e in badges] == [(1, 'Tac-Touch'), (3, 'Tac-Touch')]
+    assert not badges
     overlaps = []
     for i, a in enumerate(elements):
         for b in elements[i+1:]:
