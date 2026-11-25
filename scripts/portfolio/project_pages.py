@@ -37,16 +37,12 @@ PROJECTS = [
   'case': 'work/tac-touch/',
   'visual': {
       'flow': [
-          ('chip', '센서 · MCU', '읽기 상태·측정 분리'),
-          ('compare', '보드 · PC 검증', '정상 0 vs 실패 대조'),
-          ('sliders', 'PC 앱 · MCP', 'AI 기구 각도 편집'),
+          ('센서 · MCU', '읽기 상태·측정 분리'),
+          ('보드 · PC 대조', '정상 0 vs 실패 구분'),
+          ('PC 앱 · MCP', 'AI 기구 각도 편집'),
       ],
-      'built_tags': [
-          ('chip', '센서 펌웨어'),
-          ('compare', '보드 검증'),
-          ('sliders', 'MCP 연동'),
-      ],
-      'trouble_tags': [
+      'built_keywords': ['센서 펌웨어', '보드 검증', 'MCP 연동'],
+      'trouble_transitions': [
           ('0값 혼동', '상태·수치 분리'),
           ('수정 후 검증', '재확인·결과 분리'),
       ],
@@ -191,10 +187,10 @@ def project_page(b, spec, web, awards):
 
 
 def visual_project_body(b, spec):
-    """Harmonized editorial visual layout with 3-step flow, keyword tags and Problem->Solution cards."""
+    """Swiss-editorial structured project page: unboxed sequence, keyword rail, hairline split."""
     vis = spec['visual']
 
-    # Left column: unchanged source figure, tagline, summary and icon-anchored reflection
+    # Left column: unchanged source figure, tagline, summary and unadorned reflection
     reflection_height = text_height(spec['reflection'], LEFT_WIDTH, 10, 15)
     summary_height = text_height(spec['summary'], LEFT_WIDTH, 10.5, 16)
     tagline_height = text_height(spec['tagline'], LEFT_WIDTH, 12.3, 18, bold=True)
@@ -211,47 +207,56 @@ def visual_project_body(b, spec):
     top = b.para(spec['summary'], M, top + 6, LEFT_WIDTH, 10.5, 16,
                  MUTED, keep_words=True)
     b.rule(top + 12, M, LEFT_WIDTH)
-    top = vc.section_heading(b, 'insight', '회고', M, top + 24, LEFT_WIDTH)
+    top = b.para('회고', M, top + 24, LEFT_WIDTH, 12.3, 18, bold=True)
     left_end = b.para(spec['reflection'], M, top + 10, LEFT_WIDTH,
                       10, 15, MUTED, keep_words=True)
     if left_end > CONTENT_BOTTOM + .1:
         raise ValueError(f"{spec['key']}: left column exceeds available space ({left_end})")
 
-    # Right column Zone 1: 3-step system flow strip
-    top = vc.flow_strip(b, vis['flow'], RIGHT_X, CONTENT_TOP, RIGHT_WIDTH, height=54, gap=18)
+    # Right column Zone 1: Genuine 01 -> 02 -> 03 signal/workflow sequence (no boxes)
+    top = vc.sequence_flow(b, vis['flow'], RIGHT_X, CONTENT_TOP, RIGHT_WIDTH, col_gap=18)
 
-    # Right column Zone 2: Direct contributions with left-rail keyword chips
-    top = vc.section_heading(b, 'layers', '직접 맡은 구현', RIGHT_X, top + 16, RIGHT_WIDTH) + 10
-    tag_w, tag_gap = 88, 12
-    body_x, body_w = RIGHT_X + tag_w + tag_gap, RIGHT_WIDTH - tag_w - tag_gap
-    for idx, (item, (icon_name, label)) in enumerate(zip(spec['built'], vis['built_tags'])):
-        vc.keyword_tag(b, icon_name, label, RIGHT_X, top + 1, width=tag_w, height=20)
-        row_end = b.para(item, body_x, top, body_w, 9.5, 14.2, keep_words=True)
-        top = max(top + 22, row_end) + 9
+    # Generous section separation (space by relationship: large gap between groups, tight inside)
+    b.rule(top + 14, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
+    top = b.para('직접 맡은 구현', RIGHT_X, top + 26, RIGHT_WIDTH, 12.3, 18, bold=True) + 9
+
+    # Right column Zone 2: Clean typographic keyword rail + full approved sentences
+    kw_w, kw_gap = 78, 14
+    body_x, body_w = RIGHT_X + kw_w + kw_gap, RIGHT_WIDTH - kw_w - kw_gap
+    for idx, (item, keyword) in enumerate(zip(spec['built'], vis['built_keywords'])):
+        b.para(keyword, RIGHT_X, top, kw_w, 9.6, 14.5, vc.INK, bold=True, keep_words=True)
+        row_end = b.para(item, body_x, top, body_w, 9.6, 14.5, vc.INK, keep_words=True)
+        top = row_end + 10
         if idx + 1 < len(spec['built']):
-            b.rule(top - 4.5, RIGHT_X, RIGHT_WIDTH, LINE, 0.4)
+            b.rule(top - 5, RIGHT_X, RIGHT_WIDTH, LINE, 0.4)
 
-    # Right column Zone 3: Troubleshooting as two harmonized Problem -> Solution cards
-    b.rule(top + 2, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
-    top = vc.section_heading(b, 'wrench', '트러블슈팅', RIGHT_X, top + 13, RIGHT_WIDTH) + 10
+    # Right column Zone 3: Unboxed two-column troubleshooting split by one vertical hairline
+    b.rule(top + 8, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
+    top = b.para('트러블슈팅', RIGHT_X, top + 20, RIGHT_WIDTH, 12.3, 18, bold=True) + 10
 
-    card_gap = 12
-    card_w = (RIGHT_WIDTH - card_gap) / 2
-    inner_w = card_w - 20
-    # Measure tallest card body so both side-by-side cards share an exact uniform height
-    body_heights = [text_height(body, inner_w, 9.1, 13.5) for _, body in spec['troubleshooting']]
-    card_h = 11.5 + 15 + 6 + 17 + 8.5 + max(body_heights) + 11
-    if top + card_h > CONTENT_BOTTOM:
-        raise ValueError(f"{spec['key']}: troubleshooting cards exceed bottom ({top + card_h})")
+    col_gap = 26
+    col_w = (RIGHT_WIDTH - col_gap) / 2
+    col_ends = []
+    for i, ((title, body), (issue, solution)) in enumerate(
+        zip(spec['troubleshooting'], vis['trouble_transitions'])
+    ):
+        cx = RIGHT_X + i * (col_w + col_gap)
+        t_end = b.para(title, cx, top, col_w, 10.2, 14.5, vc.INK, bold=True, keep_words=True)
+        tr_end = vc.transition_line(b, issue, solution, cx, t_end + 5, col_w)
+        end_y = b.para(body, cx, tr_end + 7, col_w, 9.3, 14.0, MUTED, keep_words=True)
+        col_ends.append(end_y)
 
-    for i, ((title, body), (issue_tag, sol_tag)) in enumerate(zip(spec['troubleshooting'], vis['trouble_tags'])):
-        cx = RIGHT_X + i * (card_w + card_gap)
-        vc.draw_rounded_box(b, cx, top, card_w, card_h, radius=4, fill=vc.SURFACE, stroke=LINE, stroke_width=0.6)
-        # Subtle top terracotta accent rule echoing Pages 1 & 2
-        b.rule(top, cx + 10, 28, ACCENT, 1.8)
-        b.text(title, cx + 10, top + 11.5, size=9.7, font='KoreanBold', color=vc.INK)
-        strip_end = vc.inline_transition_strip(b, issue_tag, sol_tag, cx + 10, top + 30.0, inner_w)
-        b.para(body, cx + 10, strip_end + 8.5, inner_w, 9.1, 13.5, MUTED, keep_words=True)
+    max_end = max(col_ends)
+    if max_end > CONTENT_BOTTOM + .1:
+        raise ValueError(f"{spec['key']}: troubleshooting columns exceed bottom ({max_end})")
+
+    # Quiet vertical hairline echoing Page 1's editorial divider
+    div_x = RIGHT_X + col_w + col_gap / 2
+    b.c.saveState()
+    b.c.setStrokeColor(LINE)
+    b.c.setLineWidth(0.55)
+    b.c.line(div_x, H - top, div_x, H - max_end)
+    b.c.restoreState()
 
 
 def footer(b, spec, web, awards):

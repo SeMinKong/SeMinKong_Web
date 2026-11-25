@@ -121,10 +121,13 @@ def verify(path):
         page_elements = [e for e in elements if e['page'] == n]
         bottom = lambda e: e['top'] + e['height']
         if 'visual' in spec:
-            for label in ('직접 맡은 구현', '트러블슈팅', '회고'):
+            for label, x, width in [('직접 맡은 구현', RIGHT_X, RIGHT_WIDTH),
+                                    ('트러블슈팅', RIGHT_X, RIGHT_WIDTH), ('회고', M, LEFT_WIDTH)]:
                 headings = [e for e in page_elements if e['text'] == label]
                 assert len(headings) == 1, f'Page {n}: missing visual heading {label}'
-            assert sum(e['kind'] == 'icon' for e in page_elements) >= 9, f'Page {n}: missing vector icons'
+                assert abs(headings[0]['x'] - x) < .02
+                assert abs(headings[0]['width'] - width) < .02
+            assert not any(e['kind'] == 'icon' for e in page_elements), f'Page {n}: unexpected decorative icons'
             tagline = next(e for e in page_elements if e['text'] == spec['tagline'])
             summary = next(e for e in page_elements if e['text'] == spec['summary'])
             reflection = next(e for e in page_elements if e['text'] == spec['reflection'])
