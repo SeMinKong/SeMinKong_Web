@@ -108,14 +108,12 @@
   font-weight: var(--weight-heading);
 }
 
-.project-tools a,
-.about-next a {
+.project-tools a {
   text-decoration: underline;
   text-underline-offset: 0.22em;
 }
 
-.project-tools a:hover,
-.about-next a:hover {
+.project-tools a:hover {
   color: var(--signal);
 }
 
@@ -158,15 +156,16 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 28px;
-  padding-block: 16px;
+  gap: 12px;
+  padding-block: 28px 12px;
   border-block-start: 1px solid var(--line);
 }
 
-.about-next a {
-  display: inline-flex;
-  align-items: center;
+.about-next .button {
   min-height: 44px;
+  gap: 18px;
+  padding-inline: 18px;
+  text-decoration: none;
 }
 
 .about-page > .site-footer {
