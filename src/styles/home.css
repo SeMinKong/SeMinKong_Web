@@ -137,11 +137,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 28px;
+  gap: 12px;
+  padding-top: 4px;
 }
 
-.home-about__copy .text-link {
-  margin-top: 0;
+.home-about__actions .button {
+  min-height: 44px;
+  gap: 18px;
+  padding-inline: 18px;
 }
 
 @media (max-width: 560px) {
