@@ -37,14 +37,18 @@ PROJECTS = [
   'case': 'work/tac-touch/',
   'visual': {
       'flow': [
-          ('센서 · MCU', '읽기 상태·측정 분리'),
-          ('보드 · PC 대조', '정상 0 vs 실패 구분'),
-          ('PC 앱 · MCP', 'AI 기구 각도 편집'),
+          ('cpu', '센서 · MCU', '읽기 상태·측정 분리'),
+          ('arrow-left-right', '보드 · PC 대조', '정상 0 vs 실패 구분'),
+          ('sliders-horizontal', 'PC 앱 · MCP', 'AI 기구 각도 편집'),
       ],
-      'built_keywords': ['센서 펌웨어', '보드 검증', 'MCP 연동'],
-      'trouble_transitions': [
-          ('0값 혼동', '상태·수치 분리'),
-          ('수정 후 검증', '재확인·결과 분리'),
+      'built_items': [
+          ('cpu', '센서 펌웨어', '채널 상태 분리'),
+          ('arrow-left-right', '보드 검증', '실물·PC 대조'),
+          ('sliders-horizontal', 'MCP 연동', '기구 각도 편집'),
+      ],
+      'trouble_items': [
+          ('activity', '0값 혼동', '상태·수치 분리'),
+          ('file-check', '수정 후 검증', '재확인·결과 분리'),
       ],
   }},
  {'key': 'bondi',
@@ -213,37 +217,38 @@ def visual_project_body(b, spec):
     if left_end > CONTENT_BOTTOM + .1:
         raise ValueError(f"{spec['key']}: left column exceeds available space ({left_end})")
 
-    # Right column Zone 1: Genuine 01 -> 02 -> 03 signal/workflow sequence (no boxes)
+    # Right column Zone 1: Genuine 01 -> 02 -> 03 signal/workflow sequence with bare Lucide icons
     top = vc.sequence_flow(b, vis['flow'], RIGHT_X, CONTENT_TOP, RIGHT_WIDTH, col_gap=18)
 
     # Generous section separation (space by relationship: large gap between groups, tight inside)
-    b.rule(top + 14, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
-    top = b.para('직접 맡은 구현', RIGHT_X, top + 26, RIGHT_WIDTH, 12.3, 18, bold=True) + 9
+    b.rule(top + 12, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
+    top = b.para('직접 맡은 구현', RIGHT_X, top + 22, RIGHT_WIDTH, 12.2, 17, bold=True) + 8
 
-    # Right column Zone 2: Clean typographic keyword rail + full approved sentences
-    kw_w, kw_gap = 78, 14
+    # Right column Zone 2: Bare Lucide icon + 2-line visual keyword rail + full approved sentences
+    kw_w, kw_gap = 96, 12
     body_x, body_w = RIGHT_X + kw_w + kw_gap, RIGHT_WIDTH - kw_w - kw_gap
-    for idx, (item, keyword) in enumerate(zip(spec['built'], vis['built_keywords'])):
-        b.para(keyword, RIGHT_X, top, kw_w, 9.6, 14.5, vc.INK, bold=True, keep_words=True)
-        row_end = b.para(item, body_x, top, body_w, 9.6, 14.5, vc.INK, keep_words=True)
-        top = row_end + 10
+    for idx, (item, (icon_name, keyword, sub_kw)) in enumerate(zip(spec['built'], vis['built_items'])):
+        rail_end = vc.keyword_rail_item(b, icon_name, keyword, sub_kw, RIGHT_X, top, kw_w)
+        body_end = b.para(item, body_x, top, body_w, 9.4, 14.0, vc.INK, keep_words=True)
+        top = max(rail_end, body_end) + 9
         if idx + 1 < len(spec['built']):
-            b.rule(top - 5, RIGHT_X, RIGHT_WIDTH, LINE, 0.4)
+            b.rule(top - 4.5, RIGHT_X, RIGHT_WIDTH, LINE, 0.4)
 
-    # Right column Zone 3: Unboxed two-column troubleshooting split by one vertical hairline
-    b.rule(top + 8, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
-    top = b.para('트러블슈팅', RIGHT_X, top + 20, RIGHT_WIDTH, 12.3, 18, bold=True) + 10
+    # Right column Zone 3: Unboxed two-column troubleshooting with bare Lucide icons + neutral strips
+    b.rule(top + 6, RIGHT_X, RIGHT_WIDTH, LINE, 0.65)
+    top = b.para('트러블슈팅', RIGHT_X, top + 16, RIGHT_WIDTH, 12.2, 17, bold=True) + 9
 
-    col_gap = 26
+    col_gap = 24
     col_w = (RIGHT_WIDTH - col_gap) / 2
     col_ends = []
-    for i, ((title, body), (issue, solution)) in enumerate(
-        zip(spec['troubleshooting'], vis['trouble_transitions'])
+    for i, ((title, body), (icon_name, issue, solution)) in enumerate(
+        zip(spec['troubleshooting'], vis['trouble_items'])
     ):
         cx = RIGHT_X + i * (col_w + col_gap)
-        t_end = b.para(title, cx, top, col_w, 10.2, 14.5, vc.INK, bold=True, keep_words=True)
-        tr_end = vc.transition_line(b, issue, solution, cx, t_end + 5, col_w)
-        end_y = b.para(body, cx, tr_end + 7, col_w, 9.3, 14.0, MUTED, keep_words=True)
+        vc.lucide_icon(b, icon_name, cx, top + 1.2, size=11.5, color_hex='#a73524', stroke_width='1.85')
+        t_end = b.para(title, cx + 16.5, top, col_w - 16.5, 10.0, 14.2, vc.INK, bold=True, keep_words=True)
+        tr_end = vc.neutral_transition_strip(b, issue, solution, cx, t_end + 5, col_w)
+        end_y = b.para(body, cx, tr_end + 7, col_w, 9.2, 13.6, MUTED, keep_words=True)
         col_ends.append(end_y)
 
     max_end = max(col_ends)

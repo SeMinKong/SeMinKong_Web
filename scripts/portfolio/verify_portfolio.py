@@ -127,7 +127,7 @@ def verify(path):
                 assert len(headings) == 1, f'Page {n}: missing visual heading {label}'
                 assert abs(headings[0]['x'] - x) < .02
                 assert abs(headings[0]['width'] - width) < .02
-            assert not any(e['kind'] == 'icon' for e in page_elements), f'Page {n}: unexpected decorative icons'
+            assert sum(e['kind'] == 'icon' for e in page_elements) == 8, f'Page {n}: expected 8 semantic Lucide icons'
             tagline = next(e for e in page_elements if e['text'] == spec['tagline'])
             summary = next(e for e in page_elements if e['text'] == spec['summary'])
             reflection = next(e for e in page_elements if e['text'] == spec['reflection'])
