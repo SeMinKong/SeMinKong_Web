@@ -75,6 +75,7 @@ def verify(path):
     assert not any(label in texts[0] for label in ['이 문서', '2026.11.25', '9쪽', 'A4 가로'])
     assert 'SSAFY 자율프로젝트 1등' in texts[0] and 'SSAFY 자율프로젝트 1등' in texts[2]
     assert 'SSAFY 특화프로젝트 2등' in texts[0] and 'SSAFY 특화프로젝트 2등' in texts[3]
+    assert 'SSAFY 공통프로젝트 1등' in texts[0] and 'SSAFY 공통프로젝트 1등' in texts[4]
     assert '구현 경험' in texts[1]
     assert not any(label in all_text for label in ['Torque OFF', '구현을 더 자세히 읽기', '프로젝트의 입구'])
     assert not any(e['page'] == 2 and e['kind'] == 'annotation' for e in layout['elements'])

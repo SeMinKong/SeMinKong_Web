@@ -127,7 +127,7 @@ def build(template, output):
         awards = [
             ('SSAFY Autonomous Project - 1st Place', ' | Tac-Touch', '2026'),
             ('SSAFY Specialization Project - 2nd Place', ' | Bondi', '2026'),
-            ('SSAFY Common Project - Excellence Award', ' | AIoT Track, Gwangju Class 1 (1st Place)', '10 Aug 2026'),
+            ('SSAFY Common Project - 1st Place', ' | THING, Excellence Award (AIoT Track, Gwangju Class 1)', '10 Aug 2026'),
             ('2025 IT Project Pro League - Encouragement Award', ' | Soongsil University Spartan SW Education Center', '22 Nov 2025'),
             ('15th Soongsil Capstone Design Competition - Encouragement Award', ' | Soongsil University', '1 Oct 2025'),
             ('2025 College of IT Software Competition - Gold Prize', ' | Soongsil University College of IT', '18 Aug 2025'),

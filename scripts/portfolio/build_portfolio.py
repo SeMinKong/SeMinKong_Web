@@ -117,7 +117,7 @@ CERTIFICATIONS = [
      'certificate-opic-english.webp'),
 ]
 AWARDS = [
-    ('THING', 'SSAFY 공통 프로젝트 우수상', '2026.08.10', 'award-ssafy-common-project.webp'),
+    ('THING', 'SSAFY 공통프로젝트 1등 (우수상)', '2026.08.10', 'award-ssafy-common-project.webp'),
     ('Briefit', '2025 IT대학 소프트웨어 공모전 금상', '2025.08.18', 'award-software-competition.webp'),
     ('Briefit', '제15회 숭실 캡스톤디자인 경진대회 장려상', '2025.10.01', 'award-capstone-design.webp'),
     ('Briefit', '2025 IT 프로젝트 프로리그 장려상', '2025.11.22', 'award-it-project-pro-league.webp'),
@@ -460,7 +460,7 @@ def introduction(b):
     b.para('SSAFY 특화프로젝트 2등', col_x[1], 408, col_w, 9.4, 14, MUTED)
 
     short_awards = [
-        'SSAFY 공통 프로젝트 우수상',
+        'SSAFY 공통프로젝트 1등',
         'IT대학 SW 공모전 금상',
         '숭실 캡스톤디자인 장려상',
         'IT 프로젝트 프로리그 장려상',

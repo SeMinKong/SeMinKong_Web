@@ -400,9 +400,12 @@ test('both SSAFY cases are public destinations and record their SSAFY awards', a
   const articles = awards.match(/<article\b[\s\S]*?<\/article>/g) ?? [];
   const tactile = articles.find((article) => article.includes('href="../work/tac-touch/"')) ?? '';
   const museum = articles.find((article) => article.includes('href="../work/bondi/"')) ?? '';
+  const common = articles.find((article) => article.includes('href="../work/thing/"')) ?? '';
   assert.match(tactile, /SSAFY 자율프로젝트 · Tac-Touch/);
   assert.match(tactile, /<p>1등<\/p>/);
   assert.match(museum, /<p>2등<\/p>/);
+  assert.match(common, /SSAFY 공통프로젝트 · THING/);
+  assert.match(common, /<p>1등/);
 });
 
 test('current residence is consistently Suwon across the website', async () => {
@@ -431,10 +434,10 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 6639462);
+  assert.equal(pdf.length, 6639548);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    '0248B9A66989E4165A2FB5AA8B90002AFE60A44BFC3152D7D2B0450BAA9476FE',
+    'C65885B0090A70DEB6F4D2B60AE7525EC6BBC4726BBC72A42E19C14AD50BE355',
     'Published PDF must match the reviewed nine-page project portfolio'
   );
 });

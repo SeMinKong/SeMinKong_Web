@@ -170,7 +170,7 @@ def project_page(b, spec, web, awards):
 def footer(b, spec, web, awards):
     stack = spec['stack'].replace('<br/>', ' · ')
     b.para(stack, M, 534, CW, 9.3, 12, MUTED, keep_words=True, align='center', limit=H - 20)
-    titles = ['SSAFY 공통 프로젝트 우수상', 'SW 공모전 금상',
+    titles = ['SSAFY 공통프로젝트 1등 (우수상)', 'SW 공모전 금상',
               '캡스톤디자인 장려상', 'IT 프로젝트 프로리그 장려상']
     if spec['awards']:
         b.award_links([(titles[index], web + 'resume/' + awards[index][3])
