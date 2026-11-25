@@ -442,62 +442,47 @@ class Book:
 
 def introduction(b):
     b.start('공세민', key='introduction')
-    b.text('Se Min Kong', M, 108, 34, 'Helvetica-Bold')
-    b.para('상상을 현실로 이끄는 개발자', M, 162, 380, 18, 26, bold=True)
-    b.para('숭실대학교 소프트웨어학부를 졸업하고<br/>SSAFY Robotics Track에서 프로젝트를 진행하고 있습니다.',
-           M, 208, 380, 11.6, 20, keep_words=True)
-    b.image('@se-min-kong-profile.png', 448, 137, 180, 168)
-    b.label('연락처', 650, 137)
-    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', 650, 159, 10)
-    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', 650, 183, 10)
-    b.link('웹 포트폴리오', WEB, 650, 207, 10)
-    b.label('교육', 650, 240)
-    b.para('SSAFY Robotics Track<br/>2026.01 - 현재', 650, 258, 150, 10, 15)
+    b.text('Se Min Kong', M, 108, 36, 'Helvetica-Bold')
+    b.para('상상을 현실로 이끄는 개발자', M, 166, 400, 18, 25, bold=True)
+    b.para('숭실대학교 소프트웨어학부 · SSAFY Robotics Track', M, 214, 400, 11, 17, MUTED)
+    b.para('Computer Vision · Robotics / Physical AI', M, 238, 400, 10.5, 16, MUTED)
 
-    b.rule(322)
-    b.para('자격', M, 334, 360, 13, 19, bold=True, align='center')
-    for i, (title, issuer, valid, asset) in enumerate(CERTIFICATIONS):
-        top = 359 + i * 64
-        b.rule(top, M, 360, LINE, .7)
-        b.center_link(title, WEB + 'resume/' + asset, M + 180, top + 10, 11.6)
-        b.para(issuer, M, top + 29, 360, 9.3, 14, MUTED, align='center')
-        b.para(valid, M, top + 44, 360, 9.3, 14, MUTED, align='center')
+    b.image('@se-min-kong-profile.png', 466, 126, 180, 172)
 
-    b.trophy(594.5, 336, 13)
-    b.para('수상', 612.5, 334, 26, 13, 19, bold=True, align='center')
-    award_lines = [
-        'SSAFY 공통 프로젝트<br/>우수상',
-        'IT대학 소프트웨어 공모전<br/>금상',
-        '숭실 캡스톤디자인 경진대회<br/>장려상',
-        'IT 프로젝트 프로리그<br/>장려상',
+    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', 642, 164, 10.2)
+    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', 642, 192, 10.2)
+    b.para('Suwon, Republic of Korea', 642, 220, 160, 9.8, 15, MUTED)
+
+    b.rule(334)
+    b.para('자격', M, 352, 340, 13, 19, bold=True, align='center')
+    cert_dates = ['2026.09', '~2027.10']
+    for i, (title, _issuer, _valid, asset) in enumerate(CERTIFICATIONS):
+        top = 384 + i * 56
+        b.rule(top, M, 340, LINE, .7)
+        b.center_link(title, WEB + 'resume/' + asset, M + 170, top + 12, 11.4)
+        b.para(cert_dates[i], M, top + 31, 340, 9.3, 14, MUTED, align='center')
+
+    b.trophy(586, 354, 13)
+    b.para('수상', 604, 352, 28, 13, 19, bold=True, align='center')
+    col_w = 180
+    col_x = [420, 622]
+    b.rule(384, col_x[0], col_w, LINE, .7)
+    b.gold_badge('Tac-Touch', col_x[0] + col_w / 2, 396)
+    b.rule(384, col_x[1], col_w, LINE, .7)
+    b.para('SSAFY 특화프로젝트 2등', col_x[1], 394, col_w, 10.2, 15, bold=True, align='center')
+
+    short_awards = [
+        'SSAFY 공통 프로젝트 우수상',
+        'IT대학 SW 공모전 금상',
+        '숭실 캡스톤디자인 장려상',
+        'IT 프로젝트 프로리그 장려상',
     ]
-    for i, spec in enumerate(s for s in project_pages.PROJECTS if 'badge' in s or 'award_label' in s):
-        x = 430 + i * 192
-        b.rule(359, x, 176, LINE, .7)
-        if 'badge' in spec:
-            b.gold_badge(spec['badge'], x + 88, 364)
-            b.para('택로봇 기업 연계', x, 379, 176, 9.3, 13, MUTED, align='center')
-        else:
-            b.para(spec['award_label'], x, 364, 176, 10.1, 14, bold=True, align='center')
-            b.para(spec['name'], x, 379, 176, 9.3, 13, MUTED, align='center')
-    for index, (project, title, date, asset) in enumerate(AWARDS):
-        top = 398 + (index // 2) * 46
-        x = 430 + (index % 2) * 192
-        b.rule(top, x, 176, LINE, .7)
-        b.para(award_lines[index], x, top + 3, 176, 10.1, 13, bold=True, align='center')
-        b.para(f'{date} · {project}', x, top + 30, 176, 9.3, 13, MUTED, align='center')
+    for index, label in enumerate(short_awards):
+        top = 426 + (index // 2) * 42
+        x = col_x[index % 2]
+        b.rule(top, x, col_w, LINE, .7)
+        b.para(label, x, top + 11, col_w, 10.2, 15, bold=True, align='center')
 
-    b.rule(493)
-    facts = [
-        ('학력', '숭실대학교 소프트웨어학부 · 2020.03 - 2026.02'),
-        ('관심 분야', 'Computer Vision · Robotics / Physical AI'),
-        ('거주지', 'Suwon, Republic of Korea'),
-    ]
-    width = CW / 3
-    for i, (label, body) in enumerate(facts):
-        x = M + i * width
-        b.para(label, x, 501, width, 9.3, 13, MUTED, bold=True, align='center')
-        b.para(body, x, 518, width, 9.3, 14, MUTED, align='center', keep_words=True)
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/'),
            ('프로젝트', WEB + 'work/')])
 
