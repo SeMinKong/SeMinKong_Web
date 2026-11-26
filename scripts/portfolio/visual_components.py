@@ -10,7 +10,9 @@ from pathlib import Path
 
 from reportlab.graphics import renderPDF
 from reportlab.lib.colors import HexColor
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
+from reportlab.platypus import Paragraph
 from svglib.svglib import svg2rlg
 
 ICONS_DIR = Path(__file__).resolve().parent / 'assets' / 'icons'
@@ -97,11 +99,16 @@ def pictogram_flow(b, nodes, x, top, width, icon_size=20.0, gap=18.0):
     return max_end
 
 
+def _measure(text, width, size, leading, bold=False):
+    style = ParagraphStyle('vc_m', fontName='KoreanBold' if bold else 'Korean',
+                           fontSize=size, leading=leading, splitLongWords=False)
+    return Paragraph(text, style).wrap(width, 600)[1]
+
+
 def truth_table(b, headers, rows, col_widths, x, top):
-    """Flat Swiss-editorial comparison table (neutral header band + hairlines, zero card chrome)."""
+    """Flat Swiss-editorial comparison table (auto row heights, neutral header band, zero cards)."""
     total_w = sum(col_widths)
     header_h = 20.0
-    row_h = 28.0
     c = b.c
     H = c._pagesize[1]
 
@@ -118,12 +125,21 @@ def truth_table(b, headers, rows, col_widths, x, top):
 
     y = top + header_h
     for idx, (icon_name, icon_color, state_label, problem, resolution) in enumerate(rows):
-        row_text_y = y + 8.6
-        lucide_icon(b, icon_name, x + 8, y + 8.2, size=11.5, color_hex=icon_color, stroke_width='1.85')
-        b.para(state_label, x + 24, row_text_y, col_widths[0] - 28, 9.3, 13.0, INK, bold=True, keep_words=True)
-        b.para(problem, x + col_widths[0] + 8, row_text_y, col_widths[1] - 12, 9.1, 13.0, MUTED, keep_words=True)
-        b.para(resolution, x + col_widths[0] + col_widths[1] + 8, row_text_y,
-               col_widths[2] - 14, 9.2, 13.0, INK, keep_words=True)
+        h0 = _measure(state_label, col_widths[0] - 28, 9.2, 12.8, bold=True)
+        h1 = _measure(problem, col_widths[1] - 12, 9.0, 12.8, bold=False)
+        h2 = _measure(resolution, col_widths[2] - 14, 9.1, 12.8, bold=False)
+        content_h = max(h0, h1, h2)
+        row_h = max(27.0, content_h + 13.0)
+        pad_top = (row_h - content_h) / 2.0
+
+        lucide_icon(b, icon_name, x + 8, y + (row_h - 11.5) / 2.0,
+                    size=11.5, color_hex=icon_color, stroke_width='1.85')
+        b.para(state_label, x + 24, y + (row_h - h0) / 2.0, col_widths[0] - 28,
+               9.2, 12.8, INK, bold=True, keep_words=True)
+        b.para(problem, x + col_widths[0] + 8, y + (row_h - h1) / 2.0, col_widths[1] - 12,
+               9.0, 12.8, MUTED, keep_words=True)
+        b.para(resolution, x + col_widths[0] + col_widths[1] + 8, y + (row_h - h2) / 2.0,
+               col_widths[2] - 14, 9.1, 12.8, INK, keep_words=True)
         y += row_h
         weight = 0.55 if idx + 1 == len(rows) else 0.4
         b.rule(y, x, total_w, LINE, weight)
@@ -136,9 +152,9 @@ def check_rows(b, items, x, top, width, label_w=108.0):
     y = top
     for idx, (icon_name, label, detail) in enumerate(items):
         lucide_icon(b, icon_name, x, y + 1.2, size=11.5, color_hex='#a73524', stroke_width='1.9')
-        lbl_end = b.para(label, x + 17, y, label_w - 20, 9.4, 13.4, INK, bold=True, keep_words=True)
-        end_y = b.para(detail, x + label_w, y, width - label_w, 9.2, 13.4, MUTED, keep_words=True)
-        y = max(lbl_end, end_y) + 9
+        lbl_end = b.para(label, x + 17, y, label_w - 20, 9.3, 13.2, INK, bold=True, keep_words=True)
+        end_y = b.para(detail, x + label_w, y, width - label_w, 9.1, 13.2, MUTED, keep_words=True)
+        y = max(lbl_end, end_y) + 8
         if idx + 1 < len(items):
-            b.rule(y - 4.5, x, width, LINE, 0.4)
-    return y - 9
+            b.rule(y - 4.0, x, width, LINE, 0.4)
+    return y - 8
