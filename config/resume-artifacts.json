@@ -3,16 +3,16 @@
   "pages": 1,
   "files": {
     "SeMinKong-Resume.docx": {
-      "bytes": 12536,
-      "sha256": "fd8ee63fa6d4241a1db5605b810773d698ac5a6cd268abad5d65614a7ac5d903"
+      "bytes": 12531,
+      "sha256": "c2cb24a27e0822511a44235fffa2b6c0301e3bfee2a8c8cbb6139e9319613d90"
     },
     "SeMinKong-Resume.pdf": {
-      "bytes": 147547,
-      "sha256": "923238d42c982346f3f32e11431eecdb8ec2ca3112d279e16d8357813f7928e5"
+      "bytes": 147047,
+      "sha256": "0a014aeb1921750cd33792b1f6579e1806f2f08dad727b94f7c3699b0d3d47d5"
     },
     "SeMinKong-Resume-page-1.png": {
-      "bytes": 426711,
-      "sha256": "546c62b89dbf40ca8a786e531bd74c9817015d2aa0fd0d0d7f47b01a873434b7"
+      "bytes": 427005,
+      "sha256": "e9fe7eb3545069cd390fe3e4a06704188fcd4aab06cc0122c036458bccab900c"
     }
   }
 }

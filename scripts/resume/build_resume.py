@@ -43,7 +43,7 @@ def add_featured_projects(body, template_rows, relationships):
             'tac-touch',
         ),
         (
-            'Bondi', 'SSAFY Specialization Project, VR Museum', '2026 (4 weeks)',
+            'Bondi', 'SSAFY Specialization Project, VR Museum', 'Aug 2026 - Sep 2026',
             'TRELLIS | AdaPoinTr | Blender | Unreal Engine | OpenXR',
             'Tested point-cloud completion on a 3D model built from one photo of a damaged comb-pattern pottery vessel.',
             'Built VR galleries and hand controls to grasp, rotate and compare damaged and reconstructed pottery.',

@@ -69,7 +69,7 @@ PROJECTS = [
  {'key': 'bondi',
   'name': 'Bondi',
   'tagline': 'AI 복원 유물을 직접 만지며 비교하는 VR 박물관',
-  'period': '2026년 · 4주',
+  'period': '2026.08 - 09',
   'role': '3D 점군 복원 · VR 전시장 · OpenXR 손 추적',
   'team': '7인 팀',
   'stack': 'TRELLIS · AdaPoinTr · Blender · Unreal Engine · OpenXR',
