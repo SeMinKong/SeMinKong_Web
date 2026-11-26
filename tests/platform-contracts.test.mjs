@@ -391,10 +391,10 @@ test('both SSAFY cases are public destinations and record their SSAFY awards', a
   }
 
   const resume = await readFile(sourceUrl('resume/index.html'), 'utf8');
-  for (const slug of slugs) {
+  for (const slug of [...slugs, 'thing']) {
     const html = await readFile(sourceUrl('work/' + slug + '/index.html'), 'utf8');
     assert.ok(html.includes('href="https://github.com/SeMinKong"'), slug + ' links back to the author');
-    assert.doesNotMatch(html, /href="https:\/\/(?:lab\.ssafy\.com|github\.com\/SeMinKong\/(?:Bondi|TacRobot))\b/i);
+    assert.doesNotMatch(html, /href="https:\/\/(?:lab\.ssafy\.com|github\.com\/SeMinKong\/(?:Bondi|TacRobot|THING))\b/i);
   }
   const awards = resume.match(/<div class="resume-list resume-awards">([\s\S]*?)<\/section>/)?.[1] ?? '';
   const articles = awards.match(/<article\b[\s\S]*?<\/article>/g) ?? [];
@@ -434,10 +434,10 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 6662715);
+  assert.equal(pdf.length, 6669689);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    'DD677F7F5E99EC715B79BB5BD82DD6720738CF71C0A64822FC4F8C194D11D12B',
+    '44E81C0D037BE97E52D5879EA267E4778013F7F4E1C1EAF2BAE094F42B172E64',
     'Published PDF must match the reviewed nine-page project portfolio'
   );
 });

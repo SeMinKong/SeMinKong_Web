@@ -118,8 +118,6 @@ PROJECTS = [
   'figure': ('@thing-video-can-0010.jpg', (0.08, 0.25, 0.95, 0.94)),
   'caption': '캔 파지 · 7축 텐던 시연',
   'awards': [0],
-  'repo': 'https://github.com/SeMinKong/THING/',
-  'detail': 'docs/engineering-notes.md',
   'case': 'work/thing/',
   'schematic': {
       'short_summary': 'Jetson 비전이 추출한 21개 손 랜드마크를 7축 HandCommand로 변환해, Raspberry Pi 5와 DYNAMIXEL XL330 7개로 실시간 모방·파지하는 텐던 로봇 손입니다.',
@@ -413,17 +411,17 @@ def schematic_project_body(b, spec):
 
 def footer(b, spec, web, awards):
     stack = spec['stack'].replace('<br/>', ' · ')
-    b.para(stack, M, 534, CW, 9.2, 12, MUTED, keep_words=True, align='center', limit=H - 20)
+    b.para(stack, M, 530, CW, 9.2, 12, MUTED, keep_words=True, align='center', limit=H - 20)
     titles = ['SSAFY 공통프로젝트 1등 (우수상)', 'SW 공모전 금상',
               '캡스톤디자인 장려상', 'IT 프로젝트 프로리그 장려상']
     if spec['awards']:
         b.award_links([(titles[index], web + 'resume/' + awards[index][3])
-                       for index in spec['awards']], 549, size=9.2, gap=26)
+                       for index in spec['awards']], 545, size=9.2, gap=26)
     if 'badge' in spec:
-        b.gold_badge(spec['badge'], W / 2, 549)
+        b.gold_badge(spec['badge'], W / 2, 545)
     if 'award_label' in spec:
-        b.para(spec['award_label'], M, 549, CW, 9.2, 12, MUTED, bold=True,
+        b.para(spec['award_label'], M, 545, CW, 9.2, 12, MUTED, bold=True,
                align='center', limit=H - 20)
-    b.rule(530)
-    b.link_row(source_links(spec, web), 564, size=9.2, gap=30)
+    b.rule(526)
+    b.button_row(source_links(spec, web), 564, size=9.2, gap=14, pad_x=8.5, pad_y=2.8)
     b.end(rule_top=None)

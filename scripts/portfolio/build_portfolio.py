@@ -171,15 +171,87 @@ class Book:
     def label(self, text, x, top):
         self.text(text, x, top, 10, 'KoreanBold', MUTED)
 
-    def link(self, title, url, x, top, size=9, internal=False, limit=BOTTOM):
+    def link(self, title, url, x, top, size=9, internal=False, limit=BOTTOM, underline=True):
         self.text(title, x, top, size, 'Korean', ACCENT, limit=limit)
         width = pdfmetrics.stringWidth(title, 'Korean', size)
+        if underline:
+            self.c.saveState()
+            self.c.setStrokeColor(HexColor('#d8a196'))
+            self.c.setLineWidth(0.55)
+            self.c.line(x, H - top - size - 1.8, x + width, H - top - size - 1.8)
+            self.c.restoreState()
         rect = (x, H - top - size - 3, x + width, H - top + 2)
         if internal:
             self.c.linkRect('', url, rect, relative=0, thickness=0)
         else:
             self.c.linkURL(quote(url, safe=':/#?=&%@'), rect, relative=0, thickness=0)
         return width
+
+    def _ext_arrow(self, x, mid_y, size=4.6, color=ACCENT):
+        """Crisp vector northeast arrow signaling a clickable link."""
+        c = self.c
+        y = H - mid_y
+        half = size / 2.0
+        c.saveState()
+        c.setStrokeColor(color)
+        c.setLineWidth(0.85)
+        c.setLineCap(1)
+        c.setLineJoin(1)
+        c.line(x, y - half, x + size, y + half)
+        c.line(x + size * 0.35, y + half, x + size, y + half)
+        c.line(x + size, y + half - size * 0.65, x + size, y + half)
+        c.restoreState()
+
+    def button_link(self, title, url, x, top, size=9.2, pad_x=9.0, pad_y=3.2,
+                    primary=False, limit=H - 12):
+        """Tactile Swiss-editorial PDF button with full-box clickable URI rect."""
+        font = 'KoreanBold'
+        text_w = pdfmetrics.stringWidth(title, font, size)
+        arrow_gap, arrow_sz = 4.5, 4.6
+        btn_w = pad_x + text_w + arrow_gap + arrow_sz + pad_x
+        btn_h = size + pad_y * 2 + 1.0
+        btn_top = top - pad_y
+        text_x = x + pad_x
+        c = self.c
+        y_bot = H - btn_top - btn_h
+        c.saveState()
+        if primary:
+            c.setFillColor(HexColor('#7c2417'))
+            c.roundRect(x, y_bot - 0.9, btn_w, btn_h, 2.6, stroke=0, fill=1)
+            c.setFillColor(ACCENT)
+            c.setStrokeColor(ACCENT)
+            c.setLineWidth(0.75)
+            c.roundRect(x, y_bot, btn_w, btn_h, 2.6, stroke=1, fill=1)
+        else:
+            c.setFillColor(HexColor('#ddd6c8'))
+            c.roundRect(x, y_bot - 0.85, btn_w, btn_h, 2.6, stroke=0, fill=1)
+            c.setFillColor(HexColor('#fcfbf7'))
+            c.setStrokeColor(HexColor('#c98678'))
+            c.setLineWidth(0.7)
+            c.roundRect(x, y_bot, btn_w, btn_h, 2.6, stroke=1, fill=1)
+        c.restoreState()
+
+        fg = PAPER if primary else ACCENT
+        self.text(title, text_x, top, size, font, fg, limit=limit)
+        self.checks[-1]['center_x'] = round(text_x + text_w / 2, 2)
+        self.checks[-1]['btn_x'] = round(x, 2)
+        self.checks[-1]['btn_width'] = round(btn_w, 2)
+        self._ext_arrow(text_x + text_w + arrow_gap, top + size * 0.54, arrow_sz, fg)
+        c.linkURL(quote(url, safe=':/#?=&%@'), (x, y_bot, x + btn_w, y_bot + btn_h), relative=0, thickness=0)
+        return btn_w
+
+    def button_row(self, sources, top, size=9.2, center=W / 2, gap=14,
+                   pad_x=9.0, pad_y=3.2, primary_first=False):
+        font = 'KoreanBold'
+        arrow_gap, arrow_sz = 4.5, 4.6
+        widths = [pad_x * 2 + pdfmetrics.stringWidth(title, font, size) + arrow_gap + arrow_sz
+                  for title, _ in sources]
+        total = sum(widths) + gap * (len(widths) - 1)
+        x = center - total / 2
+        for i, ((title, url), bw) in enumerate(zip(sources, widths)):
+            self.button_link(title, url, x, top, size=size, pad_x=pad_x, pad_y=pad_y,
+                             primary=(primary_first and i == 0))
+            x += bw + gap
 
     def center_link(self, title, url, center, top, size=10, limit=BOTTOM):
         width = pdfmetrics.stringWidth(title, 'Korean', size)
@@ -388,7 +460,7 @@ class Book:
         if rule_top is not None:
             self.rule(rule_top)
         if sources:
-            self.link_row(sources, 549, size=9.5)
+            self.button_row(sources, 552, size=9.2, gap=14, pad_x=9.5, pad_y=3.4)
         self.c.showPage()
 
     def section(self, title, body, x, top, width, size=10.4, keep_words=True):
@@ -574,21 +646,22 @@ def closing(b):
     item_width = (CW - gap * 2) / 3
     for i, spec in enumerate(project_pages.PROJECTS):
         x = M + (i % 3) * (item_width + gap)
-        top = 240 + (i // 3) * 76
+        top = 236 + (i // 3) * 78
         b.para(spec['name'], x, top, item_width, 12.4, 18, bold=True, align='center')
-        b.link_row(project_pages.source_links(spec, WEB)[:2], top + 28,
-                   size=10.0, center=x + item_width / 2, gap=24)
+        b.button_row(project_pages.source_links(spec, WEB)[:2], top + 28,
+                     size=9.5, center=x + item_width / 2, gap=12, pad_x=9.5, pad_y=3.8)
 
     b.rule(390)
     widget = qr.QrCodeWidget(WEB)
     x0, y0, x1, y1 = widget.getBounds()
-    side = 72
+    side = 70
     drawing = Drawing(side, side, transform=[side / (x1-x0), 0, 0, side / (y1-y0), 0, 0])
     drawing.add(widget)
-    renderPDF.draw(drawing, b.c, (W - side) / 2, H - 404 - side)
-    b.center_link('웹 포트폴리오', WEB, W / 2, 484, 10.0)
+    renderPDF.draw(drawing, b.c, (W - side) / 2, H - 402 - side)
+    b.button_row([('웹 포트폴리오', WEB)], 484, size=9.6, center=W / 2,
+                 pad_x=12.0, pad_y=3.8, primary_first=True)
     b.link_row([('semin1224@gmail.com', 'mailto:semin1224@gmail.com'),
-                ('github.com/SeMinKong', 'https://github.com/SeMinKong')], 508, size=10.0)
+                ('github.com/SeMinKong', 'https://github.com/SeMinKong')], 513, size=10.0)
     b.end([('프로젝트', WEB + 'work/'), ('이력서 · 수상', WEB + 'resume/')])
 
 

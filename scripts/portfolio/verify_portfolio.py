@@ -64,7 +64,8 @@ def verify(path):
             uri = str(action['/URI'])
             assert uri.isascii() and urlsplit(uri).scheme in {'https', 'mailto'}
             assert all(part not in uri for part in ['drive.google.com', 'canva.com', '.private', 'localhost',
-                                                    'github.com/SeMinKong/TacRobot', 'github.com/SeMinKong/Bondi'])
+                                                    'github.com/SeMinKong/TacRobot', 'github.com/SeMinKong/Bondi',
+                                                    'github.com/SeMinKong/THING'])
             links.append(uri)
         links_by_page.append(links)
     all_text = '\n'.join(texts)
@@ -173,13 +174,15 @@ def verify(path):
         metadata = next(e for e in page_elements if e['text'].startswith(spec['period'] + ' · '))
         assert metadata['x'] == M and metadata['top'] == 90 and abs(metadata['width'] - CW) < .02
         stack = next(e for e in page_elements if e['text'] == spec['stack'].replace('<br/>', ' · '))
-        assert stack['x'] == M and stack['top'] == 534
+        assert stack['x'] == M and stack['top'] == 530
         labels = ['README', '기술 문서', '프로젝트 시연'] if 'repo' in spec else ['공개 프로젝트 사례']
         links = [next(e for e in page_elements if e['text'] == label) for label in labels]
         assert all(e['top'] == 564 for e in links)
-        assert abs((links[0]['x'] + links[-1]['x'] + links[-1]['width']) / 2 - 841.89 / 2) < .02
+        left_x = links[0].get('btn_x', links[0]['x'])
+        right_x = links[-1].get('btn_x', links[-1]['x']) + links[-1].get('btn_width', links[-1]['width'])
+        assert abs((left_x + right_x) / 2 - 841.89 / 2) < .02
         assert sum(e['kind'] == 'trophy' for e in page_elements) == len(spec['awards'])
-        award_items = [e for e in page_elements if 548 <= e['top'] <= 549]
+        award_items = [e for e in page_elements if 544 <= e['top'] <= 545]
         if award_items:
             left = min(e['x'] for e in award_items)
             right = max(e['x'] + e['width'] for e in award_items)
