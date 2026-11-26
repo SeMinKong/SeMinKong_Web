@@ -456,19 +456,20 @@ def introduction(b):
 
     col_x = [M, 286]
     col_w = 236
-    b.para('SSAFY 자율프로젝트 1등', col_x[0], 408, col_w, 9.4, 14, MUTED)
-    b.para('SSAFY 특화프로젝트 2등', col_x[1], 408, col_w, 9.4, 14, MUTED)
-
-    short_awards = [
+    left_awards = [
+        'SSAFY 자율프로젝트 1등',
+        'SSAFY 특화프로젝트 2등',
         'SSAFY 공통프로젝트 1등',
-        'IT대학 SW 공모전 금상',
+    ]
+    right_awards = [
         '숭실 캡스톤디자인 장려상',
+        'IT대학 SW 공모전 금상',
         'IT 프로젝트 프로리그 장려상',
     ]
-    for row in range(2):
-        text_y = 438 + row * 28
-        b.para(short_awards[row * 2], col_x[0], text_y, col_w, 9.4, 14, MUTED)
-        b.para(short_awards[row * 2 + 1], col_x[1], text_y, col_w, 9.4, 14, MUTED)
+    for row in range(3):
+        text_y = 408 + row * 28
+        b.para(left_awards[row], col_x[0], text_y, col_w, 9.4, 14, MUTED)
+        b.para(right_awards[row], col_x[1], text_y, col_w, 9.4, 14, MUTED)
 
     # Subtle vertical divider
     b.c.saveState()
