@@ -26,7 +26,7 @@ MUTED, LINE, ACCENT, TINT = map(HexColor, ['#625e56', '#d4d0c5', '#a73524', '#ee
 PROJECTS = [
  {'key': 'tac-touch',
   'name': 'Tac-Touch',
-  'tagline': '손끝 촉각 신호를 실시간 진단하는 그리퍼 모니터링',
+  'tagline': '기업 택로봇과 함께한 반도체 촉각센서 데이터 연동 기반 실시간 미끄러짐 감지, 초고속 파지력 제어 및 멀티모달 센서 모니터링 GUI 개발',
   'period': '2026.10 - 11',
   'role': '센서 수집 펌웨어 · 보드–PC 검증 · MCP 연동',
   'team': '6인 팀',
