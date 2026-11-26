@@ -513,12 +513,12 @@ def introduction(b):
 
 def capability(b):
     b.start('구현 경험', key='capability')
-    titles = ['센서 신호 유효성 검증과 PC 앱 연동',
-              '3D 결손 복원과 VR 핸드 트래킹 인터랙션',
-              '카메라 입력과 로봇 제어를 연결한 시스템 구현',
-              'ROS 2와 웹 서버 간 비동기 데이터 연동',
-              '다축 모터 제어와 텐던 구동계 통합',
-              '학습·추론을 위한 데이터 변환 파이프라인 구축']
+    titles = ['센서 신호 유효성 판별 및 PC·MCP 제어 연동',
+              '3D 점군 복원 파이프라인과 OpenXR 인터랙션 설계',
+              '비전 인식과 로봇팔·자율주행 통합 공정 구축',
+              'ROS 2·웹 관제 간 영상·상태 분리 스트리밍 설계',
+              '7축 모터 동기 제어 및 텐던 기구·통신 통합',
+              '모델 학습·추론 신뢰도를 높이는 데이터 전처리·평가']
     gap = 34
     width = (CW - gap) / 2
     for i, title in enumerate(titles):
@@ -532,7 +532,7 @@ def capability(b):
     stack_rule = 304
     b.rule(stack_rule, M, CW, LINE, .65)
     b.para('기술 스택', M, stack_rule + 16, 78, 15.8, 22, bold=True)
-    b.para('프로젝트 성격에 따라 Unreal Engine · OpenXR · MCP 등 도메인 도구를 함께 활용합니다.',
+    b.para('문제 해결에 필요한 도구라면 도메인 경계 없이 학습해 적용합니다. (Unreal Engine · OpenXR · MCP 등)',
            M + 86, stack_rule + 21.5, CW - 86, 9.2, 13.5, MUTED)
 
     column = CW / len(STACK)
@@ -547,17 +547,17 @@ def capability(b):
             stars = '★' * score + '☆' * (STACK_RATINGS['scale'] - score)
             b.para(f"{name} <font color='#a73524'>{stars}</font>",
                    x, stack_rule + 82 + j * 21, column, 9.8, 14, align='center')
-    b.para('별점은 작성자 자기평가이며 5단계 기준입니다.', M, 514, CW,
+    b.para('숙련도는 실제 프로젝트 구현 경험 기준 작성자 자기평가(5단계)입니다.', M, 514, CW,
            9.2, 13.2, MUTED, align='center')
     b.end([('GitHub', 'https://github.com/SeMinKong'),
            ('학습 관심사', WEB + 'about/#questions-title')])
 
 
 def closing(b):
-    b.start('프로젝트 자료', '공개 사례 · README · 기술 문서', key='closing', title_align='center')
-    guide = [('README', '개요 · 역할 · 실행 방법'),
-             ('기술 문서', '코드 · 계산식 · 검증 범위'),
-             ('공개 프로젝트 사례', '담당 구현 · 시연 화면 · 프로젝트 상세')]
+    b.start('프로젝트 자료', '직접 구현한 코드, 검증 근거, 시연 기록을 한곳에 정리했습니다.', key='closing', title_align='center')
+    guide = [('README', '문제 정의 · 담당 역할 · 실행 구조'),
+             ('기술 문서', '설계 근거 · 검증 범위 · 트러블슈팅'),
+             ('공개 프로젝트 사례', '핵심 구현 · 시연 화면 · 상세 리포트')]
     gap = 32
     width = (CW - gap * 2) / 3
     for i, (title, body) in enumerate(guide):

@@ -67,10 +67,9 @@ def _arrow(b, x1, x2, mid_y, color=LINE, head_color=MUTED):
     c.restoreState()
 
 
-def numbered_heading(b, ordinal, title, x, top, width):
-    """Clean Swiss-editorial numbered section heading (L2: 12.4pt)."""
-    b.text(ordinal, x, top + 1.6, size=10.0, font='Helvetica-Bold', color=ACCENT)
-    return b.para(title, x + 21, top, width - 21, 12.4, 17.5, INK, bold=True, keep_words=True)
+def section_title(b, title, x, top, width):
+    """Unadorned L2 section heading matching '회고' across every project page."""
+    return b.para(title, x, top, width, 12.4, 17.5, INK, bold=True, keep_words=True)
 
 
 def pictogram_flow(b, nodes, x, top, width, icon_size=20.0, gap=18.0):

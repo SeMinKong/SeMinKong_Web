@@ -434,10 +434,10 @@ test('the reviewed static portfolio is downloadable without exposing working fil
   assert.match(distVerifier, /Production Portfolio directory contains private or unapproved files/);
   assert.equal(pdf.toString('ascii', 0, 5), '%PDF-');
   assert.ok(pdf.subarray(-32).toString('ascii').includes('%%EOF'));
-  assert.equal(pdf.length, 6650727);
+  assert.equal(pdf.length, 6649450);
   assert.equal(
     await sha256Of('public/portfolio/SeMinKong-Portfolio.pdf'),
-    '4F8FE7F7428B865E3A7539CDB638FD6E715836D7297E178E75FEEC1378D6CBA6',
+    '1488179D082815A3296EB8AD907D485D64BD8B107FE75DBE1094B68D90141255',
     'Published PDF must match the reviewed nine-page project portfolio'
   );
 });

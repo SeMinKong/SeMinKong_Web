@@ -115,8 +115,9 @@ def verify(path):
         bottom = lambda e: e['top'] + e['height']
         if 'schematic' in spec:
             sc = spec['schematic']
-            section_titles = [title for _, title, _ in sc['sections']]
-            for label in [spec['name'], '회고', *section_titles]:
+            section_titles = [title for title, _ in sc['sections']]
+            assert section_titles == ['직접 맡은 구현', '트러블슈팅'], f'Page {n}: must preserve exact headings'
+            for label in [spec['name'], '직접 맡은 구현', '트러블슈팅', '회고']:
                 assert label in texts[n-1], f'Page {n}: missing {label}'
             for fact in [spec['tagline'], spec['role'], spec['period'], spec['team'],
                          spec['stack'].replace('<br/>', ' · '), sc['short_summary'],
