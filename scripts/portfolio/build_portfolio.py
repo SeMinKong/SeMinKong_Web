@@ -454,8 +454,11 @@ def introduction(b):
     b.text('Se Min Kong', M, 88, 46, 'Helvetica-Bold')
     b.rule(156, M, 46, ACCENT, 2.2)
     b.para('상상을 현실로 이끄는 개발자', M, 176, major_w, 20.5, 29, bold=True)
-    b.para('숭실대학교 소프트웨어학부 · SSAFY Robotics Track', M, 222, major_w, 12.4, 18, INK)
-    b.para('Computer Vision · Robotics / Physical AI', M, 246, major_w, 10.0, 15, MUTED)
+    b.para('SSAFY Robotics Track', M, 224, 166, 12.4, 18, INK)
+    b.para('2026.02 ~', M + 174, 226.2, major_w - 174, 10.0, 15, MUTED)
+    b.para('숭실대학교 소프트웨어학부', M, 248, 166, 12.4, 18, INK)
+    b.para('2020.03 ~ 2026.02', M + 174, 250.2, major_w - 174, 10.0, 15, MUTED)
+    b.para('Computer Vision · Robotics / Physical AI', M, 290, major_w, 10.0, 15, MUTED)
 
     # Lower 38.2% golden band: Awards (left) aligned to Certifications (right)
     b.rule(horizon_y, M, major_w, LINE, .65)
