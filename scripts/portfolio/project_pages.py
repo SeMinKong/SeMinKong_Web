@@ -14,12 +14,13 @@ from reportlab.platypus import Paragraph
 import visual_components as vc
 
 W, H = landscape(A4)
-M, CW = 38, W - 76
-LEFT_WIDTH = 300
-RIGHT_X = 368
+M, CW = 40, W - 80
+# Exact Golden Ratio split (Minor 278 : Major 449.89 = 1 : 1.6183, gutter 34pt)
+LEFT_WIDTH = 278
+RIGHT_X = M + LEFT_WIDTH + 34
 RIGHT_WIDTH = W - M - RIGHT_X
-BODY_SIZE, BODY_LEADING = 10.3, 15.5
-CONTENT_TOP, CONTENT_BOTTOM = 128, 522
+BODY_SIZE, BODY_LEADING = 10.0, 15.0
+CONTENT_TOP, CONTENT_BOTTOM = 128, 520
 MUTED, LINE, ACCENT, TINT = map(HexColor, ['#625e56', '#d4d0c5', '#a73524', '#eeeae1'])
 
 PROJECTS = [
@@ -227,7 +228,7 @@ PROJECTS = [
                   ('sparkles', '#a73524', '학습 품질 한계', '3,000건 학습만으론 미흡', '서비스 운영을 위해 <b>Gemini API 추가 연동</b> 보완'),
                   ('scissors', '#171512', '장문 입력 초과', '모델 입력 길이 초과', '문단 묶음 <b>분할 요약 → 재요약</b> (장문 절단 한계)'),
                   ('check', '#171512', '반복 문장 정리', '끝부분 반복·초단문 생성', '규칙 후처리로 <b>반복 제거 · 정상 단문 보존</b>'),
-              ], [116.0, 110.0, RIGHT_WIDTH - 226.0]),
+              ], [112.0, 122.0, RIGHT_WIDTH - 234.0]),
           ]),
       ],
       'required_facts': [
@@ -352,15 +353,15 @@ def project_page(b, spec, web, awards):
 
 
 def schematic_project_body(b, spec):
-    """Pictogram-led project page replacing verbose prose with visual schematics and tables."""
+    """Pictogram-led project page on the golden grid (Minor 278 : Major 450) and sqrt(phi) type scale."""
     sc = spec['schematic']
     summary_text = sc['short_summary']
     reflection_text = sc['short_reflection']
 
-    # Left column: unchanged source figure, concise summary and reflection
-    reflection_height = text_height(reflection_text, LEFT_WIDTH, 9.8, 14.8)
-    summary_height = text_height(summary_text, LEFT_WIDTH, 10.2, 15.5)
-    tagline_height = text_height(spec['tagline'], LEFT_WIDTH, 12.3, 18, bold=True)
+    # Left minor column (38.2%): source figure, L2 tagline (12.4pt), L1 copy (10.0pt)
+    reflection_height = text_height(reflection_text, LEFT_WIDTH, 10.0, 15.0)
+    summary_height = text_height(summary_text, LEFT_WIDTH, 10.0, 15.0)
+    tagline_height = text_height(spec['tagline'], LEFT_WIDTH, 12.4, 17.5, bold=True)
     image_height = min(194, CONTENT_BOTTOM - CONTENT_TOP - reflection_height
                        - summary_height - tagline_height - 15 - 18 - 64)
     if image_height < 130:
@@ -368,19 +369,19 @@ def schematic_project_body(b, spec):
     figure, region = spec['figure']
     top = b.image(figure, M, CONTENT_TOP, LEFT_WIDTH, image_height,
                   region=region, caption=spec['caption'],
-                  caption_size=9.8, caption_leading=15, caption_gap=10)
-    top = b.para(spec['tagline'], M, top + 14, LEFT_WIDTH, 12.3, 18,
+                  caption_size=9.2, caption_leading=13.5, caption_gap=10)
+    top = b.para(spec['tagline'], M, top + 14, LEFT_WIDTH, 12.4, 17.5,
                  bold=True, keep_words=True)
-    top = b.para(summary_text, M, top + 6, LEFT_WIDTH, 10.2, 15.5,
+    top = b.para(summary_text, M, top + 6, LEFT_WIDTH, 10.0, 15.0,
                  MUTED, keep_words=True)
     b.rule(top + 14, M, LEFT_WIDTH)
-    top = b.para('회고', M, top + 26, LEFT_WIDTH, 12.0, 17, bold=True)
-    left_end = b.para(reflection_text, M, top + 9, LEFT_WIDTH,
-                      9.8, 14.8, MUTED, keep_words=True)
+    top = b.para('회고', M, top + 26, LEFT_WIDTH, 12.4, 17.5, bold=True)
+    left_end = b.para(reflection_text, M, top + 8, LEFT_WIDTH,
+                      10.0, 15.0, MUTED, keep_words=True)
     if left_end > CONTENT_BOTTOM + .1:
         raise ValueError(f"{spec['key']}: left column exceeds available space ({left_end})")
 
-    # Right column: modular numbered domains (flow / table / checks)
+    # Right major column (61.8%): modular numbered domains (flow / table / checks)
     y = CONTENT_TOP
     for s_idx, (ordinal, title, blocks) in enumerate(sc['sections']):
         if s_idx > 0:
@@ -395,7 +396,7 @@ def schematic_project_body(b, spec):
                                       icon_size=icon_size, gap=gap)
             elif kind == 'table':
                 _, headers, rows, col_widths = block
-                y = vc.truth_table(b, headers, rows, col_widths, RIGHT_X, y + 13)
+                y = vc.truth_table(b, headers, rows, col_widths, RIGHT_X, y + 14)
             elif kind == 'checks':
                 _, items, label_w = block
                 if b_idx > 0:
@@ -410,17 +411,17 @@ def schematic_project_body(b, spec):
 
 def footer(b, spec, web, awards):
     stack = spec['stack'].replace('<br/>', ' · ')
-    b.para(stack, M, 534, CW, 9.3, 12, MUTED, keep_words=True, align='center', limit=H - 20)
+    b.para(stack, M, 534, CW, 9.2, 12, MUTED, keep_words=True, align='center', limit=H - 20)
     titles = ['SSAFY 공통프로젝트 1등 (우수상)', 'SW 공모전 금상',
               '캡스톤디자인 장려상', 'IT 프로젝트 프로리그 장려상']
     if spec['awards']:
         b.award_links([(titles[index], web + 'resume/' + awards[index][3])
-                       for index in spec['awards']], 549, size=9.3, gap=26)
+                       for index in spec['awards']], 549, size=9.2, gap=26)
     if 'badge' in spec:
         b.gold_badge(spec['badge'], W / 2, 549)
     if 'award_label' in spec:
-        b.para(spec['award_label'], M, 549, CW, 9.3, 12, MUTED, bold=True,
+        b.para(spec['award_label'], M, 549, CW, 9.2, 12, MUTED, bold=True,
                align='center', limit=H - 20)
     b.rule(530)
-    b.link_row(source_links(spec, web), 564, size=9.3, gap=30)
+    b.link_row(source_links(spec, web), 564, size=9.2, gap=30)
     b.end(rule_top=None)

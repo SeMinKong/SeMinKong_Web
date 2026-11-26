@@ -68,13 +68,13 @@ def _arrow(b, x1, x2, mid_y, color=LINE, head_color=MUTED):
 
 
 def numbered_heading(b, ordinal, title, x, top, width):
-    """Clean Swiss-editorial numbered section heading (01 / 02)."""
-    b.text(ordinal, x, top + 1.4, size=10.2, font='Helvetica-Bold', color=ACCENT)
-    return b.para(title, x + 21, top, width - 21, 12.2, 17, INK, bold=True, keep_words=True)
+    """Clean Swiss-editorial numbered section heading (L2: 12.4pt)."""
+    b.text(ordinal, x, top + 1.6, size=10.0, font='Helvetica-Bold', color=ACCENT)
+    return b.para(title, x + 21, top, width - 21, 12.4, 17.5, INK, bold=True, keep_words=True)
 
 
 def pictogram_flow(b, nodes, x, top, width, icon_size=20.0, gap=18.0):
-    """Centered bare Lucide pictograms connected by horizontal arrows with concise 2-line captions."""
+    """Centered bare Lucide pictograms connected by horizontal arrows (L1 bold / L0 muted)."""
     n = len(nodes)
     node_w = (width - gap * (n - 1)) / n
     icon_mid_y = top + icon_size / 2
@@ -86,9 +86,9 @@ def pictogram_flow(b, nodes, x, top, width, icon_size=20.0, gap=18.0):
         color_hex = '#a73524' if accent else '#171512'
         lucide_icon(b, icon_name, ix, top, size=icon_size, color_hex=color_hex, stroke_width='1.7')
 
-        t_end = b.para(title, nx, top + icon_size + 7, node_w, 9.8, 13.5, INK,
+        t_end = b.para(title, nx, top + icon_size + 7, node_w, 10.0, 14.0, INK,
                        bold=True, align='center', keep_words=True)
-        s_end = b.para(subtitle, nx, t_end + 1.5, node_w, 9.0, 12.4, MUTED,
+        s_end = b.para(subtitle, nx, t_end + 1.5, node_w, 9.2, 13.0, MUTED,
                        align='center', keep_words=True)
         max_end = max(max_end, s_end)
 
@@ -106,9 +106,9 @@ def _measure(text, width, size, leading, bold=False):
 
 
 def truth_table(b, headers, rows, col_widths, x, top):
-    """Flat Swiss-editorial comparison table (auto row heights, neutral header band, zero cards)."""
+    """Flat Swiss-editorial comparison table aligned to the 9.2 / 9.6 / 10.0 scale."""
     total_w = sum(col_widths)
-    header_h = 20.0
+    header_h = 21.0
     c = b.c
     H = c._pagesize[1]
 
@@ -120,26 +120,25 @@ def truth_table(b, headers, rows, col_widths, x, top):
 
     cx = x
     for label, w in zip(headers, col_widths):
-        b.text(label, cx + 8, top + 5.2, size=9.0, font='KoreanBold', color=MUTED)
+        b.text(label, cx + 8, top + 5.6, size=9.2, font='KoreanBold', color=MUTED)
         cx += w
 
     y = top + header_h
     for idx, (icon_name, icon_color, state_label, problem, resolution) in enumerate(rows):
-        h0 = _measure(state_label, col_widths[0] - 28, 9.2, 12.8, bold=True)
-        h1 = _measure(problem, col_widths[1] - 12, 9.0, 12.8, bold=False)
-        h2 = _measure(resolution, col_widths[2] - 14, 9.1, 12.8, bold=False)
+        h0 = _measure(state_label, col_widths[0] - 28, 9.5, 13.4, bold=True)
+        h1 = _measure(problem, col_widths[1] - 12, 9.2, 13.4, bold=False)
+        h2 = _measure(resolution, col_widths[2] - 14, 9.4, 13.4, bold=False)
         content_h = max(h0, h1, h2)
-        row_h = max(27.0, content_h + 13.0)
-        pad_top = (row_h - content_h) / 2.0
+        row_h = max(28.0, content_h + 14.0)
 
         lucide_icon(b, icon_name, x + 8, y + (row_h - 11.5) / 2.0,
                     size=11.5, color_hex=icon_color, stroke_width='1.85')
         b.para(state_label, x + 24, y + (row_h - h0) / 2.0, col_widths[0] - 28,
-               9.2, 12.8, INK, bold=True, keep_words=True)
+               9.5, 13.4, INK, bold=True, keep_words=True)
         b.para(problem, x + col_widths[0] + 8, y + (row_h - h1) / 2.0, col_widths[1] - 12,
-               9.0, 12.8, MUTED, keep_words=True)
+               9.2, 13.4, MUTED, keep_words=True)
         b.para(resolution, x + col_widths[0] + col_widths[1] + 8, y + (row_h - h2) / 2.0,
-               col_widths[2] - 14, 9.1, 12.8, INK, keep_words=True)
+               col_widths[2] - 14, 9.4, 13.4, INK, keep_words=True)
         y += row_h
         weight = 0.55 if idx + 1 == len(rows) else 0.4
         b.rule(y, x, total_w, LINE, weight)
@@ -148,13 +147,13 @@ def truth_table(b, headers, rows, col_widths, x, top):
 
 
 def check_rows(b, items, x, top, width, label_w=108.0):
-    """Concise pictogram-anchored verification takeaways replacing verbose troubleshooting prose."""
+    """Concise pictogram-anchored verification takeaways (9.6pt label / 9.4pt detail)."""
     y = top
     for idx, (icon_name, label, detail) in enumerate(items):
-        lucide_icon(b, icon_name, x, y + 1.2, size=11.5, color_hex='#a73524', stroke_width='1.9')
-        lbl_end = b.para(label, x + 17, y, label_w - 20, 9.3, 13.2, INK, bold=True, keep_words=True)
-        end_y = b.para(detail, x + label_w, y, width - label_w, 9.1, 13.2, MUTED, keep_words=True)
-        y = max(lbl_end, end_y) + 8
+        lucide_icon(b, icon_name, x, y + 1.4, size=11.5, color_hex='#a73524', stroke_width='1.9')
+        lbl_end = b.para(label, x + 17, y, label_w - 20, 9.6, 13.8, INK, bold=True, keep_words=True)
+        end_y = b.para(detail, x + label_w, y, width - label_w, 9.4, 13.8, MUTED, keep_words=True)
+        y = max(lbl_end, end_y) + 9
         if idx + 1 < len(items):
-            b.rule(y - 4.0, x, width, LINE, 0.4)
-    return y - 8
+            b.rule(y - 4.5, x, width, LINE, 0.4)
+    return y - 9

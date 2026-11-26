@@ -47,7 +47,7 @@ PHOTO_IMAGES = {
 }
 WEB = 'https://seminkong.github.io/SeMinKong_Web/'
 W, H = landscape(A4)
-M, CW = 38, W - 76
+M, CW = 40, W - 80
 BOTTOM = 535
 INK, MUTED, PAPER, LINE, ACCENT, TINT = map(
     HexColor, ['#171512', '#625e56', '#f7f5ef', '#d4d0c5', '#a73524', '#eeeae1'])
@@ -376,9 +376,9 @@ class Book:
         self.n += 1
         self.c.setFillColor(PAPER)
         self.c.rect(0, 0, W, H, fill=1, stroke=0)
-        self.para(title, M, 46, title_width, 25, 33, bold=True, align=title_align)
+        self.para(title, M, 44, title_width, 26, 34, bold=True, align=title_align)
         if subtitle:
-            self.para(subtitle, M, 91, title_width, 10.5, 16, MUTED, align=title_align)
+            self.para(subtitle, M, 88, title_width, 10.0, 15, MUTED, align=title_align)
         key = key or f'p{self.n}'
         self.c.bookmarkPage(key)
         self.c.addOutlineEntry(title, key, level=0, closed=False)
@@ -442,20 +442,28 @@ class Book:
 
 
 def introduction(b):
-    b.start('공세민', key='introduction', title_width=486)
-    b.text('Se Min Kong', M, 92, 48, 'Helvetica-Bold')
-    b.rule(164, M, 44, ACCENT, 2.4)
-    b.para('상상을 현실로 이끄는 개발자', M, 184, 486, 22, 30, bold=True)
-    b.para('숭실대학교 소프트웨어학부 · SSAFY Robotics Track', M, 232, 486, 12, 18, INK)
-    b.para('Computer Vision · Robotics / Physical AI', M, 256, 486, 11.2, 17, MUTED)
+    # Exact Golden Ratio split (Major 450 : Minor 278 = 1.6187, gutter 34pt)
+    # and Vertical Golden Horizon at y = 352 (upper 306 : lower 188 = 1.628)
+    major_w, gutter = 450, 34
+    div_x = M + major_w + gutter / 2          # 507
+    rail_x = M + major_w + gutter             # 524
+    rail_w = W - M - rail_x                   # 277.89
+    horizon_y = 352
 
-    # Quiet supporting awards block anchored near bottom of main column
-    b.rule(364, M, 486, LINE, .65)
-    b.trophy(M, 382, 11)
-    b.para('수상', M + 16, 380, 120, 9.8, 14, MUTED, bold=True)
+    b.start('공세민', key='introduction', title_width=major_w)
+    b.text('Se Min Kong', M, 88, 46, 'Helvetica-Bold')
+    b.rule(156, M, 46, ACCENT, 2.2)
+    b.para('상상을 현실로 이끄는 개발자', M, 176, major_w, 20.5, 29, bold=True)
+    b.para('숭실대학교 소프트웨어학부 · SSAFY Robotics Track', M, 222, major_w, 12.4, 18, INK)
+    b.para('Computer Vision · Robotics / Physical AI', M, 246, major_w, 10.0, 15, MUTED)
 
-    col_x = [M, 286]
-    col_w = 236
+    # Lower 38.2% golden band: Awards (left) aligned to Certifications (right)
+    b.rule(horizon_y, M, major_w, LINE, .65)
+    b.trophy(M, horizon_y + 16, 11.5)
+    b.para('수상', M + 17, horizon_y + 14.5, 120, 10.0, 14, MUTED, bold=True)
+
+    col_w = (major_w - 22) / 2                # 214
+    col_x = [M, M + col_w + 22]
     left_awards = [
         'SSAFY 자율프로젝트 1등',
         'SSAFY 특화프로젝트 2등',
@@ -467,36 +475,37 @@ def introduction(b):
         'IT 프로젝트 프로리그 장려상',
     ]
     for row in range(3):
-        text_y = 408 + row * 28
-        b.para(left_awards[row], col_x[0], text_y, col_w, 9.4, 14, MUTED)
-        b.para(right_awards[row], col_x[1], text_y, col_w, 9.4, 14, MUTED)
+        text_y = horizon_y + 44 + row * 28
+        b.para(left_awards[row], col_x[0], text_y, col_w, 10.0, 14.5, MUTED)
+        b.para(right_awards[row], col_x[1], text_y, col_w, 10.0, 14.5, MUTED)
 
-    # Subtle vertical divider
+    # Vertical golden-section hairline divider
     b.c.saveState()
     b.c.setStrokeColor(LINE)
     b.c.setLineWidth(.65)
-    b.c.line(552, H - 52, 552, H - 508)
+    b.c.line(div_x, H - 48, div_x, H - 504)
     b.c.restoreState()
 
-    rail_x, rail_w = 582, 220
-    b.image('@se-min-kong-profile.png', rail_x, 52, 174, 232)
+    # Right minor column: portrait (0.75 ratio), contact links, aligned certifications
+    portrait_w, portrait_h = 171, 228
+    b.image('@se-min-kong-profile.png', rail_x, 48, portrait_w, portrait_h)
     b.c.saveState()
     b.c.setStrokeColor(LINE)
     b.c.setLineWidth(.6)
-    b.c.rect(rail_x, H - 52 - 232, 174, 232, stroke=1, fill=0)
+    b.c.rect(rail_x, H - 48 - portrait_h, portrait_w, portrait_h, stroke=1, fill=0)
     b.c.restoreState()
 
-    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', rail_x, 304, 9.8)
-    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', rail_x, 326, 9.8)
-    b.para('Suwon, Republic of Korea', rail_x, 348, rail_w, 9.3, 14, MUTED)
+    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', rail_x, 290, 10.0)
+    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', rail_x, 310, 10.0)
+    b.para('Suwon, Republic of Korea', rail_x, 329, rail_w, 9.2, 13.5, MUTED)
 
-    b.rule(384, rail_x, rail_w, LINE, .65)
-    b.para('자격', rail_x, 400, rail_w, 9.8, 14, MUTED, bold=True)
+    b.rule(horizon_y, rail_x, rail_w, LINE, .65)
+    b.para('자격', rail_x, horizon_y + 14.5, rail_w, 10.0, 14, MUTED, bold=True)
     cert_dates = ['2026.09', '~2027.10']
     for i, (title, _issuer, _valid, asset) in enumerate(CERTIFICATIONS):
-        top = 426 + i * 28
-        b.link(title, WEB + 'resume/' + asset, rail_x, top, 9.6)
-        b.para(cert_dates[i], rail_x + 112, top, 108, 9.1, 13, MUTED)
+        top = horizon_y + 44 + i * 28
+        b.link(title, WEB + 'resume/' + asset, rail_x, top, 10.0)
+        b.para(cert_dates[i], rail_x + 124, top + 0.4, rail_w - 124, 9.2, 13.5, MUTED)
 
     b.end([('웹 포트폴리오', WEB), ('온라인 이력서', WEB + 'resume/'),
            ('프로젝트', WEB + 'work/')])
@@ -510,31 +519,36 @@ def capability(b):
               'ROS 2와 웹 서버 간 비동기 데이터 연동',
               '다축 모터 제어와 텐던 구동계 통합',
               '학습·추론을 위한 데이터 변환 파이프라인 구축']
-    gap = 36
+    gap = 34
     width = (CW - gap) / 2
     for i, title in enumerate(titles):
         x = M + (i % 2) * (width + gap)
-        top = 114 + (i // 2) * 66
-        b.rule(top, x, width, ACCENT, .9)
-        b.para(title, x, top + 19, width, 13.3, 20, bold=True, align='center', keep_words=True)
+        top = 104 + (i // 2) * 62
+        b.rule(top, x, width, LINE, .65)
+        b.rule(top, x, 26, ACCENT, 1.8)
+        b.para(title, x, top + 16, width, 12.4, 18, bold=True, keep_words=True)
 
-    b.rule(329)
-    b.para('기술 스택', M, 345, CW, 14, 21, bold=True, align='center')
+    # Golden vertical break between Experience (upper) and Tech Stack (lower)
+    stack_rule = 304
+    b.rule(stack_rule, M, CW, LINE, .65)
+    b.para('기술 스택', M, stack_rule + 16, 78, 15.8, 22, bold=True)
     b.para('프로젝트 성격에 따라 Unreal Engine · OpenXR · MCP 등 도메인 도구를 함께 활용합니다.',
-           M, 369, CW, 9.3, 14, MUTED, align='center')
+           M + 86, stack_rule + 21.5, CW - 86, 9.2, 13.5, MUTED)
+
     column = CW / len(STACK)
     group_labels = ['Robotics · Simulation', 'Languages', 'AI · Vision',
                     'LLM · Backend', 'Platform · Collaboration']
     for i, (_, tools) in enumerate(STACK):
         x = M + i * column
-        b.para(group_labels[i], x, 389, column, 10, 15, bold=True, align='center')
+        b.para(group_labels[i], x, stack_rule + 52, column, 10.2, 14.5, INK, bold=True, align='center')
+        b.rule(stack_rule + 72, x + 16, column - 32, LINE, .5)
         for j, name in enumerate(tools):
             score = STACK_RATINGS['ratings'][name]
             stars = '★' * score + '☆' * (STACK_RATINGS['scale'] - score)
             b.para(f"{name} <font color='#a73524'>{stars}</font>",
-                   x, 418 + j * 19, column, 10.2, 15, align='center')
-    b.para('별점은 작성자 자기평가이며 5단계 기준입니다.', M, 517, CW,
-           9.3, 14, MUTED, align='center')
+                   x, stack_rule + 82 + j * 21, column, 9.8, 14, align='center')
+    b.para('별점은 작성자 자기평가이며 5단계 기준입니다.', M, 514, CW,
+           9.2, 13.2, MUTED, align='center')
     b.end([('GitHub', 'https://github.com/SeMinKong'),
            ('학습 관심사', WEB + 'about/#questions-title')])
 
@@ -544,33 +558,34 @@ def closing(b):
     guide = [('README', '개요 · 역할 · 실행 방법'),
              ('기술 문서', '코드 · 계산식 · 검증 범위'),
              ('공개 프로젝트 사례', '담당 구현 · 시연 화면 · 프로젝트 상세')]
-    gap = 30
+    gap = 32
     width = (CW - gap * 2) / 3
     for i, (title, body) in enumerate(guide):
         x = M + i * (width + gap)
-        b.rule(136, x, width, ACCENT, .9)
-        b.para(title, x, 151, width, 12.5, 19, bold=True, align='center')
-        b.para(body, x, 181, width, 10, 15, MUTED, align='center')
+        b.rule(132, x, width, LINE, .65)
+        b.rule(132, x + (width - 28) / 2, 28, ACCENT, 1.8)
+        b.para(title, x, 148, width, 12.4, 18, bold=True, align='center')
+        b.para(body, x, 174, width, 9.8, 14.5, MUTED, align='center')
 
-    b.rule(225)
+    b.rule(216)
     item_width = (CW - gap * 2) / 3
     for i, spec in enumerate(project_pages.PROJECTS):
         x = M + (i % 3) * (item_width + gap)
-        top = 250 + (i // 3) * 83
-        b.para(spec['name'], x, top, item_width, 12, 18, bold=True, align='center')
-        b.link_row(project_pages.source_links(spec, WEB)[:2], top + 31,
-                   size=10.2, center=x + item_width / 2, gap=25)
+        top = 240 + (i // 3) * 76
+        b.para(spec['name'], x, top, item_width, 12.4, 18, bold=True, align='center')
+        b.link_row(project_pages.source_links(spec, WEB)[:2], top + 28,
+                   size=10.0, center=x + item_width / 2, gap=24)
 
-    b.rule(402)
+    b.rule(390)
     widget = qr.QrCodeWidget(WEB)
     x0, y0, x1, y1 = widget.getBounds()
-    side = 70
+    side = 72
     drawing = Drawing(side, side, transform=[side / (x1-x0), 0, 0, side / (y1-y0), 0, 0])
     drawing.add(widget)
-    renderPDF.draw(drawing, b.c, (W - side) / 2, H - 418 - side)
-    b.center_link('웹 포트폴리오', WEB, W / 2, 494, 10)
+    renderPDF.draw(drawing, b.c, (W - side) / 2, H - 404 - side)
+    b.center_link('웹 포트폴리오', WEB, W / 2, 484, 10.0)
     b.link_row([('semin1224@gmail.com', 'mailto:semin1224@gmail.com'),
-                ('github.com/SeMinKong', 'https://github.com/SeMinKong')], 520, size=10)
+                ('github.com/SeMinKong', 'https://github.com/SeMinKong')], 508, size=10.0)
     b.end([('프로젝트', WEB + 'work/'), ('이력서 · 수상', WEB + 'resume/')])
 
 
