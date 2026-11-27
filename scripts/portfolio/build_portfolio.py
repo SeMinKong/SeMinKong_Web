@@ -21,6 +21,7 @@ import os
 
 import project_pages
 import technical_pages
+import visual_components as vc
 
 from PIL import Image
 from reportlab.pdfgen import canvas
@@ -571,9 +572,12 @@ def introduction(b):
     b.c.rect(rail_x, H - 48 - portrait_h, portrait_w, portrait_h, stroke=1, fill=0)
     b.c.restoreState()
 
-    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', rail_x, 290, 10.0)
-    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', rail_x, 310, 10.0)
-    b.para('Suwon, Republic of Korea', rail_x, 329, rail_w, 9.2, 13.5, MUTED)
+    vc.lucide_icon(b, 'gmail', rail_x, 290.6, size=10.5, color_hex='#625e56')
+    b.link('semin1224@gmail.com', 'mailto:semin1224@gmail.com', rail_x + 17, 290, 10.0)
+    vc.lucide_icon(b, 'github', rail_x, 310.1, size=10.5, color_hex='#625e56')
+    b.link('github.com/SeMinKong', 'https://github.com/SeMinKong', rail_x + 17, 310, 10.0)
+    vc.lucide_icon(b, 'map-pin', rail_x, 329.8, size=10.5, color_hex='#625e56', stroke_width='1.95')
+    b.para('Suwon, Republic of Korea', rail_x + 17, 329, rail_w - 17, 9.2, 13.5, MUTED)
 
     b.rule(horizon_y, rail_x, rail_w, LINE, .65)
     b.para('자격', rail_x, horizon_y + 14.5, rail_w, 10.0, 14, MUTED, bold=True)
@@ -661,8 +665,19 @@ def closing(b):
     renderPDF.draw(drawing, b.c, (W - side) / 2, H - 402 - side)
     b.button_row([('웹 포트폴리오', WEB)], 484, size=9.6, center=W / 2,
                  pad_x=12.0, pad_y=3.8, primary_first=True)
-    b.link_row([('semin1224@gmail.com', 'mailto:semin1224@gmail.com'),
-                ('github.com/SeMinKong', 'https://github.com/SeMinKong')], 513, size=10.0)
+    contact_items = [
+        ('gmail', 'semin1224@gmail.com', 'mailto:semin1224@gmail.com'),
+        ('github', 'github.com/SeMinKong', 'https://github.com/SeMinKong'),
+    ]
+    icon_sz, icon_gap, item_gap = 10.5, 5.5, 28.0
+    c_widths = [icon_sz + icon_gap + pdfmetrics.stringWidth(label, 'Korean', 10.0)
+                for _, label, _ in contact_items]
+    cx = (W - (sum(c_widths) + item_gap * (len(c_widths) - 1))) / 2
+    for (icon_name, label, url), cw in zip(contact_items, c_widths):
+        vc.lucide_icon(b, icon_name, cx, 513.5, size=icon_sz, color_hex='#625e56')
+        tw = pdfmetrics.stringWidth(label, 'Korean', 10.0)
+        b.center_link(label, url, cx + icon_sz + icon_gap + tw / 2, 513, 10.0, limit=H - 20)
+        cx += cw + item_gap
     b.end([('프로젝트', WEB + 'work/'), ('이력서 · 수상', WEB + 'resume/')])
 
 

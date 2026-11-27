@@ -34,6 +34,7 @@ def lucide_icon(b, name, x, top, size=18, color_hex='#171512', stroke_width='1.7
         raw = (ICONS_DIR / f'{name}.svg').read_text(encoding='utf-8')
         raw = (raw
                .replace('stroke="currentColor"', f'stroke="{color_hex}"')
+               .replace('fill="currentColor"', f'fill="{color_hex}"')
                .replace('stroke-width="2"', f'stroke-width="{stroke_width}"'))
         svg_bytes = raw.encode('utf-8')
         _ICON_CACHE[key] = svg_bytes
