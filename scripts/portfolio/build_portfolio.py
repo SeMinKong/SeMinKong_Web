@@ -540,19 +540,20 @@ def introduction(b):
     col_w = (major_w - 22) / 2                # 214
     col_x = [M, M + col_w + 22]
     left_awards = [
-        'SSAFY 자율프로젝트 1등',
-        'SSAFY 특화프로젝트 2등',
-        'SSAFY 공통프로젝트 1등',
+        ('SSAFY 자율프로젝트 1등', 'Tac-Touch'),
+        ('SSAFY 특화프로젝트 2등', 'Bondi'),
+        ('SSAFY 공통프로젝트 1등', 'THING'),
     ]
     right_awards = [
-        '숭실 캡스톤디자인 장려상',
-        'IT대학 SW 공모전 금상',
-        'IT 프로젝트 프로리그 장려상',
+        ('숭실 캡스톤디자인 장려상', 'Briefit'),
+        ('IT대학 SW 공모전 금상', 'Briefit'),
+        ('IT 프로젝트 프로리그 장려상', 'Briefit'),
     ]
     for row in range(3):
         text_y = horizon_y + 44 + row * 28
-        b.para(left_awards[row], col_x[0], text_y, col_w, 10.0, 14.5, MUTED)
-        b.para(right_awards[row], col_x[1], text_y, col_w, 10.0, 14.5, MUTED)
+        for col, (award, project) in enumerate((left_awards[row], right_awards[row])):
+            b.para(f"{award} <font color='#625e56' size='9.2'>· {project}</font>",
+                   col_x[col], text_y, col_w, 10.0, 14.5, INK, keep_words=True)
 
     # Vertical golden-section hairline divider
     b.c.saveState()
